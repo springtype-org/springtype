@@ -1,0 +1,25 @@
+{
+  "name": "springtype-incubator",
+  "version": "1.0.0",
+  "description": "It just works.",
+  "dependencies": {},
+  "devDependencies": {
+    "assemblyscript": "github:AssemblyScript/assemblyscript",
+    "ts-polyfill": "^3.0.1",
+    "webpack": "^4.17.1"
+  },
+  "scripts": {
+    "package": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyr0/springtype-incubator/issues"
+  },
+  "homepage": "https://github.com/kyr0/springtype-incubator#readme"
+}
