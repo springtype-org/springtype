@@ -75,6 +75,8 @@ export class BeanFactory {
             BeanFactory.injectionMap[className][injectionProfile]
         );
 
+        //console.log('resolveBeanConstructorArguments', constructorParameterTypes);
+
         return BeanFactory.getBeansByType(
             constructorParameterTypes, injectionProfile, className
         );
@@ -124,6 +126,8 @@ export class BeanFactory {
                     ctor.prototype.metaClassName, injectionProfile
                 );
 
+                console.log('ctor', ctor.prototype.metaClassName, 'resolved to', beanInstanceFromRegistry);
+
                 if (beanInstanceFromRegistry) {
 
                     beans.push(beanInstanceFromRegistry)
@@ -137,11 +141,18 @@ export class BeanFactory {
 
                         const beanInstance = new ctor();
 
-                        BeanFactory.registerBeanInstance(ctor.prototype.metaClassName, beanInstance, injectionProfile);
+                        console.log('registering bean by name (singleton)', ctor.prototype.metaClassName, beanInstance);
 
-                        beans.push(
-                            beanInstance
-                        )
+                        // if a bean is unresolvable, it's metaClassName is undefined,
+                        // do not register instances in this case
+                        if (typeof ctor.prototype.metaClassName != 'undefined') {
+
+                            BeanFactory.registerBeanInstance(ctor.prototype.metaClassName, beanInstance, injectionProfile);
+
+                            beans.push(
+                                beanInstance
+                            )
+                        }
                     } else {
 
                         beans.push(

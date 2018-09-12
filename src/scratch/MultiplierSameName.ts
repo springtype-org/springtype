@@ -7,7 +7,7 @@ export class Multiplier {
     constructor(unresolvable: UnresolvableBean) {
 
         // even this is injected, no matter if UnresolvableBean is @Bean annotated or not
-        unresolvable.test();
+        //unresolvable.test();
 
     }
 
