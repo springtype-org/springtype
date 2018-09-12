@@ -34,7 +34,16 @@ export class BeanFactory {
         if (!BeanFactory.injectionMap[className]) {
             BeanFactory.injectionMap[className] = {};
         }
-        BeanFactory.injectionMap[className][injectionProfile] = ctor;
+
+        if (!BeanFactory.injectionMap[className][injectionProfile]) {
+            BeanFactory.injectionMap[className][injectionProfile] = ctor;
+        } else {
+            throw new Error(
+                `Bean with name ${className} is already registered. 
+                Please make sure NOT to duplicate class names as it is an anti-pattern.
+                Make sure, all your class names are unique.
+            `);
+        }
     }
 
     static getBean<T>(
