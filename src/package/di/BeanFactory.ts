@@ -71,7 +71,7 @@ export class BeanFactory {
             // try to fetch from cache, otherwise directly head to new instance creation
             if (injectionStrategy === InjectionStrategy.SINGLETON) {
 
-                const beanInstanceFromRegistry = BeanFactory.getBeanInstanceFromRegistry(
+                const beanInstanceFromRegistry = BeanFactory.getSingletonBeanInstanceFromRegistry(
                     className, injectionProfile
                 );
 
@@ -80,11 +80,13 @@ export class BeanFactory {
                 }
             }
 
+            // because the singleton code branch didn't return,
+            // we are here to create the first instance ever or another new instance
+            // -> start of the recursion -> follow the path down the rabbit hole...
             const beanInstance = new BeanFactory.injectionMap[className][injectionProfile](
                 ...BeanFactory.resolveBeanConstructorArguments(className, injectionProfile)
             );
-
-            BeanFactory.registerBeanInstance(className, beanInstance, injectionProfile);
+            BeanFactory.registerSingletonBeanInstance(className, beanInstance, injectionProfile);
 
             return beanInstance;
 
@@ -96,16 +98,18 @@ export class BeanFactory {
 
     static resolveBeanConstructorArguments(className: string, injectionProfile: InjectionProfile): Array<any> {
 
-        // fetch constructor parameter types
+        // fetch constructor parameter types from reflection metadata
         const constructorParameterTypes: Array<IBean<any>> = BeanFactory.getConstructorParameterTypes(
             BeanFactory.injectionMap[className][injectionProfile]
         );
 
+        // and do the default round-trip to get all instances by type
         const constructorArguments = BeanFactory.getBeansByType(
             constructorParameterTypes, injectionProfile, className
         );
 
-        // resolving @Inject override constructor  parameter values
+        // but if there are special @Inject decorations,
+        // we head to resolve them and use these values instead
         if (BeanFactory.beanParameterMetadataMap[className] &&
             BeanFactory.beanParameterMetadataMap[className].parameters &&
             BeanFactory.beanParameterMetadataMap[className].parameters.length) {
@@ -125,7 +129,7 @@ export class BeanFactory {
         return constructorArguments;
     }
 
-    static registerBeanInstance(
+    static registerSingletonBeanInstance(
         className: string,
         instance: any,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
@@ -135,10 +139,13 @@ export class BeanFactory {
             BeanFactory.beanInstanceMap[className] = {};
         }
 
-        BeanFactory.beanInstanceMap[className][injectionProfile] = instance;
+        // take care it doesn't happen twice. First call wins. End of the story.
+        if (!BeanFactory.beanInstanceMap[className][injectionProfile]) {
+            BeanFactory.beanInstanceMap[className][injectionProfile] = instance;
+        }
     }
 
-    static getBeanInstanceFromRegistry(
+    static getSingletonBeanInstanceFromRegistry(
         className: string,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
     ): any {
@@ -165,18 +172,19 @@ export class BeanFactory {
                     throw new Error("Cyclic dependency detected in class: " + forClassName);
                 }
 
-                const beanInstanceFromRegistry = BeanFactory.getBeanInstanceFromRegistry(
+                const singletonBeanInstanceFromRegistry = BeanFactory.getSingletonBeanInstanceFromRegistry(
                     ctor.prototype.metaClassName, injectionProfile
                 );
 
                 // console.log('ctor', ctor.prototype.metaClassName, 'resolved to', beanInstanceFromRegistry);
 
-                if (beanInstanceFromRegistry) {
+                if (singletonBeanInstanceFromRegistry) {
 
-                    beans.push(beanInstanceFromRegistry)
+                    beans.push(singletonBeanInstanceFromRegistry)
 
                 } else {
 
+                    // recursions end -> class points to itself -> create instance -> register instance!
                     if (ctor.prototype.metaClassName == ctor.prototype.metaClassName) {
 
                         //console.log('getBean()', ctor.name, ctor);
@@ -189,7 +197,7 @@ export class BeanFactory {
                         // do not register instances in this case
                         if (typeof ctor.prototype.metaClassName != 'undefined') {
 
-                            BeanFactory.registerBeanInstance(ctor.prototype.metaClassName, beanInstance, injectionProfile);
+                            BeanFactory.registerSingletonBeanInstance(ctor.prototype.metaClassName, beanInstance, injectionProfile);
 
                             beans.push(
                                 beanInstance
@@ -198,6 +206,8 @@ export class BeanFactory {
                     } else {
 
                         beans.push(
+
+                            // -> follow it down the rabbit hole
                             BeanFactory.getBean(ctor, injectionProfile)
                         );
                     }

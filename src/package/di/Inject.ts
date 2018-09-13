@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import {BeanFactory, InjectionProfile, InjectionStrategy} from "./BeanFactory";
+import {InjectBeanFactory} from "../../../dist/package/di";
 
 export const INJECT_DECORATOR_METADATA_KEY = Symbol("Inject");
 
@@ -33,7 +34,7 @@ export function createDefaultParameterInjectionMetaData() {
  * value typeof Function
  * -> uses the Function as a constructor and creates an instance of it to inject
  */
-export declare type InjectionReference =  any | InjectBeanFactory | Function;
+export declare type InjectionReference = any | InjectBeanFactory | Function;
 
 export function resolveInjectionParameterValue(parameterInjectionMetaData: ParameterInjectionMetaData, parameterIndex: number) {
 
@@ -48,12 +49,12 @@ export function resolveInjectionParameterValue(parameterInjectionMetaData: Param
         if (typeof injectionReference === 'function') {
 
             // dynamic InjectBeanFactory signature check
+            // this happens like this because InjectBeanFactory is an interface
             if (injectionReference.prototype.factory &&
                 typeof injectionReference.prototype.factory === 'function') {
 
                 // TODO: Optimize -> use BeanFactory and cache factory instances itself
                 const factoryOrInstance = new injectionReference();
-
                 injectionValue = factoryOrInstance.factory();
 
             } else if (injectionReference.prototype.metaClassName) {
@@ -76,10 +77,6 @@ export function resolveInjectionParameterValue(parameterInjectionMetaData: Param
             // use the value directly (any value case)
             injectionValue = injectionReference;
         }
-    } else {
-
-
-
     }
     return injectionValue;
 }
@@ -91,6 +88,7 @@ export function BeanMethod(target: any, propertyName: string, descriptor: TypedP
     // backup original method
     const method: Function = <Function> descriptor.value;
 
+    // we replace the method again, the call the original impl. with injected arguments
     descriptor.value = function() {
 
         // replacement method impl. -> this is called when the actual @BeanMethod annotated method is called (hook)
