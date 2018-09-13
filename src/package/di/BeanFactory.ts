@@ -1,8 +1,14 @@
 import {IBean} from "./Bean";
+import {ParameterInjectionMetaData, resolveInjectionParameterValue} from "./Inject";
 
 export enum InjectionProfile {
     DEFAULT = 'DEFAULT',
     TEST = 'TEST',
+}
+
+export enum InjectionStrategy {
+    SINGLETON = 'SINGLETON',
+    NEW_INSTANCE = 'NEW_INSTANCE'
 }
 
 export interface InjectionMap {
@@ -21,9 +27,13 @@ export class BeanFactory {
         }
     } = {};
 
+    static beanParameterMetadataMap: {
+        [className: string]: ParameterInjectionMetaData;
+    } = {};
+
 
     private static getConstructorParameterTypes(target: IBean<any>): Array<IBean<any>> {
-        return Reflect.getMetadata("design:paramtypes", target) || [];
+        return Reflect.getMetadata('design:paramtypes', target) || [];
     }
 
     static registerBean(
@@ -47,20 +57,27 @@ export class BeanFactory {
     }
 
     static getBean<T>(
-        className: string,
         requiredType: Function,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT): T {
+        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
+        injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): T {
 
+        // infer class name via metaClassName provided by @Bean decorator
+        const className = requiredType.prototype.metaClassName;
 
         if (BeanFactory.injectionMap[className] &&
             BeanFactory.injectionMap[className][injectionProfile]) {
 
-            const beanInstanceFromRegistry = BeanFactory.getBeanInstanceFromRegistry(
-                className, injectionProfile
-            );
+            // only in case of singleton instance retrieval,
+            // try to fetch from cache, otherwise directly head to new instance creation
+            if (injectionStrategy === InjectionStrategy.SINGLETON) {
 
-            if (beanInstanceFromRegistry) {
-                return beanInstanceFromRegistry;
+                const beanInstanceFromRegistry = BeanFactory.getBeanInstanceFromRegistry(
+                    className, injectionProfile
+                );
+
+                if (beanInstanceFromRegistry) {
+                    return beanInstanceFromRegistry;
+                }
             }
 
             const beanInstance = new BeanFactory.injectionMap[className][injectionProfile](
@@ -73,7 +90,7 @@ export class BeanFactory {
 
         } else {
 
-            throw new Error("Class not found: " + className + " for profile " + injectionProfile);
+            throw new Error(`Class not found: ${className} for profile ${injectionProfile}. Did you forget to add @Bean?`);
         }
     }
 
@@ -84,11 +101,28 @@ export class BeanFactory {
             BeanFactory.injectionMap[className][injectionProfile]
         );
 
-        //console.log('resolveBeanConstructorArguments', constructorParameterTypes);
-
-        return BeanFactory.getBeansByType(
+        const constructorArguments = BeanFactory.getBeansByType(
             constructorParameterTypes, injectionProfile, className
         );
+
+        // resolving @Inject override constructor  parameter values
+        if (BeanFactory.beanParameterMetadataMap[className] &&
+            BeanFactory.beanParameterMetadataMap[className].parameters &&
+            BeanFactory.beanParameterMetadataMap[className].parameters.length) {
+
+            const overrideInjectParamValues = BeanFactory.beanParameterMetadataMap[className].parameters;
+
+            for (let i=0; i<overrideInjectParamValues.length; i++) {
+
+                constructorArguments[overrideInjectParamValues[i].parameterIndex] =
+
+                    resolveInjectionParameterValue(
+                        BeanFactory.beanParameterMetadataMap[className],
+                        overrideInjectParamValues[i].parameterIndex
+                    );
+            }
+        }
+        return constructorArguments;
     }
 
     static registerBeanInstance(
@@ -135,7 +169,7 @@ export class BeanFactory {
                     ctor.prototype.metaClassName, injectionProfile
                 );
 
-                console.log('ctor', ctor.prototype.metaClassName, 'resolved to', beanInstanceFromRegistry);
+                // console.log('ctor', ctor.prototype.metaClassName, 'resolved to', beanInstanceFromRegistry);
 
                 if (beanInstanceFromRegistry) {
 
@@ -143,14 +177,13 @@ export class BeanFactory {
 
                 } else {
 
-
                     if (ctor.prototype.metaClassName == ctor.prototype.metaClassName) {
 
                         //console.log('getBean()', ctor.name, ctor);
 
                         const beanInstance = new ctor();
 
-                        console.log('registering bean by name (singleton)', ctor.prototype.metaClassName, beanInstance);
+                        // console.log('registering bean by name (singleton)', ctor.prototype.metaClassName, beanInstance);
 
                         // if a bean is unresolvable, it's metaClassName is undefined,
                         // do not register instances in this case
@@ -165,7 +198,7 @@ export class BeanFactory {
                     } else {
 
                         beans.push(
-                            BeanFactory.getBean(ctor.prototype.metaClassName, ctor, injectionProfile)
+                            BeanFactory.getBean(ctor, injectionProfile)
                         );
                     }
                 }
@@ -174,5 +207,12 @@ export class BeanFactory {
             return beans;
         }
         return [];
+    }
+
+
+    static registerBeanConstructorInjectionMetadata(className: string, parameterInjectionMetaData: ParameterInjectionMetaData) {
+
+        // registering @Inject override constructor parameter values
+        BeanFactory.beanParameterMetadataMap[className] = parameterInjectionMetaData;
     }
 }

@@ -13,7 +13,7 @@
         "sourceMap": true,
         "lib": [
             "dom",
-            "es5",
+            "es2017",
 
             "es2015.core",
             "es2015.promise",
