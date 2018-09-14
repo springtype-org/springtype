@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import {BeanFactory, InjectionProfile, InjectionStrategy} from "./BeanFactory";
-import {InjectBeanFactory} from "../../../dist/package/di";
 
 export const INJECT_DECORATOR_METADATA_KEY = Symbol("Inject");
 
