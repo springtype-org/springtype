@@ -1,5 +1,5 @@
-import {IBean} from "./Bean";
-import {ParameterInjectionMetaData, resolveInjectionParameterValue} from "./Inject";
+import {IBean} from "./decorator/Component";
+import {ParameterInjectionMetaData, resolveInjectionParameterValue} from "./decorator/Inject";
 
 export enum InjectionProfile {
     DEFAULT = 'DEFAULT',
@@ -61,7 +61,7 @@ export class BeanFactory {
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
         injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): T {
 
-        // infer class name via metaClassName provided by @Bean decorator
+        // infer class name via metaClassName provided by @Component decorator
         const className = requiredType.prototype.metaClassName;
 
         if (BeanFactory.injectionMap[className] &&

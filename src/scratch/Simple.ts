@@ -1,16 +1,18 @@
-import {Bean, BeanMethod, Inject} from "../package/di";
+import {Component, Autowired, Inject} from "../package/di";
 import {Multiplier} from "./Multiplier";
 import {Subtractor} from "./Subtractor";
 
-@Bean()
+@Component()
 class Simple {
+
+
 
     constructor(
         protected multiplier?: Multiplier
     ) {
     }
 
-    @BeanMethod
+    @Autowired
     calc(a: number, b: number, @Inject() subtractor?: Subtractor): number {
 
         if (subtractor && this.multiplier) {

@@ -1,12 +1,12 @@
-import {Bean} from "../package/di";
+import {Component} from "../package/di";
 import {UnresolvableBean} from "./UnresolvableBean";
 
-@Bean()
+@Component()
 export class Multiplier {
 
     constructor(unresolvable: UnresolvableBean) {
 
-        // even this is injected, no matter if UnresolvableBean is @Bean annotated or not
+        // even this is injected, no matter if UnresolvableBean is @Component annotated or not
         if (!unresolvable) {
 
             // console.log('Fine, unresolvable class name is injected as', unresolvable);

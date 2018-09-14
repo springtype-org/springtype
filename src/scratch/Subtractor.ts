@@ -1,6 +1,6 @@
-import {Bean} from "../package/di";
+import {Component} from "../package/di";
 
-@Bean()
+@Component()
 export class Subtractor {
 
     signed: boolean = false;

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {BeanFactory, InjectionProfile} from "./BeanFactory";
+import {BeanFactory, InjectionProfile} from "../BeanFactory";
 import {
     INJECT_DECORATOR_METADATA_KEY,
     ParameterInjectionMetaData,
@@ -14,7 +14,7 @@ export interface IBean<T> extends Function {
     metaClassName?: string;
 }
 
-export function Bean(beanConfig?: BeanConfig) {
+export function Component(beanConfig?: BeanConfig) {
 
     return function<T extends IBean<any>>(target: T) {
 
@@ -34,7 +34,7 @@ export function Bean(beanConfig?: BeanConfig) {
         BeanFactory.registerBean(target.name, target, selfInjectionProfile);
 
         // @Inject decorators that may be defined inside of the class definition
-        // this @Bean decorator is bound to, are processed first.
+        // this @Component decorator is bound to, are processed first.
         // This call collects it's meta data so the BeanFactory can
         // handle the constructor parameter value injection correctly.
         const parameterInjectionMetaData: ParameterInjectionMetaData = Reflect.getOwnMetadata(

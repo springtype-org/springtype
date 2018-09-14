@@ -1,4 +1,4 @@
-import {Bean, Inject, InjectBeanFactory, BeanMethod} from "../package/di";
+import {Component, Inject, InjectBeanFactory, Autowired} from "../package/di";
 import {Multiplier} from "./Multiplier";
 import {Subtractor} from "./Subtractor";
 import {UnresolvableBean} from "./UnresolvableBean";
@@ -13,7 +13,7 @@ class CustomLocalMultiplierFactory implements InjectBeanFactory {
     }
 }
 
-@Bean()
+@Component()
 export class Gain {
 
     // default injection strategy is: InjectionStrategy.SINGLETON
@@ -37,8 +37,8 @@ export class Gain {
         console.log('Subtraction result:', subtractor.subtract(3, 5));
     }
 
-    // @BeanMethod allows any method in any arbitrary class to @Inject parameters
-    @BeanMethod
+    // @Autowired allows any method in any arbitrary class to @Inject parameters
+    @Autowired
     testInject(
 
         // Use some InjectBeanFactory to create the instance to inject
