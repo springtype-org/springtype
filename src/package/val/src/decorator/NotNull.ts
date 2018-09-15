@@ -5,7 +5,7 @@ export function NotNull(target: Object, propertyKey: string | symbol, parameterI
 }
 
 export function validate(paramName: string, value: Object) {
-    if(undefined === value){
+    if(null === value){
         throw new Error(`Parameter ${paramName} is null or undefined.`);
     }
 }
