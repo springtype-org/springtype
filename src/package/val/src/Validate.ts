@@ -1,6 +1,6 @@
 import "reflect-metadata"
 import {getParamNames, Tuple2} from "../../util";
-import {ValidationConfigurator} from "./validators";
+import {ValidationConfigurator} from "./Validator";
 
 const VALIDATION_METHOD_PARAMNAMES_METADATA = Symbol("ParamNames");
 const VALIDATION_DECORATOR_METADATA_KEY = Symbol("Validation");
