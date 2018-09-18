@@ -1,17 +1,19 @@
 import {baseValidator} from "../Validate";
 import * as fromRequired from "./Required"
+import {validateType} from "./Max";
 
 export function Min(minimum: number) {
-    return baseValidator((value) => validate(value, minimum));
+    return baseValidator((value) => {
+        if (!fromRequired.validate(value)) {
+            return false;
+        }
+        if (!validateType(value)) {
+            throw Error(`Invalid minimum (type=${typeof value})`);
+        }
+        return validate(value, minimum)
+    });
 }
 
 export function validate(value: any, minimum: number): boolean {
-    if(!fromRequired.validate(value)){
-        return false;
-    }
-    if (typeof value === 'number' || value instanceof Number) {
-        return value >= minimum;
-    }
-    throw Error(`Invalid minimum (type=${typeof value})`);
-
+    return value >= minimum;
 }
