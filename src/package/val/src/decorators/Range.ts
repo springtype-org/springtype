@@ -11,7 +11,7 @@ function validate(value: any, minimum: number, maximum: number): boolean {
     if (!fromRequired.validate(value)) {
         return false;
     }
-    if (!(typeof value === 'number' || value instanceof Number)) {
+    if (typeof value === 'number' || value instanceof Number) {
         return fromMax.validate(value, maximum) && fromMin.validate(value, minimum)
     }
     throw Error(`Invalid range (type=${typeof value})`);
