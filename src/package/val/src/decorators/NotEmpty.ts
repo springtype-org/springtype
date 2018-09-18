@@ -2,7 +2,7 @@ import {baseValidator} from "../Validate";
 import * as fromRequired from "./Required"
 
 export function NotEmpty(all = false) {
-    return baseValidator((value: any) => validate(value,all));
+    return baseValidator((value: any) => validate(value, all));
 }
 
 function validate(value: any, all: boolean): boolean {
@@ -18,7 +18,7 @@ function validate(value: any, all: boolean): boolean {
             if (!validate(element.value, all)) {
                 return false;
             }
-            if(all === false){
+            if (all === false) {
                 return true;
             }
             element = iterator.next();
