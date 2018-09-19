@@ -1,4 +1,4 @@
-import {IBean} from "./decorator/Component";
+import {CLASS_IDENTIFIER, CLASS_NAME, IBean} from "./decorator/Component";
 import {ParameterInjectionMetaData, resolveInjectionParameterValue} from "./decorator/Inject";
 
 export enum InjectionProfile {
@@ -17,9 +17,17 @@ export interface InjectionMap {
     };
 }
 
+
+export interface SymbolInjectionMap {
+    [classIdentifier: string]: {
+        [injectionProfile: string]: IBean<any>;
+    };
+}
+
 export class BeanFactory {
 
     static injectionMap: InjectionMap = {};
+    static symbolInjectionMap: InjectionMap = {};
 
     static beanInstanceMap: {
         [className: string]: {
@@ -34,6 +42,30 @@ export class BeanFactory {
 
     private static getConstructorParameterTypes(target: IBean<any>): Array<IBean<any>> {
         return Reflect.getMetadata('design:paramtypes', target) || [];
+    }
+
+    static registerBeanSymbol(ctor: IBean<any>,
+                              injectionProfile: InjectionProfile = InjectionProfile.DEFAULT) {
+
+
+        const classIdent = ctor.prototype[CLASS_IDENTIFIER];
+        const className = ctor.prototype[CLASS_NAME];
+
+        /*
+        if (!BeanFactory.symbolInjectionMap[ctor.prototype[CLASS_IDENTIFIER]]) {
+            BeanFactory.symbolInjectionMap[className] = {};
+        }
+
+        if (!BeanFactory.injectionMap[className][injectionProfile]) {
+            BeanFactory.injectionMap[className][injectionProfile] = ctor;
+        } else {
+            throw new Error(
+                `Bean with name ${className} is already registered. 
+                Please make sure NOT to duplicate class names as it is an anti-pattern.
+                Make sure, all your class names are unique.
+            `);
+        }
+        */
     }
 
     static registerBean(

@@ -5,6 +5,9 @@ import {
     ParameterInjectionMetaData,
 } from "./Inject";
 
+export const CLASS_IDENTIFIER = Symbol('CLASS_IDENTIFIER');
+export const CLASS_NAME = Symbol('CLASS_NAME');
+
 export interface BeanConfig {
     injectionProfile: InjectionProfile;
 }
@@ -29,9 +32,33 @@ export function Component(beanConfig?: BeanConfig) {
         // resulting in a generic name for the class
         target.prototype.metaClassName = target.name;
 
+        // defines a unique class identifier which allows for
+        // having more than one class with the same name
+        // still able to be distinguished
+        /*
+        Object.defineProperty(target.prototype, CLASS_IDENTIFIER, {
+            value: Symbol(target.name),
+            writable: false,
+            enumerable: false
+        });
+        */
+
+        target.prototype[CLASS_IDENTIFIER] = Symbol(target.name);
+        target.prototype[CLASS_NAME] = target.name;
+
+        // defines the class name next to the identifier
+        /*
+        Object.defineProperty(target.prototype, CLASS_NAME, {
+            value: target.name,
+            writable: false,
+            enumerable: false
+        });
+        */
+
         // register this class with the BeanFactory, so it knows about it
         // allowing all subsequent classes to be able to create instances of us
         BeanFactory.registerBean(target.name, target, selfInjectionProfile);
+        BeanFactory.registerBeanSymbol(target, selfInjectionProfile);
 
         // @Inject decorators that may be defined inside of the class definition
         // this @Component decorator is bound to, are processed first.

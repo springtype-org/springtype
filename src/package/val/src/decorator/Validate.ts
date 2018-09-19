@@ -62,6 +62,7 @@ export function baseValidator(target: Object, propertyKey: string | symbol, para
     validationObject[parameterIndex] = constrains;
     Reflect.defineMetadata(VALIDATION_DECORATOR_METADATA_KEY, validationObject, target, propertyKey);
 }
+
 export interface ValidationConstrain {
     validate(paramName: string, value: Object): void;
 }
