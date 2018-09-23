@@ -22,9 +22,8 @@ class AssertValidator implements Validator {
     }
 }
 
-export const ASSERT_VALIDATOR: AssertValidator = new AssertValidator();
-export const PRINT_VALIDATOR: AssertValidator = new PrintValidator();
-
+export const ASSERT_VALIDATOR: Validator = new AssertValidator();
+export const PRINT_VALIDATOR: Validator = new PrintValidator();
 
 export interface Validator {
     validate(result: ValidationResult[]): void;

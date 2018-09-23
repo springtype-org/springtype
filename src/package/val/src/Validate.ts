@@ -1,12 +1,13 @@
 import "reflect-metadata"
-import {getParamNames, Optional, Try, Tuple2} from "../../util";
-import {ErrorValidator, Validator} from "./Validator";
+import {getParamNames, Tuple2} from "../../util";
+import {ASSERT_VALIDATOR, Validator} from "./Validator";
 
 const VALIDATION_METHOD_PARAMNAMES_METADATA = Symbol("ParamNames");
 const VALIDATION_DECORATOR_METADATA_KEY = Symbol("Validation");
+const VALIDATOR_DEFAULT = ASSERT_VALIDATOR;
 
 
-export function Validate(validator: Validator = ErrorValidator.getInstance()) {
+export function Validate(validator: Validator = VALIDATOR_DEFAULT) {
     return (target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
         let method = descriptor.value;
 
@@ -42,7 +43,7 @@ export function Validate(validator: Validator = ErrorValidator.getInstance()) {
 }
 
 
-export function Validation(validator: Validator = ErrorValidator.getInstance()) {
+export function Validation(validator: Validator = VALIDATOR_DEFAULT) {
     return function classDecorator<T extends { new(...args: any[]): {} }>(target: T) {
         for (const propertyName of Object.keys(target.prototype)) {
             const descriptor = Object.getOwnPropertyDescriptor(target.prototype, propertyName);
