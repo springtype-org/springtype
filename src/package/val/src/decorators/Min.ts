@@ -1,10 +1,10 @@
 import {baseValidator} from "../Validate";
-import * as fromRequired from "./Required"
+import {validate as fromRequiredValidate}   from "./Required"
 import {validateType} from "./Max";
 
 export function Min(minimum: number) {
     return baseValidator((value) => {
-        if (!fromRequired.validate(value)) {
+        if (!fromRequiredValidate(value)) {
             return false;
         }
         if (!validateType(value)) {

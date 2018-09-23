@@ -1,28 +1,29 @@
 import {ValidationResult} from "./Validate";
-import {Component} from "../../di";
 
 function buildErrorText(error: ValidationResult): string {
     return `Parameter (name=${error.argumentName},index=${error.index}) is invalid (value=${error.input})`;
 }
-@Component()
-export class PrintValidator implements Validator {
+
+class PrintValidator implements Validator {
+    public constructor() {
+    }
+
     validate(errors: ValidationResult[]): void {
         console.error(errors.map(buildErrorText).join(' '))
     }
 }
 
-@Component()
-export class ErrorValidator implements Validator {
+class AssertValidator implements Validator {
+    public constructor() {
+    }
+
     validate(errors: ValidationResult[]): void {
         throw new Error(errors.map(buildErrorText).join(' '))
     }
 }
 
-const DEFAULT: Validator = new ErrorValidator();
-
-export class ValidationConfigurator {
-    static active: Validator = DEFAULT;
-}
+export const ASSERT_VALIDATOR: AssertValidator = new AssertValidator();
+export const PRINT_VALIDATOR: AssertValidator = new PrintValidator();
 
 
 export interface Validator {

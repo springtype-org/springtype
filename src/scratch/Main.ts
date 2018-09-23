@@ -1,7 +1,6 @@
 import {Gain} from "./Gain";
 import {BeanFactory} from "../package/di";
 import {Corrupt} from "./Corrupt";
-import {PrintValidator, ValidationConfigurator} from "../package/val";
 
 let gain: Gain = BeanFactory.getBean(Gain);
 let corrupt: Corrupt = BeanFactory.getBean(Corrupt);
@@ -9,8 +8,6 @@ let corrupt: Corrupt = BeanFactory.getBean(Corrupt);
 console.log('Gain via DI', gain);
 
 gain.testInject();
-
-ValidationConfigurator.active = BeanFactory.getBean(PrintValidator);
 
 corrupt.undefined('test');
 corrupt.undefined();
@@ -26,8 +23,8 @@ corrupt.notEmptyAll(['SpringType', null]);
 corrupt.required(1);
 corrupt.required(null);
 corrupt.required();
-corrupt.min(0);
-corrupt.min(1);
+corrupt.min(-0);
+corrupt.min(-1);
 corrupt.max(3);
 corrupt.max(2);
 corrupt.range(2);

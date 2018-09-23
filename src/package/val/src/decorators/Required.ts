@@ -1,6 +1,6 @@
 import {baseValidator} from "../Validate";
-import * as fromNotNull from "./NotNull";
-import * as fromDefined from "./Defined";
+import {validate as notNullValidate} from "./NotNull";
+import {validate as definedValidate} from "./IsDefined";
 
 
 export function Required() {
@@ -8,6 +8,6 @@ export function Required() {
 }
 
 export const validate = (value: any): boolean => {
-    return fromNotNull.validate(value) && fromDefined.validate(value)
+    return notNullValidate(value) && definedValidate(value)
 };
 

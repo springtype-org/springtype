@@ -1,12 +1,12 @@
 import {baseValidator} from "../Validate";
-import * as fromRequired from "./Required"
-import * as fromMax from "./Max"
-import * as fromMin from "./Min"
+import {validate as requiredValidate}  from "./Required"
+import {validate as maxValidate}  from "./Max"
+import {validate as minValidate} from "./Min"
 import {validateType} from "./Max";
 
 export function Range(minimum: number, maximum: number) {
     return baseValidator((value) => {
-        if (!fromRequired.validate(value)) {
+        if (!requiredValidate(value)) {
             return false;
         }
         if (!validateType(value)) {
@@ -17,5 +17,5 @@ export function Range(minimum: number, maximum: number) {
 }
 
 function validate(value: any, minimum: number, maximum: number): boolean {
-    return fromMax.validate(value, maximum) && fromMin.validate(value, minimum)
+    return maxValidate(value, maximum) && minValidate(value, minimum)
 }

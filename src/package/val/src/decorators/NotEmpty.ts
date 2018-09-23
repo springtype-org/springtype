@@ -1,12 +1,12 @@
 import {baseValidator} from "../Validate";
-import * as fromRequired from "./Required"
+import {validate as fromRequiredValidate}   from "./Required"
 
 export function NotEmpty(all = false) {
     return baseValidator((value: any) => validate(value, all));
 }
 
 function validate(value: any, all: boolean): boolean {
-    if (!fromRequired.validate(value)) {
+    if (!fromRequiredValidate(value)) {
         return false;
     }
     if (typeof value == 'string' || value instanceof String) {
