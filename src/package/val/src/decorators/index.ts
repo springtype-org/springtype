@@ -5,3 +5,8 @@ export {Required} from "./Required";
 export {Range} from "./Range";
 export {Min} from "./Min";
 export {Max} from "./Max";
+export {Future} from "./Future"
+export {Past} from "./Past"
+export {IsDate} from "./IsDate"
+export {IsString} from "./IsString"
+export {IsNumber} from "./IsNumber"
