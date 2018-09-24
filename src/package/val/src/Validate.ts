@@ -66,6 +66,9 @@ export function baseValidator(constrain: IValidate): ParameterDecorator {
 
 export type IValidate = (value: any) => boolean;
 
+export type Options = {required?: boolean;}
+export const DEFAULT_OPTIONS: Options = {required: false};
+
 export type ValidationResult = {
     argumentName: String
     index: number
