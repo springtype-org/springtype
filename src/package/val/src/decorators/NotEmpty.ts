@@ -1,14 +1,17 @@
-import {baseValidator} from "../Validate";
-import {validate as fromRequiredValidate}   from "./Required"
+import {baseValidator, DEFAULT_OPTIONS} from "../Validate";
+import {validateRequired} from "./Required"
 
-export function NotEmpty(all = false) {
-    return baseValidator((value: any) => validate(value, all));
+export function NotEmpty(all = false, options: OptionsNotEmpty = DEFAULT_OPTIONS) {
+    return baseValidator((value: any) => {
+        const required = validateRequired(value, options);
+        if (required.isPresent() && !required.get()) {
+            return false;
+        }
+        return validate(value, options.all === true);
+    })
 }
 
 function validate(value: any, all: boolean): boolean {
-    if (!fromRequiredValidate(value)) {
-        return false;
-    }
     if (typeof value == 'string' || value instanceof String) {
         return value.length > 0;
     } else if (typeof value[Symbol.iterator] === 'function') {
@@ -25,4 +28,9 @@ function validate(value: any, all: boolean): boolean {
         }
     }
     return true;
+}
+
+export type OptionsNotEmpty = {
+    required?: boolean;
+    all?: boolean;
 }
