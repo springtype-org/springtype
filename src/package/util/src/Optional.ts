@@ -8,6 +8,13 @@ export class Optional<T> {
         return this._value !== null && this._value !== undefined;
     }
 
+    public then(fun: (value: T) => T): Optional<T> {
+        if (this.isPresent()) {
+            return Optional.of(fun(this.get()));
+        }
+        return Optional.none();
+    }
+
     get(): T {
         return this._value;
     }
