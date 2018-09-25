@@ -1,10 +1,10 @@
-import {ValidationResult} from "./Validate";
+import {ValidationResult} from "./ValidateMethod";
 
 function buildErrorText(error: ValidationResult): string {
     return `Parameter (name=${error.argumentName},index=${error.index}) is invalid (value=${error.input})`;
 }
 
-class PrintValidator implements Validator {
+class PrintValidator implements IValidator {
     public constructor() {
     }
 
@@ -13,7 +13,7 @@ class PrintValidator implements Validator {
     }
 }
 
-class AssertValidator implements Validator {
+class AssertValidator implements IValidator {
     public constructor() {
     }
 
@@ -21,10 +21,10 @@ class AssertValidator implements Validator {
         throw new Error(errors.map(buildErrorText).join(' '))
     }
 }
+export const ASSERT_VALIDATOR: IValidator = new AssertValidator();
+export const VALIDATOR_DEFAULT = ASSERT_VALIDATOR;
+export const PRINT_VALIDATOR: IValidator = new PrintValidator();
 
-export const ASSERT_VALIDATOR: Validator = new AssertValidator();
-export const PRINT_VALIDATOR: Validator = new PrintValidator();
-
-export interface Validator {
+export interface IValidator {
     validate(result: ValidationResult[]): void;
 }

@@ -1,36 +1,41 @@
-import {baseValidator, DEFAULT_OPTIONS} from "../Validate";
-import {validateRequired} from "./Required"
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT} from "../ValidateMethod";
+import {validateRequired, validate as fromRequiredvalidate} from "./Required"
 
-export function NotEmpty(all = false, options: OptionsNotEmpty = DEFAULT_OPTIONS) {
-    return baseValidator((value: any) => {
-        const required = validateRequired(value, options);
-        if (required.isPresent() && !required.get()) {
-            return false;
-        }
-        return validate(value, options.all === true);
-    })
-}
+export const NotEmpty = (options: OptionsNotEmpty = {...DECORATOR_OPTIONS_DEFAULT}) =>
+    baseValidator((value) =>
+        validateRequired(
+            value,
+            () => validate(value, options.full === true),
+            options)
+    );
 
-function validate(value: any, all: boolean): boolean {
+export const validate = (value: any, full: boolean): boolean => {
+    if(!fromRequiredvalidate(value)){
+        return false
+    }
     if (typeof value == 'string' || value instanceof String) {
         return value.length > 0;
     } else if (typeof value[Symbol.iterator] === 'function') {
         const iterator = value[Symbol.iterator]();
         let element = iterator.next();
-        while (!element.done) {
-            if (!validate(element.value, all)) {
+        do{
+            if(!fromRequiredvalidate(element.value)){
+                return false
+            }
+            if (!validate(element.value, full)) {
                 return false;
             }
-            if (all === false) {
+            if (full === false) {
                 return true;
             }
             element = iterator.next();
         }
+        while (element.done === false)
     }
     return true;
-}
+};
 
 export type OptionsNotEmpty = {
     required?: boolean;
-    all?: boolean;
+    full?: boolean;
 }
