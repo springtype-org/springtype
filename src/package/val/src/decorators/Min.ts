@@ -1,27 +1,17 @@
-import {baseValidator, DEFAULT_OPTIONS, Options} from "../Validate";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
 import {validateRequired} from "./Required"
 import {validate as fromNumberValidate} from "./IsNumber"
 import {validate as fromDateValidate} from "./IsDate";
 
-export function Min<T extends number | Date>(minimum: T, options: Options = DEFAULT_OPTIONS) {
-    return baseValidator((value) => {
-        const required = validateRequired(value, options);
-        if (required.isPresent() &&  !required.get()) {
-            return false;
-        }
-        if (fromNumberValidate(value)) {
-            if (fromNumberValidate(minimum)) {
-                return validateNumber(value, <number> minimum)
-            }
-        }
-        if (fromDateValidate(value)) {
-            if (fromDateValidate(minimum)) {
-                return validateDate(value, <Date> minimum)
-            }
-        }
-        return false;
-    });
-}
+export const Min = <T extends number | Date>(minimum: T, options: Options = DECORATOR_OPTIONS_DEFAULT) =>
+    baseValidator((value) =>
+        validateRequired(
+            value,
+            () =>
+                fromNumberValidate(value) && fromNumberValidate(minimum) && validateNumber(value, <number> minimum) ||
+                fromDateValidate(value) && fromDateValidate(minimum) && validateDate(value, <Date> minimum),
+            options)
+    );
 
 export function validateNumber(value: number, minimum: number): boolean {
     return value >= minimum;

@@ -1,9 +1,5 @@
-import {baseValidator} from "../Validate";
+import {baseValidator} from "../ValidateMethod";
 
-export function NotNull() {
-    return baseValidator(validate)
-}
+export const NotNull = () => baseValidator(validate);
 
-export const validate = (value: any): boolean => {
-    return null !== value;
-};
+export const validate = (value: any): boolean => null !== value;

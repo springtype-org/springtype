@@ -1,8 +1,7 @@
-import {baseValidator} from "../Validate";
+import {baseValidator} from "../ValidateMethod";
 
-export function IsDefined() {
-    return baseValidator(validate)
-}
+export const IsDefined = () => baseValidator(validate);
+
 export const validate = (value: any): boolean => {
     return value !== undefined
 };

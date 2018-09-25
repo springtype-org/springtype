@@ -1,20 +1,13 @@
-import {baseValidator, DEFAULT_OPTIONS, Options} from "../Validate";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
 import {validateRequired} from "./Required";
 import {validate as fromDateValidate} from "./IsDate";
 
-export function Past(options: Options = DEFAULT_OPTIONS) {
-    return baseValidator((value) => {
-        const required = validateRequired(value, options);
-        if (required.isPresent() && !required.get()) {
-            return false;
-        }
-        if (fromDateValidate(value)) {
-            return validate(<Date> value);
-        }
-        return false;
-    })
-}
+export const Past=(options: Options = DECORATOR_OPTIONS_DEFAULT) =>
+    baseValidator((value) =>
+        validateRequired(
+            value,
+            () => fromDateValidate(value) && validate(<Date> value),
+            options)
+    );
 
-export const validate = (value: Date): boolean => {
-    return new Date() > value;
-};
+export const validate = (value: Date): boolean => new Date() > value;
