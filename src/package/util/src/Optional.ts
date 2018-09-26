@@ -27,6 +27,9 @@ export class Optional<T> {
     }
 
     static of<T>(value: T): Optional<T> {
+        if(value === null || value === undefined){
+            Optional.none();
+        }
         return new Optional<T>(value);
     }
 
