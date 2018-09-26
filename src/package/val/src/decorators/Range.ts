@@ -4,7 +4,6 @@ import {validateDate as fromMaxValidateDate, validateNumber as fromMaxValidateNu
 import {validateDate as fromMinValidateDate, validateNumber as fromMinValidateNumber} from "./Min"
 import {validate as fromNumberValidate} from "./IsNumber"
 import {validate as fromDateValidate} from "./IsDate";
-import {validate} from "./Past";
 
 
 export const Range = <T extends number | Date>(minimum: T, maximum: T, options: Options = DECORATOR_OPTIONS_DEFAULT) =>
