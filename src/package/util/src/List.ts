@@ -24,11 +24,15 @@ export class List<T> {
         return this.find(value).isPresent();
     }
 
-    public map<M>(fun: () => M): M[] {
-        return this.array.map(fun);
+    public map<R>(fun: (value: T, index: number) => R): List<R> {
+        return List.of([...this.array].map(fun));
     }
 
-    public forEach(fun: (value: T, index: number, array: T[]) => void): void {
+    public reverse(): List<T> {
+       return List.of([...this.array].reverse())
+    }
+
+    public forEach(fun: (value: T, index: number) => void): void {
         this.array.forEach(fun);
     }
 

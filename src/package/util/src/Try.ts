@@ -6,19 +6,23 @@ export class Try<T> {
     }
 
     public getOrElse(defaultValue: T): T {
-        try{
+        try {
             return this.fun();
         }
-        catch(e){
+        catch (e) {
             return defaultValue;
         }
     }
 
-    public get(): Optional<T> {
-        try{
+    public get(): T {
+        return this.fun();
+    }
+
+    public toOption(): Optional<T> {
+        try {
             return Optional.of(this.fun());
         }
-        catch(e){
+        catch (e) {
             return Optional.none();
         }
     }
