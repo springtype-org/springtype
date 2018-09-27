@@ -36,7 +36,6 @@ const checksum = (value: string): boolean => {
     //Convert number to array (with only digits):
     let number = toDigitList(isbn.slice(0, -1)).toArray();
 
-
     //Save last digit (control digit):
     const last = isbn.slice(-1);
     const lastDigit = (last !== 'X') ? parseInt(last, 10) : 'X';
