@@ -26,8 +26,8 @@ export const validate = (value: string): boolean => {
     return total % 10 === 0
 };
 
-const toDigitList = (digitString: string): List<number> => List.of(digitString.split(''))
-    .map((d) => Number(d));
+export const toDigitList = (digitString: string): List<number> => List.of(digitString.split(''))
+    .map(Number);
 
 const sum = (list: List<number>): number => {
     let result = 0;
