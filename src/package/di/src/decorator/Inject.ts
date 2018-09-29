@@ -1,68 +1,52 @@
 import "reflect-metadata";
-import {BeanFactory, InjectionProfile, InjectionStrategy} from "../BeanFactory";
+import {InjectionProfile, InjectionStrategy} from "../BeanFactory";
+import {ComponentReflector} from "../ComponentReflector";
+import {ApplicationContext} from "../ApplicationContext";
 
-export const INJECT_DECORATOR_METADATA_KEY = Symbol("Inject");
+export const INJECT_DECORATOR_METADATA_KEY = Symbol("@Inject");
 
-export interface InjectBeanFactory {
-    factory(): any;
-}
-
-export interface ParameterInjectionMetaDataEntry {
-    parameterIndex: number;
+export interface ArgumentInjectionMetadata {
+    index: number;
     injectionReference: InjectionReference;
-    injectionProfile: InjectionProfile;
+    injectionStrategy: InjectionStrategy;
 }
 
-export interface ParameterInjectionMetaData {
-    parameters: Array<ParameterInjectionMetaDataEntry>;
+export interface ArgumentsInjectionMetaData {
+    arguments: Array<ArgumentInjectionMetadata>;
 }
 
-export function createDefaultParameterInjectionMetaData() {
+export function createDefaultArgumentsInjectionMetadata() {
     return {
-        parameters: []
+        arguments: []
     }
 }
 
-/**
- * any value except a value typeof InjectBeanFactory or Function:
- * -> just injects the value named
- *
- * value typeof InjectBeanFactory
- * -> uses a singleton instance of that InjectBeanFactory to produce an instance to inject
- *
- * value typeof Function
- * -> uses the Function as a constructor and creates an instance of it to inject
- */
-export declare type InjectionReference = any | InjectBeanFactory | Function;
+export declare type InjectionReference = any | Function;
 
-export function resolveInjectionParameterValue(parameterInjectionMetaData: ParameterInjectionMetaData, parameterIndex: number) {
+export function resolveInjectionParameterValue(
+    argumentsInjectionMetaData: ArgumentsInjectionMetaData,
+    index: number,
+    isTestComponent: boolean
+) {
 
     let injectionValue: any;
 
-    if (!parameterInjectionMetaData.parameters[parameterIndex]) return;
+    if (!argumentsInjectionMetaData.arguments[index]) return;
 
-    const injectionReference: InjectionReference = parameterInjectionMetaData.parameters[parameterIndex].injectionReference;
+    const injectionReference: InjectionReference =
+        argumentsInjectionMetaData.arguments[index].injectionReference;
 
     if (typeof injectionReference !== 'undefined') {
 
         if (typeof injectionReference === 'function') {
 
-            // dynamic InjectBeanFactory signature check
-            // this happens like this because InjectBeanFactory is an interface
-            if (injectionReference.prototype.factory &&
-                typeof injectionReference.prototype.factory === 'function') {
-
-                // TODO: Optimize -> use BeanFactory and cache factory instances itself
-                const factoryOrInstance = new injectionReference();
-                injectionValue = factoryOrInstance.factory();
-
-            } else if (injectionReference.prototype.metaClassName) {
+            if (ComponentReflector.isComponent(injectionReference)) {
 
                 // it is not a InjectBeanFactory, just use the instance
-                injectionValue = BeanFactory.getBean(
+                injectionValue = ApplicationContext.getInstance().getBean(
                     injectionReference,
-                    parameterInjectionMetaData.parameters[parameterIndex].injectionProfile,
-                    InjectionStrategy.NEW_INSTANCE
+                    isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
+                    argumentsInjectionMetaData.arguments[index].injectionStrategy,
                 );
 
             } else {
@@ -82,51 +66,31 @@ export function resolveInjectionParameterValue(parameterInjectionMetaData: Param
 
 export function Inject(
     injectionReference?: InjectionReference,
-    injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
+    injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON
 ) {
 
-    return function(targetClassInstanceOrCtor: Object|Function, propertyKey: string | symbol, parameterIndex: number) {
+    return function(targetClassInstanceOrCtor: Object|Function, propertyKey: string | symbol, argumentIndex: number) {
 
-        // case: param on constructor function
         if (typeof targetClassInstanceOrCtor === 'function') {
 
-            // fetch (probably existing) meta data
-            const parameterInjectionMetaData: ParameterInjectionMetaData = Reflect.getOwnMetadata(
-                INJECT_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, targetClassInstanceOrCtor.name
-            ) || createDefaultParameterInjectionMetaData();
-
-            // enhance meta data for parameter
-            parameterInjectionMetaData.parameters[parameterIndex] = {
-                parameterIndex,
-                injectionReference,
-                injectionProfile
-            };
-
-            // (re-)define injection reference meta data
-            Reflect.defineMetadata(
-                INJECT_DECORATOR_METADATA_KEY,
-                parameterInjectionMetaData,
+            // case: param on constructor function
+            ComponentReflector.setConstructorArgumentsInjectionMetadata(
                 targetClassInstanceOrCtor,
-                targetClassInstanceOrCtor.name);
+                argumentIndex,
+                injectionReference,
+                injectionStrategy
+            );
 
         } else {
 
             // case: param on method
-
-            // fetch (probably existing) meta data
-            const parameterInjectionMetaData: ParameterInjectionMetaData = Reflect.getOwnMetadata(
-                INJECT_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, propertyKey
-            ) || createDefaultParameterInjectionMetaData();
-
-            // enhance meta data for parameter
-            parameterInjectionMetaData.parameters[parameterIndex] = {
-                parameterIndex,
+            ComponentReflector.setMethodArgumentsInjectionMetadata(
+                targetClassInstanceOrCtor,
+                argumentIndex,
+                propertyKey,
                 injectionReference,
-                injectionProfile
-            };
-
-            // (re-define) injection reference for parameter index
-            Reflect.defineMetadata(INJECT_DECORATOR_METADATA_KEY, parameterInjectionMetaData, targetClassInstanceOrCtor, propertyKey);
+                injectionStrategy
+            );
         }
     }
 }

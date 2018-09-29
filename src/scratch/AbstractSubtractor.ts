@@ -1,8 +1,6 @@
-import {Component} from "../package/di";
-import {AbstractSubtractor} from "./AbstractSubtractor";
+import {Subtractor} from "./Subtractor";
 
-@Component
-export class Subtractor extends AbstractSubtractor {
+export abstract class AbstractSubtractor {
 
     signed: boolean = false;
 

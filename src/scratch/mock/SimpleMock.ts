@@ -1,13 +1,10 @@
-import {Component, Autowired, Inject} from "../package/di";
-import {Multiplier} from "./Multiplier";
-import {Subtractor} from "./Subtractor";
-import {NiceSubtractor} from "./NiceSubtractor";
-import {SimpleMock} from "./mock/SimpleMock";
+import {Autowired, Component, Inject} from "../../package/di/index";
+import {NiceSubtractor} from "../NiceSubtractor";
+import {Subtractor} from "../Subtractor";
+import {Multiplier} from "../Multiplier";
 
-@Component({
-    mockedBy: SimpleMock
-})
-export class Simple {
+@Component
+export class SimpleMock {
 
     constructor(
         protected multiplier?: Multiplier
@@ -16,6 +13,8 @@ export class Simple {
 
     @Autowired
     calc(a: number, b: number, @Inject(NiceSubtractor) subtractor?: Subtractor): number {
+
+        console.log('test calc');
 
         if (subtractor && this.multiplier) {
             return subtractor.subtract(

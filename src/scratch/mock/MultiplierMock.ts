@@ -1,13 +1,10 @@
-import {Component} from "../package/di";
-import {UnresolvableBean} from "./UnresolvableBean";
-import {MultiplierMock} from "./mock/MultiplierMock";
+import {UnresolvableBean} from "../UnresolvableBean";
+import {Component} from "../../package/di";
 
-@Component({
-    mockedBy: MultiplierMock
-})
-export class Multiplier {
+@Component
+export class MultiplierMock {
 
-    constructor(unresolvable: UnresolvableBean, mul?: Multiplier) {
+    constructor(unresolvable: UnresolvableBean) {
 
         // even this is injected, no matter if UnresolvableBean is @Component annotated or not
         if (!unresolvable) {
@@ -21,6 +18,7 @@ export class Multiplier {
 
     multiply(a: number, b: number) {
 
+        console.log('test multiply');
         return a * b;
     }
 }

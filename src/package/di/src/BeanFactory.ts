@@ -1,5 +1,6 @@
-import {CLASS_IDENTIFIER, CLASS_NAME, IBean} from "./decorator/Component";
-import {ParameterInjectionMetaData, resolveInjectionParameterValue} from "./decorator/Inject";
+import {IComponent} from "./decorator/Component";
+import {ArgumentsInjectionMetaData, resolveInjectionParameterValue} from "./decorator/Inject";
+import {ComponentReflector} from "./ComponentReflector";
 
 export enum InjectionProfile {
     DEFAULT = 'DEFAULT',
@@ -8,253 +9,212 @@ export enum InjectionProfile {
 
 export enum InjectionStrategy {
     SINGLETON = 'SINGLETON',
-    NEW_INSTANCE = 'NEW_INSTANCE'
-}
-
-export interface InjectionMap {
-    [className: string]: {
-        [injectionProfile: string]: IBean<any>;
-    };
-}
-
-
-export interface SymbolInjectionMap {
-    [classIdentifier: string]: {
-        [injectionProfile: string]: IBean<any>;
-    };
+    NEW = 'NEW'
 }
 
 export class BeanFactory {
 
-    static injectionMap: InjectionMap = {};
-    static symbolInjectionMap: InjectionMap = {};
+    registry = {};
+    singletonInstances = {};
 
-    static beanInstanceMap: {
-        [className: string]: {
-            [injectionProfile: string]: any;
-        }
-    } = {};
-
-    static beanParameterMetadataMap: {
-        [className: string]: ParameterInjectionMetaData;
-    } = {};
-
-
-    private static getConstructorParameterTypes(target: IBean<any>): Array<IBean<any>> {
-        return Reflect.getMetadata('design:paramtypes', target) || [];
+    setComponent(componentCtor: IComponent<any>) {
+        Reflect.set(this.registry, ComponentReflector.getSymbol(componentCtor), componentCtor);
     }
 
-    static registerBeanSymbol(ctor: IBean<any>,
-                              injectionProfile: InjectionProfile = InjectionProfile.DEFAULT) {
-
-
-        const classIdent = ctor.prototype[CLASS_IDENTIFIER];
-        const className = ctor.prototype[CLASS_NAME];
-
-        /*
-        if (!BeanFactory.symbolInjectionMap[ctor.prototype[CLASS_IDENTIFIER]]) {
-            BeanFactory.symbolInjectionMap[className] = {};
-        }
-
-        if (!BeanFactory.injectionMap[className][injectionProfile]) {
-            BeanFactory.injectionMap[className][injectionProfile] = ctor;
-        } else {
-            throw new Error(
-                `Bean with name ${className} is already registered. 
-                Please make sure NOT to duplicate class names as it is an anti-pattern.
-                Make sure, all your class names are unique.
-            `);
-        }
-        */
+    getComponent(componentCtor: IComponent<any>) {
+        return Reflect.get(this.registry, ComponentReflector.getSymbol(componentCtor)) || null;
     }
 
-    static registerBean(
-        className: string,
-        ctor: IBean<any>,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT) {
-
-        if (!BeanFactory.injectionMap[className]) {
-            BeanFactory.injectionMap[className] = {};
-        }
-
-        if (!BeanFactory.injectionMap[className][injectionProfile]) {
-            BeanFactory.injectionMap[className][injectionProfile] = ctor;
-        } else {
-            throw new Error(
-                `Bean with name ${className} is already registered. 
-                Please make sure NOT to duplicate class names as it is an anti-pattern.
-                Make sure, all your class names are unique.
-            `);
-        }
-    }
-
-    static getBean<T>(
-        requiredType: Function,
+    getBean<T extends IComponent<any>>(
+        componentCtor: T,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
-        injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): T {
+        injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): any {
 
-        // infer class name via metaClassName provided by @Component decorator
-        const className = requiredType.prototype.metaClassName;
+        // validate component reference
+        componentCtor = this.getComponent(componentCtor);
 
-        if (BeanFactory.injectionMap[className] &&
-            BeanFactory.injectionMap[className][injectionProfile]) {
+        if (!ComponentReflector.isComponent(componentCtor)) {
 
-            // only in case of singleton instance retrieval,
-            // try to fetch from cache, otherwise directly head to new instance creation
-            if (injectionStrategy === InjectionStrategy.SINGLETON) {
-
-                const beanInstanceFromRegistry = BeanFactory.getSingletonBeanInstanceFromRegistry(
-                    className, injectionProfile
-                );
-
-                if (beanInstanceFromRegistry) {
-                    return beanInstanceFromRegistry;
-                }
-            }
-
-            // because the singleton code branch didn't return,
-            // we are here to create the first instance ever or another new instance
-            // -> start of the recursion -> follow the path down the rabbit hole...
-            const beanInstance = new BeanFactory.injectionMap[className][injectionProfile](
-                ...BeanFactory.resolveBeanConstructorArguments(className, injectionProfile)
+            return this.solveUnresolvableBean(
+                componentCtor
             );
-            BeanFactory.registerSingletonBeanInstance(className, beanInstance, injectionProfile);
-
-            return beanInstance;
-
-        } else {
-
-            throw new Error(`Class not found: ${className} for profile ${injectionProfile}. Did you forget to add @Bean?`);
         }
+
+        const classSymbol = ComponentReflector.getSymbol(componentCtor);
+        const beanConfig = ComponentReflector.getConfig(componentCtor);
+
+        if (injectionProfile === InjectionProfile.TEST &&
+            beanConfig &&
+            beanConfig.mockedBy &&
+            ComponentReflector.isComponent(beanConfig.mockedBy)) {
+
+            componentCtor = this.getComponent(beanConfig.mockedBy);
+
+            ComponentReflector.setIsMockComponent(componentCtor);
+        }
+
+        // only in case of singleton instance retrieval,
+        // try to fetch from cache, otherwise directly head to new instance creation
+        if (injectionStrategy === InjectionStrategy.SINGLETON) {
+
+            const singletonInstance = this.getSingletonBeanInstance(classSymbol);
+
+            if (singletonInstance) {
+                return singletonInstance;
+            }
+        }
+
+        // injectionStrategy === InjectionStrategy.NEW || singleton instance not found
+
+        const beanInstance = new componentCtor(
+            ...this.resolveConstructorArguments(componentCtor, injectionProfile)
+        );
+
+        if (injectionStrategy === InjectionStrategy.SINGLETON) {
+            this.setSingletonBeanInstance(classSymbol, beanInstance);
+        }
+        return beanInstance;
     }
 
-    static resolveBeanConstructorArguments(className: string, injectionProfile: InjectionProfile): Array<any> {
+    getSingletonBeanInstance(
+        classSymbol: symbol
+    ): any {
+        return Reflect.get(this.singletonInstances, classSymbol);
+    }
+
+    setSingletonBeanInstance(
+        classSymbol: symbol,
+        beanInstance: any
+    ): void {
+        Reflect.set(this.singletonInstances, classSymbol, beanInstance);
+    }
+
+    resolveConstructorArguments<T extends IComponent<any>>(
+        componentCtor: T,
+        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
+    ): Array<any> {
+
+        componentCtor = this.getComponent(componentCtor);
+
+        const isTestComponent = ComponentReflector.getIsMockComponent(componentCtor);
+
+        const cachedConstructorArguments = ComponentReflector.getResolvedConstructorArguments(componentCtor);
+
+        if (cachedConstructorArguments) {
+            return cachedConstructorArguments;
+        }
+
 
         // fetch constructor parameter types from reflection metadata
-        const constructorParameterTypes: Array<IBean<any>> = BeanFactory.getConstructorParameterTypes(
-            BeanFactory.injectionMap[className][injectionProfile]
+        const constructorParameterTypes: Array<IComponent<any>> = ComponentReflector.getConstructorArgumentTypes(
+            componentCtor
         );
 
         // and do the default round-trip to get all instances by type
-        const constructorArguments = BeanFactory.getBeansByType(
-            constructorParameterTypes, injectionProfile, className
+        const constructorArguments = this.getBeans(
+            constructorParameterTypes,
+            componentCtor,
+            injectionProfile
         );
+
+        const constructorArgumentsParameterInjectionMetdata: ArgumentsInjectionMetaData =
+            ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
 
         // but if there are special @Inject decorations,
         // we head to resolve them and use these values instead
-        if (BeanFactory.beanParameterMetadataMap[className] &&
-            BeanFactory.beanParameterMetadataMap[className].parameters &&
-            BeanFactory.beanParameterMetadataMap[className].parameters.length) {
+        if (constructorArgumentsParameterInjectionMetdata &&
+            constructorArgumentsParameterInjectionMetdata.arguments &&
+            constructorArgumentsParameterInjectionMetdata.arguments.length) {
 
-            const overrideInjectParamValues = BeanFactory.beanParameterMetadataMap[className].parameters;
+            const overrideInjectParamValues = constructorArgumentsParameterInjectionMetdata.arguments;
 
-            for (let i=0; i<overrideInjectParamValues.length; i++) {
+            for (let i = 0; i < overrideInjectParamValues.length; i++) {
 
-                constructorArguments[overrideInjectParamValues[i].parameterIndex] =
+                if (typeof overrideInjectParamValues[i] !== 'undefined') {
 
-                    resolveInjectionParameterValue(
-                        BeanFactory.beanParameterMetadataMap[className],
-                        overrideInjectParamValues[i].parameterIndex
-                    );
+                    constructorArguments[overrideInjectParamValues[i].index] =
+
+                        resolveInjectionParameterValue(
+                            constructorArgumentsParameterInjectionMetdata,
+                            overrideInjectParamValues[i].index,
+                            isTestComponent
+                        );
+                }
             }
         }
+
+        // cache
+        ComponentReflector.setResolvedConstructorArguments(componentCtor, constructorArguments);
+
         return constructorArguments;
     }
 
-    static registerSingletonBeanInstance(
-        className: string,
-        instance: any,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
-    ) {
-
-        if (!BeanFactory.beanInstanceMap[className]) {
-            BeanFactory.beanInstanceMap[className] = {};
-        }
-
-        // take care it doesn't happen twice. First call wins. End of the story.
-        if (!BeanFactory.beanInstanceMap[className][injectionProfile]) {
-            BeanFactory.beanInstanceMap[className][injectionProfile] = instance;
-        }
-    }
-
-    static getSingletonBeanInstanceFromRegistry(
-        className: string,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
-    ): any {
-
-        if (BeanFactory.beanInstanceMap[className] && BeanFactory.beanInstanceMap[className][injectionProfile]) {
-            return BeanFactory.beanInstanceMap[className][injectionProfile];
-        }
-        return null;
-    }
-
-    static getBeansByType(
-        types: Array<IBean<any>>,
+    getBeans<T extends IComponent<any>>(
+        types: Array<IComponent<any>>,
+        forComponentCtor: T,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
-        forClassName: string
-    ): Array<any> {
+    ): Array<IComponent<any>> {
 
         if (types && types.length > 0) {
 
             const beans: Array<any> = [];
 
-            types.forEach((ctor: IBean<any>) => {
+            types.forEach((_componentCtor: IComponent<any>) => {
 
-                if (ctor === undefined) {
-                    throw new Error("Cyclic dependency detected in class: " + forClassName);
-                }
+                const componentCtor = this.getComponent(_componentCtor);
 
-                const singletonBeanInstanceFromRegistry = BeanFactory.getSingletonBeanInstanceFromRegistry(
-                    ctor.prototype.metaClassName, injectionProfile
-                );
+                // the component to inject (componentCtor) matches the component to inject in (forComponentCtor)
+                if (forComponentCtor === componentCtor) {
 
-                // console.log('ctor', ctor.prototype.metaClassName, 'resolved to', beanInstanceFromRegistry);
+                    beans.push(
+                        this.solveCyclicDependency(componentCtor)
+                    );
+                } else if (!componentCtor) {
 
-                if (singletonBeanInstanceFromRegistry) {
-
-                    beans.push(singletonBeanInstanceFromRegistry)
+                    // bean unresolvable -> inject undefined
+                    beans.push(
+                        this.solveUnresolvableBean(
+                            _componentCtor
+                        )
+                    );
 
                 } else {
 
-                    // recursions end -> class points to itself -> create instance -> register instance!
-                    if (ctor.prototype.metaClassName == ctor.prototype.metaClassName) {
+                    const singletonBeanInstanceFromRegistry = this.getSingletonBeanInstance(
+                        ComponentReflector.getSymbol(componentCtor)
+                    );
 
-                        //console.log('getBean()', ctor.name, ctor);
+                    if (singletonBeanInstanceFromRegistry) {
 
-                        const beanInstance = new ctor();
+                        beans.push(singletonBeanInstanceFromRegistry)
 
-                        // console.log('registering bean by name (singleton)', ctor.prototype.metaClassName, beanInstance);
-
-                        // if a bean is unresolvable, it's metaClassName is undefined,
-                        // do not register instances in this case
-                        if (typeof ctor.prototype.metaClassName != 'undefined') {
-
-                            BeanFactory.registerSingletonBeanInstance(ctor.prototype.metaClassName, beanInstance, injectionProfile);
-
-                            beans.push(
-                                beanInstance
-                            )
-                        }
                     } else {
 
                         beans.push(
-
-                            // -> follow it down the rabbit hole
-                            BeanFactory.getBean(ctor, injectionProfile)
+                            // follow down the rabbit hole
+                            this.getBean(componentCtor, injectionProfile)
                         );
                     }
                 }
             });
-
             return beans;
         }
         return [];
     }
 
+    solveUnresolvableBean<T extends IComponent<any>>(
+        componentCtor: T
+    ): any {
 
-    static registerBeanConstructorInjectionMetadata(className: string, parameterInjectionMetaData: ParameterInjectionMetaData) {
+        console.warn(`The component referenced for injection is missing a @Component decorator: ${componentCtor.name}`);
 
-        // registering @Inject override constructor parameter values
-        BeanFactory.beanParameterMetadataMap[className] = parameterInjectionMetaData;
+        return undefined;
+    }
+
+    solveCyclicDependency<T extends IComponent<any>>(componentCtor: T): T {
+
+        console.warn(`Cyclic dependency detected in @Component: ${ComponentReflector.getName(componentCtor)}`);
+
+        return componentCtor;
     }
 }

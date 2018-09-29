@@ -1,12 +1,13 @@
 import {
-    INJECT_DECORATOR_METADATA_KEY,
-    ParameterInjectionMetaData, resolveInjectionParameterValue
+    ArgumentsInjectionMetaData, resolveInjectionParameterValue
 } from "./Inject";
-import {BeanFactory} from "../BeanFactory";
+import {InjectionProfile} from "../BeanFactory";
+import {ComponentReflector} from "../ComponentReflector";
+import {ApplicationContext} from "../ApplicationContext";
 
 export function Autowired(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<Function | any>) {
 
-    const reflectedParamTypes = Reflect.getMetadata('design:paramtypes', target, propertyName) || [];
+    const methodArgumentTypes = ComponentReflector.getMethodArgumentTypes(target, propertyName);
 
     // backup original method
     const method: Function = <Function> descriptor.value;
@@ -14,44 +15,67 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
     // we replace the method again, the call the original impl. with injected arguments
     descriptor.value = function() {
 
-        // replacement method impl. -> this is called when the actual @BeanMethod annotated method is called (hook)
-
-        const parameterInjectionMetaData: ParameterInjectionMetaData = Reflect.getOwnMetadata(
-            INJECT_DECORATOR_METADATA_KEY, target, propertyName
+        const isTestComponent = ComponentReflector.getIsMockComponent(
+            ApplicationContext.getInstance().getComponent(target.constructor)
         );
+
+        // replacement method impl. -> this is called when the actual @BeanMethod annotated method is called (hook)
+        const argumentsInjectionMetaData: ArgumentsInjectionMetaData =
+            ComponentReflector.getMethodArgumentsInjectionMetadata(
+                target, propertyName
+            );
 
         const newArgs = [];
 
-        // first, copy initial arguments
+        // 1. Copy initial argument values (non-optionals, default values)
         for (let i=0; i<arguments.length; i++) {
             newArgs[i] = arguments[i];
         }
 
-        if (parameterInjectionMetaData &&
-            parameterInjectionMetaData.parameters &&
-            parameterInjectionMetaData.parameters.length) {
+        // 2. There might be @Inject(...) decorations, process them and inject
+        if (argumentsInjectionMetaData &&
+            argumentsInjectionMetaData.arguments &&
+            argumentsInjectionMetaData.arguments.length) {
 
             // copy arguments over into new arguments array (because arguments are immutable in modern times ;)
-            for (let i=0; i<parameterInjectionMetaData.parameters.length; i++) {
-
+            for (let i=0; i<argumentsInjectionMetaData.arguments.length; i++) {
 
                 // resolve override injection argument
-                const injectionValue = resolveInjectionParameterValue(parameterInjectionMetaData, i);
+                const injectionValue = resolveInjectionParameterValue(argumentsInjectionMetaData, i, isTestComponent);
 
                 // conditionally overwrite original call argument for sub-call
                 if (typeof injectionValue !== 'undefined') {
 
                     newArgs[i] = injectionValue;
 
-                } else if (parameterInjectionMetaData.parameters[i]) {
+                } else if (argumentsInjectionMetaData.arguments[i]) {
 
-                    // parameter has @Inject decorator, but no explicit value; fallback to singleton strategy!
-                    if (reflectedParamTypes[i]) {
+                    // parameter has @Inject() decorator, but no explicit value; fallback to default strategy
+                    if (methodArgumentTypes[i]) {
 
                         // fetch singleton from cache by reflected type
-                        newArgs[i] = BeanFactory.getBean(reflectedParamTypes[i]);
+                        newArgs[i] = ApplicationContext.getInstance().getBean(
+                            methodArgumentTypes[i],
+                            isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
+                            argumentsInjectionMetaData.arguments[i].injectionStrategy
+                        );
                     }
                 }
+            }
+        }
+
+        // 3. For all arguments that are appended optional and are not passed and not injects by @Inject(...)
+        //    try to inject them using their type reference
+        for (let i=arguments.length; i<methodArgumentTypes.length; i++) {
+
+            if (typeof newArgs[i] === 'undefined' &&
+                ComponentReflector.isComponent(methodArgumentTypes[i])) {
+
+
+                newArgs[i] = ApplicationContext.getInstance().getBean(
+                    methodArgumentTypes[i],
+                    isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT
+                );
             }
         }
         return method.apply(this, newArgs);
