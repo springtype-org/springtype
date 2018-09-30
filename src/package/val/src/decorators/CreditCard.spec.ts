@@ -126,8 +126,10 @@ describe('CreditCard', () => {
         expect(validate('123456789981')).to.equal(true);
         expect(validate('123456789999')).to.equal(true);
         expect(validate('4111111111111111')).to.equal(true);
+        expect(validate('4111-1111-1111-1111')).to.equal(true);
     });
     it( 'invalid',() => {
+        expect(validate('1445-5789-981')).to.equal(false);
 
     });
 });
