@@ -1,0 +1,26 @@
+{
+  "name": "@springtype/springtype-incubator-example-hello-world",
+  "version": "1.0.1",
+  "description": "It just says hello to the world.",
+  "dependencies": {
+    "@springtype/springtype-incubator": "file:../../",
+    "cross-env": "^5.2.0",
+    "parcel-bundler": "^1.10.1",
+    "sass": "^1.14.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel serve webapp/src/index.html",
+    "build": "cross-env NODE_ENV=production parcel build webapp/src/index.html --public-url .",
+    "watch": "parcel watch  webapp/src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.1.1"
+  }
+}

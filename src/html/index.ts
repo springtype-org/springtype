@@ -1,0 +1,1 @@
+export { WebComponent, WebComponentLifecycle, WebComponentConfig } from "./src/decorator/WebComponent";

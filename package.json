@@ -1,12 +1,22 @@
 {
-  "name": "springtype-incubator",
-  "version": "1.0.0",
+  "name": "@springtype/springtype-incubator",
+  "version": "1.0.1",
   "description": "It just works.",
   "dependencies": {
+    "@types/node": "^10.11.3",
+    "colors": "^1.3.2",
+    "optimist": "^0.6.1",
+    "prompt": "^1.0.0",
     "reflect-metadata": "^0.1.12",
+    "rxjs": "^6.3.3",
     "ts-polyfill": "^3.0.1",
     "tslib": "^1.9.3"
   },
+  "bin": {
+    "springtype": "./dist/bin/springtype.js"
+  },
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "devDependencies": {
     "@types/chai": "^4.1.5",
     "@types/mocha": "^5.2.5",
@@ -14,7 +24,7 @@
     "mocha": "^5.2.0"
   },
   "scripts": {
-    "package": "tsc",
+    "package": "cd src && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
