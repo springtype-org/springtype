@@ -15,8 +15,14 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
     // we replace the method again, the call the original impl. with injected arguments
     descriptor.value = function() {
 
+        const cmp = ApplicationContext.getInstance().getComponent(target.constructor);
+
+        if (!cmp) {
+            throw new Error('@Autowired on methods requires @Component on the class.');
+        }
+
         const isTestComponent = ComponentReflector.getIsMockComponent(
-            ApplicationContext.getInstance().getComponent(target.constructor)
+            cmp
         );
 
         // replacement method impl. -> this is called when the actual @BeanMethod annotated method is called (hook)

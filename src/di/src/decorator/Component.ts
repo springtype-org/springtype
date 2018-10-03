@@ -33,22 +33,18 @@ function registerBean<T extends IComponent<any>>(componentCtor: T, beanConfig?: 
     // instanceof checks sane. It is necessary, because we want to
     // *replace* the constructor with one that resolves it's arguments by itself (injection)
     // and is capable of even handling @Inject decorators in it constructor arguments (wohoo)
-    const derivedComponentCtor = class extends componentCtor {
+    const InjectionClassProxy = class extends componentCtor {
         constructor(...args: Array<any>) {
             super(...ApplicationContext.getInstance().resolveConstructorArguments(componentCtor));
         }
     };
 
-    // not copying the original prototype back to the class would result in
-    // direct instanceof returning false. Bad idea.
-    derivedComponentCtor.prototype = componentCtor.prototype;
+    ComponentReflector.registerDerived(componentCtor, InjectionClassProxy);
 
-    ComponentReflector.registerDerived(componentCtor, derivedComponentCtor);
-
-    ApplicationContext.getInstance().setComponent(derivedComponentCtor);
+    ApplicationContext.getInstance().setComponent(InjectionClassProxy);
 
     // just replace the original class declaration by our generic one
-    return derivedComponentCtor;
+    return InjectionClassProxy;
 }
 
 export function Component<T extends IComponent<any>>(beanConfigOrCtor?: BeanConfig<T>|T): T|any {

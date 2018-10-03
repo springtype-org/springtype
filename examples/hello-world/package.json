@@ -5,14 +5,15 @@
   "dependencies": {
     "@springtype/springtype-incubator": "file:../../",
     "cross-env": "^5.2.0",
+    "materialize-css": "^1.0.0-rc.2",
     "parcel-bundler": "^1.10.1",
     "sass": "^1.14.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel serve webapp/src/index.html",
-    "build": "cross-env NODE_ENV=production parcel build webapp/src/index.html --public-url .",
-    "watch": "parcel watch  webapp/src/index.html"
+    "start": "parcel serve src/index.html",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url .",
+    "watch": "parcel watch src/index.html"
   },
   "repository": {
     "type": "git",
