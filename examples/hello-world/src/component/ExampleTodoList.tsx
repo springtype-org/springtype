@@ -16,11 +16,16 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         todos: []
     };
 
+    onListItemMouseOver = (evt: Event) => {
+
+        console.log('List item click', evt.target);
+    };
+
     render() {
 
         // loop rendering is inherent
         const listItems = this.state.todos.map((todo: Todo) =>
-            <li>{ todo.text }</li>
+            <li onclick={ this.onListItemMouseOver }>{ todo.text }</li>
         );
 
         // what is returned, will be attached to this node

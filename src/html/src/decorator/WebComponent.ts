@@ -116,9 +116,9 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (element) {
 
                     if (config.shadow) {
-                        this.shadowRoot.appendChild(element.cloneNode(true));
+                        this.shadowRoot.appendChild(element);
                     } else {
-                        this.appendChild(element.cloneNode(true));
+                        this.appendChild(element);
                     }
                 }
             }

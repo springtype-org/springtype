@@ -8,7 +8,7 @@ import './component/ExampleTodoList';
     tag: 'example-app',
 
     // use shadow DOM (isolated CSS)
-    shadow: true
+    //shadow: true
 })
 @Component
 class ExampleAppElement extends HTMLElement implements WebComponentLifecycle {
@@ -27,7 +27,7 @@ class ExampleAppElement extends HTMLElement implements WebComponentLifecycle {
 
         // web component is attached to this web component node
         return (
-            <example-todo-list todos={ this.todoService.getTodos() } />
+            <example-todo-list class='example' todos={ this.todoService.getTodos() } />
         );
     }
 
