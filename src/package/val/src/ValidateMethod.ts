@@ -1,6 +1,7 @@
 import "reflect-metadata"
-import {getParamNames, Tuple2} from "../../util";
-import { IValidator, VALIDATOR_DEFAULT} from "./Validator";
+import {getParamNames, Tuple2} from "../../lang";
+import {IValidator, VALIDATOR_DEFAULT} from "./Validator";
+import {validate} from "./decorators/Required";
 
 const VALIDATION_METHOD_PARAMNAMES_METADATA = Symbol("ParamNames");
 const VALIDATION_DECORATOR_METADATA_KEY = Symbol("Validation");
@@ -56,3 +57,17 @@ export type ValidationResult = {
     index: number
     input: any
 }
+
+export const validateRequired = (value: any, func: () => boolean, options: Options,): boolean => {
+    const isValid = validate(value);
+    if (!!!options.required) {
+        //required === false
+        if (isValid) {
+            return func();
+        }
+        return true;
+    } else {
+        //required === true
+        return isValid && func();
+    }
+};

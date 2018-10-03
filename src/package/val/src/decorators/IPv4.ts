@@ -1,5 +1,4 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
-import {validateRequired} from "./Required";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validate as fromIsString} from "./IsString"
 import {validate as fromPattern} from "./Pattern"
 
@@ -16,4 +15,4 @@ export const IPv4 = (options: Options = DECORATOR_OPTIONS_DEFAULT) =>
     );
 
 
-export const validate = (value: string): boolean=> fromPattern(value,IPV4_REGEX);
+export const validate = (value: string): boolean => fromPattern(value, IPV4_REGEX);

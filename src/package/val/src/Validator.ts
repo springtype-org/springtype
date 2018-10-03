@@ -21,6 +21,7 @@ class AssertValidator implements IValidator {
         throw new Error(errors.map(buildErrorText).join(' '))
     }
 }
+
 export const ASSERT_VALIDATOR: IValidator = new AssertValidator();
 export const VALIDATOR_DEFAULT = ASSERT_VALIDATOR;
 export const PRINT_VALIDATOR: IValidator = new PrintValidator();

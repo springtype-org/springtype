@@ -1,5 +1,4 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
-import {validateRequired} from "./Required";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validate as fromIsString} from "./IsString"
 import {toDigitList} from "./CreditCard";
 

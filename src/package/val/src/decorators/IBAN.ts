@@ -1,5 +1,4 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
-import {validateRequired} from "./Required";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validate as fromIsString} from "./IsString"
 
 export const IBAN = (options: Options = DECORATOR_OPTIONS_DEFAULT) =>
@@ -37,7 +36,7 @@ export const validate = (value: string): boolean => {
 
 
 const mod97 = (string: string): boolean => {
-    let checksum = parseInt(string.slice(0, 2),10);
+    let checksum = parseInt(string.slice(0, 2), 10);
     let fragment;
     for (let offset = 2; offset < string.length; offset += 7) {
         fragment = String(checksum) + string.substring(offset, offset + 7);

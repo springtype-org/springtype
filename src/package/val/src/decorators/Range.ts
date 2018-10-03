@@ -1,5 +1,4 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
-import {validateRequired} from "./Required"
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validateDate as fromMaxValidateDate, validateNumber as fromMaxValidateNumber} from "./Max"
 import {validateDate as fromMinValidateDate, validateNumber as fromMinValidateNumber} from "./Min"
 import {validate as fromNumberValidate} from "./IsNumber"

@@ -1,7 +1,12 @@
-export { Component }  from './src/decorator/Component';
-export { BeanFactory } from './src/BeanFactory';
-export { ApplicationContext } from './src/ApplicationContext';
-export { Autowired } from './src/decorator/Autowired';
+export {Component}  from './src/decorator/Component';
+export {
+    InjectionProfile,
+    InjectionStrategy,
+    BeanFactory
+} from './src/BeanFactory';
+
+export {ApplicationContext} from './src/ApplicationContext';
+export {Autowired} from './src/decorator/Autowired';
 export {
     Inject,
     InjectionReference,

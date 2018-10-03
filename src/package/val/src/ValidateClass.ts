@@ -1,5 +1,5 @@
 import {IValidator, VALIDATOR_DEFAULT} from "./Validator";
-import {Validate as validateDecorator } from "./ValidateMethod";
+import {Validate as validateDecorator} from "./ValidateMethod";
 
 export const Validation = (validator: IValidator = VALIDATOR_DEFAULT) =>
     <T extends { new(...args: any[]): {} }>(target: T) => {

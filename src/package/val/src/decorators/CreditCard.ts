@@ -1,7 +1,6 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
-import {validateRequired} from "./Required";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validate as fromIsString} from "./IsString"
-import {List} from "../../../util";
+import {List} from "../../../lang";
 
 
 export const CreditCard = (options: Options = DECORATOR_OPTIONS_DEFAULT) =>
@@ -17,7 +16,7 @@ export const validate = (value: string): boolean => {
     //delete all not numeric stuff
     const ccDigits: string = String(value).toUpperCase().replace(/[^0-9]/g, '');
     const total = sum(toDigitList(ccDigits)
-        // reverse
+    // reverse
         .reverse()
         // double every odd index
         .map((v, i) => i % 2 === 1 ? (v + v) : (v))

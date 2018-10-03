@@ -1,5 +1,5 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT} from "../ValidateMethod";
-import {validate as fromRequiredvalidate, validateRequired} from "./Required"
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, validateRequired} from "../ValidateMethod";
+import {validate as fromRequiredValidate} from "./Required"
 
 export const NotEmpty = (options: OptionsNotEmpty = {...DECORATOR_OPTIONS_DEFAULT}) =>
     baseValidator((value) =>
@@ -10,7 +10,7 @@ export const NotEmpty = (options: OptionsNotEmpty = {...DECORATOR_OPTIONS_DEFAUL
     );
 
 export const validate = (value: any, full: boolean): boolean => {
-    if (!fromRequiredvalidate(value)) {
+    if (!fromRequiredValidate(value)) {
         return false
     }
     if (typeof value == 'string' || value instanceof String) {
@@ -19,7 +19,7 @@ export const validate = (value: any, full: boolean): boolean => {
         const iterator = value[Symbol.iterator]();
         let element = iterator.next();
         do {
-            if (!fromRequiredvalidate(element.value)) {
+            if (!fromRequiredValidate(element.value)) {
                 return false
             }
             if (!validate(element.value, full)) {

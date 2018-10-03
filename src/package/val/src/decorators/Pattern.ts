@@ -1,12 +1,11 @@
-import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options} from "../ValidateMethod";
-import {validateRequired} from "./Required";
+import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validate as fromIsString} from "./IsString";
 
 export const Pattern = (regex: RegExp, options: Options = DECORATOR_OPTIONS_DEFAULT) =>
     baseValidator((value) =>
         validateRequired(
             value,
-            () => fromIsString(value) && validate(<string> value,regex),
+            () => fromIsString(value) && validate(<string> value, regex),
             options)
     );
 
