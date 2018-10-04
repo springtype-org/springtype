@@ -25,7 +25,7 @@
   },
   "scripts": {
     "package": "cd src && tsc",
-    "test": "cd scratch && ts-node di/SimpleStarter.ts"
+    "test": "cd src && mocha --require ts-node/register test/**/*.spec.ts"
   },
   "repository": {
     "type": "git",
