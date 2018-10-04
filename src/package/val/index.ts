@@ -14,4 +14,3 @@ export {
     IValidate,
     Options,
 } from "./src/ValidateMethod";
-

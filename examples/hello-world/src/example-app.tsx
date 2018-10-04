@@ -1,8 +1,9 @@
-import {WebComponent, WebComponentLifecycle, Component} from "../../../dist/index";
 
 import {TodoService} from "./service/TodoService";
 
 import './component/ExampleTodoList';
+import {WebComponent, WebComponentLifecycle} from "../../../src/package/html";
+import {Component} from "../../../src/package/di";
 
 @WebComponent({
     tag: 'example-app',

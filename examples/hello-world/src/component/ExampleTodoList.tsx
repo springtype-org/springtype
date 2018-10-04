@@ -1,5 +1,5 @@
-import {WebComponent, WebComponentLifecycle} from "../../../../dist/index";
 import {Todo} from "../service/TodoService";
+import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html/src/decorator/WebComponent";
 
 interface TodoListState {
     todos: Array<Todo>;

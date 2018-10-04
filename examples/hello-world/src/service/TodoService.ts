@@ -1,4 +1,5 @@
-import {Component} from "../../../../dist/index";
+import {Component} from "../../../../src/package/di/src/decorator/Component";
+
 
 export interface Todo {
     text: string;
