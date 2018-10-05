@@ -16,7 +16,7 @@ class JSXRenderer {
 
     protected stateHeapPtr: number = 0;
 
-    constructor(protected nativeCreateElement: Function) {
+    constructor(protected _nativeCreateElement: Function) {
     }
 
     protected normalizeAttributeName(name: string): string {
@@ -27,7 +27,7 @@ class JSXRenderer {
         return 'state-' + (++(<any>window).React.stateHeapPtr);
     }
 
-    protected appendChild(child: string|Node|Array<Node>, element: Node) {
+    protected appendChild(child: string|number|boolean|Node|Array<Node>, element: Node) {
 
         let childToAppend = child;
 
@@ -35,9 +35,13 @@ class JSXRenderer {
 
             childToAppend = child;
 
-        } else if (typeof child == 'string') {
+        } else if (
+            typeof child == 'string' ||
+            typeof child == 'number' ||
+            typeof child == 'boolean'
+        ) {
 
-            childToAppend = document.createTextNode(child);
+            childToAppend = document.createTextNode(child.toString());
 
         } else if (child instanceof Array) {
 
@@ -57,7 +61,11 @@ class JSXRenderer {
         }
     };
 
-    createElement(name: string, attributes: any, ...children: Array<any>) {
+    nativeCreateElement(tagName: string, nativeOptions?: any): Element {
+        return this._nativeCreateElement(tagName, nativeOptions);
+    }
+
+    createElement(name: string, attributes?: any, ...children: Array<any>) {
 
         attributes = attributes || {};
 
@@ -65,7 +73,7 @@ class JSXRenderer {
 
         delete attributes.is;
 
-        const element = this.nativeCreateElement(name, nativeOptions);
+        const element: any = this.nativeCreateElement(name, nativeOptions);
 
         // content attributes vs IDL attributes have many cases
         Object.entries(attributes).forEach(([name,value]) => {
@@ -105,4 +113,4 @@ class JSXRenderer {
     document.createElement.bind(document)
 );
 
-document.createElement = (<any>window).React.createElement;
+document.createElement = (<any>window).React.createElement.bind((<any>window).React);

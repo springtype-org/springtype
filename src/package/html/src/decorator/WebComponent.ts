@@ -1,6 +1,7 @@
 import "../ui/JSXRenderer";
-import {ApplicationContext} from "../../../di";
+import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
+import {WebComponentReflector} from "./WebComponentReflector";
 
 export enum ShadowAttachMode {
     OPEN = 'open',
@@ -45,13 +46,18 @@ export interface IWebComponent<WC> extends Function {
     new(...args: any[]): WC;
 }
 
+// TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
 
     if (!config.props) config.props = [];
 
+    if (!config.tag) {
+        throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
+    }
+
     return (target: WC) => {
 
-        let derivedCustomWebComponent = class extends target {
+        let CustomWebComponent = class extends target {
 
             constructor(...args: Array<any>) {
 
@@ -158,6 +164,13 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
+            unmount() {
+
+                if (super.unmount) {
+                    return super.unmount();
+                }
+            }
+
             render(): JSX.Element {
 
                 if (super.render) {
@@ -171,15 +184,21 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
         try {
 
             // register custom element
-            window.customElements.define(config.tag, derivedCustomWebComponent);
+            window.customElements.define(config.tag, CustomWebComponent);
+
+            WebComponentReflector.setTagName(<any>CustomWebComponent, config.tag);
 
         } catch(e) {
 
             if (ApplicationContext.getInstance().getEnvironment() === ApplicationEnvironment.DEV) {
-                window.location.href = '/';
+
+                // hot reload based error for web component registration (window.customElements.define(...))
+                if (e.message.indexOf('this name has already been used with this registry') > -1) {
+                    window.location.href = '/';
+                }
             }
             throw e;
         }
-        return derivedCustomWebComponent;
+        return CustomWebComponent;
     }
 }

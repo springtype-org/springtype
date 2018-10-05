@@ -2,13 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>App</title>
 
-    <link rel="stylesheet" href="example-app.scss" />
+    <title>TODO List Example App</title>
 
-    <script src="example-app.tsx"></script>
+    <!-- main application stylesheet entry-point -->
+    <link rel="stylesheet" href="view/ExampleApp.scss" />
+
+    <!-- main application logic entry-point -->
+    <script src="ExampleAppModule.tsx"></script>
+
 </head>
 <body>
-    <example-app></example-app>
+
+    <!-- main application router/view entry-point -->
+    <router-outlet />
 </body>
 </html>

@@ -585,7 +585,11 @@ describe('val', () => {
             assert.doesNotThrow(() => validateOnClass.required([]));
         });
         it('negative', () => {
-            assert.throws(() => validateOnClass.notNull(null));
+            assert.throws(() => {
+                validateOnClass.notNull(null);
+
+                console.log('???');
+            });
             assert.throws(() => validateOnClass.notEmpty(['']));
             assert.throws(() => validateOnClass.notEmpty(''));
             assert.throws(() => validateOnClass.notEmptyRequired([null]));

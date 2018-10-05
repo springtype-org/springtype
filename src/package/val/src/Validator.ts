@@ -18,6 +18,9 @@ class AssertValidator implements IValidator {
     }
 
     validate(errors: ValidationResult[]): void {
+
+        console.log('AssertValidator', errors);
+
         throw new Error(errors.map(buildErrorText).join(' '))
     }
 }
