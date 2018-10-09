@@ -1,22 +1,24 @@
 import {Todo, TodoService} from "../../service/TodoService";
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
-import {Component} from "../../../../../src/package/di";
 import {Router} from "../../../../../src/package/html/src/router/Router";
+import {RenderStrategy} from "../../../../../src/package/html";
 
 interface TodoListState {
     todos: Array<Todo>;
 }
 
 @WebComponent({
-    tag: 'example-todo-list'
+    tag: 'example-todo-list',
+    props: ['lala'],
+    renderStrategy: RenderStrategy.OnStateChange
 })
-@Component
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
 
     // all props are auto-synced with the state object
     state!: TodoListState;
 
-    constructor(protected todoService: TodoService,
+    constructor(public lala: number,
+                protected todoService: TodoService,
                 protected router: Router) {
 
         super();
@@ -24,12 +26,22 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
     onListItemClick = (evt: Event) => {
 
-        console.log('List item click', evt.target);
+        console.log('List item click this.lala?', evt.target);
     };
+
+    init() {
+
+        // TODO: Should be possible in constructor too...
+        this.state.todos = this.todoService.getTodos();
+
+        console.log('Mutated state todos', this.state.todos);
+
+        console.log('lala attribute', this.lala);
+    }
 
     render() {
 
-        this.state.todos = this.todoService.getTodos();
+        console.log('render called ExampleTodoList');
 
         // loop rendering is inherent
         const listItems = this.state.todos.map((todo: Todo) =>

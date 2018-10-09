@@ -207,9 +207,18 @@ export class BeanFactory {
         componentCtor: T
     ): any {
 
-        console.warn(`The component referenced for injection is missing a @Component decorator: ${componentCtor.name}`);
+        if (componentCtor instanceof Object) {
 
-        return undefined;
+            console.log('injected interface object');
+
+            return {};
+
+        } else {
+
+            console.warn(`The component referenced for injection is missing a @Component decorator: ${(<any>componentCtor).name}`);
+
+            return undefined;
+        }
     }
 
     solveCyclicDependency<T extends IComponent<any>>(componentCtor: T): T {

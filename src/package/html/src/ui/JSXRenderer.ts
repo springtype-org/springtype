@@ -31,6 +31,8 @@ class JSXRenderer {
 
         let childToAppend = child;
 
+        console.log('child', child);
+
         if (child instanceof Node) {
 
             childToAppend = child;
@@ -46,7 +48,7 @@ class JSXRenderer {
         } else if (child instanceof Array) {
 
             // Array of Node
-
+            // TODO: Array of any other type?
             child.forEach((childNode: Node) => {
                 this.appendChild(childNode, element);
             });
@@ -76,12 +78,14 @@ class JSXRenderer {
         const element: any = this.nativeCreateElement(name, nativeOptions);
 
         // content attributes vs IDL attributes have many cases
-        Object.entries(attributes).forEach(([name,value]) => {
+        Object.entries(attributes).forEach(([name, value]) => {
 
             // set event handler
             if (name.startsWith('on')) {
 
-                element[name] = value;
+                element.addEventListener(name.substring(2, name.length), value);
+
+                console.log('element', element, name);
 
             } else if (typeof value !== 'string') {
 

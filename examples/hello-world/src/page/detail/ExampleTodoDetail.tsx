@@ -1,5 +1,4 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
-import {Component} from "../../../../../src/package/di";
 import {Todo, TodoService} from "../../service/TodoService";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 
@@ -11,9 +10,7 @@ interface TodoState {
 @WebComponent({
     tag: 'example-todo-detail',
     props: ['todo'],
-
 })
-@Component
 export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecycle {
 
     // all props are auto-synced with the state object
