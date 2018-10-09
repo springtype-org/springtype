@@ -16,7 +16,7 @@ class JSXRenderer {
 
     protected stateHeapPtr: number = 0;
 
-    constructor(protected nativeCreateElement: Function) {
+    constructor(protected _nativeCreateElement: Function) {
     }
 
     protected normalizeAttributeName(name: string): string {
@@ -27,22 +27,28 @@ class JSXRenderer {
         return 'state-' + (++(<any>window).React.stateHeapPtr);
     }
 
-    protected appendChild(child: string|Node|Array<Node>, element: Node) {
+    protected appendChild(child: string|number|boolean|Node|Array<Node>, element: Node) {
 
         let childToAppend = child;
+
+        console.log('child', child);
 
         if (child instanceof Node) {
 
             childToAppend = child;
 
-        } else if (typeof child == 'string') {
+        } else if (
+            typeof child == 'string' ||
+            typeof child == 'number' ||
+            typeof child == 'boolean'
+        ) {
 
-            childToAppend = document.createTextNode(child);
+            childToAppend = document.createTextNode(child.toString());
 
         } else if (child instanceof Array) {
 
             // Array of Node
-
+            // TODO: Array of any other type?
             child.forEach((childNode: Node) => {
                 this.appendChild(childNode, element);
             });
@@ -57,7 +63,11 @@ class JSXRenderer {
         }
     };
 
-    createElement(name: string, attributes: any, ...children: Array<any>) {
+    nativeCreateElement(tagName: string, nativeOptions?: any): Element {
+        return this._nativeCreateElement(tagName, nativeOptions);
+    }
+
+    createElement(name: string, attributes?: any, ...children: Array<any>) {
 
         attributes = attributes || {};
 
@@ -65,15 +75,17 @@ class JSXRenderer {
 
         delete attributes.is;
 
-        const element = this.nativeCreateElement(name, nativeOptions);
+        const element: any = this.nativeCreateElement(name, nativeOptions);
 
         // content attributes vs IDL attributes have many cases
-        Object.entries(attributes).forEach(([name,value]) => {
+        Object.entries(attributes).forEach(([name, value]) => {
 
             // set event handler
             if (name.startsWith('on')) {
 
-                element[name] = value;
+                element.addEventListener(name.substring(2, name.length), value);
+
+                console.log('element', element, name);
 
             } else if (typeof value !== 'string') {
 
@@ -105,4 +117,4 @@ class JSXRenderer {
     document.createElement.bind(document)
 );
 
-document.createElement = (<any>window).React.createElement;
+document.createElement = (<any>window).React.createElement.bind((<any>window).React);

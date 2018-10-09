@@ -30,13 +30,15 @@ export class BeanFactory {
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
         injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): any {
 
+        const originalCtor = componentCtor;
+
         // validate component reference
         componentCtor = this.getComponent(componentCtor);
 
-        if (!ComponentReflector.isComponent(componentCtor)) {
+        if (!componentCtor || !ComponentReflector.isComponent(componentCtor)) {
 
             return this.solveUnresolvableBean(
-                componentCtor
+                originalCtor
             );
         }
 
@@ -103,7 +105,6 @@ export class BeanFactory {
         if (cachedConstructorArguments) {
             return cachedConstructorArguments;
         }
-
 
         // fetch constructor parameter types from reflection metadata
         const constructorParameterTypes: Array<IComponent<any>> = ComponentReflector.getConstructorArgumentTypes(
@@ -206,9 +207,18 @@ export class BeanFactory {
         componentCtor: T
     ): any {
 
-        console.warn(`The component referenced for injection is missing a @Component decorator: ${componentCtor.name}`);
+        if (componentCtor instanceof Object) {
 
-        return undefined;
+            console.log('injected interface object');
+
+            return {};
+
+        } else {
+
+            console.warn(`The component referenced for injection is missing a @Component decorator: ${(<any>componentCtor).name}`);
+
+            return undefined;
+        }
     }
 
     solveCyclicDependency<T extends IComponent<any>>(componentCtor: T): T {

@@ -13,7 +13,7 @@ export const Validate = (validator: IValidator = VALIDATOR_DEFAULT) =>
 
         const reflectedParamNames = getParamNames(target[propertyName]);
 
-        Object.defineProperties(target[propertyName].prototype, {
+        Reflect.set(target[propertyName], VALIDATION_METHOD_PARAMNAMES_METADATA,{
             [VALIDATION_METHOD_PARAMNAMES_METADATA]: reflectedParamNames
         });
 

@@ -1,6 +1,11 @@
 import "../ui/JSXRenderer";
-import {ApplicationContext} from "../../../di";
+import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
+import {WebComponentReflector} from "./WebComponentReflector";
+import {RenderStrategy} from "../ui/RenderStrategy";
+
+const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
+const STATE_OBJECT = Symbol('STATE_OBJECT');
 
 export enum ShadowAttachMode {
     OPEN = 'open',
@@ -12,9 +17,13 @@ export interface WebComponentConfig {
     shadow?: boolean;
     shadowMode?: ShadowAttachMode;
     props?: Array<string>;
+    renderStrategy?: RenderStrategy;
+    template?: (view: any) => Node;
 }
 
+
 export class WebComponentLifecycle  {
+    constructor() {}
     state?: any = {};
     init?(): void {}
     mount?(): void {}
@@ -23,13 +32,13 @@ export class WebComponentLifecycle  {
     }
     unmount?(): void {}
     onPropChange?(prop: string, newValue: any, oldValue?: any): void {};
-    onStateChange?(prop: string, state: any): void {}
+    onStateChange?(prop: string, state: any): void {};
+    reflow?(): void {};
 }
 
-export interface PropertyChangeEvent {
+export interface AttributeChangeEvent {
     prop: string;
-    newValue: any;
-    oldValue: any;
+    value: any
 }
 
 export enum LifecycleEvent {
@@ -37,7 +46,7 @@ export enum LifecycleEvent {
     SHADOW_ATTACHED = 'SHADOW_ATTACHED',
     CONNECTED = 'CONNECTED',
     DISCONNECTED = 'DISCONNECTED',
-    PROPERTY_CHANGE = 'PROPERTY_CHANGE',
+    ATTRIBUTE_CHANGE = 'ATTRIBUTE_CHANGE',
     STATE_CHANGE = 'STATE_CHANGE'
 }
 
@@ -45,20 +54,60 @@ export interface IWebComponent<WC> extends Function {
     new(...args: any[]): WC;
 }
 
+class WebComponentState {
+    constructor(private state: any) {}
+}
+
+// TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
 
     if (!config.props) config.props = [];
 
+    if (!config.tag) {
+        throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
+    }
+
     return (target: WC) => {
 
-        let derivedCustomWebComponent = class extends target {
+        // @Component by default
+        target = Component(target);
+
+        // custom web component extends user implemented web component class
+        // which extends HTMLElement
+        let CustomWebComponent = class extends target {
 
             constructor(...args: Array<any>) {
 
                 super();
 
-                // initialize state
-                this.state = {};
+                this.initialized = false;
+
+                if (config.renderStrategy === RenderStrategy.OnStateChange) {
+
+                    this.state = new Proxy(this.state || {}, {
+                        set: (o, k, v): boolean => {
+
+                            if (o[k] !== v) {
+
+                                o[k] = v;
+
+                                if (this.initialized) {
+                                    this.reflow();
+                                }
+                            }
+                            return true;
+                        }
+                    });
+
+                    Object.defineProperty(this, 'state', {
+                        writable: false
+                    });
+
+
+                } else {
+
+                    this.state = this.state || {};
+                }
 
                 if (config.shadow) {
 
@@ -70,64 +119,21 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 this.dispatchEvent(new CustomEvent(LifecycleEvent.INIT));
 
                 this.init();
+
+                this.initialized = true;
             }
 
             static get observedAttributes() {
                 return config.props;
             }
 
-            attributeChangedCallback(prop: string, oldValue: string, newValue: string) {
+            private getAttributeLocalState(prop: string, stateHeapPtr: string): any {
 
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.PROPERTY_CHANGE,  {
-                    detail: <PropertyChangeEvent> {
-                        prop,
-                        oldValue,
-                        newValue
-                    }
-                }));
-
-                this.onPropChange(prop, newValue, oldValue);
-
-                if (newValue.startsWith('state')) {
-                    this.changeState(prop, newValue);
-                }
-            }
-
-            changeState(prop: string, stateHeapPtr: string): void {
-
-                const propState = (<any>window).React.stateHeapCache[stateHeapPtr];
+                const attributeStateValue = (<any>window).React.stateHeapCache[stateHeapPtr];
 
                 delete (<any>window).React.stateHeapCache[stateHeapPtr];
 
-                if (this.state) {
-                    this.state[prop] = propState;
-                    this.onStateChange(prop, propState);
-                }
-            }
-
-            connectedCallback() {
-
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.CONNECTED));
-
-                this.mount();
-
-                const element: HTMLElement = <any> this.render();
-
-                if (element) {
-
-                    if (config.shadow) {
-                        this.shadowRoot.appendChild(element);
-                    } else {
-                        this.appendChild(element);
-                    }
-                }
-            }
-
-            disconnectedCallback() {
-
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.DISCONNECTED));
-
-                return this.unmount();
+                return attributeStateValue;
             }
 
             init(): void {
@@ -158,28 +164,105 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            render(): JSX.Element {
+            unmount() {
+
+                if (super.unmount) {
+                    return super.unmount();
+                }
+            }
+
+            render(): any {
+
+                console.log('re-render', this, this.state);
 
                 if (super.render) {
                     return super.render();
                 } else {
+
+                    if (typeof config.template == 'function') {
+
+                        // render template by default
+                        return config.template(this);
+                    }
                     return ('');
                 }
+            }
+
+            protected flow() {
+                const element: HTMLElement = this.render();
+
+                if (element) {
+
+                    if (config.shadow) {
+                        this.shadowRoot.appendChild(element);
+                    } else {
+                        this.appendChild(element);
+                    }
+                    Reflect.set(this, CHILD_ELEMENT, element);
+                }
+            }
+
+            protected reflow() {
+
+                if (config.shadow) {
+                    this.shadowRoot.innerHTML = '';
+                } else {
+                    this.innerHTML = '';
+                }
+
+                this.flow();
+            }
+
+            attributeChangedCallback(prop: string, oldValue: string, newValue: string) {
+
+                const attributeValue = this.getAttributeLocalState(prop, newValue);
+
+                // map local attribute field value
+                this[prop] = attributeValue;
+
+                this.dispatchEvent(new CustomEvent(LifecycleEvent.ATTRIBUTE_CHANGE,  {
+                    detail: <AttributeChangeEvent> {
+                        prop,
+                        value: attributeValue
+                    }
+                }));
+            }
+
+            connectedCallback() {
+
+                this.dispatchEvent(new CustomEvent(LifecycleEvent.CONNECTED));
+
+                this.mount();
+
+                this.flow();
+            }
+
+            disconnectedCallback() {
+
+                this.dispatchEvent(new CustomEvent(LifecycleEvent.DISCONNECTED));
+
+                return this.unmount();
             }
         };
 
         try {
 
             // register custom element
-            window.customElements.define(config.tag, derivedCustomWebComponent);
+            window.customElements.define(config.tag, CustomWebComponent);
+
+            WebComponentReflector.setTagName(<any>CustomWebComponent, config.tag);
 
         } catch(e) {
 
             if (ApplicationContext.getInstance().getEnvironment() === ApplicationEnvironment.DEV) {
-                window.location.href = '/';
+
+                // hot reload based error for web component registration (window.customElements.define(...))
+                if (e.message.indexOf('this name has already been used with this registry') > -1) {
+                    window.location.href = '/';
+                }
             }
             throw e;
         }
-        return derivedCustomWebComponent;
+        return CustomWebComponent;
     }
 }

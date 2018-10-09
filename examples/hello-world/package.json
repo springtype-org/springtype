@@ -23,5 +23,8 @@
   "license": "MIT",
   "devDependencies": {
     "typescript": "^3.1.1"
-  }
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
 }

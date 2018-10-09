@@ -1,19 +1,29 @@
 import {Component} from "../../../../src/package/di/src/decorator/Component";
 
-
 export interface Todo {
+    id: number;
     text: string;
 }
 
 @Component
 export class TodoService {
 
-    getTodos(): Array<Todo> {
+    data: Array<Todo> = [{
+        id: 1,
+        text: "Foo"
+    }, {
+        id: 2,
+        text: "Bar"
+    }];
 
-        return [{
-            text: "Foo"
-        }, {
-            text: "Bar"
-        }]
+    getTodos(): Array<Todo> {
+        return this.data;
+    }
+
+    getById(id: number): Todo {
+
+        return this.data.filter((todo: Todo) => {
+            return todo.id === id;
+        })[0];
     }
 }
