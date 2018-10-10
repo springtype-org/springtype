@@ -2,6 +2,7 @@ import {Todo, TodoService} from "../../service/TodoService";
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {RenderStrategy} from "../../../../../src/package/html";
+import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 
 interface TodoListState {
     todos: Array<Todo>;
@@ -23,13 +24,10 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
     constructor(
         // an attribute; must be public as it is accessible publicly
         public lala: number,
-
         // injected, typed state; must be public as
         public state: TodoListState,
-
         // injected service to load data
         protected todoService: TodoService,
-
         // injected router to getParams() and navigate()
         protected router: Router) {
 
@@ -47,11 +45,9 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
         console.log('List item click this.lala?', evt.target);
 
-        /*
         this.router.navigate(ExampleTodoDetail, {
-           id:
+           id: 2
         });
-        */
     };
 
     /**
@@ -75,10 +71,9 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
         console.log('render called ExampleTodoList');
 
-        // loop rendering is inherent
         const listItems = this.state.todos.map((todo: Todo) =>
-            <li onclick={ this.onListItemClick }>
-                <a href={ `/#/todo/${todo.id}` }>{ todo.text }</a>
+            <li onclick={ this.onListItemClick } class="todo-item">
+                { todo.text }
             </li>
         );
 

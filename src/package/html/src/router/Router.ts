@@ -1,4 +1,3 @@
-import {IWebComponent} from "../decorator/WebComponent";
 import {Component} from "../../../di";
 import {RouterOutlet} from "./RouterOutlet";
 
@@ -193,12 +192,18 @@ export class Router {
 
         for (let route in this.ROUTE_MAP) {
 
-            if (this.ROUTE_MAP[route].component === webComponent.prototype) {
+            if (this.ROUTE_MAP[route] === webComponent) {
 
-                console.log('have to route to', webComponent, 'with', params);
+                for (let param in params) {
+
+                    if (params.hasOwnProperty(param)) {
+                        route = route.replace(':' + param, params[param]);
+                    }
+                }
+                window.location.href += '#' + route;
+
+                break;
             }
-
         }
-
     }
 }

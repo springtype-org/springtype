@@ -25,16 +25,15 @@ export interface WebComponentConfig {
     template?: (view: any) => Node;
 }
 
-
 export class WebComponentLifecycle  {
-    constructor() {}
+    constructor() {};
     state?: any = {};
     init?(): void {}
-    mount?(): void {}
+    mount?(): void {};
     render?(): JSX.Element {
         return ('');
     }
-    unmount?(): void {}
+    unmount?(): void {};
     onAttributeChange?(name: string, newValue: any, oldValue?: any): void {};
     onStateChange?(state: any, name: string|number|symbol, value: any): void {};
     reflow?(): void {};
@@ -268,7 +267,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 if (!cancelled) {
 
-                    // TODO: Call mount after attributes have been set!
                     this.mount();
 
                     this.flow();
