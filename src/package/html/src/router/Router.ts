@@ -188,4 +188,17 @@ export class Router {
 
          this.ROUTER_OUTLET = routerOutlet;
     }
+
+    navigate(webComponent: Function, params: any) {
+
+        for (let route in this.ROUTE_MAP) {
+
+            if (this.ROUTE_MAP[route].component === webComponent.prototype) {
+
+                console.log('have to route to', webComponent, 'with', params);
+            }
+
+        }
+
+    }
 }

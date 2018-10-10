@@ -1,9 +1,7 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {RenderStrategy} from "../../../../../src/package/html";
-
 import template from './ImprintPage.tpl';
-import {Component} from "../../../../../src/package/di";
 
 interface ImprintPageState {
     header: string;
@@ -12,7 +10,7 @@ interface ImprintPageState {
 @WebComponent({
     tag: 'imprint-page',
     renderStrategy: RenderStrategy.OnStateChange,
-    props: ['header'],
+    attributes: ['header'],
     template // re-rendered on state change
 })
 export class ImprintPage extends HTMLElement implements WebComponentLifecycle {

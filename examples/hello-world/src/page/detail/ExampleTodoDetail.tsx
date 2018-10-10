@@ -9,11 +9,11 @@ interface TodoState {
 
 @WebComponent({
     tag: 'example-todo-detail',
-    props: ['todo'],
+    attributes: ['todo'],
 })
 export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecycle {
 
-    // all props are auto-synced with the state object
+    // all attributes are auto-synced with the state object
     state!: TodoState;
 
     constructor(
@@ -40,7 +40,6 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
                 text: 'Invalid id'
             }
         }
-
 
         // what is returned, will be attached to this node
         return (

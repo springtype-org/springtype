@@ -2,7 +2,6 @@ import "../ui/JSXRenderer";
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
-import {RenderStrategy} from "../ui/RenderStrategy";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const STATE_OBJECT = Symbol('STATE_OBJECT');
@@ -12,11 +11,16 @@ export enum ShadowAttachMode {
     CLOSED = 'closed'
 }
 
+export enum RenderStrategy {
+    OnRequest = 'ON_REQUEST',
+    OnStateChange = 'ON_STATE_CHANGE'
+}
+
 export interface WebComponentConfig {
     tag: string;
     shadow?: boolean;
     shadowMode?: ShadowAttachMode;
-    props?: Array<string>;
+    attributes?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => Node;
 }
@@ -31,37 +35,41 @@ export class WebComponentLifecycle  {
         return ('');
     }
     unmount?(): void {}
-    onPropChange?(prop: string, newValue: any, oldValue?: any): void {};
-    onStateChange?(prop: string, state: any): void {};
+    onAttributeChange?(name: string, newValue: any, oldValue?: any): void {};
+    onStateChange?(state: any, name: string|number|symbol, value: any): void {};
     reflow?(): void {};
 }
 
 export interface AttributeChangeEvent {
-    prop: string;
-    value: any
+    name: string;
+    oldValue: any;
+    newValue: any;
 }
 
+export interface StateChangeEvent {
+    state: any;
+    name: string|number|symbol;
+    value: any;
+}
+
+
 export enum LifecycleEvent {
-    INIT = 'INIT',
+    BEFORE_INIT = 'BEFORE_INIT',
     SHADOW_ATTACHED = 'SHADOW_ATTACHED',
-    CONNECTED = 'CONNECTED',
-    DISCONNECTED = 'DISCONNECTED',
+    BEFORE_MOUNT = 'BEFORE_MOUNT',
+    BEFORE_UNMOUNT = 'BEFORE_UNMOUNT',
     ATTRIBUTE_CHANGE = 'ATTRIBUTE_CHANGE',
-    STATE_CHANGE = 'STATE_CHANGE'
+    BEFORE_STATE_CHANGE = 'BEFORE_STATE_CHANGE'
 }
 
 export interface IWebComponent<WC> extends Function {
     new(...args: any[]): WC;
 }
 
-class WebComponentState {
-    constructor(private state: any) {}
-}
-
 // TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
 
-    if (!config.props) config.props = [];
+    if (!config.attributes) config.attributes = [];
 
     if (!config.tag) {
         throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
@@ -76,23 +84,33 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
         // which extends HTMLElement
         let CustomWebComponent = class extends target {
 
+            protected initialized: boolean = false;
+
             constructor(...args: Array<any>) {
 
                 super();
 
-                this.initialized = false;
-
                 if (config.renderStrategy === RenderStrategy.OnStateChange) {
 
                     this.state = new Proxy(this.state || {}, {
-                        set: (o, k, v): boolean => {
+                        set: (state: any, name: string|number|symbol, value: any): boolean => {
 
-                            if (o[k] !== v) {
+                            console.log('state change');
 
-                                o[k] = v;
+                            if (state[name] !== value) {
 
-                                if (this.initialized) {
-                                    this.reflow();
+                                state[name] = value;
+
+                                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_STATE_CHANGE,  {
+                                    detail: <StateChangeEvent> {
+                                        state,
+                                        name,
+                                        value
+                                    }
+                                }));
+
+                                if (!cancelled) {
+                                    this.onStateChange(state, name, value);
                                 }
                             }
                             return true;
@@ -116,15 +134,13 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     });
                 }
 
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.INIT));
+                !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_INIT));
 
                 this.init();
-
-                this.initialized = true;
             }
 
             static get observedAttributes() {
-                return config.props;
+                return config.attributes;
             }
 
             private getAttributeLocalState(prop: string, stateHeapPtr: string): any {
@@ -141,23 +157,32 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.init) {
                     super.init();
                 }
+                this.initialized = true;
             }
 
-            onPropChange(prop: string, oldValue: string, newValue: string): void {
+            onAttributeChange(name: string, oldValue: string, newValue: string): void {
 
-                if (super.onPropChange) {
-                    return super.onPropChange(prop, oldValue, newValue);
+                if (super.onAttributeChange) {
+                    return super.onAttributeChange(name, oldValue, newValue);
                 }
             }
 
-            onStateChange(prop: string, state: any): void {
+            onStateChange(state: any, name: string|number|symbol, value: any): void {
+
+                if (this.initialized) {
+
+                    // re-render on state change
+                    this.reflow();
+                }
 
                 if (super.onStateChange) {
-                    return super.onStateChange(prop, state);
+                    return super.onStateChange(state, name, value);
                 }
             }
 
             mount() {
+
+                console.log('on mount', this);
 
                 if (super.mount) {
                     return super.mount();
@@ -173,6 +198,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             render(): any {
 
+                // TODO: Event fire
                 console.log('re-render', this, this.state);
 
                 if (super.render) {
@@ -189,6 +215,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             protected flow() {
+
                 const element: HTMLElement = this.render();
 
                 if (element) {
@@ -213,35 +240,53 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 this.flow();
             }
 
-            attributeChangedCallback(prop: string, oldValue: string, newValue: string) {
+            attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
-                const attributeValue = this.getAttributeLocalState(prop, newValue);
+                const attributeValue = this.getAttributeLocalState(name, newValue);
 
                 // map local attribute field value
-                this[prop] = attributeValue;
+                this[name] = attributeValue;
 
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.ATTRIBUTE_CHANGE,  {
+                console.log('setting wc attr', name, newValue);
+
+                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.ATTRIBUTE_CHANGE,  {
                     detail: <AttributeChangeEvent> {
-                        prop,
-                        value: attributeValue
+                        name: name,
+                        oldValue,
+                        newValue
                     }
                 }));
+
+                if (!cancelled) {
+                    this.onAttributeChange(name, oldValue, newValue);
+                }
             }
 
             connectedCallback() {
 
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.CONNECTED));
+                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_MOUNT));
 
-                this.mount();
+                if (!cancelled) {
 
-                this.flow();
+                    // TODO: Call mount after attributes have been set!
+                    this.mount();
+
+                    this.flow();
+
+                } else {
+
+                    console.warn('');
+                }
             }
 
             disconnectedCallback() {
 
-                this.dispatchEvent(new CustomEvent(LifecycleEvent.DISCONNECTED));
+                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_UNMOUNT));
 
-                return this.unmount();
+                if (!cancelled) {
+
+                    return this.unmount();
+                }
             }
         };
 

@@ -8,37 +8,69 @@ interface TodoListState {
 }
 
 @WebComponent({
+
+    // name of the element. Here: <example-todo-list>
     tag: 'example-todo-list',
-    props: ['lala'],
+
+    // attributes to react on: <example-todo-list lala={ 123 } />
+    attributes: ['lala'],
+
+    // re-render strategy (manually call this.reflow() or let the framework do it?)
     renderStrategy: RenderStrategy.OnStateChange
 })
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
 
-    // all props are auto-synced with the state object
-    state!: TodoListState;
+    constructor(
+        // an attribute; must be public as it is accessible publicly
+        public lala: number,
 
-    constructor(public lala: number,
-                protected todoService: TodoService,
-                protected router: Router) {
+        // injected, typed state; must be public as
+        public state: TodoListState,
+
+        // injected service to load data
+        protected todoService: TodoService,
+
+        // injected router to getParams() and navigate()
+        protected router: Router) {
 
         super();
+
+        // one-time fetch todo items (before render and mount)
+        this.state.todos = this.todoService.getTodos();
     }
 
+    /**
+     * Directly bound DOM event handler.
+     * Receives a native DOM event object.
+     */
     onListItemClick = (evt: Event) => {
 
         console.log('List item click this.lala?', evt.target);
+
+        /*
+        this.router.navigate(ExampleTodoDetail, {
+           id:
+        });
+        */
     };
 
-    init() {
+    /**
+     * - Attributes set (on this.*)
+     * - Children rendered
+     * - This element has been added to a parent DOM element
+     */
+    mount() {
 
-        // TODO: Should be possible in constructor too...
-        this.state.todos = this.todoService.getTodos();
+        console.log('mounted');
 
-        console.log('Mutated state todos', this.state.todos);
-
-        console.log('lala attribute', this.lala);
+        console.log('getAttribute("lala")', this.lala);
+        console.log('parent element', this.parentNode);
     }
 
+    /**
+     * You can implement this method or (alternatively)
+     * set a `template` function in @WebComponent (see: imprint/ImprintPage.tsx)
+     */
     render() {
 
         console.log('render called ExampleTodoList');

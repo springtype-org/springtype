@@ -8,13 +8,28 @@ interface StateHeapCache {
 
 class JSXRenderer {
 
+    /**
+     * WebComponent attributes state heap cache.
+     * Global cache. Used for intermediate value transmission.
+     * Memory is freed directly after the atomic transmission
+     * operation (DOM -> WebComponent JS instance) has ended.
+     */
     stateHeapCache: StateHeapCache = {};
 
+    /**
+     * Heap pointers are used to address a certain attribute
+     * state in transmission between DOM and WebComponent JS
+     * instance.
+     */
+    protected stateHeapPtr: number = 0;
+
+    /**
+     * Some standard JSX/TSX attribute names are transformed
+     * so that IDE support broadened.
+     */
     protected attrNormalizations: AttributeNormalization = {
         classname: 'class'
     };
-
-    protected stateHeapPtr: number = 0;
 
     constructor(protected _nativeCreateElement: Function) {
     }
@@ -102,6 +117,8 @@ class JSXRenderer {
             }
         });
 
+        console.log('Done setting attributes for element', element);
+
         children
             .filter(child => !(child == null || typeof child == 'undefined'))
             .forEach((child) => {
@@ -117,4 +134,6 @@ class JSXRenderer {
     document.createElement.bind(document)
 );
 
+// assign at global scope for the native DOM functions to instantiate
+// WebComponents using this JSX renderer
 document.createElement = (<any>window).React.createElement.bind((<any>window).React);
