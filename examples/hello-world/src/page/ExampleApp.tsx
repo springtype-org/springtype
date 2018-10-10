@@ -11,6 +11,6 @@ import template from './ExampleApp.tpl';
 
     template
 })
-export class ExampleApp extends HTMLElement implements WebComponentLifecycle {
+export class ExampleApp extends HTMLElement {
 
 }
