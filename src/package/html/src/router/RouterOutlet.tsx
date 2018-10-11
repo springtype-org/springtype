@@ -1,10 +1,10 @@
 import {WebComponent, WebComponentLifecycle} from "../..";
 import {Component} from "../../../di";
-import {Router} from "./Router";
 import {WebComponentReflector} from "../decorator/WebComponentReflector";
+import {Router} from "./Router";
 
 export interface RouterState {
-    mounted?: boolean;
+    mounted: boolean;
 }
 
 @WebComponent({
@@ -13,11 +13,11 @@ export interface RouterState {
 @Component
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
-    state: RouterState = {};
-
     currentComponent!: Element;
 
-    constructor(router: Router) {
+    constructor(public state: RouterState,
+                protected router: Router) {
+
         super();
 
         router.registerRouterOutlet(this);

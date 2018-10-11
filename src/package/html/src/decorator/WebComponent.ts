@@ -1,7 +1,7 @@
-import "../ui/JSXRenderer";
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
+import {StringCaseTransformator} from "../../../lang/src/StringCaseTransformator";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const STATE_OBJECT = Symbol('STATE_OBJECT');
@@ -13,13 +13,15 @@ export enum ShadowAttachMode {
 
 export enum RenderStrategy {
     OnRequest = 'ON_REQUEST',
-    OnStateChange = 'ON_STATE_CHANGE'
+    OnStateChange = 'ON_STATE_CHANGE' // TODO: OnPropChanged
 }
 
 export interface WebComponentConfig {
     tag: string;
     shadow?: boolean;
     shadowMode?: ShadowAttachMode;
+
+    // TODO: -> props
     attributes?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => Node;
@@ -27,16 +29,25 @@ export interface WebComponentConfig {
 
 export class WebComponentLifecycle  {
     constructor() {};
+
+    // TODO: state -> props
     state?: any = {};
     init?(): void {}
     mount?(): void {};
+    remount?(): void {};
     render?(): JSX.Element {
         return ('');
     }
     unmount?(): void {};
+
+    // TODO: onPropChanged
     onAttributeChange?(name: string, newValue: any, oldValue?: any): void {};
+
+    // TODO: onPropsChanged
     onStateChange?(state: any, name: string|number|symbol, value: any): void {};
     reflow?(): void {};
+    mountChildren?(): void {};
+    remountChildren?(): void {};
 }
 
 export interface AttributeChangeEvent {
@@ -51,13 +62,16 @@ export interface StateChangeEvent {
     value: any;
 }
 
-
 export enum LifecycleEvent {
     BEFORE_INIT = 'BEFORE_INIT',
     SHADOW_ATTACHED = 'SHADOW_ATTACHED',
     BEFORE_MOUNT = 'BEFORE_MOUNT',
     BEFORE_UNMOUNT = 'BEFORE_UNMOUNT',
+
+    // TODO: BEFORE_PROP_CHANGE
     ATTRIBUTE_CHANGE = 'ATTRIBUTE_CHANGE',
+
+    // TODO: remove
     BEFORE_STATE_CHANGE = 'BEFORE_STATE_CHANGE'
 }
 
@@ -83,11 +97,13 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
         // which extends HTMLElement
         let CustomWebComponent = class extends target {
 
-            protected initialized: boolean = false;
+            protected mounted: boolean = false;
 
             constructor(...args: Array<any>) {
 
                 super();
+
+                // TODO: Register with route and GC ourselves on Route Change?!
 
                 if (config.renderStrategy === RenderStrategy.OnStateChange) {
 
@@ -108,7 +124,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                                     }
                                 }));
 
-                                if (!cancelled) {
+                                if (!cancelled) { // todo: remove if
                                     this.onStateChange(state, name, value);
                                 }
                             }
@@ -139,7 +155,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             static get observedAttributes() {
-                return config.attributes;
+
+                const attributesToObserve = config.attributes || [];
+
+                // automatically allow for state restore
+                if (attributesToObserve.indexOf('state') === -1) {
+                    attributesToObserve.push('state');
+                }
+                return attributesToObserve;
             }
 
             private getAttributeLocalState(prop: string, stateHeapPtr: string): any {
@@ -156,7 +179,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.init) {
                     super.init();
                 }
-                this.initialized = true;
             }
 
             onAttributeChange(name: string, oldValue: string, newValue: string): void {
@@ -168,7 +190,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             onStateChange(state: any, name: string|number|symbol, value: any): void {
 
-                if (this.initialized) {
+                if (this.mounted) {
 
                     // re-render on state change
                     this.reflow();
@@ -186,7 +208,30 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.mount) {
                     return super.mount();
                 }
+                this.mounted = true;
             }
+
+            remount() {
+
+                if (super.remount) {
+                    return super.remount();
+                }
+            }
+
+            mountChildren() {
+
+                if (super.mountChildren) {
+                    return super.mountChildren();
+                }
+            }
+
+            remountChildren() {
+
+                if (super.remountChildren) {
+                    return super.remountChildren();
+                }
+            }
+
 
             unmount() {
 
@@ -195,7 +240,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            render(): any {
+            render(initial: boolean): any {
 
                 // TODO: Event fire
                 console.log('re-render', this, this.state);
@@ -213,9 +258,9 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            protected flow() {
+            protected flow(initial: boolean = false) {
 
-                const element: HTMLElement = this.render();
+                const element: HTMLElement = this.render(initial);
 
                 if (element) {
 
@@ -225,6 +270,12 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         this.appendChild(element);
                     }
                     Reflect.set(this, CHILD_ELEMENT, element);
+
+                    if (initial) {
+                        this.mountChildren();
+                    } else {
+                        this.remountChildren();
+                    }
                 }
             }
 
@@ -237,6 +288,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
 
                 this.flow();
+
+                this.remount();
             }
 
             attributeChangedCallback(name: string, oldValue: string, newValue: string) {
@@ -244,10 +297,20 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 const attributeValue = this.getAttributeLocalState(name, newValue);
 
                 // map local attribute field value
-                this[name] = attributeValue;
 
+                if (name !== 'state' || !this[name]) {
+
+                    // assign
+                    this[StringCaseTransformator.kebabToCamelCase(name)] = attributeValue;
+
+                } else {
+
+                    // merge
+                    Object.assign(this[name], attributeValue);
+                }
                 console.log('setting wc attr', name, newValue);
 
+                // TODO: BEFORE_PROP_CHANGE
                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.ATTRIBUTE_CHANGE,  {
                     detail: <AttributeChangeEvent> {
                         name: name,
@@ -269,7 +332,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                     this.mount();
 
-                    this.flow();
+                    this.flow(true);
 
                 } else {
 

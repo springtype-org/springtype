@@ -6,6 +6,8 @@ import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 
 interface TodoListState {
     todos: Array<Todo>;
+    lol: number;
+    test: Array<string>;
 }
 
 @WebComponent({
@@ -13,8 +15,8 @@ interface TodoListState {
     // name of the element. Here: <example-todo-list>
     tag: 'example-todo-list',
 
-    // attributes to react on: <example-todo-list lala={ 123 } />
-    attributes: ['lala'],
+    // attributes to react on: <example-todo-list static-todo-id={ 2 } />
+    attributes: ['static-todo-id'], // accessed as camelCase: this.staticTodoId
 
     // re-render strategy (manually call this.reflow() or let the framework do it?)
     renderStrategy: RenderStrategy.OnStateChange
@@ -22,8 +24,10 @@ interface TodoListState {
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
+
+        protected h2: HTMLHeadingElement,
         // an attribute; must be public as it is accessible publicly
-        public lala: number,
+        public staticTodoId: number,
         // injected, typed state; must be public as
         public state: TodoListState,
         // injected service to load data
@@ -46,7 +50,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         console.log('List item click this.lala?', evt.target);
 
         this.router.navigate(ExampleTodoDetail, {
-           id: 2
+           id: this.staticTodoId
         });
     };
 
@@ -57,10 +61,16 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
      */
     mount() {
 
-        console.log('mounted');
 
-        console.log('getAttribute("lala")', this.lala);
+        console.log('transmitted state', this.state);
+
+        console.log('getAttribute("static-todo-id") or just this.staticTodoId: ', this.staticTodoId);
         console.log('parent element', this.parentNode);
+    }
+
+    mountChildren() {
+
+        console.log('mounted h2', this.h2);
     }
 
     /**
@@ -77,11 +87,12 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
             </li>
         );
 
-        // what is returned, will be attached to this node
         return (
             <div>
-                <h2>TODO's:</h2>
+                <h2 bind-h2={ this }>TODO's:</h2>
                 <ul>{ listItems }</ul>
+
+                <b>Initial attribute applied state: { this.state.lol }</b>
             </div>
         );
     }

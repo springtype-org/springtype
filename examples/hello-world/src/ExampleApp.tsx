@@ -1,15 +1,15 @@
 import {ExampleTodoList} from "./page/list/ExampleTodoList";
 import {WebModule} from "../../../src/package/html";
-import {ExampleApp} from "./page/ExampleApp";
+import {ExampleAppLayout} from "./page/ExampleAppLayout";
 import {ExampleTodoDetail} from "./page/detail/ExampleTodoDetail";
 import {ImprintPage} from "./page/imprint/ImprintPage";
 
 @WebModule({
     routes: {
-        '': ExampleApp,
+        '': ExampleAppLayout,
         '/todos': ExampleTodoList,
         '/todo/:id': ExampleTodoDetail,
         '/imprint': ImprintPage
     }
 })
-export class ExampleAppModule {}
+export class ExampleApp {}

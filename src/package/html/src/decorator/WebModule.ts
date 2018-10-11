@@ -1,11 +1,12 @@
-import {Router, WebModuleRoutes} from "../router/Router";
+import {WebModuleRoutes} from "../router/Router";
 import {ApplicationContext} from "../../../di";
-
 // import RouterOutlet web component
 import '../router/RouterOutlet';
+import {DefaultWebApp, IWebApp} from "./WebApp";
 
 export interface WebModuleConfig {
-    routes: WebModuleRoutes
+    routes: WebModuleRoutes,
+    app?: IWebApp<any>
 }
 
 export interface IWebModule<WC> extends Function {
@@ -14,12 +15,20 @@ export interface IWebModule<WC> extends Function {
 
 export function WebModule<WM extends IWebModule<any>>(config: WebModuleConfig): any {
 
-    const router = ApplicationContext.getInstance().getBean(Router);
+    // apply defaults
+    if (!config.app) {
+        config.app = ApplicationContext.getInstance().getBean(DefaultWebApp)
+    }
 
-    router.registerRoutes(config.routes);
+    const webAppConfig = ApplicationContext.getInstance().getWebAppConfig();
+
+    if (webAppConfig.router && config.routes) {
+
+        // register routes within application router
+        webAppConfig.router.registerRoutes(config.routes);
+    }
 
     return (target: WM) => {
-
         return target;
     }
 }

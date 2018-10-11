@@ -1,6 +1,4 @@
-import {
-    ArgumentsInjectionMetaData, resolveInjectionParameterValue
-} from "./Inject";
+import {ArgumentsInjectionMetaData, resolveInjectionParameterValue} from "./Inject";
 import {InjectionProfile} from "../BeanFactory";
 import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";

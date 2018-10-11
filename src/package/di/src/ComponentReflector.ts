@@ -1,8 +1,9 @@
 import {BeanConfig, IComponent} from "./decorator/Component";
 import {
+    ArgumentsInjectionMetaData,
     createDefaultArgumentsInjectionMetadata,
-    INJECT_DECORATOR_METADATA_KEY, InjectionReference,
-    ArgumentsInjectionMetaData
+    INJECT_DECORATOR_METADATA_KEY,
+    InjectionReference
 } from "./decorator/Inject";
 import {InjectionStrategy} from "./BeanFactory";
 

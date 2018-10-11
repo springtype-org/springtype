@@ -1,4 +1,5 @@
 import {BeanFactory} from "./BeanFactory";
+import {WebAppConfig} from "../../html/src/decorator/WebApp";
 
 export enum ApplicationRuntime {
     WEBBROWSER = "WEBBROWSER",
@@ -18,6 +19,7 @@ export class ApplicationContext extends BeanFactory {
     protected static defaultInstance: ApplicationContext = new ApplicationContext();
 
     protected environment: ApplicationEnvironment = ApplicationEnvironment.DEV;
+    protected webAppConfig!: WebAppConfig;
 
     setEnvironment(environment: ApplicationEnvironment): void {
         this.environment = environment;
@@ -37,5 +39,13 @@ export class ApplicationContext extends BeanFactory {
             return ApplicationRuntime.WEBBROWSER;
         }
         return ApplicationRuntime.EMBEDDED;
+    }
+
+    setWebAppConfig(config: WebAppConfig) {
+        this.webAppConfig = config;
+    }
+
+    getWebAppConfig(): WebAppConfig {
+        return this.webAppConfig;
     }
 }

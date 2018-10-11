@@ -13,10 +13,8 @@ interface TodoState {
 })
 export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecycle {
 
-    // all attributes are auto-synced with the state object
-    state!: TodoState;
-
     constructor(
+        public state: TodoState,
         protected todoService: TodoService,
         protected router: Router
     ) {

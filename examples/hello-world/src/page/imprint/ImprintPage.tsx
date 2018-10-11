@@ -1,7 +1,7 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
-import {Router} from "../../../../../src/package/html/src/router/Router";
 import {RenderStrategy} from "../../../../../src/package/html";
 import template from './ImprintPage.tpl';
+import {Router} from "../../../../../src/package/html/src/router/Router";
 
 interface ImprintPageState {
     header: string;
@@ -15,7 +15,10 @@ interface ImprintPageState {
 })
 export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
 
-    constructor(public state: ImprintPageState, protected router: Router) {
+    constructor(
+        public state: ImprintPageState,
+        protected router: Router
+    ) {
 
         super();
 

@@ -1,8 +1,5 @@
 import "reflect-metadata";
-import {
-    INJECT_DECORATOR_METADATA_KEY,
-    ArgumentsInjectionMetaData,
-} from "./Inject";
+import {ArgumentsInjectionMetaData, INJECT_DECORATOR_METADATA_KEY,} from "./Inject";
 import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";
 

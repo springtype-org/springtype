@@ -1,3 +1,7 @@
+import {IRenderer} from "./IRenderer";
+import {Component} from "../../../di";
+import {StringCaseTransformator} from "../../../lang/src/StringCaseTransformator";
+
 interface AttributeNormalization {
     [attributeName: string]: string
 }
@@ -6,7 +10,8 @@ interface StateHeapCache {
     [stateHeapPtr: string]: any;
 }
 
-class JSXRenderer {
+@Component
+export class TSXRenderer implements IRenderer {
 
     /**
      * WebComponent attributes state heap cache.
@@ -31,7 +36,24 @@ class JSXRenderer {
         classname: 'class'
     };
 
-    constructor(protected _nativeCreateElement: Function) {
+    /**
+     * Original DOM/native createElement implementation reference.
+     */
+    protected _nativeCreateElement: Function = document.createElement.bind(document);
+
+    constructor() {
+        this.init();
+    }
+
+    init() {
+
+        // implement React TSX rendering API
+        // (used globally by TypeScript compiler --jsx emitted code)
+        (<any>window).React = this;
+
+        // assign at global scope for the native DOM functions to instantiate
+        // WebComponents using this TSX renderer
+        document.createElement = (<any>window).React.createElement.bind((<any>window).React);
     }
 
     protected normalizeAttributeName(name: string): string {
@@ -96,7 +118,17 @@ class JSXRenderer {
         Object.entries(attributes).forEach(([name, value]) => {
 
             // set event handler
-            if (name.startsWith('on')) {
+            if (name.startsWith('bind-')) {
+
+                const scope: any = value;
+                const bindName = StringCaseTransformator.kebabToCamelCase(name.substring(5, name.length));
+
+                console.log('scope', scope, 'bindName', bindName, 'ele', element);
+
+                // assign bound element reference by name; e.g. bind-h2 -> this.h2 = element;
+                scope[bindName] = element;
+
+            } else if (name.startsWith('on')) {
 
                 element.addEventListener(name.substring(2, name.length), value);
 
@@ -128,12 +160,3 @@ class JSXRenderer {
         return element;
     }
 }
-
-// implement React JSX rendering API (used globally by TypeScript compiler --jsx emitted code)
-(<any>window).React = new JSXRenderer(
-    document.createElement.bind(document)
-);
-
-// assign at global scope for the native DOM functions to instantiate
-// WebComponents using this JSX renderer
-document.createElement = (<any>window).React.createElement.bind((<any>window).React);
