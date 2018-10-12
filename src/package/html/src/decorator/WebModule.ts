@@ -1,4 +1,4 @@
-import {WebModuleRoutes} from "../router/Router";
+import {WebModuleRoutes} from "../router/IRouter";
 import {ApplicationContext} from "../../../di";
 // import RouterOutlet web component
 import '../router/RouterOutlet';
