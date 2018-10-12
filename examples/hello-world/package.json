@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel serve src/index.html",
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url .",
-    "watch": "parcel watch src/index.html"
+    "serve": "parcel serve watch src/index.html"
   },
   "repository": {
     "type": "git",
