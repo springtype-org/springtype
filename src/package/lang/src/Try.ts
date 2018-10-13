@@ -1,7 +1,5 @@
-import {NonFatalError, NoSuchElementError} from "./errors";
+import {NonFatalError, NoSuchElementError, UnsupportedOperationError} from "./errors";
 import {Objects} from "./Objects";
-import {TryFailure} from "./TryFailure";
-import {TrySuccess} from "./TrySuccess";
 
 export abstract class Try<T>  /*Iterable<T> ,*/ {
 
@@ -154,6 +152,59 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     abstract isFailure(): boolean;
 
     abstract isSuccess(): boolean;
+}
+
+export class TrySuccess<T> extends Try<T> {
+    constructor(private value: T) {
+        super()
+    }
+
+    public get(): T {
+        return this.value;
+    }
+
+    public getCause(): Error {
+        throw new UnsupportedOperationError("getCause() on Success");
+    }
+
+    public isFailure(): boolean {
+        return false;
+    }
+
+    public isSuccess(): boolean {
+        return true;
+    }
+
+    public toString(): string {
+        return "Success(" + this.value + ")";
+    }
+}
+export class TryFailure<T> extends Try<T> {
+
+    constructor(private cause: Error) {
+        super();
+    }
+
+    public get(): T {
+        throw new NonFatalError(this.cause);
+    }
+
+    public getCause(): Error {
+        return this.cause;
+    }
+
+    public isFailure(): boolean {
+        return true;
+    }
+
+    public isSuccess(): boolean {
+        return false;
+    }
+
+    public toString(): string {
+        return "Failure(" + this.cause + ")";
+    }
+
 }
 
 
