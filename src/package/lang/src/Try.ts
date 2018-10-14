@@ -1,16 +1,22 @@
-import {NonFatalError, NoSuchElementError, UnsupportedOperationError} from "./errors";
-import {Objects} from "./Objects";
+export abstract class Try<T> {
 
-export abstract class Try<T>  /*Iterable<T> ,*/ {
+    protected constructor() {
+    }
 
-    constructor() {
+    private static requireNonNullDefined<T>(value: T, message: string): T {
+        if (typeof value === 'undefined') {
+            throw new UndefinedError(message + ' was undefined');
+        }
+        if (value === null) {
+            throw new NullPointerError(message + ' was null');
+        }
+        return value;
     }
 
     public static of<T>(callable: () => T): Try<T> {
-        Objects.requireNonNullDefined(callable, "callable");
         try {
             const result = callable();
-            Objects.requireNonNullDefined(result, "result")
+            Try.requireNonNullDefined(result, "result");
             return new TrySuccess(result);
         } catch (t) {
             return new TryFailure(t);
@@ -18,7 +24,6 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     }
 
     public filter(predicate: (value: T) => boolean): Try<T> {
-        Objects.requireNonNullDefined(predicate, "predicate");
         if (this.isSuccess()) {
             try {
                 const value = this.get();
@@ -33,11 +38,10 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     }
 
 
-    public flatMap<U extends T>(mapper: (value: T) => Try<U>): Try<U> {
-        Objects.requireNonNullDefined(mapper, "mapper");
+    public flatMap<U extends T>(mapper: (value: T) => U): Try<U> {
         if (this.isSuccess()) {
             try {
-                return mapper(this.get());
+                return Try.of(() => mapper(this.get()));
             } catch (t) {
                 return new TryFailure(t);
             } finally {
@@ -49,11 +53,8 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     }
 
     public fold<U>(ifTryFailure: (error: Error) => U, ifSuccess: (value: T) => U): U {
-        Objects.requireNonNullDefined(ifTryFailure, "ifTryFailure");
-        Objects.requireNonNullDefined(ifSuccess, "ifSuccess");
         return this.isSuccess() ? ifSuccess(this.get()) : ifTryFailure(this.getCause());
     }
-
 
 
     public getOrElse(other: T): T {
@@ -61,12 +62,10 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     }
 
     public getOrElseGet(supplier: () => T): T {
-        Objects.requireNonNullDefined(supplier, "supplier");
         return this.isSuccess() ? this.get() : supplier();
     }
 
     public getOrElseThrow<X extends Error>(exceptionProvider: (error: Error) => X): T {
-        Objects.requireNonNullDefined(exceptionProvider, "exceptionProvider");
         if (this.isSuccess()) {
             return this.get();
         } else {
@@ -76,7 +75,6 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
 
     public map<U>(mapper: (value: T) => U): Try<U> {
         if (this.isSuccess()) {
-            Objects.requireNonNullDefined(mapper, "mapper");
             try {
                 return new TrySuccess(mapper(this.get()));
             } catch (t) {
@@ -88,9 +86,8 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     }
 
 
-    public mapTryFailure<X extends Error>(mapper: (error: Error) => X): Try<T> {
+    public mapFailure<X extends Error>(mapper: (error: Error) => X): Try<T> {
         if (this.isFailure()) {
-            Objects.requireNonNullDefined(mapper, "mapper");
             try {
                 return new TryFailure(mapper(this.getCause()));
             } catch (t) {
@@ -101,9 +98,8 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
         }
     }
 
-    public onTryFailure(action: (error: Error) => void): Try<T> {
+    public onFailure(action: (error: Error) => void): Try<T> {
         if (this.isFailure()) {
-            Objects.requireNonNullDefined(action, "action");
             action(this.getCause());
         }
         return this;
@@ -112,7 +108,6 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     public onSuccess(action: (value: T) => void): Try<T> {
         if (this.isSuccess()) {
             try {
-                Objects.requireNonNullDefined(action, "action is null");
                 action(this.get());
             } catch (e) {
                 return new TryFailure(e);
@@ -126,7 +121,6 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
             return this;
         } else {
             try {
-                Objects.requireNonNullDefined(callable, "callable");
                 return callable();
             } catch (x) {
                 return new TryFailure(x);
@@ -135,10 +129,8 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     }
 
     public recover(exceptionType: Function, recoveryFunction: () => T): Try<T> {
-        Objects.requireNonNullDefined(exceptionType, "exceptionType");
-        Objects.requireNonNullDefined(recoveryFunction, "recoveryFunction");
         if (this.isFailure()) {
-            if (this.getCause() instanceof exceptionType) {
+            if ((<any>this.getCause()).constructor === exceptionType) {
                 return Try.of(() => recoveryFunction());
             }
         }
@@ -152,9 +144,10 @@ export abstract class Try<T>  /*Iterable<T> ,*/ {
     abstract isFailure(): boolean;
 
     abstract isSuccess(): boolean;
+
 }
 
-export class TrySuccess<T> extends Try<T> {
+class TrySuccess<T> extends Try<T> {
     constructor(private value: T) {
         super()
     }
@@ -179,14 +172,15 @@ export class TrySuccess<T> extends Try<T> {
         return "Success(" + this.value + ")";
     }
 }
-export class TryFailure<T> extends Try<T> {
+
+class TryFailure<T> extends Try<T> {
 
     constructor(private cause: Error) {
         super();
     }
 
     public get(): T {
-        throw new NonFatalError(this.cause);
+        throw this.cause;
     }
 
     public getCause(): Error {
@@ -204,8 +198,33 @@ export class TryFailure<T> extends Try<T> {
     public toString(): string {
         return "Failure(" + this.cause + ")";
     }
+}
 
+export class NullPointerError extends Error {
+    constructor(message?: string) {
+        super(message);
+        (<any> this).__proto__ = NullPointerError.prototype;
+    }
+}
+
+export class UndefinedError extends Error {
+    constructor(message?: string) {
+        super(message);
+        (<any> this).__proto__ = UndefinedError.prototype;
+    }
 }
 
 
+export class NoSuchElementError extends Error {
+    constructor(message?: string) {
+        super(message);
+        (<any> this).__proto__ = NoSuchElementError.prototype;
+    }
+}
 
+export class UnsupportedOperationError extends Error {
+    constructor(message?: string) {
+        super(message);
+        (<any> this).__proto__ = UnsupportedOperationError.prototype;
+    }
+}

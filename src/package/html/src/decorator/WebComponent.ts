@@ -1,7 +1,7 @@
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
-import {StringCaseTransformator} from "../../../lang/src/StringCaseTransformator";
+import {StringCase} from "../../../lang/src/StringCase";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const STATE_OBJECT = Symbol('STATE_OBJECT');
@@ -301,7 +301,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (name !== 'state' || !this[name]) {
 
                     // assign
-                    this[StringCaseTransformator.kebabToCamelCase(name)] = attributeValue;
+                    this[StringCase.kebabToCamelCase(name)] = attributeValue;
 
                 } else {
 

@@ -33,7 +33,7 @@ const checksum = (value: string): boolean => {
 
     //Remove last digit (control digit):
     //Convert number to array (with only digits):
-    let number = toDigitList(isbn.slice(0, -1)).toArray();
+    let number = toDigitList(isbn.slice(0, -1));
 
     //Save last digit (control digit):
     const last = isbn.slice(-1);

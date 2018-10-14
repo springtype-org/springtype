@@ -1,23 +1,21 @@
-import {Try} from "../../package/lang";
-import {NonFatalError} from "../../package/lang/src/errors";
-import {UndefinedError} from "../../package/lang/src/errors/UndefinedError";
+import {Try, UndefinedError} from "../../package/lang";
+import {expect} from "chai";
 
-describe('Try', () => {
-
-    beforeEach(() => {
-        console.log("asdasd")
-
-    });
-
-    describe('recover', () => {
+describe('lang', () => {
+    it('Try ', function () {
         const array = ["first"];
-        const failure: Try<string> = Try.of(
-            () => array[1]);
+        expect(Try.of(() => array[1]).recover(UndefinedError,
+            () => "second").get()).to.equal("second")
 
-        failure.recover(UndefinedError,
-            () => "second");
     });
+    it('Try o ', function () {
+        const o: any = {};
+        expect(
+            Try.of(() => o["dsdf"]["jkj"])
+            .recover(TypeError,
+            () => "second").isSuccess()).to.equal(true)
 
+    });
 });
 
 

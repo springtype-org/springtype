@@ -1,6 +1,5 @@
 import {baseValidator, DECORATOR_OPTIONS_DEFAULT, Options, validateRequired} from "../ValidateMethod";
 import {validate as fromIsString} from "./IsString"
-import {List} from "../../../lang";
 
 
 export const CreditCard = (options: Options = DECORATOR_OPTIONS_DEFAULT) =>
@@ -25,10 +24,9 @@ export const validate = (value: string): boolean => {
     return total % 10 === 0
 };
 
-export const toDigitList = (digitString: string): List<number> => List.of(digitString.split(''))
-    .map(Number);
+export const toDigitList = (digitString: string): Array<number> => digitString.split('').map(Number);
 
-const sum = (list: List<number>): number => {
+const sum = (list: Array<number>): number => {
     let result = 0;
     list.forEach((d) => result += d);
     return result;
