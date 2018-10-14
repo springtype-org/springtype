@@ -1,6 +1,6 @@
 import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
-import {StringCase} from "../../../lang/src/StringCase";
+import {StringCaseTransformator} from "../../../lang/src/StringCaseTransformator";
 
 interface AttributeNormalization {
     [attributeName: string]: string
@@ -121,7 +121,7 @@ export class TSXRenderer implements IRenderer {
             if (name.startsWith('bind-')) {
 
                 const scope: any = value;
-                const bindName = StringCase.kebabToCamelCase(name.substring(5, name.length));
+                const bindName = StringCaseTransformator.kebabToCamelCase(name.substring(5, name.length));
 
                 console.log('scope', scope, 'bindName', bindName, 'ele', element);
 
