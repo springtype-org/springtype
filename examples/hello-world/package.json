@@ -10,7 +10,7 @@
     "sass": "^1.14.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ts-node test/service/TodoService.spec.ts",
     "start": "parcel serve src/index.html",
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url .",
     "serve": "parcel serve watch src/index.html"
@@ -22,7 +22,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^23.3.5",
     "parcel": "^1.10.2",
+    "ts-jest": "^23.10.4",
     "typescript": "^3.1.1"
   },
   "browserslist": [

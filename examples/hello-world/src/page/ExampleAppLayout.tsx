@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html/index";
+import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html";
 
 import template from './ExampleAppLayout.tpl';
 import {ExampleTodoList} from "./list/ExampleTodoList";

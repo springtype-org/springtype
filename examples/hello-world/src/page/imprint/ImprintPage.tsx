@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
+import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
 import {RenderStrategy} from "../../../../../src/package/html";
 import template from './ImprintPage.tpl';
 import {Router} from "../../../../../src/package/html/src/router/Router";
@@ -22,15 +22,18 @@ export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
 
         super();
 
-        this.state.header = 'asdasd22';
+        this.state.header = 'nix';
 
-        setTimeout(() => {
+        let c = 0;
+
+        setInterval(() => {
 
             console.log('asdasd33!!!');
 
-            this.state.header = 'asdasd33';
+            ++c;
+            this.state.header = `reloads ${c}`;
 
-        }, 3000);
+        }, 1000);
     }
 
     onFooterContentHeaderClick = () => {

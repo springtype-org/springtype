@@ -12,7 +12,7 @@ export class Multiplier {
         // even this is injected, no matter if UnresolvableBean is @Component annotated or not
         if (!unresolvable) {
 
-            //console.log('Fine, unresolvable class name is injected as', unresolvable);
+            //log.log('Fine, unresolvable class name is injected as', unresolvable);
 
             //unresolvable.test();
         }

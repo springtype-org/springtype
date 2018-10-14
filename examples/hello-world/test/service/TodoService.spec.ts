@@ -1,15 +1,15 @@
-import {TodoService} from "./TodoService";
+import {TestSuite} from "../../../../src/package/test/src/TestSuite";
+import {Test} from "../../../../src/package/test/src/Test";
+import {Todo, TodoService} from "../../src/service/TodoService";
+import {ConsoleLogger} from "../../../../src/package/log";
+import {Component} from "../../../../src/package/di";
 
-export interface Todo {
-    id: number;
-    text: string;
-}
-
+// TODO: mocha/chai
 @TestSuite
+@Component
 export class TodoServiceTest extends TodoService {
 
-    constructor(protected console: Logger) {
-
+    constructor(protected log: ConsoleLogger) {
         super();
     }
 
@@ -24,7 +24,7 @@ export class TodoServiceTest extends TodoService {
     })
     getTodos(): Array<Todo> {
 
-        this.console.log('Test logging...');
+        this.log.log('Test logging...');
 
         return super.getTodos();
     }
@@ -45,5 +45,12 @@ export class TodoServiceTest extends TodoService {
     })
     getById(id: number): Todo {
         return super.getById(id);
+    }
+
+    @Test({
+        returns: "Hello, world!"
+    })
+    helloWorld(): string {
+        return TodoService.helloWorld();
     }
 }

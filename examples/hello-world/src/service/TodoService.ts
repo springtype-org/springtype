@@ -1,4 +1,4 @@
-import {Component} from "../../../../src/package/di/src/decorator/Component";
+import {Component} from "../../../../src/package/di";
 
 export interface Todo {
     id: number;
@@ -25,5 +25,9 @@ export class TodoService {
         return this.data.filter((todo: Todo) => {
             return todo.id === id;
         })[0];
+    }
+
+    static helloWorld(): string {
+        return "Hello, world!";
     }
 }
