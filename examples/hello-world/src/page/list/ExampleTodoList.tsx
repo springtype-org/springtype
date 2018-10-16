@@ -15,6 +15,7 @@ interface TodoListProps {
     // name of the element. Here: <example-todo-list>
     tag: 'example-todo-list',
 
+    // TODO: Remove support for kebab-case! Use camelCase forever...
     // props to react on: <example-todo-list static-todo-id={ 2 } />
     props: ['static-todo-id'], // accessed as camelCase: this.staticTodoId
 
