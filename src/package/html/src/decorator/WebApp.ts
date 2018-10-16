@@ -3,8 +3,7 @@ import {TSXRenderer} from "../ui/TSXRenderer";
 import {ApplicationContext, Component} from "../../../di";
 import {IRouter} from "../router/IRouter";
 import {HistoryRouter} from "../router/HistoryRouter";
-import {ILogger} from "../../../log/src/ILogger";
-import {ConsoleLogger} from "../../../log";
+import {ConsoleLogger, ILogger} from "../../../log";
 
 export interface WebAppConfig {
     isDefault?: boolean;

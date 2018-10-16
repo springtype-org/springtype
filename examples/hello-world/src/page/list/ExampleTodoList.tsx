@@ -1,10 +1,10 @@
 import {Todo, TodoService} from "../../service/TodoService";
-import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html/src/decorator/WebComponent";
+import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {RenderStrategy} from "../../../../../src/package/html";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 
-interface TodoListState {
+interface TodoListProps {
     todos: Array<Todo>;
     lol: number;
     test: Array<string>;
@@ -15,11 +15,11 @@ interface TodoListState {
     // name of the element. Here: <example-todo-list>
     tag: 'example-todo-list',
 
-    // attributes to react on: <example-todo-list static-todo-id={ 2 } />
-    attributes: ['static-todo-id'], // accessed as camelCase: this.staticTodoId
+    // props to react on: <example-todo-list static-todo-id={ 2 } />
+    props: ['static-todo-id'], // accessed as camelCase: this.staticTodoId
 
     // re-render strategy (manually call this.reflow() or let the framework do it?)
-    renderStrategy: RenderStrategy.OnStateChange
+    renderStrategy: RenderStrategy.onPropsChanged
 })
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
 
@@ -28,8 +28,8 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         protected h2: HTMLHeadingElement,
         // an attribute; must be public as it is accessible publicly
         public staticTodoId: number,
-        // injected, typed state; must be public as
-        public state: TodoListState,
+        // injected, typed props; must be public as
+        public props: TodoListProps,
         // injected service to load data
         protected todoService: TodoService,
         // injected router to getParams() and navigate()
@@ -38,7 +38,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         super();
 
         // one-time fetch todo items (before render and mount)
-        this.state.todos = this.todoService.getTodos();
+        this.props.todos = this.todoService.getTodos();
     }
 
     /**
@@ -62,7 +62,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
     mount() {
 
 
-        console.log('transmitted state', this.state);
+        console.log('transmitted props', this.props);
 
         console.log('getAttribute("static-todo-id") or just this.staticTodoId: ', this.staticTodoId);
         console.log('parent element', this.parentNode);
@@ -81,7 +81,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
         console.log('render called ExampleTodoList');
 
-        const listItems = this.state.todos.map((todo: Todo) =>
+        const listItems = this.props.todos.map((todo: Todo) =>
             <li onclick={ this.onListItemClick } class="todo-item">
                 { todo.text }
             </li>
@@ -92,7 +92,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
                 <h2 bind-h2={ this }>TODO's:</h2>
                 <ul>{ listItems }</ul>
 
-                <b>Initial attribute applied state: { this.state.lol }</b>
+                <b>Initial attribute applied state: { this.props.lol }</b>
             </div>
         );
     }

@@ -3,26 +3,26 @@ import {RenderStrategy} from "../../../../../src/package/html";
 import template from './ImprintPage.tpl';
 import {Router} from "../../../../../src/package/html/src/router/Router";
 
-interface ImprintPageState {
+interface ImprintPageProps {
     header: string;
 }
 
 @WebComponent({
     tag: 'imprint-page',
-    renderStrategy: RenderStrategy.OnStateChange,
-    attributes: ['header'],
-    template // re-rendered on state change
+    renderStrategy: RenderStrategy.onPropsChanged,
+    props: ['header'],
+    template // re-rendered on props change
 })
 export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
-        public state: ImprintPageState,
+        public props: ImprintPageProps,
         protected router: Router
     ) {
 
         super();
 
-        this.state.header = 'nix';
+        this.props.header = 'nix';
 
         let c = 0;
 
@@ -31,14 +31,14 @@ export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
             console.log('asdasd33!!!');
 
             ++c;
-            this.state.header = `reloads ${c}`;
+            this.props.header = `reloads ${c}`;
 
         }, 1000);
     }
 
     onFooterContentHeaderClick = () => {
 
-        // 2nd state change
-        this.state.header = 'Footer Content mutated';
+        // 2nd props change
+        this.props.header = 'Footer Content mutated';
     };
 }

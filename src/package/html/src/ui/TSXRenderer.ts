@@ -1,6 +1,6 @@
 import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
-import {StringCaseTransformator} from "../../../lang/src/StringCaseTransformator";
+import {CaseTransformer} from "../../../lang";
 
 interface AttributeNormalization {
     [attributeName: string]: string
@@ -14,19 +14,19 @@ interface StateHeapCache {
 export class TSXRenderer implements IRenderer {
 
     /**
-     * WebComponent attributes state heap cache.
+     * WebComponent props props heap cache.
      * Global cache. Used for intermediate value transmission.
      * Memory is freed directly after the atomic transmission
      * operation (DOM -> WebComponent JS instance) has ended.
      */
-    stateHeapCache: StateHeapCache = {};
+    propsHeapCache: StateHeapCache = {};
 
     /**
      * Heap pointers are used to address a certain attribute
-     * state in transmission between DOM and WebComponent JS
+     * props in transmission between DOM and WebComponent JS
      * instance.
      */
-    protected stateHeapPtr: number = 0;
+    protected propsHeapPtr: number = 0;
 
     /**
      * Some standard JSX/TSX attribute names are transformed
@@ -60,8 +60,8 @@ export class TSXRenderer implements IRenderer {
         return this.attrNormalizations[name.toLowerCase()] || name;
     }
 
-    protected getStateHeapPtr(): string {
-        return 'state-' + (++(<any>window).React.stateHeapPtr);
+    protected getPropsHeapPtr(): string {
+        return 'props-' + (++(<any>window).React.propsHeapPtr);
     }
 
     protected appendChild(child: string|number|boolean|Node|Array<Node>, element: Node) {
@@ -114,14 +114,14 @@ export class TSXRenderer implements IRenderer {
 
         const element: any = this.nativeCreateElement(name, nativeOptions);
 
-        // content attributes vs IDL attributes have many cases
+        // content props vs IDL props have many cases
         Object.entries(attributes).forEach(([name, value]) => {
 
             // set event handler
             if (name.startsWith('bind-')) {
 
                 const scope: any = value;
-                const bindName = StringCaseTransformator.kebabToCamelCase(name.substring(5, name.length));
+                const bindName = CaseTransformer.kebabToCamelCase(name.substring(5, name.length));
 
                 console.log('scope', scope, 'bindName', bindName, 'ele', element);
 
@@ -136,11 +136,11 @@ export class TSXRenderer implements IRenderer {
 
             } else if (typeof value !== 'string') {
 
-                const stateHeapPtr = this.getStateHeapPtr();
+                const propsHeapPtr = this.getPropsHeapPtr();
 
-                this.stateHeapCache[stateHeapPtr] = value;
+                this.propsHeapCache[propsHeapPtr] = value;
 
-                element.setAttribute(name, stateHeapPtr);
+                element.setAttribute(name, propsHeapPtr);
 
             } else {
 

@@ -1,3 +1,3 @@
-export * from "./src/Tuple";
-export * from "./src/Method";
-export * from "./src/Try";
+export * from "./src/reflect/Method";
+export * from "./src/util/Try";
+export * from "./src/string/transformer/CaseTransformer";
