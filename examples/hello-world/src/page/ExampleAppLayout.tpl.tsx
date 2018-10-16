@@ -6,7 +6,7 @@ export default (view: ExampleAppLayout) =>
 
     <example-todo-list id='todo-list'
                        bind-list={ view }
-                       state={ { lol: 123, test: ['asd']} }
+                       props={ { lol: 123, test: ['asd']} }
                        static-todo-id={ 2 }
                        class='example' />
 

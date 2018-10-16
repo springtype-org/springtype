@@ -4,7 +4,7 @@ import {WebComponentReflector} from "./WebComponentReflector";
 import {CaseTransformer} from "../../../lang";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
-const STATE_OBJECT = Symbol('STATE_OBJECT');
+const PROPS_OBJECT = Symbol('PROPS_OBJECT');
 
 export enum ShadowAttachMode {
     OPEN = 'open',
@@ -37,7 +37,7 @@ export class WebComponentLifecycle  {
     }
     unmount?(): void {};
     onPropChanged?(name: string, newValue: any, oldValue?: any): void {};
-    onPropsChanged?(state: any, name: string|number|symbol, value: any): void {};
+    onPropsChanged?(props: any, name: string|number|symbol, value: any): void {};
     reflow?(): void {};
     mountChildren?(): void {};
     remountChildren?(): void {};
@@ -49,7 +49,7 @@ export interface AttributeChangeEvent {
     newValue: any;
 }
 
-export interface StateChangeEvent {
+export interface PropsChangeEvent {
     props: any;
     name: string|number|symbol;
     value: any;
@@ -106,7 +106,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                                 props[name] = value;
 
                                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE,  {
-                                    detail: <StateChangeEvent> {
+                                    detail: <PropsChangeEvent> {
                                         props,
                                         name,
                                         value
@@ -121,7 +121,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         }
                     });
 
-                    Object.defineProperty(this, 'state', {
+                    Object.defineProperty(this, 'props', {
                         writable: false
                     });
 
@@ -148,19 +148,19 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 const attributesToObserve = config.props || [];
 
                 // automatically allow for props restore
-                if (attributesToObserve.indexOf('state') === -1) {
-                    attributesToObserve.push('state');
+                if (attributesToObserve.indexOf('props') === -1) {
+                    attributesToObserve.push('props');
                 }
                 return attributesToObserve;
             }
 
-            private getAttributeLocalState(prop: string, stateHeapPtr: string): any {
+            private getAttributeLocalProp(prop: string, propHeapPtr: string): any {
 
-                const attributeStateValue = (<any>window).React.propsHeapCache[stateHeapPtr];
+                const attributePropValue = (<any>window).React.propsHeapCache[propHeapPtr];
 
-                delete (<any>window).React.propsHeapCache[stateHeapPtr];
+                delete (<any>window).React.propsHeapCache[propHeapPtr];
 
-                return attributeStateValue;
+                return attributePropValue;
             }
 
             init(): void {
@@ -177,7 +177,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            onPropsChanged(state: any, name: string|number|symbol, value: any): void {
+            onPropsChanged(props: any, name: string|number|symbol, value: any): void {
 
                 if (this.mounted) {
 
@@ -186,7 +186,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
 
                 if (super.onPropsChanged) {
-                    return super.onPropsChanged(state, name, value);
+                    return super.onPropsChanged(props, name, value);
                 }
             }
 
@@ -283,11 +283,11 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
-                const attributeValue = this.getAttributeLocalState(name, newValue);
+                const attributeValue = this.getAttributeLocalProp(name, newValue);
 
                 // map local attribute field value
 
-                if (name !== 'state' || !this[name]) {
+                if (name !== 'props' || !this[name]) {
 
                     // assign
                     this[CaseTransformer.kebabToCamelCase(name)] = attributeValue;

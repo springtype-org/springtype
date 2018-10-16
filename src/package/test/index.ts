@@ -1,2 +1,2 @@
-export { Test } from "./src/Test";
-export { TestSuite } from "./src/TestSuite";
+export { Test } from "./src/decorator/Test";
+export { TestSuite } from "./src/decorator/TestSuite";

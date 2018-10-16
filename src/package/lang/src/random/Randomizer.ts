@@ -1,4 +1,4 @@
-import {StringBuilder} from "../string/StringBuilder";
+import {StringBuilder} from "../..";
 
 export const CHARSET_ALPHA_UPPER_CASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 export const CHARSET_ALPHA_LOWER_CASE = CHARSET_ALPHA_UPPER_CASE.toLowerCase();
