@@ -16,7 +16,7 @@ export const ISBN = (options: Options = DECORATOR_OPTIONS_DEFAULT) =>
     );
 
 /**
- * validate function
+ * validateFn function
  * @param value the raw isbn number
  */
 export const validate = (value: string): boolean => {
@@ -25,7 +25,7 @@ export const validate = (value: string): boolean => {
 };
 
 /*
-* Checksum for validate ISBN-10 and ISBN-13.
+* Checksum for validateFn ISBN-10 and ISBN-13.
 */
 const checksum = (value: string): boolean => {
     //isbn have to be number or string (composed only of digits or char "X"):
@@ -73,7 +73,7 @@ const checksum = (value: string): boolean => {
 const PREFIX_ISBN_REGEX = /^ISBN(?:-1[03])?:?\x20+/i;
 
 /*
- * Regexp for validate ISBN (only nubers or char "X").
+ * Regexp for validateFn ISBN (only nubers or char "X").
  * Example for ISBN-10: "048665088X", "0306406152".
  * Example for ISBN-13: "9788371815102".
  *

@@ -7,7 +7,7 @@ export default (view: ImprintPage) =>
         <div className="row">
             <div className="col l6 s12">
                 <h5 className="white-text" onClick={ view.onFooterContentHeaderClick }>
-                    {view.state.header}
+                    {view.props.header}
                 </h5>
                 <p className="grey-text text-lighten-4">You can use rows and columns here to organize your
                     footer content. {'adasd'}</p>

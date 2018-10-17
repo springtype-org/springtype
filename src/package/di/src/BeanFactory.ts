@@ -207,16 +207,15 @@ export class BeanFactory {
         componentCtor: T
     ): any {
 
-        if (componentCtor instanceof Object) {
+        // e.g. when injecting interfaces (which resolve to Object data type ref.)
+        if (componentCtor.prototype.constructor === Object) {
 
-            console.log('injected interface object');
-
+            console.log(`Injected interface object instance ${(<any>componentCtor).name}`);
             return {};
 
         } else {
 
             console.warn(`The component referenced for injection is missing a @Component decorator: ${(<any>componentCtor).name}`);
-
             return undefined;
         }
     }

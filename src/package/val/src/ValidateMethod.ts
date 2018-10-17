@@ -1,14 +1,18 @@
 import "reflect-metadata"
-import {getParamNames, Tuple2} from "../../lang";
+import {getParamNames} from "../../lang";
 import {IValidator, VALIDATOR_DEFAULT} from "./Validator";
 import {validate} from "./decorators/Required";
 
 const VALIDATION_METHOD_PARAMNAMES_METADATA = Symbol("ParamNames");
 const VALIDATION_DECORATOR_METADATA_KEY = Symbol("Validation");
 
-
+export interface IValidationRegistration {
+    parameterIndex: number;
+    validateFn: IValidateFn;
+}
 export const Validate = (validator: IValidator = VALIDATOR_DEFAULT) =>
     (target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
+
         let method = descriptor.value;
 
         const reflectedParamNames = getParamNames(target[propertyName]);
@@ -17,14 +21,18 @@ export const Validate = (validator: IValidator = VALIDATOR_DEFAULT) =>
             [VALIDATION_METHOD_PARAMNAMES_METADATA]: reflectedParamNames
         });
 
-        descriptor.value = function () {
-            const validationObject: Tuple2<number, IValidate>[] = Reflect.getMetadata(VALIDATION_DECORATOR_METADATA_KEY, target, propertyName) || {};
+        descriptor.value = function() {
+
+            const validationRegistrations: Array<IValidationRegistration> = Reflect.getMetadata(VALIDATION_DECORATOR_METADATA_KEY, target, propertyName) || {};
             const errors: ValidationResult[] = [];
-            for (const validationTuple2 of validationObject) {
-                const parameterIndex = validationTuple2._1;
+
+            for (const validationRegistration of validationRegistrations) {
+
+                const parameterIndex = validationRegistration.parameterIndex;
                 const input = arguments[parameterIndex];
 
-                if (!validationTuple2._2(input)) {
+                if (!validationRegistration.validateFn(input)) {
+
                     errors.push({
                         argumentName: reflectedParamNames[parameterIndex],
                         index: parameterIndex,
@@ -41,13 +49,20 @@ export const Validate = (validator: IValidator = VALIDATOR_DEFAULT) =>
     };
 
 
-export const baseValidator = (constrain: IValidate): ParameterDecorator =>
-    (target: Object, propertyKey: string | symbol, parameterIndex: number) => {
-        const validationObject: Tuple2<number, IValidate>[] = Reflect.getOwnMetadata(VALIDATION_DECORATOR_METADATA_KEY, target, propertyKey) || [];
-        Reflect.defineMetadata(VALIDATION_DECORATOR_METADATA_KEY, validationObject.concat(Tuple2.of(parameterIndex, constrain)), target, propertyKey);
-    };
+export const baseValidator = (validateFn: IValidateFn): ParameterDecorator => {
+    return (target: Object, propertyKey: string | symbol, parameterIndex: number) => {
 
-export type IValidate = (value: any) => boolean;
+        const validationRegistrations: Array<IValidationRegistration> = Reflect.getOwnMetadata(
+            VALIDATION_DECORATOR_METADATA_KEY, target, propertyKey) || [];
+
+        Reflect.defineMetadata(VALIDATION_DECORATOR_METADATA_KEY, validationRegistrations.concat({
+            parameterIndex,
+            validateFn
+        }), target, propertyKey);
+    };
+};
+
+export type IValidateFn = (value: any) => boolean;
 
 export type Options = { required?: boolean; }
 export const DECORATOR_OPTIONS_DEFAULT: Options = {required: true};
@@ -58,16 +73,18 @@ export type ValidationResult = {
     input: any
 }
 
-export const validateRequired = (value: any, func: () => boolean, options: Options,): boolean => {
+export const validateRequired = (value: any, fn: () => boolean, options: Options,): boolean => {
     const isValid = validate(value);
-    if (!!!options.required) {
+
+    if (!options.required) {
         //required === false
         if (isValid) {
-            return func();
+            return fn();
         }
         return true;
+
     } else {
         //required === true
-        return isValid && func();
+        return isValid && fn();
     }
 };

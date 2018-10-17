@@ -1,5 +1,5 @@
-import {TestSuite} from "../../../../src/package/test/src/TestSuite";
-import {Test} from "../../../../src/package/test/src/Test";
+import {TestSuite} from "../../../../src/package/test/src/decorator/TestSuite";
+import {Test} from "../../../../src/package/test/src/decorator/Test";
 import {Todo, TodoService} from "../../src/service/TodoService";
 import {ConsoleLogger} from "../../../../src/package/log";
 import {Component} from "../../../../src/package/di";

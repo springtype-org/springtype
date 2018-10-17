@@ -1,9 +1,9 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
 import {Todo, TodoService} from "../../service/TodoService";
 import {Router} from "../../../../../src/package/html/src/router/Router";
-import {WebAppLogger} from "../../../../../src/package/log/src/WebAppLogger";
+import {WebAppLogger} from "../../../../../src/package/log";
 
-interface TodoState {
+interface TodoProps {
     id: number;
     text: string;
 }
@@ -21,12 +21,12 @@ class X<Y> {
 
 @WebComponent({
     tag: 'example-todo-detail',
-    attributes: ['todo'],
+    props: ['todo'],
 })
 export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
-        public state: TodoState,
+        public props: TodoProps,
         protected todoService: TodoService,
         protected router: Router,
         protected log: WebAppLogger,

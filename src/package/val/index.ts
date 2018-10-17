@@ -11,6 +11,6 @@ export {
     baseValidator,
     Validate,
     ValidationResult,
-    IValidate,
+    IValidateFn,
     Options,
 } from "./src/ValidateMethod";

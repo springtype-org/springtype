@@ -1,10 +1,10 @@
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
-import {StringCaseTransformator} from "../../../lang/src/StringCaseTransformator";
+import {CaseTransformer} from "../../../lang";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
-const STATE_OBJECT = Symbol('STATE_OBJECT');
+const PROPS_OBJECT = Symbol('PROPS_OBJECT');
 
 export enum ShadowAttachMode {
     OPEN = 'open',
@@ -13,16 +13,14 @@ export enum ShadowAttachMode {
 
 export enum RenderStrategy {
     OnRequest = 'ON_REQUEST',
-    OnStateChange = 'ON_STATE_CHANGE' // TODO: OnPropChanged
+    onPropsChanged = 'ON_PROPS_CHANGED'
 }
 
 export interface WebComponentConfig {
     tag: string;
     shadow?: boolean;
     shadowMode?: ShadowAttachMode;
-
-    // TODO: -> props
-    attributes?: Array<string>;
+    props?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => Node;
 }
@@ -30,8 +28,7 @@ export interface WebComponentConfig {
 export class WebComponentLifecycle  {
     constructor() {};
 
-    // TODO: state -> props
-    state?: any = {};
+    props?: any = {};
     init?(): void {}
     mount?(): void {};
     remount?(): void {};
@@ -39,12 +36,8 @@ export class WebComponentLifecycle  {
         return ('');
     }
     unmount?(): void {};
-
-    // TODO: onPropChanged
-    onAttributeChange?(name: string, newValue: any, oldValue?: any): void {};
-
-    // TODO: onPropsChanged
-    onStateChange?(state: any, name: string|number|symbol, value: any): void {};
+    onPropChanged?(name: string, newValue: any, oldValue?: any): void {};
+    onPropsChanged?(props: any, name: string|number|symbol, value: any): void {};
     reflow?(): void {};
     mountChildren?(): void {};
     remountChildren?(): void {};
@@ -56,8 +49,8 @@ export interface AttributeChangeEvent {
     newValue: any;
 }
 
-export interface StateChangeEvent {
-    state: any;
+export interface PropsChangeEvent {
+    props: any;
     name: string|number|symbol;
     value: any;
 }
@@ -67,12 +60,8 @@ export enum LifecycleEvent {
     SHADOW_ATTACHED = 'SHADOW_ATTACHED',
     BEFORE_MOUNT = 'BEFORE_MOUNT',
     BEFORE_UNMOUNT = 'BEFORE_UNMOUNT',
-
-    // TODO: BEFORE_PROP_CHANGE
-    ATTRIBUTE_CHANGE = 'ATTRIBUTE_CHANGE',
-
-    // TODO: remove
-    BEFORE_STATE_CHANGE = 'BEFORE_STATE_CHANGE'
+    BEFORE_PROP_CHANGE = 'BEFORE_PROP_CHANGE',
+    BEFORE_PROPS_CHANGE = 'BEFORE_PROPS_CHANGE'
 }
 
 export interface IWebComponent<WC> extends Function {
@@ -82,7 +71,7 @@ export interface IWebComponent<WC> extends Function {
 // TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
 
-    if (!config.attributes) config.attributes = [];
+    if (!config.props) config.props = [];
 
     if (!config.tag) {
         throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
@@ -103,43 +92,43 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 super();
 
-                // TODO: Register with route and GC ourselves on Route Change?!
+                // TODO: Register with route and GC ourselves on Route Change?! -> timer out of control
 
-                if (config.renderStrategy === RenderStrategy.OnStateChange) {
+                if (config.renderStrategy === RenderStrategy.onPropsChanged) {
 
-                    this.state = new Proxy(this.state || {}, {
-                        set: (state: any, name: string|number|symbol, value: any): boolean => {
+                    this.props = new Proxy(this.props || {}, {
+                        set: (props: any, name: string|number|symbol, value: any): boolean => {
 
-                            console.log('state change');
+                            console.log('props change');
 
-                            if (state[name] !== value) {
+                            if (props[name] !== value) {
 
-                                state[name] = value;
+                                props[name] = value;
 
-                                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_STATE_CHANGE,  {
-                                    detail: <StateChangeEvent> {
-                                        state,
+                                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE,  {
+                                    detail: <PropsChangeEvent> {
+                                        props,
                                         name,
                                         value
                                     }
                                 }));
 
-                                if (!cancelled) { // todo: remove if
-                                    this.onStateChange(state, name, value);
+                                if (!cancelled) {
+                                    this.onPropsChanged(props, name, value);
                                 }
                             }
                             return true;
                         }
                     });
 
-                    Object.defineProperty(this, 'state', {
+                    Object.defineProperty(this, 'props', {
                         writable: false
                     });
 
 
                 } else {
 
-                    this.state = this.state || {};
+                    this.props = this.props || {};
                 }
 
                 if (config.shadow) {
@@ -156,22 +145,22 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             static get observedAttributes() {
 
-                const attributesToObserve = config.attributes || [];
+                const attributesToObserve = config.props || [];
 
-                // automatically allow for state restore
-                if (attributesToObserve.indexOf('state') === -1) {
-                    attributesToObserve.push('state');
+                // automatically allow for props restore
+                if (attributesToObserve.indexOf('props') === -1) {
+                    attributesToObserve.push('props');
                 }
                 return attributesToObserve;
             }
 
-            private getAttributeLocalState(prop: string, stateHeapPtr: string): any {
+            private getAttributeLocalProp(prop: string, propHeapPtr: string): any {
 
-                const attributeStateValue = (<any>window).React.stateHeapCache[stateHeapPtr];
+                const attributePropValue = (<any>window).React.propsHeapCache[propHeapPtr];
 
-                delete (<any>window).React.stateHeapCache[stateHeapPtr];
+                delete (<any>window).React.propsHeapCache[propHeapPtr];
 
-                return attributeStateValue;
+                return attributePropValue;
             }
 
             init(): void {
@@ -181,23 +170,23 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            onAttributeChange(name: string, oldValue: string, newValue: string): void {
+            onPropChanged(name: string, oldValue: string, newValue: string): void {
 
-                if (super.onAttributeChange) {
-                    return super.onAttributeChange(name, oldValue, newValue);
+                if (super.onPropChanged) {
+                    return super.onPropChanged(name, oldValue, newValue);
                 }
             }
 
-            onStateChange(state: any, name: string|number|symbol, value: any): void {
+            onPropsChanged(props: any, name: string|number|symbol, value: any): void {
 
                 if (this.mounted) {
 
-                    // re-render on state change
+                    // re-render on props change
                     this.reflow();
                 }
 
-                if (super.onStateChange) {
-                    return super.onStateChange(state, name, value);
+                if (super.onPropsChanged) {
+                    return super.onPropsChanged(props, name, value);
                 }
             }
 
@@ -243,7 +232,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             render(initial: boolean): any {
 
                 // TODO: Event fire
-                console.log('re-render', this, this.state);
+                console.log('re-render', this, this.props);
 
                 if (super.render) {
                     return super.render();
@@ -294,14 +283,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
-                const attributeValue = this.getAttributeLocalState(name, newValue);
+                const attributeValue = this.getAttributeLocalProp(name, newValue);
 
                 // map local attribute field value
 
-                if (name !== 'state' || !this[name]) {
+                if (name !== 'props' || !this[name]) {
 
                     // assign
-                    this[StringCaseTransformator.kebabToCamelCase(name)] = attributeValue;
+                    this[CaseTransformer.kebabToCamelCase(name)] = attributeValue;
 
                 } else {
 
@@ -310,8 +299,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
                 console.log('setting wc attr', name, newValue);
 
-                // TODO: BEFORE_PROP_CHANGE
-                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.ATTRIBUTE_CHANGE,  {
+                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROP_CHANGE,  {
                     detail: <AttributeChangeEvent> {
                         name: name,
                         oldValue,
@@ -320,7 +308,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }));
 
                 if (!cancelled) {
-                    this.onAttributeChange(name, oldValue, newValue);
+                    this.onPropChanged(name, oldValue, newValue);
                 }
             }
 
