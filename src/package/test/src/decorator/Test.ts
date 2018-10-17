@@ -44,7 +44,7 @@ export const Test = (testConfig: ITestConfig) => (clazz: any, methodName: string
             console.log(methodName, 'Return', realReturnValue, 'should be', assertReturn);
 
             /*
-            if (!PropertyComparator.equal(realReturnValue, assertReturn, testConfig.equalType || Type.PARTIAL)) {
+            if (!PropertyComparator.equal(realReturnValue, assertReturn, testConfig.equalType || CompareType.PARTIAL)) {
                 throw new Error("FAIL: Return value and asserted value differ");
             }
             */

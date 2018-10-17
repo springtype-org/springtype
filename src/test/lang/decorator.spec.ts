@@ -1,6 +1,6 @@
 import {Try, UndefinedError} from "../../package/lang";
 import {expect} from "chai";
-import {PropertyComparator, Type} from "../../package/lang/src/util/PropertyComparator";
+import {PropertyComparator, CompareType} from "../../package/lang/src/util/PropertyComparator";
 
 describe('lang', () => {
     it('Try ', function () {
@@ -27,10 +27,10 @@ describe('lang', () => {
             prop: "test", nested: {prop: "test", nested: {prop: "test", nested: {}}}
         }, {
             prop: "test", nested: {prop: "test", nested: {prop: new String("test"),prop1: "test", nested: {}}}
-        }, Type.PARTIAL)).to.equal(true);
+        }, CompareType.PARTIAL)).to.equal(true);
 
-        expect(PropertyComparator.equal([2,3],[2,3,4], Type.PARTIAL)).to.equal(true);
-        expect(PropertyComparator.equal([2,3,4],[2,3], Type.PARTIAL)).to.equal(false);
+        expect(PropertyComparator.equal([2,3],[2,3,4], CompareType.PARTIAL)).to.equal(true);
+        expect(PropertyComparator.equal([2,3,4],[2,3], CompareType.PARTIAL)).to.equal(false);
         expect(PropertyComparator.equal([2,3],[2,3,4])).to.equal(false);
         expect(PropertyComparator.equal("sd",new String("sd"))).to.equal(true);
         expect(PropertyComparator.equal(1,new Number(1))).to.equal(true);
