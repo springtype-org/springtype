@@ -32,7 +32,11 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
     present(component: HTMLElement): void {
 
         if (this.currentComponent) {
+
             this.removeChild(this.currentComponent);
+
+            // instruct GC to get rid of the component
+            delete this.currentComponent;
         }
 
         this.currentComponent = document.createElement(WebComponentReflector.getTagName(component));

@@ -195,7 +195,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 console.log('on mount', this);
 
                 if (super.mount) {
-                    return super.mount();
+                    super.mount();
                 }
                 this.mounted = true;
             }
@@ -203,21 +203,21 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             remount() {
 
                 if (super.remount) {
-                    return super.remount();
+                    super.remount();
                 }
             }
 
             mountChildren() {
 
                 if (super.mountChildren) {
-                    return super.mountChildren();
+                    super.mountChildren();
                 }
             }
 
             remountChildren() {
 
                 if (super.remountChildren) {
-                    return super.remountChildren();
+                    super.remountChildren();
                 }
             }
 
@@ -225,7 +225,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             unmount() {
 
                 if (super.unmount) {
-                    return super.unmount();
+                    super.unmount();
                 }
             }
 

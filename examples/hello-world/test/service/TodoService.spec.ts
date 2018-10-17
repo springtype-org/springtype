@@ -54,3 +54,37 @@ export class TodoServiceTest extends TodoService {
         return TodoService.helloWorld();
     }
 }
+
+@Component
+class whatever2 {
+
+    calc(n: number, n2: number): number {
+        return n + n2;
+    }
+}
+
+class whatever2Test extends whatever2 {
+
+    @Test({
+        params: [2, 2],
+        returns: 4
+    })
+    calc(n: number, n2: number): number {
+        return super.calc(n, n2);
+    }
+}
+
+@TestSuite
+@Component
+class whatever {
+
+    constructor(private whatEver: whatever2Test) {}
+
+    @Test({
+        params: ['foo'],
+        returns: 'foo4'
+    })
+    testFoo(text: string): string {
+        return `${text}${this.whatEver.calc(2,2)}`;
+    }
+}

@@ -17,16 +17,20 @@ export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
         public props: ImprintPageProps,
-        protected router: Router
+        protected router: Router,
+        private updateInterval: number,
     ) {
 
         super();
 
         this.props.header = 'nix';
 
-        let c = 0;
+    }
 
-        setInterval(() => {
+    mount(): void {
+
+        let c = 0;
+        this.updateInterval = window.setInterval(() => {
 
             console.log('asdasd33!!!');
 
@@ -34,6 +38,11 @@ export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
             this.props.header = `reloads ${c}`;
 
         }, 1000);
+    }
+
+    unmount(): void {
+
+        clearInterval(this.updateInterval);
     }
 
     onFooterContentHeaderClick = () => {
