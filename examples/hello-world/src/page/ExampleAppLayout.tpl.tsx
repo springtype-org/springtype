@@ -1,5 +1,6 @@
 import {ExampleAppLayout} from "./ExampleAppLayout";
 
+// TODO: bind={ view.list }
 export default (view: ExampleAppLayout) =>
 
 <div>

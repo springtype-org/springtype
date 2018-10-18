@@ -1,4 +1,5 @@
 import {Component} from "../../../../src/package/di";
+import {TodoModel} from "../model/TodoModel";
 
 export interface Todo {
     id: number;
@@ -7,6 +8,14 @@ export interface Todo {
 
 @Component
 export class TodoService {
+
+    constructor(
+        // state model
+        protected todoModel: TodoModel
+    ) {
+
+        console.log('todoModel', todoModel);
+    }
 
     data: Array<Todo> = [{
         id: 1,

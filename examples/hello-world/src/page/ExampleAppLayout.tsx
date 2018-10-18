@@ -14,7 +14,7 @@ import {ExampleTodoList} from "./list/ExampleTodoList";
 })
 export class ExampleAppLayout extends HTMLElement implements WebComponentLifecycle {
 
-    protected list!: ExampleTodoList;
+    public list!: ExampleTodoList;
 
     mountChildren() {
 

@@ -3,6 +3,7 @@ import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/ht
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {RenderStrategy} from "../../../../../src/package/html";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
+import {TodoModel} from "../../model/TodoModel";
 
 interface TodoListProps {
     todos: Array<Todo>;
@@ -34,7 +35,8 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         // injected service to load data
         protected todoService: TodoService,
         // injected router to getParams() and navigate()
-        protected router: Router) {
+        protected router: Router,
+    ) {
 
         super();
 
