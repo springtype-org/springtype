@@ -13,7 +13,7 @@ export function Model(model: any): any {
     const modelInstance = appContext.getBean(injectableModel);
 
     const modelConfig: R.ModelConfig<any> = {
-        state: modelInstance.state,
+        state: modelInstance.initialState,
         reducers: {},
         effects: {}
     };

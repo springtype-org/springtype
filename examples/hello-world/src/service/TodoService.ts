@@ -10,7 +10,7 @@ export interface Todo {
 export class TodoService {
 
     constructor(
-        // state model
+        // initialState model
         protected todoModel: TodoModel
     ) {
 
