@@ -1,9 +1,7 @@
 import {Todo, TodoService} from "../../service/TodoService";
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
 import {Router} from "../../../../../src/package/html/src/router/Router";
-import {RenderStrategy} from "../../../../../src/package/html";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
-import {TodoModel} from "../../model/TodoModel";
 
 interface TodoListProps {
     todos: Array<Todo>;
@@ -19,9 +17,6 @@ interface TodoListProps {
     // TODO: Remove support for kebab-case! Use camelCase forever...
     // props to react on: <example-todo-list static-todo-id={ 2 } />
     props: ['static-todo-id'], // accessed as camelCase: this.staticTodoId
-
-    // re-render strategy (manually call this.reflow() or let the framework do it?)
-    renderStrategy: RenderStrategy.onPropsChanged
 })
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
 

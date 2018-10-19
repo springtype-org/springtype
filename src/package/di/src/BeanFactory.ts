@@ -215,6 +215,7 @@ export class BeanFactory {
 
         } else {
 
+            // TODO: Number, HTMLHeadingElement...?
             console.warn(`The component referenced for injection is missing a @Component decorator: ${(<any>componentCtor).name}`);
             return undefined;
         }

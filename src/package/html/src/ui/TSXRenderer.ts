@@ -47,6 +47,8 @@ export class TSXRenderer implements IRenderer {
 
     init() {
 
+        console.log('init TSX renderer');
+
         // implement React TSX rendering API
         // (used globally by TypeScript compiler --jsx emitted code)
         (<any>window).React = this;

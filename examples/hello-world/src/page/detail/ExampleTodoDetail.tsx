@@ -8,17 +8,6 @@ interface TodoProps {
     text: string;
 }
 
-class X<Y> {
-
-   static of<Y>(value: Y): X<Y> {
-        return new X<Y>();
-    }
-
-    flatMap<Z>(fn: () => Z): X<Z> {
-        return X.of(fn());
-    }
-}
-
 @WebComponent({
     tag: 'example-todo-detail',
     props: ['todo'],

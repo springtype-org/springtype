@@ -1,4 +1,5 @@
-export const Reducer = (clazz: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
+export const IS_REDUCER = Symbol('IS_REDUCER');
 
-    console.log('@Reducer', clazz, '.', methodName, descriptor);
+export const Reducer = (prototype: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
+    Reflect.set(prototype[methodName], IS_REDUCER,true);
 };

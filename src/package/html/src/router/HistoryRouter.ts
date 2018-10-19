@@ -141,9 +141,6 @@ export class HistoryRouter implements IRouter {
             }
 
         } else {
-
-            // TODO: Option to allow for default fallback component on 404
-
             throw new Error(`No route registered for hash url: '${hash}'. Add this route to an @WebModule({ route: { ... } })!`);
         }
     }

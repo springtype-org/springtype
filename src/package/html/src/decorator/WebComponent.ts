@@ -18,8 +18,8 @@ export enum RenderStrategy {
 
 export interface WebComponentConfig {
     tag: string;
-    shadow?: boolean;
-    shadowMode?: ShadowAttachMode;
+    isolate?: boolean;
+    isolateMode?: ShadowAttachMode;
     props?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => Node;
@@ -73,18 +73,21 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
     if (!config.props) config.props = [];
 
+    // default re-render strategy: when props object changes
+    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.onPropsChanged;
+
     if (!config.tag) {
         throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
     }
 
-    return (target: WC) => {
+    return (webComponent: WC) => {
 
         // @Component by default
-        target = Component(target);
+        const injectableWebComponent = Component(webComponent);
 
         // custom web component extends user implemented web component class
         // which extends HTMLElement
-        let CustomWebComponent = class extends target {
+        let CustomWebComponent = class extends injectableWebComponent {
 
             protected mounted: boolean = false;
 
@@ -131,10 +134,10 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     this.props = this.props || {};
                 }
 
-                if (config.shadow) {
+                if (config.isolate) {
 
                     this.attachShadow({
-                        mode: config.shadowMode ? config.shadowMode : ShadowAttachMode.OPEN
+                        mode: config.isolateMode ? config.isolateMode : ShadowAttachMode.OPEN
                     });
                 }
 
@@ -253,7 +256,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 if (element) {
 
-                    if (config.shadow) {
+                    if (config.isolate) {
                         this.shadowRoot.appendChild(element);
                     } else {
                         this.appendChild(element);
@@ -270,7 +273,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             protected reflow() {
 
-                if (config.shadow) {
+                if (config.isolate) {
                     this.shadowRoot.innerHTML = '';
                 } else {
                     this.innerHTML = '';
@@ -297,6 +300,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     // merge
                     Object.assign(this[name], attributeValue);
                 }
+
                 console.log('setting wc attr', name, newValue);
 
                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROP_CHANGE,  {

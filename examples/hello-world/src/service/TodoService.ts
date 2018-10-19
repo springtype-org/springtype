@@ -15,6 +15,13 @@ export class TodoService {
     ) {
 
         console.log('todoModel', todoModel);
+
+        todoModel.addTodo({
+            done: false,
+            id: 1,
+            text: 'asdsad'
+        })
+
     }
 
     data: Array<Todo> = [{

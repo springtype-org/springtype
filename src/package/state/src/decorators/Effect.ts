@@ -1,4 +1,5 @@
-export const Effect = (clazz: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
+export const IS_EFFECT = Symbol('IS_EFFECT');
 
-    console.log('@Effect', clazz, '.', methodName, descriptor);
+export const Effect = (prototype: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
+    Reflect.set(prototype[methodName], IS_EFFECT,true);
 };

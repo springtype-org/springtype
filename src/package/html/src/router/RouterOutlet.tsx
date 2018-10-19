@@ -1,5 +1,4 @@
 import {WebComponent, WebComponentLifecycle} from "../..";
-import {Component} from "../../../di";
 import {WebComponentReflector} from "../decorator/WebComponentReflector";
 import {Router} from "./Router";
 
@@ -10,7 +9,6 @@ export interface RouterState {
 @WebComponent({
     tag: 'router-outlet'
 })
-@Component
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
     currentComponent!: Element;

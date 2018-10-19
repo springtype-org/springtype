@@ -1,6 +1,7 @@
-import {Reducer} from "../../../../src/package/state/src/decorators/Reducer";
-import {Effect} from "../../../../src/package/state/src/decorators/Effect";
-import {IStatefulModel, StatefulModel} from "../../../../src/package/state/src/decorators/StatefulModel";
+import {Reducer} from "../../../../src/package/state";
+import {Effect} from "../../../../src/package/state";
+import {Model} from "../../../../src/package/state";
+import {Store} from "../../../../src/package/state/src/Store";
 
 export interface ITodoItem {
     id: number;
@@ -12,19 +13,23 @@ export interface ITodoState {
     todos: Array<ITodoItem>
 }
 
-@StatefulModel
-export class TodoModel implements IStatefulModel<ITodoState> {
-
-    constructor(public state: ITodoState) {
+export interface ITodoModelDispatch {
+    TodoModel: {
+        onAddTodo(todoItem: ITodoItem): ITodoState;
     }
+}
 
-    onInitialState(): ITodoState {
+@Model
+export class TodoModel {
 
-        console.log('onInitialState');
+    constructor(
+        public state: ITodoState,
+        public dispatch: ITodoModelDispatch,
+        public store: Store,
+    ) {
 
-        return {
-            todos: []
-        };
+        // set initial state
+        state.todos = [];
     }
 
     @Reducer
@@ -32,16 +37,18 @@ export class TodoModel implements IStatefulModel<ITodoState> {
 
         console.log('reducer onAddTodo called', state);
 
-        state.todos.push(todoItem);
-
+        state.todos = [
+            ...state.todos,
+            todoItem
+        ];
         return state;
     }
 
     @Effect
     async addTodo(todoItem: ITodoItem) {
 
-        console.log('effect addTodo called', todoItem);
+        console.log('effect addTodo called', todoItem, this.store);
 
-        this.onAddTodo(this.state, todoItem);
+        this.dispatch.TodoModel.onAddTodo(todoItem);
     }
 }

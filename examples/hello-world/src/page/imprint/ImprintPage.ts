@@ -1,5 +1,4 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
-import {RenderStrategy} from "../../../../../src/package/html";
 import template from './ImprintPage.tpl';
 import {Router} from "../../../../../src/package/html/src/router/Router";
 
@@ -9,9 +8,8 @@ interface ImprintPageProps {
 
 @WebComponent({
     tag: 'imprint-page',
-    renderStrategy: RenderStrategy.onPropsChanged,
     props: ['header'],
-    template // re-rendered on props change
+    template
 })
 export class ImprintPage extends HTMLElement implements WebComponentLifecycle {
 

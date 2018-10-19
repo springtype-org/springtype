@@ -11,19 +11,19 @@ export interface IValidationRegistration {
     validateFn: IValidateFn;
 }
 export const Validate = (validator: IValidator = VALIDATOR_DEFAULT) =>
-    (target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
+    (prototype: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
 
         let method = descriptor.value;
 
-        const reflectedParamNames = getParamNames(target[propertyName]);
+        const reflectedParamNames = getParamNames(prototype[methodName]);
 
-        Reflect.set(target[propertyName], VALIDATION_METHOD_PARAMNAMES_METADATA,{
+        Reflect.set(prototype[methodName], VALIDATION_METHOD_PARAMNAMES_METADATA,{
             [VALIDATION_METHOD_PARAMNAMES_METADATA]: reflectedParamNames
         });
 
         descriptor.value = function() {
 
-            const validationRegistrations: Array<IValidationRegistration> = Reflect.getMetadata(VALIDATION_DECORATOR_METADATA_KEY, target, propertyName) || {};
+            const validationRegistrations: Array<IValidationRegistration> = Reflect.getMetadata(VALIDATION_DECORATOR_METADATA_KEY, prototype, methodName) || {};
             const errors: ValidationResult[] = [];
 
             for (const validationRegistration of validationRegistrations) {
