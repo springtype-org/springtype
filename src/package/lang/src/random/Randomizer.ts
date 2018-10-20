@@ -1,5 +1,3 @@
-import {StringBuilder} from "../..";
-
 export const CHARSET_ALPHA_UPPER_CASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 export const CHARSET_ALPHA_LOWER_CASE = CHARSET_ALPHA_UPPER_CASE.toLowerCase();
 export const CHARSET_NUMERIC = '0123456789';
@@ -20,11 +18,11 @@ export class Randomizer {
      * @param length the length of string
      */
     static generateString(characterSet: string, length: number): string {
-        const builder = new StringBuilder(length);
+        let str = "";
         for (let i = 0; i < length; i++) {
-            builder.append(characterSet[~~(Math.random() * characterSet.length)]);
+            str += characterSet[~~(Math.random() * characterSet.length)];
         }
-        return builder.toString();
+        return str;
     }
 
     /**
