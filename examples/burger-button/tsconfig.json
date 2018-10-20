@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "importHelpers": true,
+        "outDir": "../dist",
+        "strict": true,
+        "declaration": true,
+        "rootDir": ".",
+        "jsx": "preserve",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "sourceMap": true,
+        "lib": [
+            "dom",
+            "es2017"
+        ]
+    }
+}

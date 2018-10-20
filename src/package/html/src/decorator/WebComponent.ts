@@ -1,6 +1,7 @@
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
+import {WebApp} from "./WebApp";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const PROPS_OBJECT = Symbol('PROPS_OBJECT');
@@ -69,6 +70,11 @@ export interface IWebComponent<WC> extends Function {
 
 // TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
+
+    if (!(<any>window).React) {
+        // default config for @WebApp is missing, load it!
+        import("./WebApp");
+    }
 
     if (!config.observeAttributes) config.observeAttributes = [];
 

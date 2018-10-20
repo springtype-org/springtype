@@ -101,7 +101,26 @@ export class TSXRenderer implements IRenderer {
         }
     };
 
+    mapName(attributeName: string): string {
+
+        // TODO: Fixme architecture
+        switch (attributeName) {
+
+            case 'xmlnsXlink':
+                return 'xmlns:xlink';
+            case 'xlinkHref':
+                return 'xlink:href';
+            case 'className':
+                return 'class';
+            default:
+                return attributeName
+        }
+    }
+
     nativeCreateElement(tagName: string, nativeOptions?: any): Element {
+
+
+
         return this._nativeCreateElement(tagName, nativeOptions);
     }
 
@@ -113,10 +132,14 @@ export class TSXRenderer implements IRenderer {
 
         delete attributes.is;
 
+
+
         const element: any = this.nativeCreateElement(name, nativeOptions);
 
         // content observeAttributes vs IDL observeAttributes have many cases
         Object.entries(attributes).forEach(([name, value]) => {
+
+            name = this.mapName(name);
 
             // set event handler
             if (name === 'bind') {
@@ -133,6 +156,10 @@ export class TSXRenderer implements IRenderer {
 
                 console.log('scope', scope, 'name?', name);
 
+            } else if (name === 'style' && typeof value !== 'string') {
+
+                console.log('style', name, value);
+
             } else if (name.startsWith('on')) {
 
                 element.addEventListener(name.substring(2, name.length), value);
@@ -144,6 +171,8 @@ export class TSXRenderer implements IRenderer {
                 const propsHeapPtr = this.getPropsHeapPtr();
 
                 this.propsHeapCache[propsHeapPtr] = value;
+
+                console.log('ptr', value);
 
                 element.setAttribute(name, propsHeapPtr);
 
