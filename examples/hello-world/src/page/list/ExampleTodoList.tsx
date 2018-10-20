@@ -1,10 +1,11 @@
-import {Todo, TodoService} from "../../service/TodoService";
+import {TodoService} from "../../service/TodoService";
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
+import {ITodoItem} from "../../state/ITodoState";
 
 interface TodoListProps {
-    todos: Array<Todo>;
+    todos: Array<ITodoItem>;
     lol: number;
     test: Array<string>;
 }
@@ -59,7 +60,6 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
      */
     mount() {
 
-
         console.log('transmitted props', this.props);
 
         console.log('getAttribute("static-todo-id") or just this.staticTodoId: ', this.staticTodoId);
@@ -77,9 +77,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
      */
     render() {
 
-        console.log('render called ExampleTodoList');
-
-        const listItems = this.props.todos.map((todo: Todo) =>
+        const listItems = this.props.todos.map((todo: ITodoItem) =>
             <li onclick={ this.onListItemClick } class="todo-item">
                 { todo.text }
             </li>

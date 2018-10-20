@@ -13,8 +13,6 @@ import {TodoModel} from "./model/TodoModel";
         '/imprint': ImprintPage
     },
     models: {
-
-        // TODO: Infer by name, use Array here
         TodoModel: TodoModel
     }
 })

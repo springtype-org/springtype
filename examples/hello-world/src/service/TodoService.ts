@@ -1,49 +1,29 @@
 import {Component} from "../../../../src/package/di";
-import {TodoModel} from "../model/TodoModel";
-
-export interface Todo {
-    id: number;
-    text: string;
-}
+import {Store} from "../../../../src/package/state";
+import {IRootState} from "../state/IRootState";
+import {ITodoItem} from "../state/ITodoState";
 
 @Component
 export class TodoService {
 
     constructor(
-        // initialState model
-        protected todoModel: TodoModel
-    ) {
+        protected store: Store<IRootState>,
+    ) {}
 
-        console.log('todoModel', todoModel);
-
-        todoModel.addTodo({
-            done: false,
-            id: 1,
-            text: 'asdsad'
-        })
-
+    // TODO: @CurrentState decorator
+    get state(): IRootState {
+        return this.store.getState();
     }
 
-    data: Array<Todo> = [{
-        id: 1,
-        text: "Foo"
-    }, {
-        id: 2,
-        text: "Bar"
-    }];
-
-    getTodos(): Array<Todo> {
-        return this.data;
+    getTodos(): Array<ITodoItem> {
+        return this.state.TodoModel.todos;
     }
 
-    getById(id: number): Todo {
+    getById(id: number): ITodoItem {
 
-        return this.data.filter((todo: Todo) => {
-            return todo.id === id;
-        })[0];
-    }
-
-    static helloWorld(): string {
-        return "Hello, world!";
+        return this.state.TodoModel.todos
+            .filter((todo: ITodoItem) => {
+                return todo.id === id;
+            })[0];
     }
 }

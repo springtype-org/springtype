@@ -1,11 +1,11 @@
 import {ApplicationContext, Component} from "../../../di";
-import {IS_EFFECT} from "./Effect";
-import {IS_REDUCER} from "./Reducer";
+import {IS_EFFECT} from "./StateEffect";
+import {IS_REDUCER} from "./StateReducer";
 import * as R from "@rematch/core";
 import {RematchDispatcher} from "@rematch/core";
 import {StateManager} from "../StateManager";
 
-export function Model(model: any): any {
+export function StateModel(model: any): any {
 
     const injectableModel = <any> Component(model);
     const appContext = ApplicationContext.getInstance();

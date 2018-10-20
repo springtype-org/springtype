@@ -1,42 +1,37 @@
-import {Reducer} from "../../../../src/package/state";
-import {Effect} from "../../../../src/package/state";
-import {Model} from "../../../../src/package/state";
-import {Store} from "../../../../src/package/state";
-
-export interface ITodoItem {
-    id: number;
-    text: string;
-    done: boolean;
-}
-
-export interface ITodoModelState {
-    todos: Array<ITodoItem>
-}
+import {StateReducer} from "../../../../src/package/state";
+import {StateEffect} from "../../../../src/package/state";
+import {StateModel} from "../../../../src/package/state";
+import {IStateModel} from "../../../../src/package/state/src/IStateModel";
+import {ITodoItem, ITodoState} from "../state/ITodoState";
 
 export interface ITodoModelDispatch {
     TodoModel: {
-        onAddTodo(todoItem: ITodoItem): ITodoModelState;
+        onAddTodo(todoItem: ITodoItem): ITodoState;
     }
 }
 
-// TODO: Must implement interface {initialState, dispatch}!
-@Model
-export class TodoModel {
+@StateModel
+export class TodoModel implements IStateModel {
 
     constructor(
-        public initialState: ITodoModelState,
+        public initialState: ITodoState,
         public dispatch: ITodoModelDispatch,
-        public store: Store,
     ) {
 
         // set initial initialState
-        initialState.todos = [];
+        initialState.todos = [{
+            done: false,
+            id: 1,
+            text: 'Bar'
+        }, {
+            done: false,
+            id: 2,
+            text: 'Foo'
+        }];
     }
 
-    @Reducer
-    onAddTodo(state: ITodoModelState, todoItem: ITodoItem): ITodoModelState {
-
-        console.log('reducer onAddTodo called', state);
+    @StateReducer
+    onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
         state.todos = [
             ...state.todos,
@@ -45,11 +40,8 @@ export class TodoModel {
         return state;
     }
 
-    @Effect
+    @StateEffect
     async addTodo(todoItem: ITodoItem) {
-
-        console.log('effect addTodo called', todoItem, this.store);
-
         this.dispatch.TodoModel.onAddTodo(todoItem);
     }
 }

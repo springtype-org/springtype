@@ -1,7 +1,8 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
-import {Todo, TodoService} from "../../service/TodoService";
+import {TodoService} from "../../service/TodoService";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {WebAppLogger} from "../../../../../src/package/log";
+import {ITodoItem} from "../../state/ITodoState";
 
 interface TodoProps {
     id: number;
@@ -25,11 +26,9 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
 
     render() {
 
-        this.log.log('Rendering...');
-
         const params = this.router.getParams();
 
-        const todo: Todo = this.todoService.getById(parseInt(params.id, 10) ) || {
+        const todo: ITodoItem = this.todoService.getById(parseInt(params.id, 10) ) || {
             id: -1,
             text: 'Invalid id'
         };
