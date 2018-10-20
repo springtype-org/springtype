@@ -1,6 +1,5 @@
 import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
-import {CaseTransformer} from "../../../lang";
 
 interface AttributeNormalization {
     [attributeName: string]: string
@@ -14,7 +13,7 @@ interface StateHeapCache {
 export class TSXRenderer implements IRenderer {
 
     /**
-     * WebComponent props props heap cache.
+     * WebComponent observeAttributes observeAttributes heap cache.
      * Global cache. Used for intermediate value transmission.
      * Memory is freed directly after the atomic transmission
      * operation (DOM -> WebComponent JS instance) has ended.
@@ -23,7 +22,7 @@ export class TSXRenderer implements IRenderer {
 
     /**
      * Heap pointers are used to address a certain attribute
-     * props in transmission between DOM and WebComponent JS
+     * observeAttributes in transmission between DOM and WebComponent JS
      * instance.
      */
     protected propsHeapPtr: number = 0;
@@ -116,19 +115,23 @@ export class TSXRenderer implements IRenderer {
 
         const element: any = this.nativeCreateElement(name, nativeOptions);
 
-        // content props vs IDL props have many cases
+        // content observeAttributes vs IDL observeAttributes have many cases
         Object.entries(attributes).forEach(([name, value]) => {
 
             // set event handler
-            if (name.startsWith('bind-')) {
+            if (name === 'bind') {
 
                 const scope: any = value;
-                const bindName = CaseTransformer.kebabToCamelCase(name.substring(5, name.length));
 
-                console.log('scope', scope, 'bindName', bindName, 'ele', element);
+                for (let bindName in scope) {
 
-                // assign bound element reference by name; e.g. bind-h2 -> this.h2 = element;
-                scope[bindName] = element;
+                    if (scope.hasOwnProperty(bindName)) {
+                        const view = scope[bindName];
+                        view[bindName] = element;
+                    }
+                }
+
+                console.log('scope', scope, 'name?', name);
 
             } else if (name.startsWith('on')) {
 

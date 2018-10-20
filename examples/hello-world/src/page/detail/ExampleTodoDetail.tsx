@@ -1,25 +1,17 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/html";
 import {TodoService} from "../../service/TodoService";
 import {Router} from "../../../../../src/package/html/src/router/Router";
-import {WebAppLogger} from "../../../../../src/package/log";
 import {ITodoItem} from "../../state/ITodoState";
 
-interface TodoProps {
-    id: number;
-    text: string;
-}
 
 @WebComponent({
-    tag: 'example-todo-detail',
-    props: ['todo'],
+    tag: 'example-todo-detail'
 })
 export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
-        public props: TodoProps,
         protected todoService: TodoService,
-        protected router: Router,
-        protected log: WebAppLogger,
+        protected router: Router
     ) {
         super();
     }

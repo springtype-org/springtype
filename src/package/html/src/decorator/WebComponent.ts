@@ -1,7 +1,6 @@
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
-import {CaseTransformer} from "../../../lang";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const PROPS_OBJECT = Symbol('PROPS_OBJECT');
@@ -20,7 +19,7 @@ export interface WebComponentConfig {
     tag: string;
     isolate?: boolean;
     isolateMode?: ShadowAttachMode;
-    props?: Array<string>;
+    observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => Node;
 }
@@ -71,9 +70,9 @@ export interface IWebComponent<WC> extends Function {
 // TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
 
-    if (!config.props) config.props = [];
+    if (!config.observeAttributes) config.observeAttributes = [];
 
-    // default re-render strategy: when props object changes
+    // default re-render strategy: when observeAttributes object changes
     if (!config.renderStrategy) config.renderStrategy = RenderStrategy.onPropsChanged;
 
     if (!config.tag) {
@@ -94,8 +93,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             constructor(...args: Array<any>) {
 
                 super();
-
-                // TODO: Register with route and GC ourselves on Route Change?! -> timer out of control
 
                 if (config.renderStrategy === RenderStrategy.onPropsChanged) {
 
@@ -131,7 +128,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 } else {
 
-                    this.props = this.props || {};
+                    this.observeAttributes = this.props || {};
                 }
 
                 if (config.isolate) {
@@ -148,9 +145,9 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             static get observedAttributes() {
 
-                const attributesToObserve = config.props || [];
+                const attributesToObserve = config.observeAttributes || [];
 
-                // automatically allow for props restore
+                // automatically allow for observeAttributes restore
                 if (attributesToObserve.indexOf('props') === -1) {
                     attributesToObserve.push('props');
                 }
@@ -160,9 +157,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             private getAttributeLocalProp(prop: string, propHeapPtr: string): any {
 
                 const attributePropValue = (<any>window).React.propsHeapCache[propHeapPtr];
-
                 delete (<any>window).React.propsHeapCache[propHeapPtr];
-
                 return attributePropValue;
             }
 
@@ -184,7 +179,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 if (this.mounted) {
 
-                    // re-render on props change
+                    // re-render on observeAttributes change
                     this.reflow();
                 }
 
@@ -288,12 +283,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 const attributeValue = this.getAttributeLocalProp(name, newValue);
 
+                console.log('attributeChangedCallback', attributeValue, name);
+
                 // map local attribute field value
 
                 if (name !== 'props' || !this[name]) {
 
                     // assign
-                    this[CaseTransformer.kebabToCamelCase(name)] = attributeValue;
+                    this[name] = attributeValue;
 
                 } else {
 
