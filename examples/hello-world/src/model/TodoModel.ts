@@ -25,8 +25,8 @@ export class TodoModel implements IStateModel {
             text: 'Bar'
         }, {
             done: false,
-            id: 2,
-            text: 'Foo'
+            id: 3,
+            text: 'Toms'
         }];
     }
 

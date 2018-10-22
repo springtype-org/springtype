@@ -29,6 +29,10 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         this.router.navigate(ExampleTodoDetail, { id });
     };
 
+    onAddItem = () => {
+        this.todoService.addItem();
+    };
+
     render() {
 
         const listItems = this.props.todos.map((todo: ITodoItem) =>
@@ -41,6 +45,8 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
             <div>
                 <h2>TODO's:</h2>
                 <ul>{ listItems }</ul>
+
+                <button onclick={ this.onAddItem }>Add</button>
             </div>
         );
     }
