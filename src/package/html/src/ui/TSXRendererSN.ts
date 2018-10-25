@@ -20,15 +20,11 @@ class TSXRendererSN extends TSXRenderer {
         return this._nativeCreateElementNS(this.namespace, tagName, nativeOptions);
     }
 
-    transform(element: HTMLElement): SVGElement | HTMLElement {
+    transform(element: HTMLElement): Element  {
         const input: ICreateElement = Reflect.get(element, CREATE_ELEMENT_ARGUMENTS_METADATA);
         console.log('transform input', input);
-        this.createElement(input.name, input.attributes, input.children);
+        super.createElement(input.name, input.attributes, input.children);
         return element
-    }
-
-    createElement(name: string, attributes?: any, ...children: Array<any>): any {
-        return super.createElement(name, attributes, children);
     }
 }
 
