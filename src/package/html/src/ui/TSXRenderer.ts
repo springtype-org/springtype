@@ -65,15 +65,15 @@ export class TSXRenderer implements IRenderer {
         document.createElement = (<any>window).React.createElement.bind((<any>window).React);
     }
 
-    protected normalizeAttributeName(name: string): string {
+    protected normalizeAttributeName = (name: string): string => {
         return this.attrNormalizations[name.toLowerCase()] || name;
     }
 
-    protected getPropsHeapPtr(): string {
+    protected getPropsHeapPtr = (): string => {
         return 'props-' + (++(<any>window).React.propsHeapPtr);
     }
 
-    protected appendChild(child: string | number | boolean | Node | Array<Node>, element: Node) {
+    protected appendChild = (child: string | number | boolean | Node | Array<Node>, element: Node) => {
 
         let childToAppend = child;
 
@@ -109,7 +109,7 @@ export class TSXRenderer implements IRenderer {
         }
     };
 
-    mapName(attributeName: string): string {
+    mapName = (attributeName: string): string => {
 
         // TODO: Fixme architecture
         switch (attributeName) {
@@ -125,15 +125,15 @@ export class TSXRenderer implements IRenderer {
         }
     }
 
-    nativeCreateElement(tagName: string, nativeOptions?: any): Element {
+    nativeCreateElement = (tagName: string, nativeOptions?: any): Element => {
         return this._nativeCreateElement(tagName, nativeOptions);
     }
 
-    setAttribute(element: Element, name: string, value: any): void {
+    setAttribute = (element: Element, name: string, value: any): void => {
         return element.setAttributeNS(null, name, value);
     }
 
-    createElement(name: string, attributes?: any, ...children: Array<any>) {
+    createElement = (name: string, attributes?: any, ...children: Array<any>) => {
 
         const input: ICreateElement = {
             name: name,
