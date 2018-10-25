@@ -1,7 +1,6 @@
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
-import {WebApp} from "./WebApp";
 
 const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const PROPS_OBJECT = Symbol('PROPS_OBJECT');

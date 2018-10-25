@@ -1,6 +1,14 @@
 import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
 
+export const CREATE_ELEMENT_ARGUMENTS_METADATA = Symbol("CREATE_ELEMENT_ARGUMENTS_METADATA");
+
+export interface ICreateElement {
+    name: string;
+    attributes?: any;
+    children: Array<any>
+}
+
 interface AttributeNormalization {
     [attributeName: string]: string
 }
@@ -65,7 +73,7 @@ export class TSXRenderer implements IRenderer {
         return 'props-' + (++(<any>window).React.propsHeapPtr);
     }
 
-    protected appendChild(child: string|number|boolean|Node|Array<Node>, element: Node) {
+    protected appendChild(child: string | number | boolean | Node | Array<Node>, element: Node) {
 
         let childToAppend = child;
 
@@ -118,23 +126,32 @@ export class TSXRenderer implements IRenderer {
     }
 
     nativeCreateElement(tagName: string, nativeOptions?: any): Element {
-
-
-
         return this._nativeCreateElement(tagName, nativeOptions);
+    }
+
+    setAttribute(element: Element, name: string, value: any): void {
+        return element.setAttributeNS(null, name, value);
     }
 
     createElement(name: string, attributes?: any, ...children: Array<any>) {
 
+        const input: ICreateElement = {
+            name: name,
+            attributes: attributes,
+            children: children
+        };
+
+
         attributes = attributes || {};
 
-        const nativeOptions = !!attributes.is ? { is: attributes.is } : undefined;
+        const nativeOptions = !!attributes.is ? {is: attributes.is} : undefined;
 
         delete attributes.is;
 
 
-
         const element: any = this.nativeCreateElement(name, nativeOptions);
+
+        Reflect.set(element, CREATE_ELEMENT_ARGUMENTS_METADATA, input);
 
         // content observeAttributes vs IDL observeAttributes have many cases
         Object.entries(attributes).forEach(([name, value]) => {
@@ -174,7 +191,7 @@ export class TSXRenderer implements IRenderer {
 
                 console.log('ptr', value);
 
-                element.setAttribute(name, propsHeapPtr);
+                this.setAttribute(element, name, propsHeapPtr);
 
             } else {
 
