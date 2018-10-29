@@ -1,6 +1,7 @@
 import {WebComponent, WebComponentLifecycle} from "../..";
 import {WebComponentReflector} from "../decorator/WebComponentReflector";
 import {Router} from "./Router";
+import {IReactCreateElement} from "../ui/TSXRenderer";
 
 export interface RouterState {
     mounted: boolean;
@@ -11,7 +12,8 @@ export interface RouterState {
 })
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
-    currentComponent!: Element;
+    currentComponent!: IReactCreateElement;
+    currentNativeComponent!: Element;
 
     constructor(public state: RouterState,
                 protected router: Router) {
@@ -29,24 +31,29 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
     present(component: HTMLElement): void {
 
-        if (this.currentComponent) {
+        if (this.currentNativeComponent) {
 
-            this.removeChild(this.currentComponent);
+            this.removeChild(this.currentNativeComponent);
 
             // instruct GC to get rid of the component
+            delete this.currentNativeComponent;
             delete this.currentComponent;
         }
 
-        this.currentComponent = document.createElement(WebComponentReflector.getTagName(component));
-
+        this.currentComponent = {name: WebComponentReflector.getTagName(component), attributes: {}, children: []};
+        this.currentNativeComponent =this.createNativeElement(this.currentComponent);
         // only if already mounted
         if (this.state.mounted) {
-            this.appendChild(this.currentComponent);
+            this.appendChild(this.currentNativeComponent);
         }
     }
 
-    render() {
+    createNativeElement(reactCreateEl: IReactCreateElement): Element {
+        this.currentNativeComponent = (window as any).React.render(reactCreateEl)
+        return this.currentNativeComponent;
+    };
 
+    render() {
         if (this.currentComponent) {
             return this.currentComponent;
         }

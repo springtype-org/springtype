@@ -1,3 +1,4 @@
+
 const TAG_NAME = Symbol('TAG_NAME');
 
 export class WebComponentReflector {

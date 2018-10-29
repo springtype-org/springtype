@@ -1,4 +1,4 @@
-import {Component} from "../../di/index";
+import {Component} from "../../di";
 import {ILogger} from "./ILogger";
 
 @Component

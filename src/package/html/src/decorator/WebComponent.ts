@@ -1,8 +1,9 @@
 import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
+import {IReactCreateElement} from "../ui/TSXRenderer";
 
-const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
+export const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const PROPS_OBJECT = Symbol('PROPS_OBJECT');
 
 export enum ShadowAttachMode {
@@ -21,25 +22,48 @@ export interface WebComponentConfig {
     isolateMode?: ShadowAttachMode;
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
-    template?: (view: any) => Node;
+    template?: (view: any) => IReactCreateElement;
 }
 
-export class WebComponentLifecycle  {
-    constructor() {};
+export class WebComponentLifecycle {
+    constructor() {
+    };
 
     props?: any = {};
-    init?(): void {}
-    mount?(): void {};
-    remount?(): void {};
+
+    init?(): void {
+    }
+
+    mount?(): void {
+    };
+
+    remount?(): void {
+    };
+
     render?(): JSX.Element {
         return ('');
     }
-    unmount?(): void {};
-    onPropChanged?(name: string, newValue: any, oldValue?: any): void {};
-    onPropsChanged?(props: any, name: string|number|symbol, value: any): void {};
-    reflow?(): void {};
-    mountChildren?(): void {};
-    remountChildren?(): void {};
+
+    createNativeElement?(reactCreateElement: IReactCreateElement): any {
+    }
+
+    unmount?(): void {
+    };
+
+    onPropChanged?(name: string, newValue: any, oldValue?: any): void {
+    };
+
+    onPropsChanged?(props: any, name: string | number | symbol, value: any): void {
+    };
+
+    reflow?(): void {
+    };
+
+    mountChildren?(): void {
+    };
+
+    remountChildren?(): void {
+    };
 }
 
 export interface AttributeChangeEvent {
@@ -50,7 +74,7 @@ export interface AttributeChangeEvent {
 
 export interface PropsChangeEvent {
     props: any;
-    name: string|number|symbol;
+    name: string | number | symbol;
     value: any;
 }
 
@@ -102,7 +126,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (config.renderStrategy === RenderStrategy.onPropsChanged) {
 
                     this.props = new Proxy(this.props || {}, {
-                        set: (props: any, name: string|number|symbol, value: any): boolean => {
+                        set: (props: any, name: string | number | symbol, value: any): boolean => {
 
                             console.log('props change');
 
@@ -110,7 +134,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                                 props[name] = value;
 
-                                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE,  {
+                                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE, {
                                     detail: <PropsChangeEvent> {
                                         props,
                                         name,
@@ -180,7 +204,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            onPropsChanged(props: any, name: string|number|symbol, value: any): void {
+            onPropsChanged(props: any, name: string | number | symbol, value: any): void {
 
                 if (this.mounted) {
 
@@ -250,23 +274,30 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            protected flow(initial: boolean = false) {
+            protected createNativeElement(reactCreateElement: IReactCreateElement): Element {
+                if (super.createNativeElement) {
+                    return super.createNativeElement(reactCreateElement);
+                }
+                return (<any> window).React.render(reactCreateElement);
+            }
 
-                const element: HTMLElement = this.render(initial);
+            protected flow = (initial: boolean = false) => {
+                const _element: IReactCreateElement = this.render(initial);
+                if (_element) {
+                    const element = this.createNativeElement(_element);
+                    if (element) {
+                        if (config.isolate) {
+                            this.shadowRoot.appendChild(element);
+                        } else {
+                            this.appendChild(element);
+                        }
+                        Reflect.set(this, CHILD_ELEMENT, element);
 
-                if (element) {
-
-                    if (config.isolate) {
-                        this.shadowRoot.appendChild(element);
-                    } else {
-                        this.appendChild(element);
-                    }
-                    Reflect.set(this, CHILD_ELEMENT, element);
-
-                    if (initial) {
-                        this.mountChildren();
-                    } else {
-                        this.remountChildren();
+                        if (initial) {
+                            this.mountChildren();
+                        } else {
+                            this.remountChildren();
+                        }
                     }
                 }
             }
@@ -305,7 +336,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 console.log('setting wc attr', name, newValue);
 
-                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROP_CHANGE,  {
+                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROP_CHANGE, {
                     detail: <AttributeChangeEvent> {
                         name: name,
                         oldValue,
@@ -352,7 +383,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             WebComponentReflector.setTagName(<any>CustomWebComponent, config.tag);
 
-        } catch(e) {
+        } catch (e) {
 
             if (ApplicationContext.getInstance().getEnvironment() === ApplicationEnvironment.DEV) {
 

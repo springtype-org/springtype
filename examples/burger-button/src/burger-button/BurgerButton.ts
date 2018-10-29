@@ -3,7 +3,7 @@ import template from "./BurgerButton.tpl";
 
 interface BurgerButtonProps {
     menuItems: Array<string>;
-    fill: 'blue';
+    fill: string;
 }
 
 @WebComponent({
@@ -18,7 +18,7 @@ export class BurgerButton extends HTMLElement implements WebComponentLifecycle {
     ) {
         super();
 
-        this.props.fill = 'blue';
+        this.props.fill = 'yellow';
     }
 
     // event listeners

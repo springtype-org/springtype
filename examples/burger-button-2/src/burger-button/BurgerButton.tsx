@@ -19,8 +19,9 @@ export class BurgerButton extends HTMLElement implements WebComponentLifecycle {
     }
 
 
-    onBurgerClick = (evt: any) => {
-        console.log(evt, 'clicked on burger')
+    onBurgerClick = (evt: any, element: any) => {
+        element.classList.toggle('active');
     };
+
 
 }

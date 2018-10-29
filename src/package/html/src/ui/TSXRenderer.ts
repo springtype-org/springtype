@@ -1,9 +1,10 @@
 import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
+import {WebAppLogger} from "../../../log";
+import {Attributes, DEFAULT_NAMESPACE_NAME, mapAttributes} from "./RenderUtils";
+import {split} from "ts-node";
 
-export const CREATE_ELEMENT_ARGUMENTS_METADATA = Symbol("CREATE_ELEMENT_ARGUMENTS_METADATA");
-
-export interface ICreateElement {
+export interface IReactCreateElement {
     name: string;
     attributes?: any;
     children: Array<any>
@@ -36,48 +37,35 @@ export class TSXRenderer implements IRenderer {
     protected propsHeapPtr: number = 0;
 
     /**
-     * Some standard JSX/TSX attribute names are transformed
-     * so that IDE support broadened.
-     */
-    protected attrNormalizations: AttributeNormalization = {
-        classname: 'class'
-    };
-
-    /**
      * Original DOM/native createElement implementation reference.
      */
     protected _nativeCreateElement: Function = document.createElement.bind(document);
+    protected _nativeCreateElementNS: Function = document.createElementNS.bind(document);
 
-    constructor() {
+    constructor(public logger: WebAppLogger) {
         this.init();
     }
 
     init() {
-
-        console.log('init TSX renderer');
-
+        // don't log here
         // implement React TSX rendering API
         // (used globally by TypeScript compiler --jsx emitted code)
         (<any>window).React = this;
 
         // assign at global scope for the native DOM functions to instantiate
         // WebComponents using this TSX renderer
-        document.createElement = (<any>window).React.createElement.bind((<any>window).React);
-    }
-
-    protected normalizeAttributeName = (name: string): string => {
-        return this.attrNormalizations[name.toLowerCase()] || name;
+        document.createElement = (<any>window).React.render.bind((<any>window).React.createElement.bind((<any>window).React));
     }
 
     protected getPropsHeapPtr = (): string => {
         return 'props-' + (++(<any>window).React.propsHeapPtr);
-    }
+    };
 
     protected appendChild = (child: string | number | boolean | Node | Array<Node>, element: Node) => {
 
         let childToAppend = child;
 
-        console.log('child', child);
+        this.logger.log('child', child);
 
         if (child instanceof Node) {
 
@@ -91,16 +79,7 @@ export class TSXRenderer implements IRenderer {
 
             childToAppend = document.createTextNode(child.toString());
 
-        } else if (child instanceof Array) {
-
-            // Array of Node
-            // TODO: Array of any other type?
-            child.forEach((childNode: Node) => {
-                this.appendChild(childNode, element);
-            });
-            return element;
         }
-
         if (childToAppend instanceof Node) {
 
             return element.appendChild(
@@ -109,105 +88,112 @@ export class TSXRenderer implements IRenderer {
         }
     };
 
-    mapName = (attributeName: string): string => {
-
-        // TODO: Fixme architecture
-        switch (attributeName) {
-
-            case 'xmlnsXlink':
-                return 'xmlns:xlink';
-            case 'xlinkHref':
-                return 'xlink:href';
-            case 'className':
-                return 'class';
-            default:
-                return attributeName
+    nativeCreateElement = (tagName: string, namespaces: [string, string][], nativeOptions?: any): Element => {
+        const namespace = namespaces.find(([n]) => DEFAULT_NAMESPACE_NAME === n);
+        if (namespace) {
+            return this._nativeCreateElementNS(namespace[1], tagName, nativeOptions);
+        } else {
+            return this._nativeCreateElement(tagName, nativeOptions);
         }
-    }
+    };
 
-    nativeCreateElement = (tagName: string, nativeOptions?: any): Element => {
-        return this._nativeCreateElement(tagName, nativeOptions);
-    }
+    setAttribute = (element: Element, name: string, value: any, namespaces: [string, string][]): void => {
+        if (namespaces.length > 0) {
+            const namespace = namespaces
+                .map(([n,v])=> <[string,string]>[n.split(':').pop(),v])
+                .find(([n]) => name.startsWith(n));
+            if (namespace) {
+                element.setAttributeNS(namespace[1], name, value);
+            } else {
+                element.setAttributeNS(null, name, value);
+            }
+        } else {
+            element.setAttribute(name, value);
+        }
 
-    setAttribute = (element: Element, name: string, value: any): void => {
-        return element.setAttributeNS(null, name, value);
-    }
+    };
 
-    createElement = (name: string, attributes?: any, ...children: Array<any>) => {
+    createElement = (name: string, attributes?: any, ...children: Array<IReactCreateElement>): IReactCreateElement => {
+        this.logger.log('createElement', name, attributes, children);
+        return {name: name, attributes: attributes, children: children};
+    };
 
-        const input: ICreateElement = {
-            name: name,
-            attributes: attributes,
-            children: children
-        };
-
-
-        attributes = attributes || {};
+    render = (reactCreateElement: IReactCreateElement, level = 0, namespaces: [string, string][] = []): Element => {
+        this.logger.log('render', reactCreateElement, level, namespaces);
+        const name = reactCreateElement.name;
+        const attributes = reactCreateElement.attributes || {};
+        const children = reactCreateElement.children || [];
 
         const nativeOptions = !!attributes.is ? {is: attributes.is} : undefined;
 
         delete attributes.is;
+        const mappedAttributes: Attributes = mapAttributes(attributes);
 
+        // 0. add all namespaces
+        namespaces = namespaces.concat(mappedAttributes.xmlns);
 
-        const element: any = this.nativeCreateElement(name, nativeOptions);
+        const element = this.nativeCreateElement(name, namespaces, nativeOptions);
 
-        Reflect.set(element, CREATE_ELEMENT_ARGUMENTS_METADATA, input);
-
-        // content observeAttributes vs IDL observeAttributes have many cases
-        Object.entries(attributes).forEach(([name, value]) => {
-
-            name = this.mapName(name);
-
-            // set event handler
-            if (name === 'bind') {
-
-                const scope: any = value;
-
-                for (let bindName in scope) {
-
-                    if (scope.hasOwnProperty(bindName)) {
-                        const view = scope[bindName];
-                        view[bindName] = element;
-                    }
+        // 1. add all bindings
+        mappedAttributes.bind.forEach(([_, v]) => {
+            const scope: any = v;
+            for (let bindName in scope) {
+                if (scope.hasOwnProperty(bindName)) {
+                    const view = scope[bindName];
+                    view[bindName] = element;
                 }
-
-                console.log('scope', scope, 'name?', name);
-
-            } else if (name === 'style' && typeof value !== 'string') {
-
-                console.log('style', name, value);
-
-            } else if (name.startsWith('on')) {
-
-                element.addEventListener(name.substring(2, name.length), value);
-
-                console.log('element', element, name);
-
-            } else if (typeof value !== 'string') {
-
-                const propsHeapPtr = this.getPropsHeapPtr();
-
-                this.propsHeapCache[propsHeapPtr] = value;
-
-                console.log('ptr', value);
-
-                this.setAttribute(element, name, propsHeapPtr);
-
-            } else {
-
-                // set string HTML attribute
-                element.setAttribute(this.normalizeAttributeName(name), value);
             }
         });
 
-        console.log('Done setting attributes for element', element);
+        // 2. add all events
+        mappedAttributes.event.forEach(([n, v]) => {
+            element.addEventListener(n, evt => {
+                // add element to event as second parameter
+                v(evt, element)
+            }, false);
+        });
 
+        // 3. add properties
+        mappedAttributes.property.forEach(([n, v]) => {
+            const propsHeapPtr = this.getPropsHeapPtr();
+            this.propsHeapCache[propsHeapPtr] = v;
+            this.logger.log('ptr', v);
+            this.setAttribute(element, n, propsHeapPtr, namespaces);
+        });
+        // 4. add html stuff
+        mappedAttributes.html.forEach(([n, v]) => {
+            this.setAttribute(element, n, v, namespaces);
+        });
+
+        // 5. log error if attribute is not map able
+        mappedAttributes.other.forEach(([n, v]) => {
+            this.logger.error(`Attribute(${n}) on element ${name} is not mapped correct.`, v)
+        });
+
+
+        this.logger.log('Done setting attributes for element', element);
         children
-            .filter(child => !(child == null || typeof child == 'undefined'))
-            .forEach((child) => {
-                return this.appendChild(child, element);
-            });
+            .filter(c => !(c == null || typeof c == 'undefined')).forEach((child) => {
 
+            //child: string | number | boolean | Node | Array<Node>
+            let processSingle = (child: any) => {
+                const childType = typeof child;
+                if (childType == 'string' ||
+                    childType == 'number' ||
+                    childType == 'boolean' ||
+                    child instanceof Node
+                ) {
+                    this.appendChild(child, element);
+                } else {
+                    element.appendChild(this.render(child, level + 1, namespaces));
+                }
+            };
+            if (child instanceof Array) {
+                child.filter(c => !(c == null || typeof c == 'undefined')).forEach(c => processSingle(c))
+            } else {
+                processSingle(child);
+            }
+        });
         return element;
     }
 }

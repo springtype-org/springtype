@@ -1,5 +1,5 @@
 import {ILogger} from "./ILogger";
-import {ApplicationContext, Component} from "../../di/index";
+import {ApplicationContext, Component} from "../../di";
 
 @Component
 export class WebAppLogger implements ILogger {

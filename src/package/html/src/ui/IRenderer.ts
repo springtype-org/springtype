@@ -1,3 +1,5 @@
+import {IReactCreateElement} from "./TSXRenderer";
+
 /**
  * constructor must define (<any>window).React to an object implementing
  * createElement(...). window.React.createElement(...) is automatically called by
@@ -14,5 +16,7 @@
  */
 export interface IRenderer {
 
-    createElement(name: string, attributes?: any, ...children: Array<any>): any;
+    createElement(name: string, attributes?: any, ...children: Array<IReactCreateElement>): IReactCreateElement;
+
+    render(reactCreateElementInput: IReactCreateElement): any;
 }
