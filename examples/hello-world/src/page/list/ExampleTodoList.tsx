@@ -31,6 +31,9 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
     onAddItem = () => {
         this.todoService.addItem();
+
+        // FIXME: Effect und re-sync
+        this.props.todos = this.todoService.getTodos();
     };
 
     render() {
