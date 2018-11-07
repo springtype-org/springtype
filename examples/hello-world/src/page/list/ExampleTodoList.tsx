@@ -43,10 +43,8 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
         return (
             <div>
-                <h2>TODO's:</h2>
                 <ul>{ listItems }</ul>
-
-                <button onclick={ this.onAddItem }>Add</button>
+                <a className="waves-effect waves-light btn" onclick={this.onAddItem}>Add</a>
             </div>
         );
     }

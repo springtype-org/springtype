@@ -20,20 +20,17 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
 
         const params = this.router.getParams();
 
-        const todo: ITodoItem = this.todoService.getById(parseInt(params.id, 10) ) || {
+        const todo: ITodoItem = this.todoService.getById(parseInt(params.id, 10)) || {
             id: -1,
             text: 'Invalid id'
         };
 
         // what is returned, will be attached to this node
         return (
-            <div>
-                <h1>TODO</h1>
-                <ul>
-                    <li>ID: { todo.id }</li>
-                    <li>Text: { todo.text }</li>
-                </ul>
-            </div>
+            <ul>
+                <li>ID: {todo.id}</li>
+                <li>Text: {todo.text}</li>
+            </ul>
         );
     }
 }
