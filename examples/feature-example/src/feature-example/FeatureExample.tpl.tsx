@@ -1,10 +1,10 @@
-import {BurgerButton} from "./BurgerButton";
+import {FeatureExample} from "./FeatureExample";
 
 import yoda from "./assets/yoda-rtfm.png";
-import stylesheet from "./burger-button.scss";
-import svgButton from "./assets/button.svg";
+import stylesheet from "./FeatureExample.scss";
+import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
 
-export default (view: BurgerButton) =>
+export default (view: FeatureExample) =>
 
     <div>
         <link rel="stylesheet" href={stylesheet}/>
@@ -18,7 +18,7 @@ export default (view: BurgerButton) =>
         <br/>
         <br/>
 
-        <img src={svgButton} onclick={view.onSVGButtonClick}/>
+        <burger-button props={{type: BurgerType.TURN}}/>
         <img src={yoda} width="200"/>
 
         <div style="font-weight: bold; cursor: pointer;" onclick="alert('yes');">click me</div>

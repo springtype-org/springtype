@@ -1,8 +1,12 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html";
 import template from "./BurgerButton.tpl";
 
-interface BurgerButtonProps {
-    active: boolean;
+export interface BurgerButtonProps {
+    type: BurgerType;
+}
+
+export enum BurgerType {
+    SWORD, ARROW_LEFT, CLOSE, ROUND_CONNER, ARROW_LEFT_TURN, AWESOME, SWORD_CROSS, TURN
 }
 
 @WebComponent({
@@ -15,7 +19,7 @@ export class BurgerButton extends HTMLElement implements WebComponentLifecycle {
         public props: BurgerButtonProps
     ) {
         super();
-        this.props.active = false;
+        this.props.type = BurgerType.ROUND_CONNER;
     }
 
 

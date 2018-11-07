@@ -1,5 +1,5 @@
 import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html";
-import template from "./BurgerButton.tpl";
+import template from "./FeatureExample.tpl";
 
 interface BurgerButtonProps {
     menuItems: Array<string>;
@@ -7,10 +7,10 @@ interface BurgerButtonProps {
 }
 
 @WebComponent({
-    tag: 'burger-button',
+    tag: 'feature-example',
     template
 })
-export class BurgerButton extends HTMLElement implements WebComponentLifecycle {
+export class FeatureExample extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
         public props: BurgerButtonProps,
