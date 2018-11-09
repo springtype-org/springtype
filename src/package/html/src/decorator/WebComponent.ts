@@ -300,7 +300,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         }
                     }
                 }
-            }
+            };
 
             protected reflow() {
 
@@ -377,18 +377,20 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
         };
 
         try {
+            //TODO: Arron help meFix me :D
+            const regCustomWebComponent = window.customElements.get(config.tag);
+            if (!regCustomWebComponent) {
+                // register custom element
+                window.customElements.define(config.tag, CustomWebComponent);
 
-            // register custom element
-            window.customElements.define(config.tag, CustomWebComponent);
-
-            WebComponentReflector.setTagName(<any>CustomWebComponent, config.tag);
-
+                WebComponentReflector.setTagName(<any>CustomWebComponent, config.tag);
+            }
         } catch (e) {
 
             if (ApplicationContext.getInstance().getEnvironment() === ApplicationEnvironment.DEV) {
 
                 // hot reload based error for web component registration (window.customElements.define(...))
-                if (e.message.indexOf('this name has already been used with this registry') > -1) {
+                if (e.message.indexOf(`this name  ${config.tag} has already been used with this registry`) > -1) {
                     window.location.href = '/';
                 }
             }
