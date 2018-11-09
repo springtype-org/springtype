@@ -9,9 +9,6 @@
     "sass": "^1.14.1"
   },
   "scripts": {
-    "clean": "rm -rf dist && rm -rf .cache",
-    "start": "parcel serve src/index.html",
-    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
   },
   "repository": {
     "type": "git",

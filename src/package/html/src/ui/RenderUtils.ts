@@ -57,7 +57,7 @@ export const mapAttributes = (attributes: any): Attributes => {
     // 4. filter all properties
     const property = correctAttributes
         .filter(e => used.indexOf(e) < 0)
-        .filter(([n, v]) => typeof v !== 'string');
+        .filter(([n, v]) => typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean');
     used = used.concat(property);
 
     // 5. filter all html
@@ -65,7 +65,7 @@ export const mapAttributes = (attributes: any): Attributes => {
         .filter(e => used.indexOf(e) < 0)
         // only string allowed
 
-        .filter(([n, v]) => typeof v === 'string');
+        .filter(([n, v]) => typeof v === 'string' || typeof v === 'number'|| typeof v === 'boolean');
     used = used.concat(html);
     return {
         bind: bind,
