@@ -117,6 +117,7 @@ const svgTurn = (view: BurgerButton) => (
 );
 
 const selectBurger = (view: BurgerButton) => {
+    debugger;
     switch (view.props.type) {
         case BurgerType.ARROW_LEFT:
             return svgArrowLeft(view);

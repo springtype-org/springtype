@@ -18,7 +18,7 @@ export default (view: FeatureExample) =>
         <br/>
         <br/>
 
-        <burger-button props={{type: BurgerType.TURN}}/>
+        <burger-button props={{type: BurgerType.CLOSE}}/>
         <img src={yoda} width="200"/>
 
         <div style="font-weight: bold; cursor: pointer;" onclick="alert('yes');">click me</div>
