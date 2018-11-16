@@ -2,16 +2,11 @@ import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
 import {WebAppLogger} from "../../../log";
 import {Attributes, DEFAULT_NAMESPACE_NAME, mapAttributes} from "./RenderUtils";
-import {split} from "ts-node";
 
 export interface IReactCreateElement {
     name: string;
     attributes?: any;
     children: Array<any>
-}
-
-interface AttributeNormalization {
-    [attributeName: string]: string
 }
 
 interface StateHeapCache {
@@ -128,7 +123,6 @@ export class TSXRenderer implements IRenderer {
 
         delete attributes.is;
         const mappedAttributes: Attributes = mapAttributes(attributes);
-
         // 0. add all namespaces
         namespaces = namespaces.concat(mappedAttributes.xmlns);
 

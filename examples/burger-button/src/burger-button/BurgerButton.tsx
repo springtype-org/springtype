@@ -16,36 +16,36 @@ export enum BurgerType {
     tag: 'burger-button',
     template
 })
-export class BurgerButton extends HTMLElement implements WebComponentLifecycle {
+export class BurgerButton extends HTMLElement implements WebComponentLifecycle<BurgerButtonProps> {
     open = false;
+    props!: BurgerButtonProps;
 
-    constructor(
-        public props: BurgerButtonProps
-    ) {
+    constructor() {
         super();
-        this.props.type = BurgerType.ROUND_CONNER;
-        this.props.width = 50;
-        this.props.onOpen = () => {
-            console.log("Button open event not used")
-        };
-        this.props.onClose = () => {
-            console.log("Button close event not used")
-        };
-
     }
 
+    init() {
+        this.props.type = this.props.type || BurgerType.SWORD;
+        this.props.width = this.props.width || 50;
+        this.props.onClose = this.props.onClose || (() => {
+        });
+        this.props.onOpen = this.props.onOpen || (() => {
+        });
+    };
 
     onBurgerClick = (evt: any, element: any) => {
         this.open = !this.open;
         if (this.open) {
             element.classList.add('active');
-            this.props.onOpen();
+            if (this.props.onOpen) {
+                this.props.onOpen();
+            }
         } else {
             element.classList.remove('active');
-            this.props.onClose();
+            if (this.props.onClose) {
+                this.props.onClose();
+            }
         }
-        return element;
     };
-
 
 }

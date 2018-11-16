@@ -25,14 +25,15 @@ export interface WebComponentConfig {
     template?: (view: any) => IReactCreateElement;
 }
 
-export class WebComponentLifecycle {
+export class WebComponentLifecycle<T> {
+
     constructor() {
-    };
-
-    props?: any = {};
-
-    init?(): void {
     }
+
+    props?: T;
+
+    init?  (): void {
+    };
 
     mount?(): void {
     };
@@ -113,6 +114,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
         // @Component by default
         const injectableWebComponent = Component(webComponent);
 
+
         // custom web component extends user implemented web component class
         // which extends HTMLElement
         let CustomWebComponent = class extends injectableWebComponent {
@@ -120,18 +122,11 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             protected mounted: boolean = false;
 
             constructor(...args: Array<any>) {
-
                 super();
-
                 if (config.renderStrategy === RenderStrategy.onPropsChanged) {
-
-                    this.props = new Proxy(this.props || {}, {
+                    this.props = new Proxy({}, {
                         set: (props: any, name: string | number | symbol, value: any): boolean => {
-
-                            console.log('props change');
-
                             if (props[name] !== value) {
-
                                 props[name] = value;
 
                                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE, {
@@ -149,7 +144,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                             return true;
                         }
                     });
-
                     Object.defineProperty(this, 'props', {
                         writable: false
                     });
@@ -266,7 +260,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 } else {
 
                     if (typeof config.template == 'function') {
-
                         // render template by default
                         return config.template(this);
                     }

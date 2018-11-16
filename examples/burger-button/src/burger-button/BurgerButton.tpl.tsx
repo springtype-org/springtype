@@ -2,7 +2,8 @@ import {BurgerButton, BurgerType} from "./BurgerButton";
 import stylesheet from "./BurgerButton.scss";
 
 const svgSword = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham1" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham1" viewBox="0 0 100 100"
+         width={view.props.width}
          onClick={view.onBurgerClick}>
         <path
             className="line top"
@@ -44,7 +45,8 @@ const svgClose = (view: BurgerButton) => (
     </svg>
 );
 const svgRoundConner = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham4" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham4" viewBox="0 0 100 100"
+         width={view.props.width}
          onClick={view.onBurgerClick}>
         <path
             className="line top"
@@ -58,7 +60,8 @@ const svgRoundConner = (view: BurgerButton) => (
     </svg>
 );
 const svgArrowLeftTurn = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate180 ham5" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate180 ham5" viewBox="0 0 100 100"
+         width={view.props.width}
          onClick={view.onBurgerClick}>
         <path
             className="line top"
@@ -87,7 +90,8 @@ const svgAwesome = (view: BurgerButton) => (
 );
 
 const svgSwordCross = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham7" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham7" viewBox="0 0 100 100"
+         width={view.props.width}
          onClick={view.onBurgerClick}>
         <path
             className="line top"
@@ -102,7 +106,8 @@ const svgSwordCross = (view: BurgerButton) => (
 );
 
 const svgTurn = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham8" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham8" viewBox="0 0 100 100"
+         width={view.props.width}
          onClick={view.onBurgerClick}>
         <path
             className="line top"
@@ -117,7 +122,7 @@ const svgTurn = (view: BurgerButton) => (
 );
 
 const selectBurger = (view: BurgerButton) => {
-    debugger;
+    view.props.width = view.props.width || 50;
     switch (view.props.type) {
         case BurgerType.ARROW_LEFT:
             return svgArrowLeft(view);
@@ -134,9 +139,7 @@ const selectBurger = (view: BurgerButton) => {
         case BurgerType.TURN:
             return svgTurn(view);
         case BurgerType.SWORD:
-        default:
             return svgSword(view);
-
     }
 
 };
