@@ -25,46 +25,31 @@ export interface WebComponentConfig {
     template?: (view: any) => IReactCreateElement;
 }
 
-export class WebComponentLifecycle<T> {
+export interface WebComponentLifecycle extends HTMLElement{
 
-    constructor() {
-    }
+    props?: any;
 
-    props?: T;
+    init(): void;
 
-    init?  (): void {
-    };
+    mount?(): void;
 
-    mount?(): void {
-    };
+    remount?(): void;
 
-    remount?(): void {
-    };
+    render?(): JSX.Element;
 
-    render?(): JSX.Element {
-        return ('');
-    }
+    createNativeElement?(reactCreateElement: IReactCreateElement): any;
 
-    createNativeElement?(reactCreateElement: IReactCreateElement): any {
-    }
+    unmount?(): void;
 
-    unmount?(): void {
-    };
+    onPropChanged?(name: string, newValue: any, oldValue?: any): void;
 
-    onPropChanged?(name: string, newValue: any, oldValue?: any): void {
-    };
+    onPropsChanged?(props: any, name: string | number | symbol, value: any): void;
 
-    onPropsChanged?(props: any, name: string | number | symbol, value: any): void {
-    };
+    reflow?(): void;
 
-    reflow?(): void {
-    };
+    mountChildren?(): void;
 
-    mountChildren?(): void {
-    };
-
-    remountChildren?(): void {
-    };
+    remountChildren?(): void;
 }
 
 export interface AttributeChangeEvent {
@@ -124,13 +109,13 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             constructor(...args: Array<any>) {
                 super();
                 if (config.renderStrategy === RenderStrategy.onPropsChanged) {
-                    this.props = new Proxy({}, {
+                    this.props = new Proxy(this.props || {}, {
                         set: (props: any, name: string | number | symbol, value: any): boolean => {
                             if (props[name] !== value) {
                                 props[name] = value;
 
                                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE, {
-                                    detail: <PropsChangeEvent> {
+                                    detail: <PropsChangeEvent>{
                                         props,
                                         name,
                                         value
@@ -271,7 +256,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.createNativeElement) {
                     return super.createNativeElement(reactCreateElement);
                 }
-                return (<any> window).React.render(reactCreateElement);
+                return (<any>window).React.render(reactCreateElement);
             }
 
             protected flow = (initial: boolean = false) => {
@@ -330,7 +315,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 console.log('setting wc attr', name, newValue);
 
                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROP_CHANGE, {
-                    detail: <AttributeChangeEvent> {
+                    detail: <AttributeChangeEvent>{
                         name: name,
                         oldValue,
                         newValue

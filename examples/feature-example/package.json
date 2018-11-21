@@ -24,7 +24,14 @@
     "parcel": "^1.10.2",
     "typescript": "^3.1.1"
   },
-  "browserslist": [
-    "last 1 Chrome version"
-  ]
+  "browserslist": {
+    "production": [
+      "> 1%",
+      "ie 10"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version"
+    ]
+  }
 }

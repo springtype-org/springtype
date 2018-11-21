@@ -16,7 +16,7 @@ export enum BurgerType {
     tag: 'burger-button',
     template
 })
-export class BurgerButton extends HTMLElement implements WebComponentLifecycle<BurgerButtonProps> {
+export class BurgerButton extends HTMLElement implements  WebComponentLifecycle {
     open = false;
     props!: BurgerButtonProps;
 

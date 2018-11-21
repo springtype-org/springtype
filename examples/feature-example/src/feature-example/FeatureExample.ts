@@ -10,7 +10,7 @@ interface BurgerButtonProps {
     tag: 'feature-example',
     template
 })
-export class FeatureExample extends HTMLElement implements WebComponentLifecycle<BurgerButtonProps> {
+export class FeatureExample extends HTMLElement implements WebComponentLifecycle {
     props!: BurgerButtonProps;
 
     constructor(
