@@ -1,5 +1,5 @@
 import {BurgerButton, BurgerType} from "./BurgerButton";
-import stylesheet from "./BurgerButton.scss";
+import  "./BurgerButton.scss";
 
 const svgSword = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham1" viewBox="0 0 100 100"
@@ -145,6 +145,5 @@ const selectBurger = (view: BurgerButton) => {
 };
 export default (view: BurgerButton) =>
     <div>
-        <link rel="stylesheet" href={stylesheet}/>
         {selectBurger(view)}
     </div>

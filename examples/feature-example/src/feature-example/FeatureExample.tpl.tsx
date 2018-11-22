@@ -1,13 +1,12 @@
 import {FeatureExample} from "./FeatureExample";
 
 import yoda from "./assets/yoda-rtfm.png";
-import stylesheet from "./FeatureExample.scss";
+import  "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
 
 export default (view: FeatureExample) =>
 
     <div>
-        <link rel="stylesheet" href={stylesheet}/>
 
         <button class="burger-button" onclick={view.onButtonClick} bind={{btn: view}}>
             {
