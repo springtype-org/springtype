@@ -168,11 +168,7 @@ export class TSXRenderer implements IRenderer {
         mappedAttributes.property.forEach((attrib) => {
             const propsHeapPtr = this.getPropsHeapPtr();
             this.propsHeapCache[propsHeapPtr] = attrib.value;
-            console.error('props',attrib)
             this.logger.trace('ptr', attrib.value);
-            if(attrib.name == 'href'){
-                console.error('href',JSON.stringify(attrib.value,null, 2);
-            }
             this.setAttribute(element, {name: attrib.name, value: propsHeapPtr}, namespaces);
         });
         // 4. add html stuff
