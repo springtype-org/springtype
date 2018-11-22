@@ -38,18 +38,10 @@ export interface SortedAttributes {
     other: Attribute[]
 }
 
-export const checkTagNameNs = (tagName: string): { found: boolean, name: string, ns?: string } => {
-    const parts = tagName.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s);
-    if (parts.length == 2) {
-        return {found: true, name: parts[1], ns: parts[0]};
-    }
-    return {found: false, name: tagName};
-};
-
 export const checkNameNs = (name: string): { found: boolean, name: string, ns?: string } => {
     const parts = name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s);
     if (parts.length == 2) {
-        return {found: true, name: parts[0], ns: parts[1]};
+        return {found: true, name: parts[1], ns: parts[2]};
     }
     return {found: false, name: name};
 };

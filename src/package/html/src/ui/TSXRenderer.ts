@@ -2,8 +2,7 @@ import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
 import {WebAppLogger} from "../../../log";
 import {
-    Attribute, checkNameNs, checkTagNameNs,
-    DEFAULT_NAMESPACE_DELIMITER,
+    Attribute, checkNameNs,
     DEFAULT_NAMESPACE_NAME,
     mapAttributes,
     Namespace,
@@ -89,7 +88,7 @@ export class TSXRenderer implements IRenderer {
     };
 
     nativeCreateElement = (tagName: string, namespaces: Namespace[], nativeOptions?: any): Element => {
-        const checkResult = checkTagNameNs(tagName);
+        const checkResult = checkNameNs(tagName);
         const newTagName = checkResult.name;
         if (checkResult.found) {
             const tagNameSpace = namespaces.find((ns) => checkResult.ns === ns.name);

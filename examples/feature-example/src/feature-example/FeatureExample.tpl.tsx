@@ -29,7 +29,7 @@ export default (view: FeatureExample) =>
 
         <svg width="100%"
              height="100%"
-             xmlnsXlink="http://www.w3.org/1999/xlink"
+             xmlns$$xlink="http://www.w3.org/1999/xlink"
              xmlns="http://www.w3.org/2000/svg"
         >
             <style>
@@ -42,10 +42,10 @@ export default (view: FeatureExample) =>
             </defs>
 
             <text y="15">black</text>
-            <use x="70" y="10" xlinkHref="#Port"/>
+            <use x="70" y="10" xlink$$href="#Port"/>
             <text y="35">{view.props.fill}</text>
-            <use x="70" y="30" xlinkHref="#Port" className="classA"/>
+            <use x="70" y="30" xlink$$href="#Port" className="classA"/>
             <text y="55">blue</text>
-            <use x="70" y="50" xlinkHref="#Port" style="fill:blue"/>
+            <use x="70" y="50" xlink$$href="#Port" style="fill:blue"/>
         </svg>
     </div>
