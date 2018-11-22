@@ -1,17 +1,19 @@
 import {IRenderer} from "./IRenderer";
 import {Component} from "../../../di";
 import {WebAppLogger} from "../../../log";
-import {Attributes, DEFAULT_NAMESPACE_NAME, mapAttributes} from "./RenderUtils";
-import {split} from "ts-node";
+import {
+    Attribute, checkNameNs, checkTagNameNs,
+    DEFAULT_NAMESPACE_DELIMITER,
+    DEFAULT_NAMESPACE_NAME,
+    mapAttributes,
+    Namespace,
+    SortedAttributes
+} from "./RenderUtils";
 
 export interface IReactCreateElement {
     name: string;
     attributes?: any;
     children: Array<any>
-}
-
-interface AttributeNormalization {
-    [attributeName: string]: string
 }
 
 interface StateHeapCache {
@@ -65,7 +67,7 @@ export class TSXRenderer implements IRenderer {
 
         let childToAppend = child;
 
-        this.logger.log('child', child);
+        this.logger.trace('child', child);
 
         if (child instanceof Node) {
 
@@ -76,9 +78,7 @@ export class TSXRenderer implements IRenderer {
             typeof child == 'number' ||
             typeof child == 'boolean'
         ) {
-
             childToAppend = document.createTextNode(child.toString());
-
         }
         if (childToAppend instanceof Node) {
 
@@ -88,38 +88,50 @@ export class TSXRenderer implements IRenderer {
         }
     };
 
-    nativeCreateElement = (tagName: string, namespaces: [string, string][], nativeOptions?: any): Element => {
-        const namespace = namespaces.find(([n]) => DEFAULT_NAMESPACE_NAME === n);
-        if (namespace) {
-            return this._nativeCreateElementNS(namespace[1], tagName, nativeOptions);
+    nativeCreateElement = (tagName: string, namespaces: Namespace[], nativeOptions?: any): Element => {
+        const checkResult = checkTagNameNs(tagName);
+        const newTagName = checkResult.name;
+        if (checkResult.found) {
+            const tagNameSpace = namespaces.find((ns) => checkResult.ns === ns.name);
+            if (tagNameSpace) {
+                return this._nativeCreateElementNS(tagNameSpace.value, newTagName, nativeOptions);
+            }
+            // if namespace not found!! create with no namespace!
+            this.logger.error("namespace not found " + checkResult.ns, checkResult);
+            return this._nativeCreateElementNS(null, newTagName, nativeOptions);
+
+        }
+        const defaultNamespace = namespaces.find((ns) => DEFAULT_NAMESPACE_NAME === ns.name);
+        if (defaultNamespace) {
+            return this._nativeCreateElementNS(defaultNamespace.value, newTagName, nativeOptions);
         } else {
-            return this._nativeCreateElement(tagName, nativeOptions);
+            return this._nativeCreateElement(newTagName, nativeOptions);
         }
     };
 
-    setAttribute = (element: Element, name: string, value: any, namespaces: [string, string][]): void => {
-        if (namespaces.length > 0) {
-            const namespace = namespaces
-                .map(([n,v])=> <[string,string]>[n.split(':').pop(),v])
-                .find(([n]) => name.startsWith(n));
+    setAttribute = (element: Element, attrib: Attribute, namespaces: Namespace[]): void => {
+        const checkResult = checkNameNs(attrib.name);
+        const attributeName = checkResult.name;
+        if (checkResult.found || namespaces.length > 0) {
+            const namespace: Namespace | undefined = namespaces
+                .find((ns) => checkResult.ns != undefined && checkResult.ns.startsWith(ns.name));
             if (namespace) {
-                element.setAttributeNS(namespace[1], name, value);
+                element.setAttributeNS(namespace.value, attributeName, attrib.value);
             } else {
-                element.setAttributeNS(null, name, value);
+                element.setAttributeNS(null, attributeName, attrib.value);
             }
         } else {
-            element.setAttribute(name, value);
+            element.setAttribute(attributeName, attrib.value);
         }
-
     };
 
     createElement = (name: string, attributes?: any, ...children: Array<IReactCreateElement>): IReactCreateElement => {
-        this.logger.log('createElement', name, attributes, children);
+        this.logger.trace('createElement', name, attributes, children);
         return {name: name, attributes: attributes, children: children};
     };
 
-    render = (reactCreateElement: IReactCreateElement, level = 0, namespaces: [string, string][] = []): Element => {
-        this.logger.log('render', reactCreateElement, level, namespaces);
+    render = (reactCreateElement: IReactCreateElement, level = 0, namespaces: Namespace[] = []): Element => {
+        this.logger.trace('render', reactCreateElement, level, namespaces);
         const name = reactCreateElement.name;
         const attributes = reactCreateElement.attributes || {};
         const children = reactCreateElement.children || [];
@@ -127,16 +139,16 @@ export class TSXRenderer implements IRenderer {
         const nativeOptions = !!attributes.is ? {is: attributes.is} : undefined;
 
         delete attributes.is;
-        const mappedAttributes: Attributes = mapAttributes(attributes);
+        const mappedAttributes: SortedAttributes = mapAttributes(attributes, namespaces);
 
         // 0. add all namespaces
-        namespaces = namespaces.concat(mappedAttributes.xmlns);
+        namespaces = mappedAttributes.xmlns;
 
         const element = this.nativeCreateElement(name, namespaces, nativeOptions);
 
         // 1. add all bindings
-        mappedAttributes.bind.forEach(([_, v]) => {
-            const scope: any = v;
+        mappedAttributes.bind.forEach((attrib) => {
+            const scope: any = attrib.value;
             for (let bindName in scope) {
                 if (scope.hasOwnProperty(bindName)) {
                     const view = scope[bindName];
@@ -146,32 +158,32 @@ export class TSXRenderer implements IRenderer {
         });
 
         // 2. add all events
-        mappedAttributes.event.forEach(([n, v]) => {
+        mappedAttributes.event.forEach(([n, fun]) => {
             element.addEventListener(n, evt => {
                 // add element to event as second parameter
-                v(evt, element)
+                fun(evt, element)
             }, false);
         });
 
         // 3. add properties
-        mappedAttributes.property.forEach(([n, v]) => {
+        mappedAttributes.property.forEach((attrib) => {
             const propsHeapPtr = this.getPropsHeapPtr();
-            this.propsHeapCache[propsHeapPtr] = v;
-            this.logger.log('ptr', v);
-            this.setAttribute(element, n, propsHeapPtr, namespaces);
+            this.propsHeapCache[propsHeapPtr] = attrib.value;
+            this.logger.trace('ptr', attrib.value);
+            this.setAttribute(element, {name: attrib.name, value: propsHeapPtr}, namespaces);
         });
         // 4. add html stuff
-        mappedAttributes.html.forEach(([n, v]) => {
-            this.setAttribute(element, n, v, namespaces);
+        mappedAttributes.html.forEach((attrib) => {
+            this.setAttribute(element, attrib, namespaces);
         });
 
         // 5. log error if attribute is not map able
-        mappedAttributes.other.forEach(([n, v]) => {
-            this.logger.error(`Attribute(${n}) on element ${name} is not mapped correct.`, v)
+        mappedAttributes.other.forEach((attrib) => {
+            this.logger.error(`Attribute(${attrib.name}) on element ${name} is not mapped correct.`, attrib.value)
         });
 
 
-        this.logger.log('Done setting attributes for element', element);
+        this.logger.trace('Done setting attributes for element', element);
         children
             .filter(c => !(c == null || typeof c == 'undefined')).forEach((child) => {
 

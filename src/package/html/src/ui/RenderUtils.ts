@@ -1,14 +1,12 @@
 const PROPERTY_BINDING_VARIABLE = 'bind';
 export const DEFAULT_NAMESPACE_NAME: string = 'xmlns';
-const CORRECT_ATTRIBUTE_NAMING = (attributeName: string): string => {
+export const DEFAULT_NAMESPACE_DELIMITER: string = '$$';
+export type Attribute = { name: string, value: any };
+export type Namespace = { name: string, value: string };
+export type NamespaceResult = { hasNs: boolean, value?: Namespace };
+const correctAttributeNaming = (attributeName: string): string => {
 
-    // TODO: Fix architecture
     switch (attributeName) {
-
-        case 'xmlnsXlink':
-            return 'xmlns:xlink';
-        case 'xlinkHref':
-            return 'xlink:href';
         /**
          * Some standard JSX/TSX attribute names are transformed
          * so that IDE support broadened.
@@ -21,60 +19,96 @@ const CORRECT_ATTRIBUTE_NAMING = (attributeName: string): string => {
     }
 };
 
-export interface Attributes {
-    bind: [string, any][],
-    xmlns: [string, string][],
-    event: [string, any][],
-    property: [string, any][],
-    html: [string, any][],
-    other: [string, any][]
+const getNamespace = (index: number, attributeName: string, knownNamespaces: Namespace[]): NamespaceResult => {
+    const nsName = attributeName.substr(0, index + 1);
+    const newAttributeName = attributeName.substr(index);
+    const result: Namespace | undefined = knownNamespaces.find((nsp) => nsName == nsp.name);
+    if (result) {
+        return {hasNs: true, value: {name: newAttributeName, value: result.value}};
+    }
+    return {hasNs: false};
+};
+
+export interface SortedAttributes {
+    bind: Attribute[],
+    xmlns: Namespace[],
+    event: [string, Function][],
+    property: Attribute[],
+    html: Attribute[],
+    other: Attribute[]
 }
 
-export const mapAttributes = (attributes: any): Attributes => {
-    let used: [string, any][] = [];
+export const checkTagNameNs = (tagName: string): { found: boolean, name: string, ns?: string } => {
+    const parts = tagName.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s);
+    if (parts.length == 2) {
+        return {found: true, name: parts[1], ns: parts[0]};
+    }
+    return {found: false, name: tagName};
+};
+
+export const checkNameNs = (name: string): { found: boolean, name: string, ns?: string } => {
+    const parts = name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s);
+    if (parts.length == 2) {
+        return {found: true, name: parts[0], ns: parts[1]};
+    }
+    return {found: false, name: name};
+};
+
+
+export const mapAttributes = (attributes: any, knownNamespaces: Namespace[]): SortedAttributes => {
+    let used: Attribute[] = [];
 
     // 0. correct names
-    const correctAttributes: [string, any][] = Object.entries(attributes)
-        .map(([name, value]): [string, any] => [CORRECT_ATTRIBUTE_NAMING(name), value]);
+    const correctAttributes: Attribute[] = Object.entries(attributes)
+        .map(([name, value]): Attribute => ({name: correctAttributeNaming(name), value: value}));
+    // 0.1 get all possible namespace attributes
+
 
     // order required
     // 1. filter all namespaces
-    const xmlns = correctAttributes.filter(([n, _]) => n.indexOf(DEFAULT_NAMESPACE_NAME) == 0);
-    used = used.concat(xmlns);
+    const rawXmlns = correctAttributes.filter((attrib) => attrib.name.indexOf(DEFAULT_NAMESPACE_NAME) == 0);
+    // 1.1 get namespace values
+    const xmlns = knownNamespaces.concat(
+        rawXmlns.map((attrib): Attribute => ({
+            name: attrib.name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s).pop() || '',
+            value: attrib.value
+        }))
+            .filter((attrib) => !!attrib.name)
+    );
+    used = used.concat(rawXmlns);
 
-    // 2. filter all bindings
+    // 3. filter all bindings
     const bind = correctAttributes
         .filter(e => used.indexOf(e) < 0)
-        .filter(([n]) => PROPERTY_BINDING_VARIABLE === n);
+        .filter((attrib) => PROPERTY_BINDING_VARIABLE === attrib.name);
     used = used.concat(bind);
 
-    // 3. filter all events
+    // 4. filter all events
     const event = correctAttributes
         .filter(e => used.indexOf(e) < 0)
-        .filter(([n, v]) => n.startsWith('on') && typeof v === 'function');
+        .filter((attrib) => attrib.name.startsWith('on') && typeof attrib.value === 'function');
     used = used.concat(event);
 
-    // 4. filter all properties
+    // 5. filter all properties
     const property = correctAttributes
         .filter(e => used.indexOf(e) < 0)
-        .filter(([n, v]) => typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean');
+        .filter((attrib) => typeof attrib.value !== 'string' && typeof attrib.value !== 'number' && typeof attrib.value !== 'boolean');
     used = used.concat(property);
 
-    // 5. filter all html
+    // 6. filter all html
     const html = correctAttributes
         .filter(e => used.indexOf(e) < 0)
         // only string allowed
+        .filter((attrib) => typeof attrib.value === 'string' || typeof attrib.value === 'number' || typeof attrib.value === 'boolean');
 
-        .filter(([n, v]) => typeof v === 'string' || typeof v === 'number'|| typeof v === 'boolean');
     used = used.concat(html);
+
     return {
         bind: bind,
         xmlns: xmlns,
-        event: event.map(([n, v]) => <[string, Function]>([n.substring(2, n.length).toLowerCase(), v])),
+        event: event.map((attrib) => <[string, Function]>([attrib.name.substring(2, attrib.name.length).toLowerCase(), attrib.value])),
         property: property,
         html: html,
-        other: correctAttributes
-            .filter(e => used.indexOf(e) < 0)
+        other: correctAttributes.filter(e => used.indexOf(e) < 0)
     }
 };
-
