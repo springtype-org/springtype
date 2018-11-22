@@ -25,7 +25,7 @@ export interface WebComponentConfig {
     template?: (view: any) => IReactCreateElement;
 }
 
-export interface WebComponentLifecycle extends HTMLElement{
+export interface WebComponentLifecycle{
 
     props?: any;
 

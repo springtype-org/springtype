@@ -21,12 +21,14 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
         super();
 
+    }
+
+    init = () => {
         // TODO: @CurrentState decorator
         this.props.todos = this.todoService.getTodos();
     }
-
     onListItemClick = (id: number) => {
-        this.router.navigate(ExampleTodoDetail, { id });
+        this.router.navigate(ExampleTodoDetail, {id});
     };
 
     onAddItem = () => {
@@ -39,14 +41,16 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
     render() {
 
         const listItems = this.props.todos.map((todo: ITodoItem) =>
-            <li onclick={ () => { this.onListItemClick(todo.id) } } class="todo-item">
-                { todo.text }
+            <li onclick={() => {
+                this.onListItemClick(todo.id)
+            }} class="todo-item">
+                {todo.text}
             </li>
         );
 
         return (
             <div>
-                <ul>{ listItems }</ul>
+                <ul>{listItems}</ul>
                 <a className="waves-effect waves-light btn" onclick={this.onAddItem}>Add</a>
             </div>
         );

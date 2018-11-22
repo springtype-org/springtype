@@ -39,9 +39,11 @@ export interface SortedAttributes {
 }
 
 export const checkNameNs = (name: string): { found: boolean, name: string, ns?: string } => {
-    const parts = name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s);
-    if (parts.length == 2) {
-        return {found: true, name: parts[1], ns: parts[2]};
+    if (!!name) {
+        const parts = name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s);
+        if (parts.length == 2) {
+            return {found: true, name: parts[1], ns: parts[2]};
+        }
     }
     return {found: false, name: name};
 };
