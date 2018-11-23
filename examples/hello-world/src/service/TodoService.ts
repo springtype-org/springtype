@@ -2,7 +2,7 @@ import {Component} from "../../../../src/package/di";
 import {Store} from "../../../../src/package/state";
 import {IRootState} from "../state/IRootState";
 import {ITodoItem} from "../state/ITodoState";
-import {TodoModel} from "../model/TodoModel";
+import {count, TodoModel} from "../model/TodoModel";
 
 @Component
 export class TodoService {
@@ -30,10 +30,11 @@ export class TodoService {
     }
 
     addItem() {
+        const newItemId =count();
         this.todoModel.addTodo({
             done: false,
-            id: 5,
-            text: 'New!!'
+            id: newItemId,
+            text:`${newItemId}. new Item`
         });
     }
 }

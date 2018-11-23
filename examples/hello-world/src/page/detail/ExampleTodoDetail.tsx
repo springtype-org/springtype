@@ -33,4 +33,7 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
             </ul>
         );
     }
+
+    init(): void {
+    }
 }

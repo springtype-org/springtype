@@ -45,10 +45,10 @@ export class Randomizer {
      * @param max the maximum value
      * @param amount amount the size of generated numbers
      */
-    static generateNumbers(min: number, max: number, amount: number) : number[]{
+    static generateNumbers(min: number, max: number, amount: number): number[] {
         let result = new Array<number>(amount);
         for (let i = 0; i < amount; i++) {
-            result.push((~~(Math.random() * (max - min))) + min);
+            result[i] = (Math.floor(Math.random() * (max - min + 1)) + min);
         }
         return result;
     }

@@ -9,7 +9,8 @@ export interface ITodoModelDispatch {
         onAddTodo(todoItem: ITodoItem): ITodoState;
     }
 }
-
+let counter = 1;
+export const count = (): number => counter++  ;
 @StateModel
 export class TodoModel implements IStateModel {
 
@@ -21,11 +22,11 @@ export class TodoModel implements IStateModel {
         // set initial initialState
         initialState.todos = [{
             done: false,
-            id: 1,
+            id: count(),
             text: 'Bar'
         }, {
             done: false,
-            id: 3,
+            id: count(),
             text: 'Toms'
         }];
     }
