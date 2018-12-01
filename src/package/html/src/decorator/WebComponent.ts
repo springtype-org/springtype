@@ -25,9 +25,8 @@ export interface WebComponentConfig {
     template?: (view: any) => IReactCreateElement;
 }
 
-export interface WebComponentLifecycle{
+export interface WebComponentLifecycle extends HTMLElement {
 
-    props?: any;
 
     init(): void;
 
@@ -109,11 +108,10 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             constructor(...args: Array<any>) {
                 super();
                 if (config.renderStrategy === RenderStrategy.onPropsChanged) {
-                    this.props = new Proxy(this.props || {}, {
+                    this.props = new Proxy({}, {
                         set: (props: any, name: string | number | symbol, value: any): boolean => {
                             if (props[name] !== value) {
                                 props[name] = value;
-
                                 const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE, {
                                     detail: <PropsChangeEvent>{
                                         props,
@@ -236,7 +234,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             render(initial: boolean): any {
-
+                this.init();
                 // TODO: Event fire
                 console.log('re-render', this, this.props);
 

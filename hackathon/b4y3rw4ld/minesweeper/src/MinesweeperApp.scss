@@ -1,14 +1,30 @@
+@font-face {
+  font-family: digital-7;
+  src: url(assets/fonts/digital-7.ttf);
+}
+
 html, body, .app {
+  font-family: 'digital-7';
   margin: 0 !important;
-  width: 100%;
-  height: 100%;
   display: block;
 }
+@import "assets/css/bootstrap-grid";
+.row-fields{
+  display: -moz-box; /* Mozilla */
+  display: -webkit-box; /* WebKit */
+  display: box; /* As specified */
 
-.row {
-  display: flex;
+  /* Children should be oriented vertically */
+  -moz-box-orient: horizontal; /* Mozilla */
+  -webkit-box-orient: horizontal; /* WebKit */
+  box-orient: horizontal; /* As specified */
 }
-
-.row > .item {
-  float: left;
+.box{
+  position: absolute;
+}
+.col-center-block {
+  float: none;
+  display: block;
+  margin: 0 auto;
+  /* margin-left: auto; margin-right: auto; */
 }

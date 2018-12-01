@@ -3,11 +3,13 @@ import {FeatureExample} from "./FeatureExample";
 import yoda from "./assets/yoda-rtfm.png";
 import  "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
-
+import "./../components/burger/BurgerExample"
 export default (view: FeatureExample) =>
 
     <div>
 
+        <div>Burger Example</div>
+        <burger-example/>
         <button class="burger-button" onclick={view.onButtonClick} bind={{btn: view}}>
             {
                 view.props.menuItems.map((text) => (<b>{text}, </b>))
