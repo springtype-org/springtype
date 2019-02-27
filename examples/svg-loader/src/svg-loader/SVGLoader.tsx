@@ -24,4 +24,7 @@ export class SVGLoader extends HTMLElement implements WebComponentLifecycle {
         this.props.width = 100;
     }
 
+    init = () => {
+    }
+
 }

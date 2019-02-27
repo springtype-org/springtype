@@ -144,6 +144,5 @@ const selectBurger = (view: BurgerButton) => {
 
 };
 export default (view: BurgerButton) =>
-    <div>
-        {selectBurger(view)}
-    </div>
+    selectBurger(view)
+

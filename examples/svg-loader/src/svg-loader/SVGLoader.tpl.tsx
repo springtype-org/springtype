@@ -362,6 +362,5 @@ const selectLoader = (view: SVGLoader) => {
 // {selectLoader(view)}
 
 export default (view: SVGLoader) =>
-    <div>
-        {selectLoader(view)}
-    </div>
+    selectLoader(view);
+
