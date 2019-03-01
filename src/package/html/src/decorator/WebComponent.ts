@@ -269,7 +269,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     }
 
                     const elements = _elements
-                        //filter functions that return void ;)
+                    //filter functions that return void ;)
                         .filter(el => !!el)
                         .map((el) => this.createNativeElement(el));
                     if (elements.length > 0) {
