@@ -25,10 +25,9 @@ export interface FieldProp {
 })
 
 export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
-    public props!: FieldProp;
     static fieldComponent: FieldComponent[] = [];
 
-    constructor() {
+    constructor(public props: FieldProp) {
         super()
     }
 
