@@ -18,9 +18,8 @@ export enum BurgerType {
 })
 export class BurgerButton extends HTMLElement implements  WebComponentLifecycle {
     open = false;
-    props!: BurgerButtonProps;
 
-    constructor() {
+    constructor(public props: BurgerButtonProps) {
         super();
     }
 
