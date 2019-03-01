@@ -7,7 +7,7 @@ export interface LoaderProps {
 }
 
 export enum LoaderType {
-    STRANGE, CLOCK, RING, DOTS, DOT_BOUNCE, BOX_LAOD, CIRCLES, SOUND, SOUND_SMALL, CIRCLE
+    STRANGE, CLOCK, RING, DOTS, DOT_BOUNCE, BOX_LOAD, CIRCLES, SOUND, SOUND_SMALL, CIRCLE
 }
 
 @WebComponent({

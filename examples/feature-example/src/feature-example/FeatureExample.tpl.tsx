@@ -3,6 +3,8 @@ import {FeatureExample} from "./FeatureExample";
 import yoda from "./assets/yoda-rtfm.png";
 import  "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
+import {LoaderType} from "../../../svg-loader/src/svg-loader/SVGLoader";
+
 import "./../components/burger/BurgerExample"
 export default (view: FeatureExample) =>
 
@@ -22,6 +24,18 @@ export default (view: FeatureExample) =>
         <burger-button props={{type: BurgerType.CLOSE}}/>
         <burger-button props={{type: BurgerType.CLOSE, width: 50}}/>
         <burger-button props={{type: BurgerType.TURN, width: 50}}/>
+        <div style="background: black">
+        <svg-loader props={{type: LoaderType.BOX_LOAD, width: 50}}/>
+        <svg-loader props={{type: LoaderType.CIRCLE, width: 50}}/>
+        <svg-loader props={{type: LoaderType.CIRCLES, width: 50}}/>
+        <svg-loader props={{type: LoaderType.CLOCK, width: 50}}/>
+        <svg-loader props={{type: LoaderType.DOT_BOUNCE, width: 50}}/>
+        <svg-loader props={{type: LoaderType.DOTS, width: 50}}/>
+        <svg-loader props={{type: LoaderType.RING, width: 50}}/>
+        <svg-loader props={{type: LoaderType.SOUND, width: 50}}/>
+        <svg-loader props={{type: LoaderType.SOUND_SMALL, width: 50}}/>
+        <svg-loader props={{type: LoaderType.STRANGE, width: 50}}/>
+        </div>
         <img src={yoda} width="200"/>
 
         <div style="font-weight: bold; cursor: pointer;" onclick="alert('yes');">click me</div>

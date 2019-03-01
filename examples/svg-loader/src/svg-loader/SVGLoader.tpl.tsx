@@ -335,7 +335,7 @@ const sound = (view: SVGLoader) => (
     </svg>);
 const selectLoader = (view: SVGLoader) => {
     switch (view.props.type) {
-        case LoaderType.BOX_LAOD:
+        case LoaderType.BOX_LOAD:
             return boxLoad(view);
         case LoaderType.DOT_BOUNCE:
             return dotsBounce(view);
