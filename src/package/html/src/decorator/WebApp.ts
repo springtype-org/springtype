@@ -14,6 +14,7 @@ import * as R from "@rematch/core";
 import "../router/RouterOutlet";
 import {StateManager} from "../../../state";
 import {IComponent} from "../../../di/src/decorator/Component";
+import {hmrEntrypoint} from "../../../hmr";
 
 export interface WebAppConfig {
     routes: WebModuleRoutes|null,
@@ -31,9 +32,13 @@ export interface IWebApp<WC> extends Function {
     new(...args: any[]): WC;
 }
 
+hmrEntrypoint();
+
 export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
 
     return (webApp: WA) => {
+
+        console.log('WebApp!! Component()');
 
         const injectableWebApp = Component(webApp);
         const appContext = ApplicationContext.getInstance();

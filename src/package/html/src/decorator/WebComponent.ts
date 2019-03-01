@@ -2,6 +2,11 @@ import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
 import {IReactCreateElement} from "../ui/TSXRenderer";
+import {CSSDeclarationBlockGenerator} from "../../../css";
+import {CSSStyleSheetDeclaration} from "../../../css";
+import {hmrEntrypoint} from "../../../hmr";
+
+hmrEntrypoint(module);
 
 export const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
 const PROPS_OBJECT = Symbol('PROPS_OBJECT');
@@ -23,12 +28,12 @@ export interface WebComponentConfig {
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => IReactCreateElement | IReactCreateElement[];
+    style?: (view: any) => CSSStyleSheetDeclaration;
 }
 
 export interface WebComponentLifecycle extends HTMLElement {
 
-
-    init(): void;
+    init?(): void;
 
     mount?(): void;
 
@@ -77,10 +82,16 @@ export interface IWebComponent<WC> extends Function {
     new(...args: any[]): WC;
 }
 
+
 // TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
 
+    console.log('WebComponent(config)', config);
+
     if (!(<any>window).React) {
+
+        console.log('import ./WebApp');
+
         // default config for @WebApp is missing, load it!
         import("./WebApp");
     }
@@ -96,9 +107,10 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
     return (webComponent: WC) => {
 
+
+        console.log('Component() webComponent', webComponent);
         // @Component by default
         const injectableWebComponent = Component(webComponent);
-
 
         // custom web component extends user implemented web component class
         // which extends HTMLElement
@@ -170,6 +182,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             init(): void {
 
+                console.log('init??');
+
                 if (super.init) {
                     super.init();
                 }
@@ -183,6 +197,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             onPropsChanged(props: any, name: string | number | symbol, value: any): void {
+
+                console.log('onPropsChanged', props);
 
                 if (this.mounted) {
 
@@ -236,19 +252,37 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             render(initial: boolean): any {
                 this.init();
+
+                console.log('render??');
+
+
+                const elements = [];
+
+                // generate and inject styles
+                if (config.style) {
+
+                    elements.push(
+                        CSSDeclarationBlockGenerator.generate(config.style(this))
+                    );
+                }
+
                 // TODO: Event fire
                 console.log('re-render', this, this.props);
 
                 if (super.render) {
-                    return super.render();
+
+                    elements.push(super.render());
+
                 } else {
 
                     if (typeof config.template == 'function') {
+
                         // render template by default
-                        return config.template(this);
+                        elements.push(config.template(this));
                     }
-                    return ('');
+                    elements.push('');
                 }
+                return elements;
             }
 
             protected createNativeElement(reactCreateElement: IReactCreateElement): Element {
