@@ -23,8 +23,8 @@ export enum RenderStrategy {
 
 export interface WebComponentConfig {
     tag: string;
-    isolate?: boolean;
-    isolateMode?: ShadowAttachMode;
+    shadow?: boolean;
+    shadowAttachMode?: ShadowAttachMode;
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => IReactCreateElement | IReactCreateElement[];
@@ -134,20 +134,20 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                             return true;
                         }
                     });
+
                     Object.defineProperty(this, 'props', {
                         writable: false
                     });
-
 
                 } else {
 
                     this.observeAttributes = this.props || {};
                 }
 
-                if (config.isolate) {
+                if (config.shadow) {
 
                     this.attachShadow({
-                        mode: config.isolateMode ? config.isolateMode : ShadowAttachMode.OPEN
+                        mode: config.shadowAttachMode ? config.shadowAttachMode : ShadowAttachMode.OPEN
                     });
                 }
 
@@ -294,7 +294,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         .filter(el => !!el)
                         .map((el) => this.createNativeElement(el));
                     if (elements.length > 0) {
-                        if (config.isolate) {
+                        if (config.shadow) {
                             elements.map(el => this.shadowRoot.appendChild(el));
                         } else {
                             elements.map(el => this.appendChild(el));
@@ -312,7 +312,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             protected reflow() {
 
-                if (config.isolate) {
+                if (config.shadow) {
                     this.shadowRoot.innerHTML = '';
                 } else {
                     this.innerHTML = '';

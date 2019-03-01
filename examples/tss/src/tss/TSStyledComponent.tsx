@@ -15,13 +15,21 @@ export enum StyleMode {
 
 @WebComponent({
     tag: 'tsstyled-component',
+    shadow: true,
     template,
     style
 })
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
 
-    // default props
-    props: Props = {
-        styleMode: StyleMode.INVERTED
-    };
+    constructor(
+        public props: Props
+    ) {
+        super();
+
+        console.log('props', props);
+    }
+
+    init() {
+        this.props.styleMode = StyleMode.INVERTED;
+    }
 }

@@ -12,7 +12,6 @@ interface BurgerButtonProps {
 })
 export class FeatureExample extends HTMLElement implements WebComponentLifecycle {
 
-
     constructor(
         public props: BurgerButtonProps,
         public btn: HTMLButtonElement
