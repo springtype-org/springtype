@@ -16,6 +16,9 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
         super();
     }
 
+    init = () => {
+    };
+
     render() {
 
         const params = this.router.getParams();
