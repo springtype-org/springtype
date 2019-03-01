@@ -7,7 +7,6 @@ import {StateManager} from "../StateManager";
 
 export function StateModel(model: any): any {
 
-    console.log('StateModel Component()');
     const injectableModel = <any> Component(model);
     const appContext = ApplicationContext.getInstance();
 

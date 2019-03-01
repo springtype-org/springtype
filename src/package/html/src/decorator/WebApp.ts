@@ -32,13 +32,9 @@ export interface IWebApp<WC> extends Function {
     new(...args: any[]): WC;
 }
 
-hmrEntrypoint();
-
 export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
 
     return (webApp: WA) => {
-
-        console.log('WebApp!! Component()');
 
         const injectableWebApp = Component(webApp);
         const appContext = ApplicationContext.getInstance();

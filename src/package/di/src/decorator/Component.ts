@@ -55,8 +55,6 @@ export function Component<T extends IComponent<any>>(beanConfigOrCtor?: BeanConf
 
     } else {
 
-        console.log('parcel tries to re-register');
-
         // called with @Component() or @Component({ ... })
         return registerBean(<T> beanConfigOrCtor);
     }
