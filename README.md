@@ -7,6 +7,7 @@ Pre-beta-release TODO list:
 - Create beautiful next-gen SVG website using our own framework
 - Write tests (70 to 90% goal)
   - First finish "test" module implementation
+- How to deal with SSR (server side rendering) and AOT compiles?
 - Implement meaningful examples and polish their architecture 
   - Examples:
     - Compatibility:
