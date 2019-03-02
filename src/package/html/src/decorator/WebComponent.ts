@@ -2,10 +2,10 @@ import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
 import {IReactCreateElement} from "../ui/TSXRenderer";
-import {CSSDeclarationBlockGenerator} from "../../../css";
-import {CSSStyleSheetDeclaration} from "../../../css";
+import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../css";
 import {hmrEntrypoint} from "../../../hmr";
 
+// @ts-ignore
 hmrEntrypoint(module);
 
 export const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
@@ -240,15 +240,26 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
-            render(initial: boolean): any {
+            /**
+             * Ensure that the destination array have no nested arrays
+             */
+            ensureVector = (destination: IReactCreateElement[], tsx: IReactCreateElement | IReactCreateElement[] | any) => {
+                if (Array.isArray(tsx)) {
+                    tsx.forEach(tsx => destination.push(tsx));
+                } else {
+                    destination.push(tsx)
+                }
+            };
+
+            render(initial: boolean): IReactCreateElement[] {
                 this.init();
 
-                const elements = [];
+                const elements: IReactCreateElement[] = [];
 
                 // generate and inject styles
                 if (config.style) {
-
-                    elements.push(
+                    this.ensureVector(
+                        elements,
                         CSSDeclarationBlockGenerator.generate(config.style(this))
                     );
                 }
@@ -257,20 +268,16 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 console.log('re-render', this, this.props);
 
                 if (super.render) {
-
-                    elements.push(super.render());
-
+                    this.ensureVector(elements, super.render());
                 } else {
-
                     if (typeof config.template == 'function') {
-
                         // render template by default
-                        elements.push(config.template(this));
+                        this.ensureVector(elements, config.template(this));
                     }
-                    elements.push('');
                 }
                 return elements;
             }
+
 
             protected createNativeElement(reactCreateElement: IReactCreateElement): Element {
                 if (super.createNativeElement) {
@@ -280,24 +287,17 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             protected flow = (initial: boolean = false) => {
-                const _element: IReactCreateElement | IReactCreateElement[] = this.render(initial);
-                if (_element) {
-                    let _elements: IReactCreateElement[];
-                    if (Array.isArray(_element)) {
-                        _elements = _element || [];
-                    } else {
-                        _elements = [_element];
-                    }
-
-                    const elements = _elements
-                    //filter functions that return void ;)
+                const _elements: IReactCreateElement[] = this.render(initial);
+                if (_elements) {
+                    const elements: Element[] = _elements
                         .filter(el => !!el)
                         .map((el) => this.createNativeElement(el));
+
                     if (elements.length > 0) {
                         if (config.shadow) {
-                            elements.map(el => this.shadowRoot.appendChild(el));
+                            elements.forEach(el => this.shadowRoot.appendChild(el));
                         } else {
-                            elements.map(el => this.appendChild(el));
+                            elements.forEach(el => this.appendChild(el));
                         }
                         Reflect.set(this, CHILD_ELEMENT, elements);
 
