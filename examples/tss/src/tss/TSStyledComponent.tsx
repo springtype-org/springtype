@@ -5,7 +5,7 @@ import {hmrEntrypoint} from "../../../../src/package/hmr";
 
 hmrEntrypoint(module);
 
-export interface Props {
+interface Props {
     styleMode: StyleMode;
 }
 
@@ -21,15 +21,8 @@ export enum StyleMode {
 })
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
 
-    constructor(
-        public props: Props
-    ) {
-        super();
-
-        console.log('props', props);
-    }
-
-    init() {
-        this.props.styleMode = StyleMode.INVERTED;
-    }
+    // default
+    props: Props = {
+        styleMode: StyleMode.INVERTED
+    };
 }

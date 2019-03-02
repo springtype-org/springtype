@@ -1,7 +1,6 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
-import {CSSStyleSheetDeclaration} from "../../../../src/package/css";
 
-export default (view: TSStyledComponent): CSSStyleSheetDeclaration => ({
+export default (view: TSStyledComponent) => ({
 
     'div > a': {
         color: '#cc0000',
@@ -16,6 +15,6 @@ export default (view: TSStyledComponent): CSSStyleSheetDeclaration => ({
         backgroundColor: 'red'
     }
 
-} as CSSStyleSheetDeclaration);
+});
 
 

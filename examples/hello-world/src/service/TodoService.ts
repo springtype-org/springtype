@@ -2,7 +2,8 @@ import {Component} from "../../../../src/package/di";
 import {Store} from "../../../../src/package/state";
 import {IRootState} from "../state/IRootState";
 import {ITodoItem} from "../state/ITodoState";
-import {count, TodoModel} from "../model/TodoModel";
+import {TodoModel} from "../model/TodoModel";
+import {getPhantomId} from "../getPhantomId";
 
 @Component
 export class TodoService {
@@ -30,7 +31,7 @@ export class TodoService {
     }
 
     addItem() {
-        const newItemId =count();
+        const newItemId =getPhantomId();
         this.todoModel.addTodo({
             done: false,
             id: newItemId,

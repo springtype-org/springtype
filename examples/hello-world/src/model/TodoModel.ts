@@ -3,14 +3,14 @@ import {StateEffect} from "../../../../src/package/state";
 import {StateModel} from "../../../../src/package/state";
 import {IStateModel} from "../../../../src/package/state/src/IStateModel";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
+import {getPhantomId} from "../getPhantomId";
 
 export interface ITodoModelDispatch {
     TodoModel: {
         onAddTodo(todoItem: ITodoItem): ITodoState;
     }
 }
-let counter = 1;
-export const count = (): number => counter++  ;
+
 @StateModel
 export class TodoModel implements IStateModel {
 
@@ -22,11 +22,11 @@ export class TodoModel implements IStateModel {
         // set initial initialState
         initialState.todos = [{
             done: false,
-            id: count(),
+            id: getPhantomId(),
             text: 'Bar'
         }, {
             done: false,
-            id: count(),
+            id: getPhantomId(),
             text: 'Toms'
         }];
     }

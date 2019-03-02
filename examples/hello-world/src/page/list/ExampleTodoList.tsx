@@ -3,35 +3,43 @@ import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/ht
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 import {ITodoItem} from "../../state/ITodoState";
+import {StoreConnectedLifecycle} from "../../../../../src/package/state/src/interface/StoreConnectedLifecycle";
+import {IRootState} from "../../state/IRootState";
+import {Connect} from "../../../../../src/package/state/src/decorators/Connect";
 
 interface TodoListProps {
     todos: Array<ITodoItem>;
 }
 
+@Connect
 @WebComponent({
     tag: 'example-todo-list'
 })
-export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
+export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle, StoreConnectedLifecycle<IRootState> {
 
     constructor(
         public props: TodoListProps,
         protected todoService: TodoService,
         protected router: Router,
     ) {
-
         super();
+    }
 
+    onStateChange(state: IRootState) {
+        console.log('on state change!');
     }
 
     init = () => {
         // TODO: @CurrentState decorator
         this.props.todos = this.todoService.getTodos();
-    }
+    };
+
     onListItemClick = (id: number) => {
         this.router.navigate(ExampleTodoDetail, {id});
     };
 
     onAddItem = () => {
+
         this.todoService.addItem();
 
         // FIXME: Effect und re-sync
