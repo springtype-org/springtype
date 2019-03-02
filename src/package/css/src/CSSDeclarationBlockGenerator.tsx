@@ -1,14 +1,7 @@
 import {CSSStyleSheetDeclaration} from "./interface/CSSStyleSheetDeclaration";
-
+import {toKebabCase} from "../../lang";
 
 export class CSSDeclarationBlockGenerator {
-
-    static toKebabCase(name: string): string {
-        return name
-            .replace(/([a-z])([A-Z])/g, '$1-$2')    // get all lowercase letters that are near to uppercase ones
-            .replace(/[\s_]+/g, '-')                // replace all spaces and low dash
-            .toLowerCase();
-    }
 
     static generate(declaration: CSSStyleSheetDeclaration) {
 
@@ -24,7 +17,7 @@ export class CSSDeclarationBlockGenerator {
 
                 if (declaration[selector].hasOwnProperty(identifier)) {
                     styleMapping = `${styleMapping}\n${
-                        CSSDeclarationBlockGenerator.toKebabCase(identifier)
+                        toKebabCase(identifier)
                     }: ${(declaration[selector] as any)[identifier]};`;
                 }
             }
