@@ -5,8 +5,27 @@ Pre-beta-release TODO list:
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app
 - Create beautiful next-gen SVG website using our own framework
+
 - Write tests (70 to 90% goal)
   - First finish "test" module implementation
+  
+- Split framework in certain code modules (e.g. apps not using store or tss shouldn't bundle the code!)
+  - @springtype/core
+      - di
+      - lang
+      - html/decorator (webcomponent)
+      - html/ui (renderer)
+  - @springtype/router
+     - html/router
+  - @springtype/store
+  - @springtype/tss
+    - tss (css)
+  - @springtype/log
+    - log
+  - @springtype/validate
+    - val
+  - @springtype/test
+   
 - How to deal with SSR (server side rendering) and AOT compiles?
 - Implement meaningful examples and polish their architecture 
   - Examples:
