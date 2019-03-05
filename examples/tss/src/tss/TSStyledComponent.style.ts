@@ -1,10 +1,10 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
-import {COMPONENT_SELECTOR} from "../../../../src/package/tss/src/CSSInlineStyleGenerator";
+import {HOST_SELECTOR} from "../../../../src/package/tss/src/CSSInlineStyleGenerator";
 
 export default (view: TSStyledComponent) => ({
 
-    // or ':component'
-    [COMPONENT_SELECTOR]: {
+    // or ':host', see https://developer.mozilla.org/en-US/docs/Web/CSS/:host()
+    [HOST_SELECTOR]: {
         border: '1px solid #000'
     },
 

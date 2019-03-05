@@ -1,7 +1,8 @@
 import {CSSStyleSheetDeclaration} from "./interface/CSSStyleSheetDeclaration";
 import {Partial, toKebabCase} from "../../lang";
 
-export const COMPONENT_SELECTOR = ':component';
+// see: https://developer.mozilla.org/en-US/docs/Web/CSS/:host()
+export const HOST_SELECTOR = ':host';
 
 export class CSSInlineStyleGenerator {
 
@@ -11,7 +12,7 @@ export class CSSInlineStyleGenerator {
 
         for (let selector in declaration) {
 
-            if (selector === COMPONENT_SELECTOR) {
+            if (selector === HOST_SELECTOR) {
 
                 for (let identifier in declaration[selector]) {
 
