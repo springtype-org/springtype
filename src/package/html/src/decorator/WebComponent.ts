@@ -5,6 +5,7 @@ import {IReactCreateElement} from "../ui/TSXRenderer";
 import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../tss";
 import {hmrEntrypoint} from "../../../hmr";
 import {CSSInlineStyleGenerator} from "../../../tss/src/CSSInlineStyleGenerator";
+import {Store} from "../../../state";
 
 // @ts-ignore
 hmrEntrypoint(module);
@@ -25,6 +26,10 @@ export enum RenderStrategy {
 export interface WebComponentConfig {
     tag: string;
     shadow?: boolean;
+    /**
+     * Connect to a state store?
+     */
+    storeConnected?: boolean;
     shadowAttachMode?: ShadowAttachMode;
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
@@ -153,6 +158,22 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
 
                 !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_INIT));
+
+                if (config.storeConnected) {
+
+                    const store: Store<any> = ApplicationContext.getInstance().getBean(Store);
+
+                    store.subscribe(() => {
+
+                        console.log('onStoreStateChange', this.onStateChange);
+
+                        if (this.onStoreStateChange && typeof this.onStoreStateChange === 'function') {
+                            this.onStoreStateChange(store.getState());
+                        }
+
+                        // TODO: Implement auto-filter and mapper for re-rendering with memorizable selectors
+                    })
+                }
 
                 this.init();
             }

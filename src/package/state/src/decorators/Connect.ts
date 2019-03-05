@@ -1,16 +1,13 @@
-import {BeanConfig} from "../../../di/src/decorator/Component";
-
 export interface IStateConnectedObject<CC> extends Function {
     new(...args: any[]): CC;
 }
 
-export interface ConnectConfig<CC extends IStateConnectedObject<any>> {
+export interface ConnectConfig<CC extends IStateConnectedObject<any>> {}
 
-}
+export const IS_STORE_CONNECTED = Symbol('IS_STORE_CONNECTED');
 
-const registerForConnect = (classToConnect: any) => {
-
-    // TODO: Register in Reflect for connect()
+const registerForConnect = (prototype: any) => {
+    Reflect.set(prototype, IS_STORE_CONNECTED,true);
 };
 
 export function Connect<CC extends IStateConnectedObject<any>>(classToConnect?: ConnectConfig<CC>|CC): CC|any {
@@ -19,7 +16,7 @@ export function Connect<CC extends IStateConnectedObject<any>>(classToConnect?: 
     if (!(typeof classToConnect === 'function')) {
 
         return (target: any) => {
-            console.log('connectec HOC @Connect(), connect to store here using store.subscribe()', target);
+            console.log('connectec HOC @Connect(), storeConnected to store here using store.subscribe()', target);
 
             registerForConnect(target);
             return target;
@@ -27,7 +24,7 @@ export function Connect<CC extends IStateConnectedObject<any>>(classToConnect?: 
 
     } else {
 
-        console.log('connectec HOC @Connect, connect to store here using store.subscribe()', classToConnect);
+        console.log('connectec HOC @Connect, storeConnected to store here using store.subscribe()', classToConnect);
 
         registerForConnect(classToConnect);
         // called with @Connect

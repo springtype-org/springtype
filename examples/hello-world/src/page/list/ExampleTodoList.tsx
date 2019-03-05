@@ -11,9 +11,9 @@ interface TodoListProps {
     todos: Array<ITodoItem>;
 }
 
-@Connect
 @WebComponent({
-    tag: 'example-todo-list'
+    tag: 'example-todo-list',
+    storeConnected: true
 })
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle, StoreConnectedLifecycle<IRootState> {
 
@@ -25,8 +25,9 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         super();
     }
 
-    onStateChange(state: IRootState) {
-        console.log('on state change!');
+    onStoreStateChange(state: IRootState) {
+        console.log('on store state change!', state);
+
     }
 
     init = () => {

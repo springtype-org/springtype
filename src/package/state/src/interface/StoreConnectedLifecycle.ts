@@ -1,3 +1,3 @@
 export interface StoreConnectedLifecycle<S> {
-    onStateChange(state: S): void;
+    onStoreStateChange(state: S): void;
 }
