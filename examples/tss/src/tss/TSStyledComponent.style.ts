@@ -1,8 +1,10 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
+import {COMPONENT_SELECTOR} from "../../../../src/package/css/src/CSSInlineStyleGenerator";
 
 export default (view: TSStyledComponent) => ({
 
-    ':component': {
+    // or ':component'
+    [COMPONENT_SELECTOR]: {
         border: '1px solid #000'
     },
 
