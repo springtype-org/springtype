@@ -74,6 +74,8 @@ Pre-beta-release TODO list:
     - @EndToEndTestSuite and @EndToEndTest want to be working
     - Adapter for Testcafe
     - WebComponent selectors for Testcafe
+  - tss
+    - Themeing support on @WebApp level?
   - hmr
     - Auto-apply in @WebApp if possible or write docs to include it in main entry-point of an app!
 
