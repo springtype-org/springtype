@@ -4,23 +4,18 @@ import {IRootState} from "../state/IRootState";
 import {ITodoItem} from "../state/ITodoState";
 import {TodoModel} from "../model/TodoModel";
 import {getPhantomId} from "../getPhantomId";
+import {Stateful} from "../../../../src/package/state/src/decorators/Stateful";
+import {StatefulLifecycle} from "../../../../src/package/state/src/interface/StatefulLifecycle";
 
+@Stateful
 @Component
-export class TodoService {
+export class TodoService implements StatefulLifecycle<IRootState> {
 
     constructor(
+        public state: IRootState,
         protected store: Store<IRootState>,
-        protected todoModel: TodoModel
+        protected todoModel: TodoModel,
     ) {}
-
-    // TODO: @CurrentState decorator
-    get state(): IRootState {
-        return this.store.getState();
-    }
-
-    getTodos(): Array<ITodoItem> {
-        return this.state.TodoModel.todos;
-    }
 
     getById(id: number): ITodoItem {
 
@@ -31,7 +26,7 @@ export class TodoService {
     }
 
     addItem() {
-        const newItemId =getPhantomId();
+        const newItemId = getPhantomId();
         this.todoModel.addTodo({
             done: false,
             id: newItemId,

@@ -63,8 +63,7 @@ Pre-beta-release TODO list:
     - Refactor @WebComponent god-like implementation
     - Include @webcomponents/webcomponentsjs/custom-elements-es5-adapter in @WebComponent
   - state
-    - Stabilize @Connect API
-    - API for memorized selectors
+    - Stabilize @Stateful API
   - math
     - To be implemented using Gpu.js (gpu.rocks)
     - Object comparison on steroids using matrices calc on GPU (40x speed)

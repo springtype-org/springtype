@@ -13,6 +13,8 @@ export interface IComponent<T> extends Function {
     new(...args: any[]): T;
 }
 
+export const COMPONENT_INITIALIZERS = Symbol('COMPONENT_INITIALIZERS');
+
 function registerBean<T extends IComponent<any>>(componentCtor: T, beanConfig?: BeanConfig<T>) {
 
     // @Inject decorators that may be defined inside of the class definition

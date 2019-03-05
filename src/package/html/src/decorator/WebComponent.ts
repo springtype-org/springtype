@@ -6,6 +6,8 @@ import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../t
 import {hmrEntrypoint} from "../../../hmr";
 import {CSSInlineStyleGenerator} from "../../../tss/src/CSSInlineStyleGenerator";
 import {Store} from "../../../state";
+import {connectComponent} from "../../../state/src/connectComponent";
+import {PropertyComparator} from "../../../lang/src/util/PropertyComparator";
 
 // @ts-ignore
 hmrEntrypoint(module);
@@ -26,10 +28,7 @@ export enum RenderStrategy {
 export interface WebComponentConfig {
     tag: string;
     shadow?: boolean;
-    /**
-     * Connect to a state store?
-     */
-    storeConnected?: boolean;
+    mapStateToProps?: (state: any) => Object;
     shadowAttachMode?: ShadowAttachMode;
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
@@ -159,22 +158,24 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_INIT));
 
-                if (config.storeConnected) {
+                // every component is stateful, but automatically re-rendering only happens
+                // when there is a mapping from state to props and prop values actually differ
+                connectComponent(this, (state: any) => {
 
-                    const store: Store<any> = ApplicationContext.getInstance().getBean(Store);
+                    if (config.mapStateToProps && typeof config.mapStateToProps === 'function') {
 
-                    store.subscribe(() => {
+                        const propsToChange: any = config.mapStateToProps(state);
 
-                        console.log('onStoreStateChange', this.onStateChange);
+                        for (let propertyName in propsToChange) {
 
-                        if (this.onStoreStateChange && typeof this.onStoreStateChange === 'function') {
-                            this.onStoreStateChange(store.getState());
+                            if (propsToChange.hasOwnProperty(propertyName)) {
+                                if (!PropertyComparator.equal(propsToChange[propertyName], this.props[propertyName])) {
+                                    this.props[propertyName] = propsToChange[propertyName];
+                                }
+                            }
                         }
-
-                        // TODO: Implement auto-filter and mapper for re-rendering with memorizable selectors
-                    })
-                }
-
+                    }
+                });
                 this.init();
             }
 

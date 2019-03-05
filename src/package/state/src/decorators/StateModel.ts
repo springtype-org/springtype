@@ -9,7 +9,6 @@ export function StateModel(model: any): any {
 
     const injectableModel = <any> Component(model);
     const appContext = ApplicationContext.getInstance();
-
     const modelInstance = appContext.getBean(injectableModel);
 
     const modelConfig: R.ModelConfig<any> = {
@@ -38,7 +37,7 @@ export function StateModel(model: any): any {
     const effects: R.ModelEffects<any> = <R.ModelEffects<any>> modelConfig.effects;
 
     modelConfig.effects = dispatch => {
-        modelInstance.dispatch = dispatch;
+        modelInstance.effects = dispatch;
         return effects;
     };
     StateManager.createModel(injectableModel, modelConfig);

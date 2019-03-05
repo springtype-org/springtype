@@ -1,4 +1,4 @@
-import {BeanConfig, IComponent} from "./decorator/Component";
+import {BeanConfig, COMPONENT_INITIALIZERS, IComponent} from "./decorator/Component";
 import {
     ArgumentsInjectionMetaData,
     createDefaultArgumentsInjectionMetadata,
@@ -152,5 +152,15 @@ export class ComponentReflector {
 
     static isComponent(componentCtor: IComponent<any>): boolean {
         return !!ComponentReflector.getSymbol(componentCtor);
+    }
+
+    static getInitializers(targetCtor: IComponent<any>): Array<Function> {
+        return Reflect.get(targetCtor, COMPONENT_INITIALIZERS) || [];
+    }
+
+    static addInitializer(targetCtor: IComponent<any>, initializer: Function): void {
+        const initializers = Reflect.get(targetCtor, COMPONENT_INITIALIZERS) || [];
+        initializers.push(initializer);
+        Reflect.set(targetCtor, COMPONENT_INITIALIZERS, initializers);
     }
 }

@@ -5,7 +5,7 @@ import {IStateModel} from "../../../../src/package/state/src/IStateModel";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
 import {getPhantomId} from "../getPhantomId";
 
-export interface ITodoModelDispatch {
+export interface ITodoModelEffects {
     TodoModel: {
         onAddTodo(todoItem: ITodoItem): ITodoState;
     }
@@ -16,7 +16,7 @@ export class TodoModel implements IStateModel {
 
     constructor(
         public initialState: ITodoState,
-        public dispatch: ITodoModelDispatch,
+        public effects: ITodoModelEffects,
     ) {
 
         // set initial initialState
@@ -43,6 +43,6 @@ export class TodoModel implements IStateModel {
 
     @StateEffect
     async addTodo(todoItem: ITodoItem) {
-        this.dispatch.TodoModel.onAddTodo(todoItem);
+        this.effects.TodoModel.onAddTodo(todoItem);
     }
 }

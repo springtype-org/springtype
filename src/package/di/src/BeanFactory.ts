@@ -72,10 +72,19 @@ export class BeanFactory {
             ...this.resolveConstructorArguments(componentCtor, injectionProfile)
         );
 
+        this.initializeBeanInstance(beanInstance, ComponentReflector.getInitializers(componentCtor));
+
         if (injectionStrategy === InjectionStrategy.SINGLETON) {
             this.setSingletonBeanInstance(classSymbol, beanInstance);
         }
         return beanInstance;
+    }
+
+    initializeBeanInstance(instance: any, initializers: Array<Function>) {
+
+        initializers.forEach((initializer) => {
+            initializer(instance);
+        });
     }
 
     getSingletonBeanInstance(

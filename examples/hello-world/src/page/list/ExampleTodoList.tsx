@@ -3,9 +3,8 @@ import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/ht
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 import {ITodoItem} from "../../state/ITodoState";
-import {StoreConnectedLifecycle} from "../../../../../src/package/state/src/interface/StoreConnectedLifecycle";
+import {StatefulLifecycle} from "../../../../../src/package/state/src/interface/StatefulLifecycle";
 import {IRootState} from "../../state/IRootState";
-import {Connect} from "../../../../../src/package/state/src/decorators/Connect";
 
 interface TodoListProps {
     todos: Array<ITodoItem>;
@@ -13,27 +12,29 @@ interface TodoListProps {
 
 @WebComponent({
     tag: 'example-todo-list',
-    storeConnected: true
+
+    // automatically called when the state changes
+    mapStateToProps: (state: IRootState) => ({
+
+        // map only what you want to map (filter/map/reduce)
+        // this might trigger a re-render but only if there is a real change
+        todos: state.TodoModel.todos
+    })
 })
-export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle, StoreConnectedLifecycle<IRootState> {
+export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle, StatefulLifecycle<IRootState> {
 
     constructor(
         public props: TodoListProps,
+        public state: IRootState,
         protected todoService: TodoService,
         protected router: Router,
     ) {
         super();
     }
 
-    onStoreStateChange(state: IRootState) {
-        console.log('on store state change!', state);
-
+    init() {
+        this.props.todos = this.state.TodoModel.todos;
     }
-
-    init = () => {
-        // TODO: @CurrentState decorator
-        this.props.todos = this.todoService.getTodos();
-    };
 
     onListItemClick = (id: number) => {
         this.router.navigate(ExampleTodoDetail, {id});
@@ -41,10 +42,8 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
     onAddItem = () => {
 
+        // TODO: Show dialog to add item
         this.todoService.addItem();
-
-        // FIXME: Effect und re-sync
-        this.props.todos = this.todoService.getTodos();
     };
 
     render() {
