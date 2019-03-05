@@ -4,6 +4,7 @@ import {StateModel} from "../../../../src/package/state";
 import {IStateModel} from "../../../../src/package/state/src/IStateModel";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
 import {getPhantomId} from "../getPhantomId";
+import {IRootState} from "../state/IRootState";
 
 export interface ITodoModelEffects {
     TodoModel: {
@@ -44,5 +45,9 @@ export class TodoModel implements IStateModel {
     @StateEffect
     async addTodo(todoItem: ITodoItem) {
         this.effects.TodoModel.onAddTodo(todoItem);
+    }
+
+    static selectTodos(state: IRootState) {
+        return state.TodoModel.todos;
     }
 }

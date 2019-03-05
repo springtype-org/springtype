@@ -5,6 +5,7 @@ import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 import {ITodoItem} from "../../state/ITodoState";
 import {StatefulLifecycle} from "../../../../../src/package/state/src/interface/StatefulLifecycle";
 import {IRootState} from "../../state/IRootState";
+import {TodoModel} from "../../model/TodoModel";
 
 interface TodoListProps {
     todos: Array<ITodoItem>;
@@ -33,7 +34,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
     }
 
     init() {
-        this.props.todos = this.state.TodoModel.todos;
+        this.props.todos = TodoModel.selectTodos(this.state);
     }
 
     onListItemClick = (id: number) => {

@@ -19,7 +19,7 @@ export class TodoService implements StatefulLifecycle<IRootState> {
 
     getById(id: number): ITodoItem {
 
-        return this.state.TodoModel.todos
+        return TodoModel.selectTodos(this.state)
             .filter((todo: ITodoItem) => {
                 return todo.id === id;
             })[0];
