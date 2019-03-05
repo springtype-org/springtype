@@ -4,6 +4,7 @@ import {WebComponentReflector} from "./WebComponentReflector";
 import {IReactCreateElement} from "../ui/TSXRenderer";
 import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../css";
 import {hmrEntrypoint} from "../../../hmr";
+import {CSSInlineStyleGenerator} from "../../../css/src/CSSInlineStyleGenerator";
 
 // @ts-ignore
 hmrEntrypoint(module);
@@ -262,6 +263,16 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         elements,
                         CSSDeclarationBlockGenerator.generate(config.style(this))
                     );
+
+                    // support for :component selector (self-referenced component styles) works even in shadow DOM
+                    const componentInlineStyle = CSSInlineStyleGenerator.generateComponentStyles(config.style(this));
+
+                    for (let styleAttributeName in componentInlineStyle) {
+
+                        if (componentInlineStyle.hasOwnProperty(styleAttributeName)) {
+                            this.style[styleAttributeName] = componentInlineStyle[styleAttributeName];
+                        }
+                    }
                 }
 
                 // TODO: Event fire
