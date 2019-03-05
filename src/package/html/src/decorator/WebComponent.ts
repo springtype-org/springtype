@@ -2,9 +2,9 @@ import {ApplicationContext, Component} from "../../../di";
 import {ApplicationEnvironment} from "../../../di/src/ApplicationContext";
 import {WebComponentReflector} from "./WebComponentReflector";
 import {IReactCreateElement} from "../ui/TSXRenderer";
-import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../css";
+import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../tss";
 import {hmrEntrypoint} from "../../../hmr";
-import {CSSInlineStyleGenerator} from "../../../css/src/CSSInlineStyleGenerator";
+import {CSSInlineStyleGenerator} from "../../../tss/src/CSSInlineStyleGenerator";
 
 // @ts-ignore
 hmrEntrypoint(module);

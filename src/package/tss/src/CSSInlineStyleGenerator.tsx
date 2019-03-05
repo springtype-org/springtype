@@ -6,9 +6,7 @@ export const COMPONENT_SELECTOR = ':component';
 export class CSSInlineStyleGenerator {
 
     static generateComponentStyles(declaration: CSSStyleSheetDeclaration): Partial<CSSStyleDeclaration> {
-
-        console.log('Generating for declaration', declaration);
-
+        
         const inlineStyles: Partial<CSSStyleDeclaration> = {};
 
         for (let selector in declaration) {
@@ -23,7 +21,6 @@ export class CSSInlineStyleGenerator {
                 }
             }
         }
-
         return inlineStyles;
     }
 }
