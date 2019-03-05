@@ -16,9 +16,6 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
         super();
     }
 
-    init = () => {
-    };
-
     render() {
 
         const params = this.router.getParams();
@@ -35,8 +32,5 @@ export class ExampleTodoDetail extends HTMLElement implements WebComponentLifecy
                 <li>Text: {todo.text}</li>
             </ul>
         );
-    }
-
-    init(): void {
     }
 }

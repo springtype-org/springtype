@@ -28,6 +28,7 @@ export class Router implements IRouter {
         return this.appRouter.enable();
     }
 
+    // TODO: getParamNumeric(paramName: string)
     getParams(): any {
         return this.appRouter.getParams();
     }
