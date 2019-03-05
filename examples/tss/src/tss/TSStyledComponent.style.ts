@@ -1,7 +1,8 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
 import {HOST_SELECTOR} from "../../../../src/package/tss/src/CSSInlineStyleGenerator";
+import {AppTheme} from "../theme";
 
-export default (view: TSStyledComponent) => ({
+export default (view: TSStyledComponent, theme: AppTheme) => ({
 
     // or ':host', see https://developer.mozilla.org/en-US/docs/Web/CSS/:host()
     [HOST_SELECTOR]: {
@@ -9,7 +10,8 @@ export default (view: TSStyledComponent) => ({
     },
 
     'div > a': {
-        color: '#cc0000',
+        color: theme.primaryColor,
+        fontSize: theme.fontSize,
         margin: view.props.styleMode === StyleMode.INVERTED ? '30px' : '60px',
         backgroundColor: 'green',
         paddingLeft: '20px',

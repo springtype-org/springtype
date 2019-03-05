@@ -33,7 +33,8 @@ export interface WebComponentConfig {
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
     template?: (view: any) => IReactCreateElement | IReactCreateElement[];
-    style?: (view: any) => CSSStyleSheetDeclaration;
+    style?: (view: any, theme?: Object) => CSSStyleSheetDeclaration;
+    theme?: Object;
 }
 
 export interface WebComponentLifecycle extends HTMLElement {
@@ -283,11 +284,11 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (config.style) {
                     this.ensureVector(
                         elements,
-                        CSSDeclarationBlockGenerator.generate(config.style(this))
+                        CSSDeclarationBlockGenerator.generate(config.style(this, config.theme))
                     );
 
                     // support for :component selector (self-referenced component styles) works even in shadow DOM
-                    const componentInlineStyle = CSSInlineStyleGenerator.generateComponentStyles(config.style(this));
+                    const componentInlineStyle = CSSInlineStyleGenerator.generateComponentStyles(config.style(this, config.theme));
 
                     for (let styleAttributeName in componentInlineStyle) {
 
