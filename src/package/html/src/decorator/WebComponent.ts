@@ -160,11 +160,11 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 // every component is stateful, but automatically re-rendering only happens
                 // when there is a mapping from state to props and prop values actually differ
-                connectComponent(this, (state: any) => {
+                if (config.mapStateToProps && typeof config.mapStateToProps === 'function') {
 
-                    if (config.mapStateToProps && typeof config.mapStateToProps === 'function') {
+                    connectComponent(this, (state: any) => {
 
-                        const propsToChange: any = config.mapStateToProps(state);
+                        const propsToChange: any = config.mapStateToProps!(state);
 
                         for (let propertyName in propsToChange) {
 
@@ -174,8 +174,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                                 }
                             }
                         }
-                    }
-                });
+                    });
+                }
                 this.init();
             }
 

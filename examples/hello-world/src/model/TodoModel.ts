@@ -1,19 +1,33 @@
 import {StateReducer} from "../../../../src/package/state";
 import {StateEffect} from "../../../../src/package/state";
 import {StateModel} from "../../../../src/package/state";
-import {IStateModel} from "../../../../src/package/state/src/IStateModel";
+import {IStateModelLifecycle} from "../../../../src/package/state/src/IStateModelLifecycle";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
 import {getPhantomId} from "../getPhantomId";
 import {IRootState} from "../state/IRootState";
 
-export interface ITodoModelEffects {
-    TodoModel: {
+const initialTodos: Array<ITodoItem> = [{
+    done: false,
+    id: getPhantomId(),
+    text: 'Bar'
+}, {
+    done: false,
+    id: getPhantomId(),
+    text: 'Toms'
+}];
+
+interface ITodoModelReducers {
+    onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
+}
+
+interface ITodoModelEffects {
+    TodoModel: { // TODO: Fixme: somehow get rid of that sub-level
         onAddTodo(todoItem: ITodoItem): ITodoState;
     }
 }
 
 @StateModel
-export class TodoModel implements IStateModel {
+export class TodoModel implements IStateModelLifecycle, ITodoModelReducers {
 
     constructor(
         public initialState: ITodoState,
@@ -21,15 +35,7 @@ export class TodoModel implements IStateModel {
     ) {
 
         // set initial initialState
-        initialState.todos = [{
-            done: false,
-            id: getPhantomId(),
-            text: 'Bar'
-        }, {
-            done: false,
-            id: getPhantomId(),
-            text: 'Toms'
-        }];
+        initialState.todos = initialTodos;
     }
 
     @StateReducer
