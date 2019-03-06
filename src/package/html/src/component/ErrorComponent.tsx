@@ -5,7 +5,7 @@ export interface ErrorComponentProps {
 }
 
 @WebComponent({
-    tag: 'springtype-error',
+    tag: 'st-error',
     style: view => ({
         'p': {
             color: '#ff0000'

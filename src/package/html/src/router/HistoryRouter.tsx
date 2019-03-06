@@ -2,7 +2,7 @@ import {ApplicationContext, Component} from "../../../di";
 import {RouterOutlet} from "./RouterOutlet";
 import {
     IRouter,
-    LocationChangeDecision,
+    LocationChangeDecision, ROUTE_WILDCARD,
     TokenizedWebModuleRoutes,
     WebModuleRouteDefinition,
     WebModuleRoutes
@@ -62,51 +62,76 @@ export class HistoryRouter implements IRouter {
 
             const tokenizedRouteCandidate = this.TOKENIZED_ROUTES[route];
 
-            // optimization: token length match
-            if (tokenizedRouteCandidate.length === tokenizedRoute.length) {
+            let routeMatches = true;
 
-                let routeMatches = true;
+            for (let i=0; i<tokenizedRouteCandidate.length; i++) {
 
-                for (let i=0; i<tokenizedRouteCandidate.length; i++) {
+                const token = tokenizedRouteCandidate[i];
 
-                    const token = tokenizedRouteCandidate[i];
+                if (token.startsWith(':')) {
 
-                    if (token.startsWith(':')) {
+                    params[token.replace(':', '')] = tokenizedRoute[i];
 
-                        params[token.replace(':', '')] = tokenizedRoute[i];
+                } else {
 
-                    } else {
-
-                        if (!token.match(tokenizedRoute[i])) {
-                            routeMatches = false;
-                            break; // stop looping further, path doesn't match
-                        }
+                    if (token !== tokenizedRoute[i]) {
+                        routeMatches = false;
+                        break; // stop looping further, path doesn't match
                     }
                 }
+            }
 
-                if (routeMatches) {
+            if (routeMatches) {
 
-                    const cmpOrDef: WebModuleRouteDefinition | IReactCreateElement = this.ROUTE_MAP[route];
+                const resolvedComponentAndParams = this.getComponent(this.ROUTE_MAP[route]);
 
-                    const component = (cmpOrDef as WebModuleRouteDefinition).component ?
-                        (cmpOrDef as WebModuleRouteDefinition).component :
-                        (cmpOrDef as IReactCreateElement);
-
-                    const defInitialParams = (cmpOrDef as WebModuleRouteDefinition).params || {};
-
-                    return {
-                        ...cmpOrDef,
-                        params: {
-                            ...defInitialParams,
-                            ...params,
-                        },
-                        component,
-                        route
-                    } as LocationChangeDecision;
-                }
+                return {
+                    params: {
+                        ...resolvedComponentAndParams.params,
+                        ...params,
+                    },
+                    component: resolvedComponentAndParams.component,
+                    route
+                } as LocationChangeDecision;
             }
         }
-        return null;
+
+        if (this.ROUTE_MAP[ROUTE_WILDCARD]) {
+
+            const resolvedComponentAndParams = this.getComponent(this.ROUTE_MAP[ROUTE_WILDCARD]);
+
+            return {
+                route: ROUTE_WILDCARD,
+                component: resolvedComponentAndParams.component,
+                params: resolvedComponentAndParams.params
+            } as LocationChangeDecision;
+        } else {
+
+            return {
+                route: ROUTE_WILDCARD,
+                component: <st-error props={{
+                    errorMessage: `No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_WILDCARD}")!`
+                }} />,
+                params: {}
+            } as LocationChangeDecision;
+        }
+    }
+
+    protected getComponent(cmpOrDef: WebModuleRouteDefinition | IReactCreateElement): {
+        params: any,
+        component: IReactCreateElement
+    } {
+
+        const component = (cmpOrDef as WebModuleRouteDefinition).component ?
+            (cmpOrDef as WebModuleRouteDefinition).component :
+            (cmpOrDef as IReactCreateElement);
+
+        const params = (cmpOrDef as WebModuleRouteDefinition).params || {};
+
+        return {
+            component,
+            params
+        };
     }
 
     protected async decideOnLocationChange(hash: string): Promise<void> {

@@ -1,11 +1,13 @@
 @import "../node_modules/materialize-css/sass/materialize";
+
 @import "./component/list/ExampleTodoList";
+@import "./component/list/ExampleListInner";
 
 .example {
   display: block;
   border: 1px solid #0D47A1;
 }
 
-#logo{
+#logo {
   margin: 5px;
 }

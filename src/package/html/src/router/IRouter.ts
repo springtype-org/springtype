@@ -1,6 +1,8 @@
 import {RouterOutlet} from "./RouterOutlet";
 import {IReactCreateElement} from "../ui/TSXRenderer";
 
+export const ROUTE_WILDCARD = '*';
+
 export interface WebModuleRouteDefinition {
     component: IReactCreateElement;
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;

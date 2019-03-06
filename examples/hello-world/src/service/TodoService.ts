@@ -2,7 +2,7 @@ import {Component} from "../../../../src/package/di";
 import {IRootState} from "../state/IRootState";
 import {ITodoItem} from "../state/ITodoState";
 import {TodoModel} from "../model/TodoModel";
-import {getPhantomId} from "../getPhantomId";
+import {getPhantomId} from "../function/getPhantomId";
 import {Stateful} from "../../../../src/package/state/src/decorators/Stateful";
 import {StatefulLifecycle} from "../../../../src/package/state/src/interface/StatefulLifecycle";
 
@@ -24,7 +24,9 @@ export class TodoService implements StatefulLifecycle {
     }
 
     addItem(text: string) {
+
         const newItemId = getPhantomId();
+
         this.todoModel.addTodo({
             done: false,
             id: newItemId,

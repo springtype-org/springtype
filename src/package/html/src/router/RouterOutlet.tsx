@@ -54,7 +54,7 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
         if (this.props.component) {
             return this.props.component;
         }
-        return (<springtype-error props={{
+        return (<st-error props={{
             errorMessage: "ERROR (RouterOutlet): No component found for route!"
         }} />);
     }

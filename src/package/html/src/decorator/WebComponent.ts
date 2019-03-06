@@ -5,9 +5,9 @@ import {IReactCreateElement} from "../ui/TSXRenderer";
 import {CSSDeclarationBlockGenerator, CSSStyleSheetDeclaration} from "../../../tss";
 import {hmrEntrypoint} from "../../../hmr";
 import {CSSInlineStyleGenerator} from "../../../tss/src/CSSInlineStyleGenerator";
-import {Store} from "../../../state";
 import {connectComponent} from "../../../state/src/connectComponent";
 import {PropertyComparator} from "../../../lang/src/util/PropertyComparator";
+import {IComponent} from "../../../di/src/decorator/Component";
 
 // @ts-ignore
 hmrEntrypoint(module);
@@ -35,6 +35,7 @@ export interface WebComponentConfig {
     template?: (view: any) => IReactCreateElement | IReactCreateElement[];
     style?: (view: any, theme?: Object) => CSSStyleSheetDeclaration;
     theme?: Object;
+    components?: Array<IComponent<any>>;
 }
 
 export interface WebComponentLifecycle extends HTMLElement {
@@ -294,9 +295,17 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
              * Ensure that the destination array have no nested arrays
              */
             ensureVector = (destination: IReactCreateElement[], tsx: IReactCreateElement | IReactCreateElement[] | any) => {
+
+                if (tsx.name && tsx.name === 'st-fragment') {
+                    tsx = tsx.children;
+                }
+
                 if (Array.isArray(tsx)) {
                     tsx.forEach(tsx => destination.push(tsx));
                 } else {
+
+
+
                     destination.push(tsx)
                 }
             };
@@ -442,7 +451,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             // must contain a kebab-dash
             if (config.tag.indexOf('-') === -1) {
-                throw new Error("WebComponent's tag name must be prefixed like: app-your-element-name. But this tag looks like: ", config.tag);
+                throw new Error("WebComponent's tag name must be prefixed like: app-your-element-name. But this tag looks like: " + config.tag);
             }
 
             if (!regCustomWebComponent) {
