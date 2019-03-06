@@ -21,12 +21,10 @@ interface ITodoModelReducers {
 }
 
 interface ITodoModelEffects {
-    TodoModel: { // TODO: Fixme: somehow get rid of that sub-level
-        onAddTodo(todoItem: ITodoItem): ITodoState;
-    }
+    onAddTodo(todoItem: ITodoItem): ITodoState;
 }
 
-@StateModel
+@StateModel("TodoModel")
 export class TodoModel implements IStateModelLifecycle, ITodoModelReducers {
 
     constructor(
@@ -50,7 +48,7 @@ export class TodoModel implements IStateModelLifecycle, ITodoModelReducers {
 
     @StateEffect
     async addTodo(todoItem: ITodoItem) {
-        this.effects.TodoModel.onAddTodo(todoItem);
+        this.effects.onAddTodo(todoItem);
     }
 
     static selectTodos(state: IRootState) {
