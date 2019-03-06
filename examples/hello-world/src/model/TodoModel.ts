@@ -21,15 +21,19 @@ interface ITodoModelReducers {
 }
 
 interface ITodoModelEffects {
+    addTodo(todoItem: ITodoItem): Promise<ITodoState>;
+}
+
+interface ITodoModelEffectsDispatcher {
     onAddTodo(todoItem: ITodoItem): ITodoState;
 }
 
 @StateModel("TodoModel")
-export class TodoModel implements IStateModelLifecycle, ITodoModelReducers {
+export class TodoModel implements IStateModelLifecycle, ITodoModelReducers, ITodoModelEffects {
 
     constructor(
         public initialState: ITodoState,
-        public effects: ITodoModelEffects,
+        public effects: ITodoModelEffectsDispatcher,
     ) {
 
         // set initial initialState
@@ -48,7 +52,7 @@ export class TodoModel implements IStateModelLifecycle, ITodoModelReducers {
 
     @StateEffect
     async addTodo(todoItem: ITodoItem) {
-        this.effects.onAddTodo(todoItem);
+        return this.effects.onAddTodo(todoItem);
     }
 
     static selectTodos(state: IRootState) {
