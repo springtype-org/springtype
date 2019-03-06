@@ -1,5 +1,4 @@
 import {Component} from "../../../../src/package/di";
-import {Store} from "../../../../src/package/state";
 import {IRootState} from "../state/IRootState";
 import {ITodoItem} from "../state/ITodoState";
 import {TodoModel} from "../model/TodoModel";
@@ -13,7 +12,6 @@ export class TodoService implements StatefulLifecycle<IRootState> {
 
     constructor(
         public state: IRootState,
-        protected store: Store<IRootState>,
         protected todoModel: TodoModel,
     ) {}
 

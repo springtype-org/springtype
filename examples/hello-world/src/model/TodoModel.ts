@@ -55,7 +55,7 @@ export class TodoModel implements IStateModelLifecycle, ITodoModelReducers, ITod
         return this.effects.onAddTodo(todoItem);
     }
 
-    static selectTodos(state: IRootState) {
+    static selectTodos(state: IRootState): Array<ITodoItem> {
         return state.TodoModel.todos;
     }
 }

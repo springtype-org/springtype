@@ -19,7 +19,7 @@ interface TodoListProps {
 
         // map only what you want to map (filter/map/reduce)
         // this might trigger a re-render but only if there is a real change
-        todos: state.TodoModel.todos
+        todos: TodoModel.selectTodos(state)
     })
 })
 export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle, StatefulLifecycle<IRootState> {
