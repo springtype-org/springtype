@@ -43,6 +43,7 @@ export class TodoModel implements IStateModelLifecycle, ITodoModelReducers, ITod
     @StateReducer
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
+        // generate a new state
         state.todos = [
             ...state.todos,
             todoItem
@@ -52,6 +53,8 @@ export class TodoModel implements IStateModelLifecycle, ITodoModelReducers, ITod
 
     @StateEffect
     async addTodo(todoItem: ITodoItem) {
+
+        // dispatch the action (calls the state reducer)
         return this.effects.onAddTodo(todoItem);
     }
 
