@@ -22,7 +22,7 @@ export enum ShadowAttachMode {
 
 export enum RenderStrategy {
     OnRequest = 'ON_REQUEST',
-    onPropsChanged = 'ON_PROPS_CHANGED'
+    OnPropsChanged = 'ON_PROPS_CHANGED'
 }
 
 export interface WebComponentConfig {
@@ -75,13 +75,22 @@ export interface PropsChangeEvent {
     value: any;
 }
 
-export enum LifecycleEvent {
+export enum WebComponentLifecycleEvent {
     BEFORE_INIT = 'BEFORE_INIT',
+    INIT = 'INIT',
     SHADOW_ATTACHED = 'SHADOW_ATTACHED',
     BEFORE_MOUNT = 'BEFORE_MOUNT',
+    MOUNT = 'MOUNT',
+    REMOUNT = 'REMOUNT',
     BEFORE_UNMOUNT = 'BEFORE_UNMOUNT',
+    UNMOUNT = 'UNMOUNT',
+    MOUNT_CHILDREN = 'MOUNT_CHILDREN',
+    REMOUNT_CHILDREN = 'REMOUNT_CHILDREN',
     BEFORE_PROP_CHANGE = 'BEFORE_PROP_CHANGE',
-    BEFORE_PROPS_CHANGE = 'BEFORE_PROPS_CHANGE'
+    BEFORE_PROPS_CHANGE = 'BEFORE_PROPS_CHANGE',
+    FLOW = 'FLOW',
+    REFLOW = 'REFLOW',
+    RENDER = 'RENDER',
 }
 
 export interface IWebComponent<WC> extends Function {
@@ -101,7 +110,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
     if (!config.observeAttributes) config.observeAttributes = [];
 
     // default re-render strategy: when observeAttributes object changes
-    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.onPropsChanged;
+    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.OnPropsChanged;
 
     if (!config.tag) {
         throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
@@ -120,12 +129,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             constructor(...args: Array<any>) {
                 super();
-                if (config.renderStrategy === RenderStrategy.onPropsChanged) {
+
+                if (config.renderStrategy === RenderStrategy.OnPropsChanged) {
                     this.props = new Proxy({}, {
                         set: (props: any, name: string | number | symbol, value: any): boolean => {
+
                             if (props[name] !== value) {
                                 props[name] = value;
-                                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROPS_CHANGE, {
+                                const cancelled = !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_PROPS_CHANGE, {
                                     detail: <PropsChangeEvent>{
                                         props,
                                         name,
@@ -144,9 +155,9 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     Object.defineProperty(this, 'props', {
                         writable: false
                     });
+                }
 
-                } else {
-
+                if (config.renderStrategy === RenderStrategy.OnRequest) {
                     this.observeAttributes = this.props || {};
                 }
 
@@ -157,25 +168,33 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     });
                 }
 
-                !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_INIT));
+                !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_INIT));
 
                 // every component is stateful, but automatically re-rendering only happens
                 // when there is a mapping from state to props and prop values actually differ
                 if (config.mapStateToProps && typeof config.mapStateToProps === 'function') {
 
-                    connectComponent(this, (state: any) => {
+                    const mapStateToProps = (state: any) => {
 
                         const propsToChange: any = config.mapStateToProps!(state);
 
                         for (let propertyName in propsToChange) {
 
                             if (propsToChange.hasOwnProperty(propertyName)) {
+
                                 if (!PropertyComparator.equal(propsToChange[propertyName], this.props[propertyName])) {
                                     this.props[propertyName] = propsToChange[propertyName];
                                 }
                             }
                         }
+                    };
+
+                    const store = connectComponent(this, (state: any) => {
+                        mapStateToProps(state);
                     });
+
+                    // init state
+                    mapStateToProps(store.getState());
                 }
                 this.init();
             }
@@ -203,6 +222,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.init) {
                     super.init();
                 }
+
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.INIT));
             }
 
             onPropChanged(name: string, oldValue: string, newValue: string): void {
@@ -227,12 +248,12 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             mount() {
 
-                console.log('on mount', this);
-
                 if (super.mount) {
                     super.mount();
                 }
                 this.mounted = true;
+
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.MOUNT));
             }
 
             remount() {
@@ -240,6 +261,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.remount) {
                     super.remount();
                 }
+
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REMOUNT));
             }
 
             mountChildren() {
@@ -247,6 +270,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.mountChildren) {
                     super.mountChildren();
                 }
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.MOUNT_CHILDREN));
             }
 
             remountChildren() {
@@ -254,6 +278,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.remountChildren) {
                     super.remountChildren();
                 }
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REMOUNT_CHILDREN));
             }
 
 
@@ -262,6 +287,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (super.unmount) {
                     super.unmount();
                 }
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.UNMOUNT));
             }
 
             /**
@@ -275,7 +301,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             };
 
-            render(initial: boolean): IReactCreateElement[] {
+            render(): IReactCreateElement[] {
                 this.init();
 
                 const elements: IReactCreateElement[] = [];
@@ -298,9 +324,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     }
                 }
 
-                // TODO: Event fire
-                console.log('re-render', this, this.props);
-
                 if (super.render) {
                     this.ensureVector(elements, super.render());
                 } else {
@@ -309,9 +332,10 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         this.ensureVector(elements, config.template(this));
                     }
                 }
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.RENDER));
+
                 return elements;
             }
-
 
             protected createNativeElement(reactCreateElement: IReactCreateElement): Element {
                 if (super.createNativeElement) {
@@ -321,7 +345,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             protected flow = (initial: boolean = false) => {
-                const _elements: IReactCreateElement[] = this.render(initial);
+                const _elements: IReactCreateElement[] = this.render();
                 if (_elements) {
                     const elements: Element[] = _elements
                         .filter(el => !!el)
@@ -342,6 +366,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         }
                     }
                 }
+
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.FLOW));
             };
 
             protected reflow() {
@@ -355,16 +381,15 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 this.flow();
 
                 this.remount();
+
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REFLOW));
             }
 
             attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
                 const attributeValue = this.getAttributeLocalProp(name, newValue);
 
-                console.log('attributeChangedCallback', attributeValue, name);
-
                 // map local attribute field value
-
                 if (name !== 'props' || !this[name]) {
 
                     // assign
@@ -376,9 +401,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     Object.assign(this[name], attributeValue);
                 }
 
-                console.log('setting wc attr', name, newValue);
-
-                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_PROP_CHANGE, {
+                const cancelled = !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_PROP_CHANGE, {
                     detail: <AttributeChangeEvent>{
                         name: name,
                         oldValue,
@@ -393,7 +416,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             connectedCallback() {
 
-                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_MOUNT));
+                const cancelled = !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_MOUNT));
 
                 if (!cancelled) {
 
@@ -401,27 +424,29 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                     this.flow(true);
 
-                } else {
-
-                    console.warn('');
                 }
             }
 
             disconnectedCallback() {
-
-                const cancelled = !this.dispatchEvent(new CustomEvent(LifecycleEvent.BEFORE_UNMOUNT));
+                const cancelled = !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_UNMOUNT));
 
                 if (!cancelled) {
-
                     return this.unmount();
                 }
             }
         };
 
         try {
-            //TODO: Arron help meFix me :D
+
             const regCustomWebComponent = window.customElements.get(config.tag);
+
+            // must contain a kebab-dash
+            if (config.tag.indexOf('-') === -1) {
+                throw new Error("WebComponent's tag name must be prefixed like: app-your-element-name. But this tag looks like: ", config.tag);
+            }
+
             if (!regCustomWebComponent) {
+
                 // register custom element
                 window.customElements.define(config.tag, CustomWebComponent);
 

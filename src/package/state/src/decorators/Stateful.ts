@@ -19,17 +19,14 @@ export function Stateful<CC extends IStateConnectedObject<any>>(classToConnect?:
     if (!(typeof classToConnect === 'function')) {
 
         return (target: any) => {
-            console.log('connectec HOC @Stateful(), storeConnected to store here using store.subscribe()', target);
-
             registerForConnect(target);
             return target;
         }
 
     } else {
 
-        console.log('connectec HOC @Stateful, storeConnected to store here using store.subscribe()', classToConnect);
-
         registerForConnect(classToConnect);
+
         // called with @Stateful
         return classToConnect;
     }

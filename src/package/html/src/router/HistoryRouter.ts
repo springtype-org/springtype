@@ -1,4 +1,4 @@
-import {Component} from "../../../di";
+import {ApplicationContext, Component} from "../../../di";
 import {RouterOutlet} from "./RouterOutlet";
 import {
     IRouter,
@@ -7,6 +7,8 @@ import {
     WebModuleRouteDefinition,
     WebModuleRoutes
 } from "./IRouter";
+import {WebAppConfig} from "../decorator/WebApp";
+import {IReactCreateElement} from "../ui/TSXRenderer";
 
 @Component
 export class HistoryRouter implements IRouter {
@@ -84,30 +86,23 @@ export class HistoryRouter implements IRouter {
 
                 if (routeMatches) {
 
-                    const cmpOrDef: WebModuleRouteDefinition|HTMLElement = this.ROUTE_MAP[route];
+                    const cmpOrDef: WebModuleRouteDefinition | IReactCreateElement = this.ROUTE_MAP[route];
 
-                    if ((<WebModuleRouteDefinition> cmpOrDef).component) {
+                    const component = (cmpOrDef as WebModuleRouteDefinition).component ?
+                        (cmpOrDef as WebModuleRouteDefinition).component :
+                        (cmpOrDef as IReactCreateElement);
 
-                        const def = <WebModuleRouteDefinition> cmpOrDef;
+                    const defInitialParams = (cmpOrDef as WebModuleRouteDefinition).params || {};
 
-                        // apply user specific params on top of initial params set by route config
-                        const mergedParams = Object.assign({}, def.params, params);
-
-                        return {
-                            guard: def.guard,
-                            component: def.component,
-                            params: mergedParams
-                        };
-
-                    } else {
-
-                        const cmp = <HTMLElement> cmpOrDef;
-
-                        return {
-                            component: cmp,
-                            params
-                        }
-                    }
+                    return {
+                        ...cmpOrDef,
+                        params: {
+                            ...defInitialParams,
+                            ...params,
+                        },
+                        component,
+                        route
+                    } as LocationChangeDecision;
                 }
             }
         }
@@ -136,7 +131,7 @@ export class HistoryRouter implements IRouter {
                 }
 
                 if (isAllowedToPresent) {
-                    this.ROUTER_OUTLET.present(<HTMLElement> decision.component);
+                    this.ROUTER_OUTLET.present(decision);
                 }
             }
 
@@ -168,26 +163,19 @@ export class HistoryRouter implements IRouter {
     }
 
     registerRouterOutlet(routerOutlet: RouterOutlet) {
-
          this.ROUTER_OUTLET = routerOutlet;
     }
 
-    navigate(webComponent: Function, params: any) {
+    navigate(path: string, params: any) {
 
-        for (let route in this.ROUTE_MAP) {
+        let route = path;
 
-            if (this.ROUTE_MAP[route] === webComponent) {
+        for (let param in params) {
 
-                for (let param in params) {
-
-                    if (params.hasOwnProperty(param)) {
-                        route = route.replace(':' + param, params[param]);
-                    }
-                }
-                window.location.href = '#' + route;
-
-                break;
+            if (params.hasOwnProperty(param)) {
+                route = route.replace(':' + param, params[param]);
             }
         }
+        window.location.href = '#' + route;
     }
 }

@@ -219,7 +219,7 @@ export class BeanFactory {
         // e.g. when injecting interfaces (which resolve to Object data type ref.)
         if (componentCtor.prototype.constructor === Object) {
 
-            console.log(`Injected interface object instance ${(<any>componentCtor).name}`);
+            //console.log(`Injected interface object instance ${(<any>componentCtor).name}`);
             return {};
 
         } else {

@@ -19,5 +19,6 @@ export const connectComponent = (instance: any, onStateChange?: (state: any) => 
         if (instance.onStoreStateChange && typeof instance.onStoreStateChange === 'function') {
             instance.onStoreStateChange(store.getState());
         }
-    })
+    });
+    return store;
 };

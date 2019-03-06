@@ -22,6 +22,9 @@ export interface WebAppConfig {
     renderer?: IRenderer;
     router?: IRouter;
     logger?: ILogger;
+    components?: {
+        [componentName: string]: IComponent<any>;
+    };
     models?: {
         [modelName: string]: IComponent<any>;
     }|null;
@@ -37,8 +40,7 @@ export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
     return (webApp: WA) => {
 
         const injectableWebApp = Component(webApp);
-        const appContext = ApplicationContext.getInstance();
-        const defaultWebAppConfig = appContext.getWebAppConfig();
+        const defaultWebAppConfig = ApplicationContext.getInstance().getWebAppConfig();
 
         if (injectableWebApp === DefaultWebApp) {
 
@@ -81,7 +83,7 @@ export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
             config.router.registerRoutes(config.routes);
         }
 
-        appContext.setWebAppConfig(config);
+        ApplicationContext.getInstance().setWebAppConfig(config);
 
         return injectableWebApp;
     }

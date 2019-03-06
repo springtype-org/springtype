@@ -3,7 +3,6 @@ import {TodoService} from "../../service/TodoService";
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {ITodoItem} from "../../state/ITodoState";
 
-
 @WebComponent({
     tag: 'example-todo-detail'
 })

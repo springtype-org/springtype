@@ -1,13 +1,14 @@
 import {RouterOutlet} from "./RouterOutlet";
+import {IReactCreateElement} from "../ui/TSXRenderer";
 
 export interface WebModuleRouteDefinition {
-    component: HTMLElement;
+    component: IReactCreateElement;
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;
     params?: Object;
 }
 
 export interface WebModuleRoutes {
-    [route: string]: WebModuleRouteDefinition|HTMLElement|any;
+    [route: string]: WebModuleRouteDefinition|IReactCreateElement;
 }
 
 export interface TokenizedWebModuleRoutes {
@@ -16,8 +17,9 @@ export interface TokenizedWebModuleRoutes {
 
 export interface LocationChangeDecision {
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;
-    component: HTMLElement;
+    component: IReactCreateElement;
     params: Object;
+    route: string;
 }
 
 export interface IRouter {
@@ -26,6 +28,6 @@ export interface IRouter {
     onLocationChange(): Promise<void>;
     disable(): void;
     enable(): void;
-    navigate(webComponent: Function, params: any): void;
+    navigate(path: string, params: any): void;
     registerRouterOutlet(routerOutlet: RouterOutlet): void;
 }

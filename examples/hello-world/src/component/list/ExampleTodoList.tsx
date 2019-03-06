@@ -6,9 +6,14 @@ import {ITodoItem} from "../../state/ITodoState";
 import {IRootState} from "../../state/IRootState";
 import {TodoModel} from "../../model/TodoModel";
 import {Partial} from "../../../../../src/package/lang";
+import {ROUTE_TODO_DETIALS} from "../../routes";
 
 interface TodoListProps {
     todos: Array<ITodoItem>;
+}
+
+interface TodoListLocalState {
+    newTodoItemText: string;
 }
 
 @WebComponent({
@@ -27,40 +32,46 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
     constructor(
         public props: TodoListProps,
         public state: IRootState,
+        public localState: TodoListLocalState,
         protected todoService: TodoService,
         protected router: Router,
     ) {
         super();
     }
 
-    init() {
-        this.props.todos = TodoModel.selectTodos(this.state);
-    }
-
     onListItemClick = (id: number) => {
-        this.router.navigate(ExampleTodoDetail, {id});
+        this.router.navigate(ROUTE_TODO_DETIALS, {id});
     };
 
     onAddItem = () => {
 
         // TODO: Show dialog to add item
-        this.todoService.addItem();
+        this.todoService.addItem(this.localState.newTodoItemText);
+    };
+
+    onNewTodoTextChange = (evt) => {
+
+        console.log('evt', evt.target.value);
+
+        this.localState.newTodoItemText = evt.target.value;
     };
 
     render() {
 
-        const listItems = this.props.todos.map((todo: ITodoItem) =>
-            <li onclick={() => {
-                this.onListItemClick(todo.id)
-            }} class="todo-item">
-                {todo.text}
-            </li>
-        );
+        const listItems = this.props.todos ?
+            this.props.todos.map((todo: ITodoItem) =>
+                <li onclick={() => {
+                    this.onListItemClick(todo.id)
+                }} class="todo-item">
+                    {todo.text}
+                </li>
+            ) : [];
 
         return (
             <div>
                 <ul>{listItems}</ul>
-                <a className="waves-effect waves-light btn" onclick={this.onAddItem}>Add</a>
+                <input id="newTodoText" placeholder="What's TODO next?" onKeyUp={this.onNewTodoTextChange} />
+                <a className="waves-effect waves-light btn" onClick={this.onAddItem}>Add</a>
             </div>
         );
     }

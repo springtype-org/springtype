@@ -23,12 +23,12 @@ export class TodoService implements StatefulLifecycle {
             })[0];
     }
 
-    addItem() {
+    addItem(text: string) {
         const newItemId = getPhantomId();
         this.todoModel.addTodo({
             done: false,
             id: newItemId,
-            text:`${newItemId}. new Item`
+            text
         });
     }
 }

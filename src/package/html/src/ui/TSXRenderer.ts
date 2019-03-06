@@ -66,8 +66,6 @@ export class TSXRenderer implements IRenderer {
 
         let childToAppend = child;
 
-        this.logger.trace('child', child);
-
         if (child instanceof Node) {
 
             childToAppend = child;
@@ -87,7 +85,7 @@ export class TSXRenderer implements IRenderer {
         }
     };
 
-    nativeCreateElement = (tagName: string, namespaces: Namespace[], nativeOptions?: any): Element => {
+    nativeCreateElement = (tagName: string, namespaces: Array<Namespace> = [], nativeOptions?: any): Element => {
         const checkResult = checkNameNs(tagName);
         const newTagName = checkResult.name;
         if (checkResult.found) {
@@ -125,12 +123,12 @@ export class TSXRenderer implements IRenderer {
     };
 
     createElement = (name: string, attributes?: any, ...children: Array<IReactCreateElement>): IReactCreateElement => {
-        this.logger.trace('createElement', name, attributes, children);
+        //this.logger.trace('createElement', name, attributes, children);
         return {name: name, attributes: attributes, children: children};
     };
 
     render = (reactCreateElement: IReactCreateElement, level = 0, namespaces: Namespace[] = []): Element => {
-        this.logger.trace('render', reactCreateElement, level, namespaces);
+        //this.logger.trace('render', reactCreateElement, level, namespaces);
         const name = reactCreateElement.name;
         const attributes = reactCreateElement.attributes || {};
         const children = reactCreateElement.children || [];
@@ -168,7 +166,7 @@ export class TSXRenderer implements IRenderer {
         mappedAttributes.property.forEach((attrib) => {
             const propsHeapPtr = this.getPropsHeapPtr();
             this.propsHeapCache[propsHeapPtr] = attrib.value;
-            this.logger.trace('ptr', attrib.value);
+            //this.logger.trace('ptr', attrib.value);
             this.setAttribute(element, {name: attrib.name, value: propsHeapPtr}, namespaces);
         });
         // 4. add html stuff
@@ -182,7 +180,7 @@ export class TSXRenderer implements IRenderer {
         });
 
 
-        this.logger.trace('Done setting attributes for element', element);
+        //this.logger.trace('Done setting attributes for element', element);
         children
             .filter(c => !(c == null || typeof c == 'undefined')).forEach((child) => {
 

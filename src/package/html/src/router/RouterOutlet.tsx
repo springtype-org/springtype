@@ -2,9 +2,16 @@ import {WebComponent, WebComponentLifecycle} from "../..";
 import {WebComponentReflector} from "../decorator/WebComponentReflector";
 import {Router} from "./Router";
 import {IReactCreateElement} from "../ui/TSXRenderer";
+import {LocationChangeDecision, WebModuleRouteDefinition} from "./IRouter";
+import {ApplicationContext} from "../../../di";
+import {WebAppConfig} from "../decorator/WebApp";
+import {WebComponentLifecycleEvent} from "../decorator/WebComponent";
 
-export interface RouterState {
-    mounted: boolean;
+import "../component/ErrorComponent";
+
+interface RouterProps {
+    component: IReactCreateElement;
+    id: number;
 }
 
 @WebComponent({
@@ -12,51 +19,43 @@ export interface RouterState {
 })
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
-    currentComponent!: IReactCreateElement;
-    currentNativeComponent!: Element;
+    mounted!: boolean;
 
-    constructor(public state: RouterState,
+    constructor(public props: RouterProps,
                 protected router: Router) {
 
         super();
 
-        router.registerRouterOutlet(this);
-
-        router.enable();
+        this.router.registerRouterOutlet(this);
+        this.router.enable();
     }
 
-    mount() {
-        this.state.mounted = true;
-    }
+    present(locationChangeDecision: LocationChangeDecision): void {
 
-    present(component: HTMLElement): void {
+        const onAfterMount = () => {
+            this.props.component = locationChangeDecision.component;
+        };
 
-        if (this.currentNativeComponent) {
+        const onMount = () => {
+            onAfterMount();
+            this.removeEventListener(WebComponentLifecycleEvent.FLOW, onMount);
+        };
 
-            this.removeChild(this.currentNativeComponent);
 
-            // instruct GC to get rid of the component
-            delete this.currentNativeComponent;
-            delete this.currentComponent;
-        }
-
-        this.currentComponent = {name: WebComponentReflector.getTagName(component), attributes: {}, children: []};
-        this.currentNativeComponent =this.createNativeElement(this.currentComponent);
-        // only if already mounted
-        if (this.state.mounted) {
-            this.appendChild(this.currentNativeComponent);
+        if (this.mounted) {
+            onAfterMount();
+        } else {
+            this.addEventListener(WebComponentLifecycleEvent.FLOW, onMount);
         }
     }
-
-    createNativeElement(reactCreateEl: IReactCreateElement): Element {
-        this.currentNativeComponent = (window as any).React.render(reactCreateEl)
-        return this.currentNativeComponent;
-    };
 
     render() {
-        if (this.currentComponent) {
-            return this.currentComponent;
+
+        if (this.props.component) {
+            return this.props.component;
         }
-        return (<strong>ERROR (RouterOutlet): No component found for route!</strong>);
+        return (<springtype-error props={{
+            errorMessage: "ERROR (RouterOutlet): No component found for route!"
+        }} />);
     }
 }

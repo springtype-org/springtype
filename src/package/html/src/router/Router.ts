@@ -33,8 +33,8 @@ export class Router implements IRouter {
         return this.appRouter.getParams();
     }
 
-    navigate(webComponent: Function, params: any): void {
-        return this.appRouter.navigate(webComponent, params);
+    navigate(path: string, params: any): void {
+        return this.appRouter.navigate(path, params);
     }
 
     onLocationChange(): Promise<void> {

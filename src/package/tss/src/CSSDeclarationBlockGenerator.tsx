@@ -5,8 +5,6 @@ export class CSSDeclarationBlockGenerator {
 
     static generate(declaration: CSSStyleSheetDeclaration) {
 
-        console.log('Generating for declaration', declaration);
-
         let styles = '';
 
         for (let selector in declaration) {

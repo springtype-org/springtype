@@ -1,4 +1,5 @@
 import {IReactCreateElement} from "./TSXRenderer";
+import {Namespace} from "./RenderUtils";
 
 /**
  * constructor must define (<any>window).React to an object implementing
@@ -15,6 +16,8 @@ import {IReactCreateElement} from "./TSXRenderer";
  * WebComponents.
  */
 export interface IRenderer {
+
+    nativeCreateElement(tagName: string, namespaces?: Array<Namespace>, nativeOptions?: any): Element;
 
     createElement(name: string, attributes?: any, ...children: Array<IReactCreateElement>): IReactCreateElement;
 
