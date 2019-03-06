@@ -8,7 +8,7 @@ import {StatefulLifecycle} from "../../../../src/package/state/src/interface/Sta
 
 @Stateful
 @Component
-export class TodoService implements StatefulLifecycle<IRootState> {
+export class TodoService implements StatefulLifecycle {
 
     constructor(
         public state: IRootState,

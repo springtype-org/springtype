@@ -1,7 +1,7 @@
 import {StateReducer} from "../../../../src/package/state";
 import {StateEffect} from "../../../../src/package/state";
 import {StateModel} from "../../../../src/package/state";
-import {IStateModelLifecycle} from "../../../../src/package/state/src/IStateModelLifecycle";
+import {StateModelLifecycle} from "../../../../src/package/state/src/StateModelLifecycle";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
 import {getPhantomId} from "../getPhantomId";
 import {IRootState} from "../state/IRootState";
@@ -16,24 +16,24 @@ const initialTodos: Array<ITodoItem> = [{
     text: 'Toms'
 }];
 
-interface ITodoModelReducers {
+interface TodoModelReducers {
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
 }
 
-interface ITodoModelEffects {
+interface TodoModelEffects {
     addTodo(todoItem: ITodoItem): Promise<ITodoState>;
 }
 
-interface ITodoModelEffectsDispatcher {
+interface TodoModelEffectsDispatcher {
     onAddTodo(todoItem: ITodoItem): ITodoState;
 }
 
 @StateModel("TodoModel")
-export class TodoModel implements IStateModelLifecycle, ITodoModelReducers, ITodoModelEffects {
+export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoModelEffects {
 
     constructor(
         public initialState: ITodoState,
-        public effects: ITodoModelEffectsDispatcher,
+        public effects: TodoModelEffectsDispatcher,
     ) {
 
         // set initial initialState

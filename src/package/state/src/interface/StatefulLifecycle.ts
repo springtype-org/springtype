@@ -1,4 +1,4 @@
-export interface StatefulLifecycle<S> {
-    onStoreStateChange?(state: S): void;
-    state?: S;
+export interface StatefulLifecycle {
+    onStoreStateChange?(state: any): void;
+    state?: any;
 }

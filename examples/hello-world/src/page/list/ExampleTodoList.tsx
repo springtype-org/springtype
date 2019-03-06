@@ -3,9 +3,9 @@ import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/ht
 import {Router} from "../../../../../src/package/html/src/router/Router";
 import {ExampleTodoDetail} from "../detail/ExampleTodoDetail";
 import {ITodoItem} from "../../state/ITodoState";
-import {StatefulLifecycle} from "../../../../../src/package/state/src/interface/StatefulLifecycle";
 import {IRootState} from "../../state/IRootState";
 import {TodoModel} from "../../model/TodoModel";
+import {Partial} from "../../../../../src/package/lang";
 
 interface TodoListProps {
     todos: Array<ITodoItem>;
@@ -15,14 +15,14 @@ interface TodoListProps {
     tag: 'example-todo-list',
 
     // automatically called when the state changes
-    mapStateToProps: (state: IRootState) => ({
+    mapStateToProps: (state: IRootState): Partial<TodoListProps> => ({
 
         // map only what you want to map (filter/map/reduce)
         // this might trigger a re-render but only if there is a real change
         todos: TodoModel.selectTodos(state)
     })
 })
-export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle, StatefulLifecycle<IRootState> {
+export class ExampleTodoList extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
         public props: TodoListProps,
