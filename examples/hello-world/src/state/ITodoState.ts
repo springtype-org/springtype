@@ -4,6 +4,7 @@ export interface ITodoRootState {
 
 export interface ITodoState {
     todos: Array<ITodoItem>
+    change: number
 }
 
 export interface ITodoItem {

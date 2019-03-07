@@ -14,7 +14,6 @@ import * as R from "@rematch/core";
 import "../router/RouterOutlet";
 import {StateManager} from "../../../state";
 import {IComponent} from "../../../di/src/decorator/Component";
-import {hmrEntrypoint} from "../../../hmr";
 
 export interface WebAppConfig {
     routes: WebModuleRoutes|null,

@@ -3,8 +3,8 @@ import {StateEffect} from "../../../../src/package/state";
 import {StateModel} from "../../../../src/package/state";
 import {StateModelLifecycle} from "../../../../src/package/state/src/StateModelLifecycle";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
-import {getPhantomId} from "../function/getPhantomId";
 import {IRootState} from "../state/IRootState";
+import {getPhantomId} from "../function/getPhantomId";
 
 const initialTodos: Array<ITodoItem> = [{
     done: false,
@@ -18,17 +18,26 @@ const initialTodos: Array<ITodoItem> = [{
 
 interface TodoModelReducers {
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
+
+    onToggleTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
+
     onRemoveTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
 }
 
 interface TodoModelEffects {
     addTodo(todoItem: ITodoItem): Promise<ITodoState>;
+
+    toggleTodo(todoItem: ITodoItem): Promise<ITodoState>
+
     removeTodo(todoItem: ITodoItem): Promise<ITodoState>;
 }
 
 interface TodoModelEffectsDispatcher {
     onAddTodo(todoItem: ITodoItem): ITodoState;
+
     onRemoveTodo(todoItem: ITodoItem): ITodoState;
+
+    onToggleTodo(todoItem: ITodoItem): ITodoState;
 }
 
 @StateModel("TodoModel")
@@ -40,12 +49,14 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
     ) {
 
         // set initial initialState
+        initialState.change = Date.now();
         initialState.todos = initialTodos;
     }
 
     @StateReducer
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
+        state.change = Date.now();
         // generate a new state
         state.todos = [
             ...state.todos,
@@ -57,12 +68,21 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
     @StateReducer
     onRemoveTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
+        state.change = Date.now();
         state.todos = state.todos
             .filter(
                 (currentTodoItem: ITodoItem) =>
-                currentTodoItem.id !== todoItem.id
+                    currentTodoItem.id !== todoItem.id
             );
 
+        return state;
+    }
+
+    @StateReducer
+    onToggleTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
+
+        state.change = Date.now();
+        todoItem.done = !todoItem.done;
         return state;
     }
 
@@ -71,6 +91,13 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
 
         // dispatch the action (calls the state reducer)
         return this.effects.onAddTodo(todoItem);
+    }
+
+    @StateEffect
+    async toggleTodo(todoItem: ITodoItem) {
+
+        // dispatch the action (calls the state reducer)
+        return this.effects.onToggleTodo(todoItem);
     }
 
     @StateEffect
@@ -84,7 +111,11 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
         });
     }
 
-    static selectTodos(state: IRootState): Array<ITodoItem> {
-        return state.TodoModel.todos;
+    static selectTodos(state: IRootState): ITodoState {
+        return {
+            todos: state.TodoModel.todos,
+            change: state.TodoModel.change
+        }
+
     }
 }

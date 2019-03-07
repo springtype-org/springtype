@@ -1,6 +1,6 @@
 export const hmrEntrypoint = (module: any) => {
 
-    if (module) {
+    if (module && module.hot) {
 
         (module as any).hot.dispose(() => {});
         (module as any).hot.accept(() => {

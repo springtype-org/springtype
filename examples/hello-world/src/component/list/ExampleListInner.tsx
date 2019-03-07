@@ -5,21 +5,19 @@ import {WebComponent, WebComponentLifecycle} from "../../../../../src/package/ht
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
 import {Router} from "../../../../../src/package/html/src/router/Router";
+import {IReactCreateElement} from "../../../../../src/package/html/src/ui/TSXRenderer";
 
 interface TodoListProps {
+    changed: number;
     todos: Array<ITodoItem>;
 }
 
 @WebComponent({
 
     tag: 'example-list-item-inner',
-
     // automatically called when the state changes
     mapStateToProps: (state: IRootState): Partial<TodoListProps> => ({
-
-        // map only what you want to map (filter/map/reduce)
-        // this might trigger a re-render but only if there is a real change
-        todos: TodoModel.selectTodos(state)
+        ...TodoModel.selectTodos(state)
     })
 })
 export class ExampleListInner extends HTMLElement implements WebComponentLifecycle {
@@ -36,46 +34,48 @@ export class ExampleListInner extends HTMLElement implements WebComponentLifecyc
         this.router.navigate(ROUTE_TODO_DETIALS, {id});
     };
 
-    onRemove = async(todoItem: ITodoItem, evt: Event) => {
-
-        console.log('onRemove', todoItem.id);
-
+    onRemove = async (evt: Event, todoItem: ITodoItem) => {
         evt.preventDefault();
         evt.stopPropagation();
 
         await this.model.removeTodo(todoItem);
-
-        console.log('Ich wurde gelöscht');
-
     };
 
-    onDoneToggle = (todo: ITodoItem, evt: Event) => {
-
-        console.log('onDoneToggle', todo);
-
+    onDoneToggle = async (evt: Event, todoItem: ITodoItem) => {
         evt.preventDefault();
         evt.stopPropagation();
-
+        await this.model.toggleTodo(todoItem);
     };
 
     render() {
-
         return <ul>
             {
-                this.props.todos ?
-                    this.props.todos.map((todo: ITodoItem) =>
-                        <li onclick={() => {
+                ([...this.props.todos] || []).sort((a: ITodoItem, b: ITodoItem) => {
+                    if (!a.done && b.done) {
+                        return -1;
+                    }
+                    if (a.done && !b.done) {
+                        return 1;
+                    }
+                    return 0
+                }).map((todo: ITodoItem) => {
+                        const text = todo.done ? <s>{todo.text} </s> : todo.text;
+                        const input: IReactCreateElement = <input type="checkbox"/>;
+                        if (todo.done) {
+                            input.attributes['checked'] = true;
+                        }
+                        return <li onclick={() => {
                             this.onListItemClick(todo.id)
                         }} class="todo-item">
-                            {todo.text}
-
-                            <a class="waves-effect waves-light btn" onClick={(evt: Event) => this.onDoneToggle(todo, evt)}>{
-                                todo.done ? 'Undone' : 'Done'
-                            }</a>
-
-                            <a class="waves-effect waves-light btn" onClick={(evt: Event) => this.onRemove(todo, evt)}>Remove (1 sec)</a>
+                            {input}
+                            <span
+                                onClick={(evt: Event) => this.onDoneToggle(evt, todo)}/>
+                            <div class="todo-item-text">{text}</div>
+                            <a class="waves-effect waves-light btn"
+                               onClick={(evt: Event) => this.onRemove(evt, todo)}>Remove (1 sec)</a>
                         </li>
-                    ) : []
+                    }
+                )
             }
         </ul>;
     }
