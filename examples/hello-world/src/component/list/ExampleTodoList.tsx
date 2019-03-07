@@ -26,14 +26,15 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
     }
 
     onAddItem = () => {
+        if (this.textInputEl.value !== '') {
+            this.todoModel.addTodo({
+                text: this.localState.newTodoItemText,
+                id: Date.now(),
+                done: false
+            });
 
-        this.todoModel.addTodo({
-            text: this.localState.newTodoItemText,
-            id: Date.now(),
-            done: false
-        });
-
-        this.textInputEl.value = '';
+            this.textInputEl.value = '';
+        }
         this.textInputEl.focus();
     };
 
@@ -51,13 +52,13 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
 
         return <st-fragment>
 
-            <example-list-item-inner />
+            <example-list-item-inner/>
 
             <input bind={{textInputEl: this}}
                    type="text"
                    id="newTodoText"
                    placeholder="What's TODO next?"
-                   onKeyUp={this.onNewTodoTextChange} />
+                   onKeyUp={this.onNewTodoTextChange}/>
 
             <a className="waves-effect waves-light btn" onClick={this.onAddItem}>Add</a>
 
