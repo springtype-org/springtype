@@ -31,8 +31,8 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
         super()
     }
 
-
-    init(): void {
+    // TODO: Use model and state
+    onPropsChanged() {
         FieldComponent.fieldComponent[this.props.position] = this;
         Window.cmp = FieldComponent.fieldComponent;
     }
@@ -42,7 +42,11 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
         const isSmall = props.amountMines <= 1;
         const checkNeighbors = [...(isSmall ? props.neighbors.all : props.neighbors.check), props.position]
             .map((pos) => FieldComponent.fieldComponent[pos])
-            .filter(cmp => !cmp.props.bomb)
+            .filter(cmp => {
+                if (cmp) {
+                    return !cmp.props.bomb;
+                }
+            })
         ;
         for (const cmp of checkNeighbors.filter(cmp => !cmp.props.open)) {
             if (FieldComponent.checkFailed(cmp.props)) {

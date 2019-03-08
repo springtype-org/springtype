@@ -18,14 +18,9 @@ interface TodoListProps {
 
     tag: 'example-list-item-inner',
     // automatically called when the state changes
-    mapStateToProps: (state: IRootState): Partial<TodoListProps> => {
-
-        console.log('state change', state);
-
-        return {
-            todos: TodoModel.selectTodos(state)
-        }
-    }
+    mapStateToProps: (state: IRootState): Partial<TodoListProps> => ({
+        todos: TodoModel.selectTodos(state)
+    })
 })
 export class ExampleListInner extends HTMLElement implements WebComponentLifecycle {
 

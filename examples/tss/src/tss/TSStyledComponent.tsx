@@ -1,8 +1,6 @@
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
-import {hmrEntrypoint, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
-
-hmrEntrypoint(module);
+import { WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 
 interface Props {
     styleMode: StyleMode;
@@ -20,8 +18,11 @@ export enum StyleMode {
 })
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
 
-    // default
-    props: Props = {
-        styleMode: StyleMode.INVERTED
-    };
+    constructor(public props: Props) {
+        super();
+    }
+
+    init() {
+        this.props.styleMode = Math.random() > 0.5 ? StyleMode.INVERTED : StyleMode.STANDARD;
+    }
 }

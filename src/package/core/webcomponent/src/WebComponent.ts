@@ -305,15 +305,11 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 if (Array.isArray(tsx)) {
                     tsx.forEach(tsx => destination.push(tsx));
                 } else {
-
-
-
                     destination.push(tsx)
                 }
             };
 
             render(): IReactCreateElement[] {
-                this.init();
 
                 const elements: IReactCreateElement[] = [];
 

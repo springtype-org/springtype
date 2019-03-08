@@ -25,6 +25,10 @@ Pre-beta-release TODO list:
     - @EndToEndTestSuite and @EndToEndTest want to be working
     - Adapter for TestCafe
     - Write end-2-end tests for web components
+  - hmr
+    - Implement @Entrypoint?
+  - example/minesweeper
+    - Use model and state
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app
