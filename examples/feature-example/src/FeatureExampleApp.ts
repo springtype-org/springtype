@@ -1,4 +1,4 @@
-import {WebComponent} from "../../../src/package/html";
+import {WebComponent} from "@springtype/springtype-incubator-core";
 import template from "./FeatureExampleApp.tpl";
 
 @WebComponent({

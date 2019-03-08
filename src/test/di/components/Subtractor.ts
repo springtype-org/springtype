@@ -1,4 +1,4 @@
-import {Component} from "../../../package/di";
+import {Component} from "../../../package/core/src/index";
 import {AbstractSubtractor} from "../helper/AbstractSubtractor";
 
 @Component

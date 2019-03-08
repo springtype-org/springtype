@@ -1,6 +1,6 @@
 import {Try, UndefinedError} from "../../package/lang";
 import {expect} from "chai";
-import {PropertyComparator, CompareType} from "../../package/lang/src/util/PropertyComparator";
+import {PropertyComparator, CompareType} from "../../package/core/src/lang/src/util/PropertyComparator";
 
 describe('lang', () => {
     it('Try ', function () {

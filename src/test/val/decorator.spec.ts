@@ -22,7 +22,7 @@ import {
     validateNumberRange,
     validatePast,
     validateRequired
-} from "../../package/val/src/decorators";
+} from "../../package/validate/src/decorators";
 import {futureDate, now, nowDate, pastDate, ValidateOnClass, ValidateOnMethod} from "./helper/ValidateMe";
 
 describe('val', () => {

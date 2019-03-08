@@ -8,24 +8,7 @@ Pre-beta-release TODO list:
 
 - Write tests (70 to 90% goal)
   - First finish "test" module implementation
-  
-- Split framework in certain code modules (e.g. apps not using store or tss shouldn't bundle the code!)
-  - @springtype/core
-      - di
-      - lang
-      - html/decorator (webcomponent)
-      - html/ui (renderer)
-  - @springtype/router
-     - html/router
-  - @springtype/store
-  - @springtype/tss
-    - tss (css)
-  - @springtype/log
-    - log
-  - @springtype/validate
-    - val
-  - @springtype/test
-   
+     
 - How to deal with SSR (server side rendering) and AOT compiles?
 - Implement meaningful examples and polish their architecture 
   - Examples:
@@ -59,9 +42,7 @@ Pre-beta-release TODO list:
        
 - Modules:
   - html
-    - Rename/split module to some better name (webcomponent, router, renderer submodules to top level modules?)
     - Refactor @WebComponent god-like implementation
-    - Include @webcomponents/webcomponentsjs/custom-elements-es5-adapter in @WebComponent
   - state
     - Stabilize @Stateful API
   - math

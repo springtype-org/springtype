@@ -13,8 +13,8 @@ import {
     Required,
     Validate,
     Validation
-} from "../../../package/val";
-import {VALIDATOR_DEFAULT} from "../../../package/val/src/Validator";
+} from "../../../package/validate/src/index";
+import {VALIDATOR_DEFAULT} from "../../../package/validate/src/Validator";
 
 export const now = Date.now();
 export const pastDate = new Date(now - 1000);

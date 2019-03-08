@@ -1,1 +1,0 @@
-export { hmrEntrypoint } from "./src/entrypoint";

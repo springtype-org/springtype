@@ -1,7 +1,6 @@
-import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html";
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
-import {hmrEntrypoint} from "../../../../src/package/hmr";
+import {hmrEntrypoint, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import {theme} from "../theme";
 
 hmrEntrypoint(module);

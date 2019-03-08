@@ -1,7 +1,7 @@
 import {Gain} from "./components/Gain";
-import {ApplicationContext, InjectionProfile, InjectionStrategy} from "../../package/di";
+import {ApplicationContext, InjectionProfile, InjectionStrategy} from "../../package/core/src/index";
 import {expect} from "chai";
-import {validateRequired} from "../../package/val/src/decorators";
+import {validateRequired} from "../../package/validate/src/decorators";
 import {Simple} from "./components/Simple";
 
 

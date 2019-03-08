@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "../../../../src/package/html";
+import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./BurgerButton.tpl";
 
 export interface BurgerButtonProps {

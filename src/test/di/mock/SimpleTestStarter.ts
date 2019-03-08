@@ -1,4 +1,4 @@
-import {ApplicationContext, InjectionProfile} from "../../../package/di";
+import {ApplicationContext, InjectionProfile} from "../../../package/core/src/index";
 import {Simple} from "../components/Simple";
 
 

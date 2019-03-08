@@ -1,5 +1,5 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
-import {HOST_SELECTOR} from "../../../../src/package/tss/src/CSSInlineStyleGenerator";
+import {HOST_SELECTOR} from "../../../../src/package/core/src/tss/src/CSSInlineStyleGenerator";
 import {AppTheme} from "../theme";
 
 export default (view: TSStyledComponent, theme: AppTheme) => ({

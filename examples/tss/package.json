@@ -3,7 +3,8 @@
   "version": "1.0.1",
   "description": "TypeScript Style Sheets.",
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.1.3",
+    "@springtype/springtype-incubator-core": "file:../../src/package/core",
+    "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "parcel-bundler": "^1.10.1",
     "tslib": "^1.9.3"
@@ -18,10 +19,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^23.3.5",
     "parcel": "^1.11.0",
     "sass": "^1.17.2",
-    "ts-jest": "^23.10.4",
     "typescript": "^3.1.1"
   },
   "browserslist": [

@@ -1,4 +1,4 @@
-import {Autowired, Component, Inject} from "../../../package/di";
+import {Autowired, Component, Inject} from "../../../package/core/src/index";
 import {Multiplier} from "./Multiplier";
 import {Subtractor} from "./Subtractor";
 import {NiceSubtractor} from "./NiceSubtractor";
