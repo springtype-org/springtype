@@ -1,5 +1,5 @@
-export * from "./ValidateClass";
-export * from "./Validator";
+export * from "./decorators/ValidateClass";
+export * from "./decorators/Validator";
 export {
     DECORATOR_OPTIONS_DEFAULT,
     baseValidator,
@@ -7,4 +7,5 @@ export {
     ValidationResult,
     IValidateFn,
     Options,
-} from "./ValidateMethod";
+} from "./decorators/ValidateMethod";
+export * from "./decorators/validators/index";

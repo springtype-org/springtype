@@ -1,9 +1,9 @@
 import {Gain} from "./components/Gain";
-import {ApplicationContext, InjectionProfile, InjectionStrategy} from "../../package/core/src/index";
-import {expect} from "chai";
-import {validateRequired} from "../../package/validate/src/decorators";
+import {ApplicationContext, InjectionProfile, InjectionStrategy} from "@springtype/springtype-incubator-core";
+import {validateRequired} from "@springtype/springtype-incubator-validate/src";
 import {Simple} from "./components/Simple";
-
+import {expect} from "chai";
+import 'mocha';
 
 describe('DI', () => {
     it('injection', () => {

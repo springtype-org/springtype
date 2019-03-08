@@ -1,22 +1,18 @@
 {
   "name": "@springtype/springtype-incubator-validate",
-  "version": "1.0.1",
+  "version": "0.9.1",
   "description": "It just works.",
   "dependencies": {
     "@babel/types": "^7.1.3",
     "@springtype/springtype-incubator-core": "file:../core",
     "@types/node": "^10.11.3",
     "lodash": "^4.17.11",
+    "reflect-metadata": "^0.1.13",
     "ts-node": "^7.0.1",
     "tslib": "^1.9.3",
     "typescript": "^3.1.1"
   },
   "source": "./src/index.ts",
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
-  "scripts": {
-    "package": "tsc"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyr0/springtype-incubator.git"

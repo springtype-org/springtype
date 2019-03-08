@@ -1,4 +1,4 @@
-import {Component} from "../../../package/core/src/index";
+import {Component} from "@springtype/springtype-incubator-core";
 import {UnresolvableBean} from "../helper/UnresolvableBean";
 import {MultiplierMock} from "../mock/MultiplierMock";
 

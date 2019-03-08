@@ -11,7 +11,6 @@ import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
 
 interface TodoListProps {
-    changed: number;
     todos: Array<ITodoItem>;
 }
 
@@ -19,9 +18,14 @@ interface TodoListProps {
 
     tag: 'example-list-item-inner',
     // automatically called when the state changes
-    mapStateToProps: (state: IRootState): Partial<TodoListProps> => ({
-        ...TodoModel.selectTodos(state)
-    })
+    mapStateToProps: (state: IRootState): Partial<TodoListProps> => {
+
+        console.log('state change', state);
+
+        return {
+            todos: TodoModel.selectTodos(state)
+        }
+    }
 })
 export class ExampleListInner extends HTMLElement implements WebComponentLifecycle {
 
@@ -54,13 +58,7 @@ export class ExampleListInner extends HTMLElement implements WebComponentLifecyc
         return <ul>
             {
                 ([...this.props.todos] || []).sort((a: ITodoItem, b: ITodoItem) => {
-                    if (!a.done && b.done) {
-                        return -1;
-                    }
-                    if (a.done && !b.done) {
-                        return 1;
-                    }
-                    return 0
+                    return a.text > b.text ? 0 : 1
                 }).map((todo: ITodoItem) => {
                         const text = todo.done ? <s>{todo.text} </s> : todo.text;
                         const input: IReactCreateElement = <input type="checkbox"/>;
@@ -75,7 +73,7 @@ export class ExampleListInner extends HTMLElement implements WebComponentLifecyc
                                 onClick={(evt: Event) => this.onDoneToggle(evt, todo)}/>
                             <div class="todo-item-text">{text}</div>
                             <a class="waves-effect waves-light btn"
-                               onClick={(evt: Event) => this.onRemove(evt, todo)}>Remove (1 sec)</a>
+                               onClick={(evt: Event) => this.onRemove(evt, todo)}>Remove (after 1 sec)</a>
                         </li>
                     }
                 )

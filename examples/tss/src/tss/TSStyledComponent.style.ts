@@ -1,5 +1,5 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
-import {HOST_SELECTOR} from "../../../../src/package/core/src/tss/src/CSSInlineStyleGenerator";
+import {HOST_SELECTOR} from "@springtype/springtype-incubator-core";
 import {AppTheme} from "../theme";
 
 export default (view: TSStyledComponent, theme: AppTheme) => ({

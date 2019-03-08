@@ -1,4 +1,4 @@
-import {ApplicationContext, InjectionProfile} from "../../../package/core/src/index";
+import {ApplicationContext, InjectionProfile} from "@springtype/springtype-incubator-core";
 import {Simple} from "../components/Simple";
 
 

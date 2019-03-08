@@ -3,8 +3,7 @@ export interface ITodoRootState {
 }
 
 export interface ITodoState {
-    todos: Array<ITodoItem>
-    change: number
+    todos: Array<ITodoItem>;
 }
 
 export interface ITodoItem {

@@ -1,4 +1,4 @@
-import {Autowired, Component, Inject} from "../../../package/core/src/index";
+import {Autowired, Component, Inject} from "@springtype/springtype-incubator-core";
 import {Multiplier} from "./Multiplier";
 import {Subtractor} from "./Subtractor";
 import {UnresolvableBean} from "../helper/UnresolvableBean";

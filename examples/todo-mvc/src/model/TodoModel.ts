@@ -15,25 +15,19 @@ const initialTodos: Array<ITodoItem> = [{
 
 interface TodoModelReducers {
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
-
     onToggleTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
-
     onRemoveTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
 }
 
 interface TodoModelEffects {
     addTodo(todoItem: ITodoItem): Promise<ITodoState>;
-
     toggleTodo(todoItem: ITodoItem): Promise<ITodoState>
-
     removeTodo(todoItem: ITodoItem): Promise<ITodoState>;
 }
 
 interface TodoModelEffectsDispatcher {
     onAddTodo(todoItem: ITodoItem): ITodoState;
-
     onRemoveTodo(todoItem: ITodoItem): ITodoState;
-
     onToggleTodo(todoItem: ITodoItem): ITodoState;
 }
 
@@ -46,14 +40,12 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
     ) {
 
         // set initial initialState
-        initialState.change = Date.now();
         initialState.todos = initialTodos;
     }
 
     @StateReducer
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
-        state.change = Date.now();
         // generate a new state
         state.todos = [
             ...state.todos,
@@ -65,7 +57,6 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
     @StateReducer
     onRemoveTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
-        state.change = Date.now();
         state.todos = state.todos
             .filter(
                 (currentTodoItem: ITodoItem) =>
@@ -78,8 +69,19 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
     @StateReducer
     onToggleTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
-        state.change = Date.now();
-        todoItem.done = !todoItem.done;
+        state.todos = [...state.todos].map(
+            (currentTodoItem: ITodoItem) => {
+                if (currentTodoItem.id === todoItem.id) {
+                    return {
+                        ...currentTodoItem,
+                        done: !currentTodoItem.done
+                    }
+                }
+                return {
+                    ...currentTodoItem
+                };
+            }
+        );
         return state;
     }
 
@@ -108,11 +110,7 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
         });
     }
 
-    static selectTodos(state: IRootState): ITodoState {
-        return {
-            todos: state.TodoModel.todos,
-            change: state.TodoModel.change
-        }
-
+    static selectTodos(state: IRootState): Array<ITodoItem> {
+        return state.TodoModel.todos;
     }
 }

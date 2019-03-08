@@ -1,7 +1,6 @@
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
 import {hmrEntrypoint, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
-import {theme} from "../theme";
 
 hmrEntrypoint(module);
 
@@ -17,8 +16,7 @@ export enum StyleMode {
     tag: 'tsstyled-component',
     shadow: true,
     template,
-    style,
-    theme
+    style
 })
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
 

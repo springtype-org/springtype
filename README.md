@@ -2,6 +2,30 @@
 
 Pre-beta-release TODO list:
 
+- Modules:
+  - webcomponent
+    - Refactor @WebComponent god-like implementation
+    - components in config -> "useComponent" or "using" or "import"?
+  - router
+    - Implement @Route(...) to register with ApplicationContext to route to
+      web components without any @WebApp. Just activate the router when needed!
+  - di
+    - Don't show a warning for injections of primitive types of standard HTML types 
+  - renderer  
+    - Remove RenderUtils
+  - state
+    - Use ImmutableJS or just hook and deep clone the objects transmitted to reducer methods
+      so that they never lead to bugs like in todo-mvc if not everything is cloned manually!
+  - test
+    - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
+    - Split tests
+    - Write more tests
+    - @Test and @TestSuite to be working
+  - end-to-end-test
+    - @EndToEndTestSuite and @EndToEndTest want to be working
+    - Adapter for TestCafe
+    - Write end-2-end tests for web components
+    
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app
 - Create beautiful next-gen SVG website using our own framework
@@ -40,25 +64,7 @@ Pre-beta-release TODO list:
       - SVG Mineweeper game using gpu.js based matrices calc
       - Featured: SVG gantt-chart component (web-component, publicly available) 
        
-- Modules:
-  - html
-    - Refactor @WebComponent god-like implementation
-  - state
-    - Stabilize @Stateful API
-  - math
-    - To be implemented using Gpu.js (gpu.rocks)
-    - Object comparison on steroids using matrices calc on GPU (40x speed)
-  - test
-    - @Test and @TestSuite want to be working
-    - Adapters for Jest, Mocha/Chai/Karma
-  - end-to-end-test
-    - @EndToEndTestSuite and @EndToEndTest want to be working
-    - Adapter for Testcafe
-    - WebComponent selectors for Testcafe
-  - tss
-    - Themeing support on @WebApp level?
-  - hmr
-    - Auto-apply in @WebApp if possible or write docs to include it in main entry-point of an app!
+
 
 # Usage
     npm i

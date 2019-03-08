@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "The real burger button as svg.",
   "dependencies": {
+    "@babel/plugin-transform-typescript": "^7.3.2",
     "@springtype/springtype-incubator-core": "file:../../src/package/core",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
