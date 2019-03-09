@@ -1,5 +1,5 @@
+import {connectComponent} from "../function/connectComponent";
 import {ComponentReflector} from "../../../di";
-import {connectComponent} from "../connectComponent";
 
 export interface IStateConnectedObject<CC> extends Function {
     new(...args: any[]): CC;

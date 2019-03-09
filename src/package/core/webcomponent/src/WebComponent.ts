@@ -5,7 +5,7 @@ import {ApplicationContext, ApplicationEnvironment, Component, IComponent} from 
 import {WebComponentReflector} from "./WebComponentReflector";
 import {IReactCreateElement} from "../../renderer";
 import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator} from "../../tss";
-import {connectComponent} from "../../state/src/connectComponent";
+import {connectComponent} from "../../state/src/function/connectComponent";
 import * as _ from "lodash";
 import {NestedCSSSelectors} from "typestyle/lib/types";
 import {CONTEXT_THEME} from "../../tss";

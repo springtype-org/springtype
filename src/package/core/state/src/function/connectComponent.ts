@@ -1,5 +1,5 @@
-import {Store} from "./Store";
-import {ApplicationContext} from "../../di";
+import {Store} from "../Store";
+import {ApplicationContext} from "../../../di";
 
 export const connectComponent = (instance: any, onStateChange?: (state: any) => void) => {
 
