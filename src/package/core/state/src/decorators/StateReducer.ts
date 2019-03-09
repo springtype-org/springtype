@@ -1,5 +1,5 @@
 export const IS_REDUCER = Symbol('IS_REDUCER');
 
-export const StateReducer = (prototype: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
-    Reflect.set(prototype[methodName], IS_REDUCER,true);
+export const StateReducer = (modelPrototype: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
+    Reflect.set(modelPrototype[methodName], IS_REDUCER,true);
 };

@@ -17,12 +17,12 @@ const listWithLayout = <app-layout props={{ children: <example-todo-list /> }} /
         [ROUTE_TODO_LIST]: listWithLayout,
         [ROUTE_TODO_DETIALS]: <app-layout props={{ children: <example-todo-detail /> }} />,
     },
-    components: {
+    components: [
         AppLayout,
         ExampleTodoList,
         ExampleTodoDetail,
         Logo
-    },
+    ],
     models: {
         TodoModel: TodoModel
     }

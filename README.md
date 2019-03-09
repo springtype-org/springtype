@@ -13,9 +13,6 @@ Pre-beta-release TODO list:
     - Don't show a warning for injections of primitive types of standard HTML types 
   - renderer  
     - Remove RenderUtils
-  - state
-    - Use ImmutableJS or just hook and deep clone the objects transmitted to reducer methods
-      so that they never lead to bugs like in todo-mvc if not everything is cloned manually!
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests

@@ -14,89 +14,53 @@ const initialTodos: Array<ITodoItem> = [{
 }];
 
 interface TodoModelReducers {
-    onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
-    onToggleTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
-    onRemoveTodo(state: ITodoState, todoItem: ITodoItem): ITodoState;
-}
-
-interface TodoModelEffects {
-    addTodo(todoItem: ITodoItem): Promise<ITodoState>;
-    toggleTodo(todoItem: ITodoItem): Promise<ITodoState>
-    removeTodo(todoItem: ITodoItem): Promise<ITodoState>;
-}
-
-interface TodoModelEffectsDispatcher {
     onAddTodo(todoItem: ITodoItem): ITodoState;
     onRemoveTodo(todoItem: ITodoItem): ITodoState;
     onToggleTodo(todoItem: ITodoItem): ITodoState;
 }
 
 @StateModel("TodoModel")
-export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoModelEffects {
+export class TodoModel implements StateModelLifecycle<ITodoState, TodoModelReducers> {
 
     constructor(
         public initialState: ITodoState,
-        public effects: TodoModelEffectsDispatcher,
+        public reducers: TodoModelReducers,
     ) {
-
-        // set initial initialState
         initialState.todos = initialTodos;
     }
 
     @StateReducer
     onAddTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
-
-        // generate a new state
-        state.todos = [
-            ...state.todos,
-            todoItem
-        ];
+        state.todos.push(todoItem);
         return state;
     }
 
     @StateReducer
     onRemoveTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
-
-        state.todos = state.todos
-            .filter(
-                (currentTodoItem: ITodoItem) =>
-                    currentTodoItem.id !== todoItem.id
-            );
-
+        state.todos = state.todos.filter((currentTodoItem: ITodoItem) => currentTodoItem.id !== todoItem.id);
         return state;
     }
 
     @StateReducer
     onToggleTodo(state: ITodoState, todoItem: ITodoItem): ITodoState {
 
-        state.todos = [...state.todos].map(
-            (currentTodoItem: ITodoItem) => {
-                if (currentTodoItem.id === todoItem.id) {
-                    return {
-                        ...currentTodoItem,
-                        done: !currentTodoItem.done
-                    }
-                }
-                return {
-                    ...currentTodoItem
-                };
+        state.todos = state.todos.map((currentTodoItem: ITodoItem) => {
+            if (currentTodoItem.id === todoItem.id) {
+                currentTodoItem.done = !currentTodoItem.done;
             }
-        );
+            return currentTodoItem;
+        });
         return state;
     }
 
     @StateEffect
     async addTodo(todoItem: ITodoItem) {
-
-        // dispatch the action (calls the state reducer)
-        return this.effects.onAddTodo(todoItem);
+        return this.reducers.onAddTodo(todoItem);
     }
 
     @StateEffect
     async toggleTodo(todoItem: ITodoItem) {
-
-        // dispatch the action (calls the state reducer)
-        return this.effects.onToggleTodo(todoItem);
+        return this.reducers.onToggleTodo(todoItem);
     }
 
     @StateEffect
@@ -104,8 +68,7 @@ export class TodoModel implements StateModelLifecycle, TodoModelReducers, TodoMo
 
         return new Promise<ITodoState>((resolve) => {
             setTimeout(() => {
-                // dispatch the action (calls the state reducer)
-                resolve(this.effects.onRemoveTodo(todoItem));
+                resolve(this.reducers.onRemoveTodo(todoItem));
             }, 1000);
         });
     }

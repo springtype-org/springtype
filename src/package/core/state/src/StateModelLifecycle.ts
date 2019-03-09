@@ -1,3 +1,4 @@
-export interface StateModelLifecycle {
-    initialState: any;
+export interface StateModelLifecycle<S, R> {
+    initialState: S;
+    reducers: R;
 }
