@@ -1,4 +1,4 @@
-import {WebApp, Theme} from "@springtype/springtype-incubator-core";
+import {Theme, WebApp} from "@springtype/springtype-incubator-core";
 import {TSStyledComponent} from "./tss/TSStyledComponent";
 import {theme} from "./theme";
 

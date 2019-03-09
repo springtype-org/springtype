@@ -9,8 +9,6 @@ Pre-beta-release TODO list:
   - router
     - Implement @Route(...) to register with ApplicationContext to route to
       web components without any @WebApp. Just activate the router when needed!
-  - di
-    - Don't show a warning for injections of primitive types of standard HTML types 
   - renderer  
     - Remove RenderUtils
   - test

@@ -2,6 +2,7 @@ import {FeatureExampleApp} from "./FeatureExampleApp";
 import {BurgerType} from "../../burger-button/src/burger-button/BurgerButton";
 import "./clock.scss"
 import "./clockScript.js"
+
 export default (view: FeatureExampleApp) =>
 
     <div>

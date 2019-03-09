@@ -1,4 +1,4 @@
-import {WebApp, Theme, AppLogger, LogLevel} from "../../../src/package/core/index";
+import {AppLogger, LogLevel, Theme, WebApp} from "../../../src/package/core/index";
 import {theme} from "./theme";
 import {SudokuComponent} from "./game/SudokuComponent";
 

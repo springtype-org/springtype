@@ -12,6 +12,8 @@ export enum InjectionStrategy {
     NEW = 'NEW'
 }
 
+export const primitiveTypeNames = ['Number', 'Array', 'String', 'Boolean', 'RegExp', 'Date'];
+
 export class BeanFactory {
 
     registry = {};
@@ -212,6 +214,14 @@ export class BeanFactory {
         return [];
     }
 
+    isNotPrimitiveType(typeName: string): boolean {
+        return primitiveTypeNames.indexOf(typeName) !== -1;
+    }
+
+    isNotElementType(typeName: string): boolean {
+        return !!typeName.match(/HTML.+Element/);
+    }
+
     solveUnresolvableBean<T extends IComponent<any>>(
         componentCtor: T
     ): any {
@@ -224,8 +234,11 @@ export class BeanFactory {
 
         } else {
 
-            // TODO: Number, HTMLHeadingElement...?
-            console.warn(`The component referenced for injection is missing a @Component decorator: ${(<any>componentCtor).name}`);
+            const typeName = (<any>componentCtor).name;
+
+            if (!this.isNotElementType(typeName) && !this.isNotPrimitiveType(typeName)) {
+                console.warn(`The component referenced for injection is missing a @Component decorator: ${typeName}`);
+            }
             return undefined;
         }
     }

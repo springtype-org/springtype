@@ -1,6 +1,6 @@
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
-import { WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 
 interface Props {
     styleMode: StyleMode;

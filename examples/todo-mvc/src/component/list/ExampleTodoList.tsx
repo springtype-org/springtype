@@ -19,7 +19,7 @@ export class ExampleTodoList extends HTMLElement implements WebComponentLifecycl
         public localState: TodoListLocalState,
         protected todoModel: TodoModel,
         protected router: Router,
-        public textInputEl: HTMLInputElement,
+        public textInputEl: HTMLInputElement
     ) {
         super();
     }

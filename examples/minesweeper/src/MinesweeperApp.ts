@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle, Randomizer} from "@springtype/springtype-incubator-core";
+import {Randomizer, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./MinesweeperApp.tpl";
 import {FieldProp, Neighbors} from "./components/field/FieldComponent";
 

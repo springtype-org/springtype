@@ -1,7 +1,6 @@
 import template from "./SudokuComponent.tpl";
 import style from "./SudokuComponent.style";
-import { WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
-import {log} from "@springtype/springtype-incubator-core";
+import {Logger, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 
 interface Props {
     difficulty: number;
@@ -15,12 +14,15 @@ interface Props {
 })
 export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {
 
-    constructor(public props: Props) {
+    constructor(public props: Props,
+                protected logger: Logger) {
         super();
     }
 
     init() {
 
-        log('SudokuComponent init');
+        this.logger.log('SudokuComponent init');
+
+        this.logger.warn('asdasd', this);
     }
 }

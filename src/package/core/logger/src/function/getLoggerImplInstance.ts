@@ -7,14 +7,22 @@ export const getLoggerImplInstance = (loggerConfig: LoggerConfig): LoggerImpl =>
 
     let loggerImpl: LoggerImpl;
 
-    switch (loggerConfig.type) {
+    // custom impl provided via config
+    if (loggerConfig.impl) {
 
-        default:
-        case LoggerImplType.CONSOLE:
-            loggerImpl = new ConsoleLoggerImpl();
-            break;
+        loggerImpl = loggerConfig.impl;
+
+    } else {
+
+        // using standard implementation
+        switch (loggerConfig.type) {
+
+            default:
+            case LoggerImplType.CONSOLE:
+                loggerImpl = new ConsoleLoggerImpl();
+                break;
+        }
     }
-
     loggerImpl.setLogLevel(loggerConfig.level!);
     loggerImpl.setFilterFunction(loggerConfig.filter);
 

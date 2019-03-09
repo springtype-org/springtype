@@ -10,3 +10,4 @@ export * from "./src/function/warn";
 export * from "./src/function/debug";
 export * from "./src/function/error";
 export * from "./src/function/trace";
+export * from "./src/interface/LoggerImpl";

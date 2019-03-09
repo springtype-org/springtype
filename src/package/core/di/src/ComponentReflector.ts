@@ -129,7 +129,7 @@ export class ComponentReflector {
         );
     }
 
-    static getSymbol(targetCtor: IComponent<any>): symbol {
+    static getSymbol(targetCtor: IComponent<any>): any {
         return Reflect.get(targetCtor, COMPONENT);
     }
 
