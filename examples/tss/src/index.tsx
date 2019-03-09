@@ -1,14 +1,8 @@
-import {Theme, WebApp} from "@springtype/springtype-incubator-core";
+import {Route, Theme} from "@springtype/springtype-incubator-core";
 import {TSStyledComponent} from "./tss/TSStyledComponent";
 import {theme} from "./theme";
+import {ROUTE_DEFAULT} from "../../todo-mvc/src/routes";
 
 @Theme(theme)
-@WebApp({
-    routes: {
-        '': <tsstyled-component />
-    },
-    components: [
-        TSStyledComponent
-    ]
-})
+@Route(ROUTE_DEFAULT, TSStyledComponent)
 export class TSSExampleApp {}

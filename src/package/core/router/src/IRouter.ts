@@ -3,7 +3,7 @@ import {IReactCreateElement} from "../../renderer/src/TSXRenderer";
 import {IComponent} from "../../di";
 import {WebComponentLifecycle} from "../../index";
 
-export const ROUTE_WILDCARD = '*';
+export const ROUTE_NOT_FOUND = '*';
 
 export interface WebModuleRouteDefinition {
     component: IReactCreateElement|IComponent<any>;

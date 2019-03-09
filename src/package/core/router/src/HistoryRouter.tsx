@@ -3,7 +3,7 @@ import {RouterOutlet} from "./RouterOutlet";
 import {
     IRouter,
     LocationChangeDecision,
-    ROUTE_WILDCARD,
+    ROUTE_NOT_FOUND,
     TokenizedWebModuleRoutes,
     WebModuleRouteDefinition,
     WebModuleRoutes
@@ -33,7 +33,11 @@ export class HistoryRouter implements IRouter {
         for (let route in routes) {
             this.TOKENIZED_ROUTES[route] = this.tokenizeRoute(route, true);
         }
-        Object.assign(this.ROUTE_MAP, routes);
+        
+        this.ROUTE_MAP = {
+            ...this.ROUTE_MAP,
+            ...routes
+        };
     }
 
     protected tokenizeRoute(route: string, registration: boolean = false): Array<string> {
@@ -96,21 +100,23 @@ export class HistoryRouter implements IRouter {
             }
         }
 
-        if (this.ROUTE_MAP[ROUTE_WILDCARD]) {
+        console.log('routing...', this.ROUTE_MAP);
 
-            const resolvedComponentAndParams = this.getComponent(this.ROUTE_MAP[ROUTE_WILDCARD]);
+        if (this.ROUTE_MAP[ROUTE_NOT_FOUND]) {
+
+            const resolvedComponentAndParams = this.getComponent(this.ROUTE_MAP[ROUTE_NOT_FOUND]);
 
             return {
-                route: ROUTE_WILDCARD,
+                route: ROUTE_NOT_FOUND,
                 component: resolvedComponentAndParams.component,
                 params: resolvedComponentAndParams.params
             } as LocationChangeDecision;
         } else {
 
             return {
-                route: ROUTE_WILDCARD,
+                route: ROUTE_NOT_FOUND,
                 component: <st-error props={{
-                    errorMessage: `No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_WILDCARD}")!`
+                    errorMessage: `No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_NOT_FOUND}")!`
                 }} />,
                 params: {}
             } as LocationChangeDecision;

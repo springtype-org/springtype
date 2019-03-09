@@ -6,9 +6,6 @@ Pre-beta-release TODO list:
   - webcomponent
     - Refactor @WebComponent god-like implementation
     - components in config -> "useComponent" or "using" or "import"?
-  - router
-    - Implement @Route(...) to register with ApplicationContext to route to
-      web components without any @WebApp. Just activate the router when needed!
   - renderer  
     - Remove RenderUtils
   - test

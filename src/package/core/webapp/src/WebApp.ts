@@ -1,6 +1,6 @@
 import {IRenderer, TSXRenderer} from "../../renderer";
 import {ApplicationContext, Component, IComponent, StateManager} from "../../index";
-import {HistoryRouter, IRouter, WebModuleRoutes} from "../../router";
+import {HistoryRouter, IRouter} from "../../router";
 import * as R from "@rematch/core";
 import {hmrEntrypoint} from "../../hmr";
 
@@ -14,7 +14,6 @@ hmrEntrypoint(module);
 import "../../router/src/RouterOutlet";
 
 export interface WebAppConfig {
-    routes: WebModuleRoutes|null,
     isDefault?: boolean;
     renderer?: IRenderer;
     router?: IRouter;
@@ -66,12 +65,6 @@ export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
             });
         }
 
-        if (config.router && config.routes) {
-
-            // register routes within application router
-            config.router.registerRoutes(config.routes);
-        }
-
         ApplicationContext.getInstance().setWebAppConfig(config);
 
         return injectableWebApp;
@@ -82,6 +75,5 @@ export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
 @WebApp({
     router: ApplicationContext.getInstance().getBean(HistoryRouter),
     renderer: ApplicationContext.getInstance().getBean(TSXRenderer),
-    routes: null,
 })
 export class DefaultWebApp {}

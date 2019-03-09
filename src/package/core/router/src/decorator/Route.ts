@@ -1,29 +1,20 @@
-import {ComponentReflector} from "../../../di";
-import {WebModuleRoutes} from "../IRouter";
+import {ApplicationContext, IComponent, IReactCreateElement, Router} from "../../../index";
 
-export interface RoutingTargetObject<RTO> extends Function {
-    new(...args: any[]): RTO;
-}
+export const registerRoute = (route: string, webComponent: any): void => {
 
-export interface RouteConfig extends WebModuleRoutes {
-}
+    const router: Router = ApplicationContext.getInstance().getBean(Router);
 
-const registerRoute = (prototype: any, routeConfig: RouteConfig) => {
-
-    ComponentReflector.addInitializer(prototype, (instance: any) => {
-
-        console.log('annotate routeConfig', routeConfig, 'to', prototype, 'instance', instance);
-    });
+    router.registerRoutes({
+        [route]: webComponent
+    })
 };
 
-export function Route<RTO extends RoutingTargetObject<any>>(routeConfig: RouteConfig): RTO|any {
+export function Route(route: string, routeTargetWebComponent: IReactCreateElement|IComponent<any>): any {
 
-    // called with @Route() or @Route({})
-    if (!(typeof routeConfig === 'function')) {
+    return (targetWebComponent: any) => {
 
-        return (target: any) => {
-            registerRoute(target, routeConfig);
-            return target;
-        }
+        registerRoute(route, routeTargetWebComponent);
+
+        return targetWebComponent;
     }
 }
