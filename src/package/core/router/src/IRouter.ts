@@ -1,6 +1,7 @@
 import {RouterOutlet} from "./RouterOutlet";
 import {IReactCreateElement} from "../../renderer/src/TSXRenderer";
 import {IComponent} from "../../di";
+import {WebComponentLifecycle} from "../../index";
 
 export const ROUTE_WILDCARD = '*';
 

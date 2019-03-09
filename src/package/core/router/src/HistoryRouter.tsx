@@ -1,4 +1,4 @@
-import {Component} from "../../index";
+import {Component, IComponent, WebComponentReflector} from "../../index";
 import {RouterOutlet} from "./RouterOutlet";
 import {
     IRouter,
@@ -117,14 +117,28 @@ export class HistoryRouter implements IRouter {
         }
     }
 
-    protected getComponent(cmpOrDef: WebModuleRouteDefinition | IReactCreateElement): {
+    protected isWebComponentClass(component: any): boolean {
+        return !!WebComponentReflector.getTagName(component);
+    }
+
+    protected getComponent(cmpOrDef: WebModuleRouteDefinition | IReactCreateElement | IComponent<any>): {
         params: any,
         component: IReactCreateElement
     } {
-
-        const component = (cmpOrDef as WebModuleRouteDefinition).component ?
+        let component: any = (cmpOrDef as WebModuleRouteDefinition).component ?
             (cmpOrDef as WebModuleRouteDefinition).component :
             (cmpOrDef as IReactCreateElement);
+
+        if (this.isWebComponentClass(component)) {
+
+            const tagName = WebComponentReflector.getTagName(component as any);
+
+            component = {
+                name: tagName,
+                attributes: [],
+                children: []
+            };
+        }
 
         const params = (cmpOrDef as WebModuleRouteDefinition).params || {};
 

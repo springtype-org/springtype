@@ -7,12 +7,13 @@ import {ROUTE_DEFAULT, ROUTE_TODO_DETIALS, ROUTE_TODO_LIST} from "./routes";
 import {ExampleTodoList} from "./component/list/ExampleTodoList";
 import {ExampleTodoDetail} from "./component/detail/ExampleTodoDetail";
 import {Logo} from "./component/logo/Logo";
+import {Page404} from "./page404";
 
 const listWithLayout = <app-layout props={{ children: <example-todo-list /> }} />;
 
 @WebApp({
     routes: {
-        [ROUTE_WILDCARD]: <div>405 I'm a teapot.</div>,
+        [ROUTE_WILDCARD]: Page404,
         [ROUTE_DEFAULT]: listWithLayout,
         [ROUTE_TODO_LIST]: listWithLayout,
         [ROUTE_TODO_DETIALS]: <app-layout props={{ children: <example-todo-detail /> }} />,
