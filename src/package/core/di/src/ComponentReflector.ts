@@ -7,12 +7,12 @@ import {
 } from "./decorator/Inject";
 import {InjectionStrategy} from "./BeanFactory";
 
-export const COMPONENT_SYMBOL = Symbol('COMPONENT_SYMBOL');
-export const COMPONENT_CONSTRUCTOR_PARAMETER_METADATA = Symbol('COMPONENT_CONSTRUCTOR_PARAMETER_METADATA');
-export const COMPONENT_NAME = Symbol('COMPONENT_NAME');
-export const COMPONENT_CONFIG = Symbol('COMPONENT_CONFIG');
-export const RESOLVED_CONSTRUCTOR_ARGUMENTS = Symbol('RESOLVED_CONSTRUCTOR_ARGUMENTS');
-export const COMPONENT_IS_MOCK_FLAG = Symbol('COMPONENT_IS_MOCK_FLAG');
+export const COMPONENT = 'COMPONENT';
+export const COMPONENT_CONSTRUCTOR_PARAMETER_METADATA = 'COMPONENT_CONSTRUCTOR_PARAMETER_METADATA';
+export const COMPONENT_NAME = 'COMPONENT_NAME';
+export const COMPONENT_CONFIG = 'COMPONENT_CONFIG';
+export const RESOLVED_CONSTRUCTOR_ARGUMENTS = 'RESOLVED_CONSTRUCTOR_ARGUMENTS';
+export const COMPONENT_IS_MOCK_FLAG = 'COMPONENT_IS_MOCK_FLAG';
 
 /**
  * This class uses the Reflect.metadata standard API (polyfilled)
@@ -46,7 +46,7 @@ export class ComponentReflector {
     ): void {
 
         Reflect.set(componentCtor, COMPONENT_CONFIG, beanConfig);
-        Reflect.set(componentCtor, COMPONENT_SYMBOL, Symbol(componentCtor.name));
+        Reflect.set(componentCtor, COMPONENT, Symbol(componentCtor.name));
         Reflect.set(componentCtor, COMPONENT_NAME, componentCtor.name);
         Reflect.set(componentCtor, COMPONENT_CONSTRUCTOR_PARAMETER_METADATA, parameterInjectionMetadata);
     }
@@ -56,7 +56,7 @@ export class ComponentReflector {
         derivedComponentCtor: IComponent<any>,
     ) {
 
-        Reflect.set(derivedComponentCtor, COMPONENT_SYMBOL, ComponentReflector.getSymbol(originalComponentCtor));
+        Reflect.set(derivedComponentCtor, COMPONENT, ComponentReflector.getSymbol(originalComponentCtor));
         Reflect.set(derivedComponentCtor, COMPONENT_NAME, ComponentReflector.getName(originalComponentCtor));
         Reflect.set(derivedComponentCtor, COMPONENT_CONFIG, ComponentReflector.getConfig(originalComponentCtor));
         Reflect.set(derivedComponentCtor, COMPONENT_CONSTRUCTOR_PARAMETER_METADATA,
@@ -130,7 +130,7 @@ export class ComponentReflector {
     }
 
     static getSymbol(targetCtor: IComponent<any>): symbol {
-        return Reflect.get(targetCtor, COMPONENT_SYMBOL);
+        return Reflect.get(targetCtor, COMPONENT);
     }
 
     static getName(targetCtor: IComponent<any>): string {

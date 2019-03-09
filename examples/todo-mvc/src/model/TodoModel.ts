@@ -1,4 +1,11 @@
-import {StateEffect, StateModel, StateModelLifecycle, StateReducer} from "@springtype/springtype-incubator-core";
+import {
+    log,
+    Logger,
+    StateEffect,
+    StateModel,
+    StateModelLifecycle,
+    StateReducer
+} from "@springtype/springtype-incubator-core";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
 import {IRootState} from "../state/IRootState";
 import {getPhantomId} from "../function/getPhantomId";
@@ -25,6 +32,7 @@ export class TodoModel implements StateModelLifecycle<ITodoState, TodoModelReduc
     constructor(
         public initialState: ITodoState,
         public reducers: TodoModelReducers,
+        protected logger: Logger,
     ) {
         initialState.todos = initialTodos;
     }
@@ -66,9 +74,15 @@ export class TodoModel implements StateModelLifecycle<ITodoState, TodoModelReduc
     @StateEffect
     async removeTodo(todoItem: ITodoItem) {
 
+        this.logger.log('Removing todoItem in 1000 ms...', todoItem);
+
         return new Promise<ITodoState>((resolve) => {
             setTimeout(() => {
+
                 resolve(this.reducers.onRemoveTodo(todoItem));
+
+                log('Removed todoItem', todoItem);
+
             }, 1000);
         });
     }

@@ -4,10 +4,10 @@ export interface ThemeTargetObject<TTO> {
     new(...args: any[]): TTO;
 }
 
-export const CONTEXT_THEME = Symbol("CONTEXT_THEME");
+export const CONTEXT_THEME = "CONTEXT_THEME";
 
 const registerTheme = (prototype: any, theme: any) => {
-    ApplicationContext.getInstance().set(CONTEXT_THEME, theme);
+    ApplicationContext.getInstance().setResource(CONTEXT_THEME, theme);
 };
 
 export function Theme<TTO extends ThemeTargetObject<any>>(theme: any): TTO|any {

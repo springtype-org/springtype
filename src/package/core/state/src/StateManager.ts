@@ -1,6 +1,6 @@
 import * as R from "@rematch/core";
 
-export const MODEL = Symbol('MODEL');
+export const MODEL = 'MODEL';
 
 export class StateManager {
 

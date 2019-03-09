@@ -1,5 +1,5 @@
 import {IRenderer, TSXRenderer} from "../../renderer";
-import {ApplicationContext, Component, ConsoleLogger, IComponent, ILogger, StateManager} from "../../index";
+import {ApplicationContext, Component, IComponent, StateManager} from "../../index";
 import {HistoryRouter, IRouter, WebModuleRoutes} from "../../router";
 import * as R from "@rematch/core";
 import {hmrEntrypoint} from "../../hmr";
@@ -18,7 +18,6 @@ export interface WebAppConfig {
     isDefault?: boolean;
     renderer?: IRenderer;
     router?: IRouter;
-    logger?: ILogger;
     components?: Array<IComponent<any>>;
     models?: {
         [modelName: string]: IComponent<any>;
@@ -44,10 +43,6 @@ export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
         } else {
 
             // inherit default instances
-            if (!config.logger) {
-                config.logger = defaultWebAppConfig.logger;
-            }
-
             if (!config.renderer) {
                 config.renderer = defaultWebAppConfig.renderer;
             }
@@ -87,7 +82,6 @@ export function WebApp<WA extends IWebApp<any>>(config: WebAppConfig): any {
 @WebApp({
     router: ApplicationContext.getInstance().getBean(HistoryRouter),
     renderer: ApplicationContext.getInstance().getBean(TSXRenderer),
-    logger: ApplicationContext.getInstance().getBean(ConsoleLogger),
     routes: null,
 })
 export class DefaultWebApp {}

@@ -3,7 +3,7 @@ import {InjectionProfile, InjectionStrategy} from "../BeanFactory";
 import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";
 
-export const INJECT_DECORATOR_METADATA_KEY = Symbol("@Inject");
+export const INJECT_DECORATOR_METADATA_KEY = "@Inject";
 
 export interface ArgumentInjectionMetadata {
     index: number;

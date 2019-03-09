@@ -10,8 +10,8 @@ import * as _ from "lodash";
 import {NestedCSSSelectors} from "typestyle/lib/types";
 import {CONTEXT_THEME} from "../../tss";
 
-export const CHILD_ELEMENT = Symbol('CHILD_ELEMENT');
-const PROPS_OBJECT = Symbol('PROPS_OBJECT');
+export const CHILD_ELEMENT = 'CHILD_ELEMENT';
+const PROPS_OBJECT = 'PROPS_OBJECT';
 
 export enum ShadowAttachMode {
     OPEN = 'open',
@@ -316,7 +316,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 // generate and inject styles
                 if (config.style) {
 
-                    const contextTheme = ApplicationContext.getInstance().get(CONTEXT_THEME);
+                    const contextTheme = ApplicationContext.getInstance().getResource(CONTEXT_THEME);
 
                     const theme = {
                         ...contextTheme ? contextTheme : {},

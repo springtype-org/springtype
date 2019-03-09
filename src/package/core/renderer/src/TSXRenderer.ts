@@ -1,5 +1,5 @@
 import {IRenderer} from "./IRenderer";
-import {Component, ConsoleLogger} from "../..";
+import {Component, Logger} from "../..";
 import {
     Attribute,
     checkNameNs,
@@ -43,7 +43,7 @@ export class TSXRenderer implements IRenderer {
     protected _nativeCreateElement: Function = document.createElement.bind(document);
     protected _nativeCreateElementNS: Function = document.createElementNS.bind(document);
 
-    constructor(public logger: ConsoleLogger) {
+    constructor(public logger: Logger) {
         this.init();
     }
 

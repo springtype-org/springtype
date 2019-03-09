@@ -1,6 +1,6 @@
 import {ITestRegistration, TEST_CONFIGS} from "./Test";
 
-export const RETURNS_ASSERT_VALUE = Symbol('ASSERT_VALUE');
+export const RETURNS_ASSERT_VALUE = 'ASSERT_VALUE';
 
 export interface ITestClass<TC> extends Function {
     new(...args: any[]): TC;

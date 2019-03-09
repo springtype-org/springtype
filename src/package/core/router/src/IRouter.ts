@@ -1,16 +1,17 @@
 import {RouterOutlet} from "./RouterOutlet";
 import {IReactCreateElement} from "../../renderer/src/TSXRenderer";
+import {IComponent} from "../../di";
 
 export const ROUTE_WILDCARD = '*';
 
 export interface WebModuleRouteDefinition {
-    component: IReactCreateElement;
+    component: IReactCreateElement|IComponent<any>;
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;
     params?: Object;
 }
 
 export interface WebModuleRoutes {
-    [route: string]: WebModuleRouteDefinition|IReactCreateElement;
+    [route: string]: WebModuleRouteDefinition|IReactCreateElement|IComponent<any>;
 }
 
 export interface TokenizedWebModuleRoutes {

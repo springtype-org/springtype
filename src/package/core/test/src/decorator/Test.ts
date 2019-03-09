@@ -1,7 +1,7 @@
 import {RETURNS_ASSERT_VALUE} from "./TestSuite";
 
-export const TEST_CONFIGS = Symbol('TEST_CONFIGS');
-export const TEST_METHOD_WRAPPED_FLAG = Symbol('TEST_METHOD_WRAPPED_FLAG');
+export const TEST_CONFIGS = 'TEST_CONFIGS';
+export const TEST_METHOD_WRAPPED_FLAG = 'TEST_METHOD_WRAPPED_FLAG';
 
 export interface ITestConfig {
     params?: Array<any>;

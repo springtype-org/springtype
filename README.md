@@ -26,6 +26,8 @@ Pre-beta-release TODO list:
     - Implement @Entrypoint?
   - example/minesweeper
     - Use model and state
+  - logger
+    - Make function interfaces async
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app
