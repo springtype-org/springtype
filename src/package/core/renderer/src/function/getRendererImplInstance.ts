@@ -1,4 +1,3 @@
-
 import {RendererImplType} from "../enum/RendererImplType";
 import {TSXRendererImpl} from "../impl/TSXRendererImpl";
 import {ApplicationContext} from "../../../di";

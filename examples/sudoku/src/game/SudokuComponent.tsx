@@ -24,15 +24,18 @@ interface GameState {
     style
 })
 
-// TODO: Refactor: @ChangeDetection
-@ChangeDetection
-@DetectFieldChanges("gameState") // activate change detection just for this class field
+// TODO: Remove with new state concept
+@DetectFieldChanges("gameState", true, (instance: any, props) => {
+    console.log('game state change');
+}) // activate change detection just for this class field
 export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {
 
-    constructor(public props: Props,
+    constructor(
 
-                // TODO: @DetectChanges
-                protected gameState: GameState) {
+        // TODO: @
+        public props: Props,
+        // TODO: @DetectChanges
+        protected gameState: GameState) {
         super();
     }
 

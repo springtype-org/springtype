@@ -12,6 +12,10 @@ import {COMPONENT_INITIALIZERS} from "./constant/COMPONENT_INITIALIZERS";
 import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
 import {createDefaultArgumentsInjectionMetadata} from "./function/createDefaultArgumentsInjectionMetadata";
 import {InjectionReference} from "./type/InjectionReference";
+import {BeanInitializer} from "./interface/BeanInitializer";
+import {CONSTRUCTOR_ARGUMENT_INITIALIZERS} from "./constant/CONSTRUCTOR_ARGUMENT_INITIALIZERS";
+import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
+import {ConstructorArgumentInitializerFunction} from "./interface/ConstructorArgumentInitializerFunction";
 
 /**
  * This class uses the Reflect.metadata standard API (polyfilled)
@@ -45,7 +49,7 @@ export class ComponentReflector {
     ): void {
 
         Reflect.set(componentCtor, COMPONENT_CONFIG, beanConfig);
-        Reflect.set(componentCtor, COMPONENT, Symbol(componentCtor.name));
+        Reflect.set(componentCtor, COMPONENT, componentCtor.name);
         Reflect.set(componentCtor, COMPONENT_NAME, componentCtor.name);
         Reflect.set(componentCtor, COMPONENT_CONSTRUCTOR_PARAMETER_METADATA, parameterInjectionMetadata);
     }
@@ -153,17 +157,34 @@ export class ComponentReflector {
         return !!ComponentReflector.getSymbol(componentCtor);
     }
 
-    static getInitializers(targetCtor: ComponentImpl<any>): Array<Function> {
+    static getInitializers(targetCtor: ComponentImpl<any>): Array<BeanInitializer> {
         return Reflect.get(targetCtor, COMPONENT_INITIALIZERS) || [];
     }
 
-    static addInitializer(targetCtor: ComponentImpl<any>, initializer: Function): void {
-        const initializers = Reflect.get(targetCtor, COMPONENT_INITIALIZERS) || [];
+    static addInitializer(targetCtor: ComponentImpl<any>, initializer: BeanInitializer): void {
+        const initializers = ComponentReflector.getInitializers(targetCtor);
         initializers.push(initializer);
         Reflect.set(targetCtor, COMPONENT_INITIALIZERS, initializers);
     }
 
-    static callInitializers(initializers: Array<Function>, instance: any): void {
+    static callInitializers(initializers: Array<BeanInitializer>, instance: any): void {
         initializers.forEach(initializer => initializer(instance));
+    }
+
+    static getConstructorArgumentInitializers(targetCtor: ComponentImpl<any>): Array<ConstructorArgumentInitializer> {
+        return Reflect.get(targetCtor, CONSTRUCTOR_ARGUMENT_INITIALIZERS) || [];
+    }
+
+    static addConstructorArgumentInitializer(
+        targetCtor: ComponentImpl<any>,
+        initializer: ConstructorArgumentInitializerFunction,
+        argumentIndex: number
+    ): void {
+        const initializers = ComponentReflector.getConstructorArgumentInitializers(targetCtor);
+        initializers.push({
+            initializer,
+            argumentIndex
+        });
+        Reflect.set(targetCtor, CONSTRUCTOR_ARGUMENT_INITIALIZERS, initializers);
     }
 }

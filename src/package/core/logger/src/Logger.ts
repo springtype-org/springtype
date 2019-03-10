@@ -4,7 +4,6 @@ import {getAppLogger} from "./function/getAppLogger";
 import {LogFilterFunction} from "./interface/LogFilterFunction";
 import {LogLevel} from "./enum/LogLevel";
 import {filterByLogLevel} from "./function/filterByLogLevel";
-import {getLogLevelSeverity} from "./function/getLogLevelSeverity";
 
 /**
  * Logger to inject which uses the decorator-provided application logger (@AppLogger(...))

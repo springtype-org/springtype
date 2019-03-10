@@ -1,4 +1,4 @@
-import {ApplicationContext, ComponentImpl, Router, VirtualElement} from "../../../index";
+import {ComponentImpl, VirtualElement} from "../../../index";
 import {registerRoute} from "../function/registerRoute";
 
 export function Route(route: string, routeTargetWebComponent: VirtualElement|ComponentImpl<any>): any {

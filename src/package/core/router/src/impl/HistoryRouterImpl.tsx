@@ -1,8 +1,6 @@
 import {Component, ComponentImpl, VirtualElement, WebComponentReflector} from "../../../index";
 import {RouterOutlet} from "../RouterOutlet";
-import {
-    RouterImpl,
-} from "../interface/RouterImpl";
+import {RouterImpl,} from "../interface/RouterImpl";
 import {TokenizedRoutes} from "../interface/TokenizedRoutes";
 import {Routes} from "../interface/Routes";
 import {RouteDefinition} from "../interface/RouteDefinition";

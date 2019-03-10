@@ -1,4 +1,9 @@
-import {VirtualElement, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {
+    UseComponent,
+    VirtualElement,
+    WebComponent,
+    WebComponentLifecycle
+} from "@springtype/springtype-incubator-core";
 import {Logo} from "../logo/Logo";
 
 export interface LayoutProps {
@@ -6,15 +11,13 @@ export interface LayoutProps {
 }
 
 @WebComponent({
-    tag: 'app-layout',
-    components: [
-        Logo
-    ]
+    tag: 'app-layout'
 })
+@UseComponent(Logo)
 export class AppLayout extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
-        public props: LayoutProps
+        public props: LayoutProps,
     ) {
         super();
     }

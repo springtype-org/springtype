@@ -7,7 +7,8 @@ export class StateManager {
 
     static createStore(storeInitConfig?: Rematch.InitConfig): Rematch.RematchStore {
 
-        console.log('initConfig', storeInitConfig);
+        // TODO: Allow to provide Store config?
+        //console.log('StateManager initConfig', storeInitConfig);
 
         const store = Rematch.init(storeInitConfig);
         StateManager.setStore(store);
@@ -31,12 +32,8 @@ export class StateManager {
         let store = StateManager.getStore();
 
         if (!store) {
-            console.log('Creating store...');
             store = StateManager.createStore();
         }
-
-        console.log('Adding model...', modelConfig);
-
         store.model(modelConfig);
 
         Reflect.set(stateModel, MODEL, Rematch.createModel(modelConfig));

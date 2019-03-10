@@ -5,6 +5,7 @@ import {PRIMITIVE_TYPE_NAMES} from "./constant/PRIMITIVE_TYPE_NAMES";
 import {ComponentImpl} from "./interface/ComponentImpl";
 import {resolveInjectionArgumentValue} from "./function/resolveInjectionArgumentValue";
 import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
+import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 
 export class BeanFactory {
 
@@ -124,6 +125,7 @@ export class BeanFactory {
         const constructorArgumentsParameterInjectionMetdata: ArgumentsInjectionMetadata =
             ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
 
+
         // but if there are special @Inject decorations,
         // we head to resolve them and use these values instead
         if (constructorArgumentsParameterInjectionMetdata &&
@@ -145,6 +147,18 @@ export class BeanFactory {
                         );
                 }
             }
+        }
+
+        const constructorArgumentInitializers = ComponentReflector.getConstructorArgumentInitializers(componentCtor);
+
+        if (constructorArgumentInitializers.length) {
+
+            constructorArgumentInitializers.forEach((initializer: ConstructorArgumentInitializer) => {
+
+                constructorArguments[initializer.argumentIndex] = initializer.initializer(
+                    constructorArguments[initializer.argumentIndex]
+                );
+            });
         }
 
         // cache

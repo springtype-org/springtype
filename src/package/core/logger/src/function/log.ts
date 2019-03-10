@@ -1,5 +1,3 @@
-import {getAppLogger} from "./getAppLogger";
-import {LoggerImpl} from "../interface/LoggerImpl";
 import {ApplicationContext} from "../../../di";
 import {Logger} from "../Logger";
 

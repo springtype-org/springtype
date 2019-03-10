@@ -1,16 +1,15 @@
-import {ChangeDetectionInterceptor} from "../../../../index";
-import {interceptableChange} from "./interceptableChange";
 import * as _ from "lodash";
+import {interceptableChange} from "./interceptableChange";
+import {ChangeDetectionInterceptor} from "../../../../index";
 
 export const createChangeDetector = (
-    instance: any,
-    fieldName: string,
+    initialValue: any,
     memorize: boolean,
-    onChange: ChangeDetectionInterceptor = (props: any, name: string|number|symbol, value: any) => {},
-    onBeforeChange: ChangeDetectionInterceptor = (props: any, name: string|number|symbol, value: any) => true,
+    onChange: ChangeDetectionInterceptor = (instance: any, name: string|number|symbol, value: any) => {},
+    onBeforeChange: ChangeDetectionInterceptor = (instance: any, name: string|number|symbol, value: any) => true,
 ) => {
 
-    instance[fieldName] = new Proxy({}, {
+    return new Proxy(initialValue, {
         set: (props: any, name: string | number | symbol, value: any): boolean => {
 
             if (memorize) {
@@ -23,12 +22,11 @@ export const createChangeDetector = (
                 interceptableChange(props, name, value, onChange, onBeforeChange);
             }
             return true;
+        },
+        getPrototypeOf() {
+            return {
+                isChangeDetector: true
+            };
         }
-    });
-
-    // make property immutable so it can't loose change detection
-    // in case of instance[fieldName] = someThingElse but throws
-    Object.defineProperty(instance, fieldName, {
-        writable: false
     });
 };

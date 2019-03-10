@@ -1,7 +1,6 @@
-import {ApplicationContext, Component} from "../../index";
+import {Component} from "../../index";
 import {RouterImpl} from "./interface/RouterImpl";
 import {RouterOutlet} from "./RouterOutlet";
-import {APP_ROUTER} from "./constant/APP_ROUTER";
 import {getAppRouter} from "./function/getAppRouter";
 import {Routes} from "./interface/Routes";
 

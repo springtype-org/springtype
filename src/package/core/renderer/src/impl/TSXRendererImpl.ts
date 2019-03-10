@@ -8,6 +8,7 @@ import {DEFAULT_NAMESPACE_NAME} from "./tsx-renderer-impl/constant/DEFAULT_NAMES
 import {Attribute} from "./tsx-renderer-impl/interface/Attribute";
 import {RuntimeDOMAttributeCacheMap} from "./tsx-renderer-impl/interface/RuntimeDOMAttributeCacheMap";
 import {NamespaceAttribute} from "./tsx-renderer-impl/interface/NamespaceAttribute";
+import {getInternalRenderApi} from "../function/getInternalRenderApi";
 
 @Component
 export class TSXRendererImpl implements RendererImpl {
@@ -38,16 +39,15 @@ export class TSXRendererImpl implements RendererImpl {
 
     init() {
 
+        // tsconfig.json tsx -> preserve
         // implement React TSX rendering API
         // (used globally by TypeScript compiler --jsx emitted code)
         (<any>window).React = this;
 
-        const internalRenderAPI = (<any>window).React;
-
         // assign at global scope for the native DOM functions to instantiate
         // WebComponents using this TSX renderer
-        document.createElement = internalRenderAPI.render.bind(
-            internalRenderAPI.createElement.bind((internalRenderAPI))
+        document.createElement = getInternalRenderApi().render.bind(
+            getInternalRenderApi().createElement.bind((getInternalRenderApi()))
         );
     }
 

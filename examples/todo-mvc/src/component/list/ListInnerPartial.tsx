@@ -8,27 +8,26 @@ import {
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
+import {MapStateToField} from "../../../../../src/package/core";
 
 interface TodoListProps {
     todos: Array<ITodoItem>;
 }
 
 @WebComponent({
-    tag: 'app-list-inner-partial',
-
-    // automatically called when the state changes (see model)
-    mapStateToProps: (state: IRootState): Partial<TodoListProps> => ({
-        todos: TodoModel.selectTodos(state)
-    })
+    tag: 'app-list-inner-partial'
 })
 export class ListInnerPartial extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
+        @MapStateToField((state: IRootState): Partial<TodoListProps> => ({
+            todos: TodoModel.selectTodos(state)
+        }))
         public props: TodoListProps,
         protected model: TodoModel,
         protected router: Router
     ) {
-        super()
+        super();
     }
 
     onListItemClick = (id: number) => {

@@ -1,0 +1,1 @@
+export const DEFAULT_PROPS_FIELD_NAME = "props";

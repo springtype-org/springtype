@@ -1,4 +1,4 @@
-import {registerForConnect} from "../function/registerForConnect";
+import {registerToCreateStateGetter} from "../function/registerToCreateStateGetter";
 import {DEFAULT_STATE_FIELD_NAME} from "../constant/DEFAULT_STATE_FIELD_NAME";
 
 export function Stateful(stateFieldName?: any): any {
@@ -7,13 +7,13 @@ export function Stateful(stateFieldName?: any): any {
     if (!(typeof stateFieldName === 'function')) {
 
         return (target: any) => {
-            registerForConnect(target, stateFieldName);
+            registerToCreateStateGetter(target, stateFieldName);
             return target;
         }
 
     } else {
 
-        registerForConnect(stateFieldName, DEFAULT_STATE_FIELD_NAME);
+        registerToCreateStateGetter(stateFieldName, DEFAULT_STATE_FIELD_NAME);
 
         // called with @Stateful
         return stateFieldName;

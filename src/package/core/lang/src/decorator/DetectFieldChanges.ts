@@ -8,7 +8,7 @@ export function DetectFieldChanges(
     onBeforeChange?: ChangeDetectionInterceptor,
 ): any {
 
-    // called with @ChangeDetector(...)
+    // called with @DetectFieldChanges(...)
     return (target: any) => {
         registerForChangeDetection(target, fieldName, memorize, onChange, onBeforeChange);
         return target;

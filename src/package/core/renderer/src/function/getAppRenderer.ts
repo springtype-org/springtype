@@ -1,4 +1,3 @@
-
 import {ApplicationContext} from "../../../di";
 import {APP_RENDERER} from "../constant/APP_RENDERER";
 import {setAppRenderer} from "./setAppRenderer";

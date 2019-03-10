@@ -2,6 +2,9 @@ import {VirtualElement} from "../../../renderer";
 
 export interface WebComponentLifecycle extends HTMLElement {
 
+    mounted?: boolean;
+    propsField?: string;
+
     init?(): void;
 
     mount?(): void;
@@ -17,6 +20,7 @@ export interface WebComponentLifecycle extends HTMLElement {
 
     onPropChanged?(name: string, newValue: any, oldValue?: any): void;
 
+    onBeforePropsChange?(props: any, name: string | number | symbol, value: any): boolean;
     onPropsChanged?(props: any, name: string | number | symbol, value: any): void;
 
     reflow?(): void;
