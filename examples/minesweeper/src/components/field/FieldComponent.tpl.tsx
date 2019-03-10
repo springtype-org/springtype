@@ -36,7 +36,7 @@ export default (view: FieldComponent) => {
                  () => {
                      if (!view.props.showBomb) {
                          const neighborsNotOpen = view.props.neighbors.all
-                             .map((pos) => FieldComponent.fieldComponent[pos])
+                             .map((pos) => FieldComponent.fieldComponents[pos])
                              .filter(nb => !nb.props.open);
 
                          const neighborsNotOpenWithoutFlag = neighborsNotOpen.filter(nb => !nb.props.flag);

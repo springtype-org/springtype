@@ -1,0 +1,1 @@
+export const DEFAULT_STATE_FIELD_NAME = 'state';

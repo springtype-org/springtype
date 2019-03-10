@@ -1,6 +1,6 @@
-import {Randomizer, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Randomizer, UseComponent, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./MinesweeperApp.tpl";
-import {FieldProp, Neighbors} from "./components/field/FieldComponent";
+import {FieldComponent, FieldProp, Neighbors} from "./components/field/FieldComponent";
 
 declare var Window: any;
 
@@ -8,6 +8,7 @@ declare var Window: any;
     tag: 'sw-app',
     template
 })
+@UseComponent(FieldComponent)
 export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle {
     public matrixDimension: [number, number] = [30, 30];
     public mineMatrix: Array<FieldProp[]> = [];

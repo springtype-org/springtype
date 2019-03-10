@@ -25,7 +25,7 @@ export interface FieldProp {
 })
 
 export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
-    static fieldComponent: FieldComponent[] = [];
+    static fieldComponents: FieldComponent[] = [];
 
     constructor(public props: FieldProp) {
         super()
@@ -33,15 +33,15 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
 
     // TODO: Use model and state
     onPropsChanged() {
-        FieldComponent.fieldComponent[this.props.position] = this;
-        Window.cmp = FieldComponent.fieldComponent;
+        FieldComponent.fieldComponents[this.props.position] = this;
+        Window.cmp = FieldComponent.fieldComponents;
     }
 
     static openFields = (props: FieldProp, checked: number[] = [], level: number = 0): boolean => {
 
         const isSmall = props.amountMines <= 1;
         const checkNeighbors = [...(isSmall ? props.neighbors.all : props.neighbors.check), props.position]
-            .map((pos) => FieldComponent.fieldComponent[pos])
+            .map((pos) => FieldComponent.fieldComponents[pos])
             .filter(cmp => {
                 if (cmp) {
                     return !cmp.props.bomb;
@@ -65,7 +65,7 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
     static checkFailed = (props: FieldProp): boolean => {
         const loose = props.bomb || props.flag;
         if (loose) {
-            FieldComponent.fieldComponent.forEach(cmp => cmp.props.showBomb = true);
+            FieldComponent.fieldComponents.forEach(cmp => cmp.props.showBomb = true);
         }
 
         return loose;

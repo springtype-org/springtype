@@ -162,4 +162,8 @@ export class ComponentReflector {
         initializers.push(initializer);
         Reflect.set(targetCtor, COMPONENT_INITIALIZERS, initializers);
     }
+
+    static callInitializers(initializers: Array<Function>, instance: any): void {
+        initializers.forEach(initializer => initializer(instance));
+    }
 }

@@ -3,10 +3,9 @@
 Pre-beta-release TODO list:
 
 - Modules:
-  - webcomponent
-    - Refactor @WebComponent god-like implementation
+  - webcomponent    
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
-    - components in config -> "useComponent" or "using" or "import"?
+    - Refactor god-class further (export functions etc.)
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
@@ -18,14 +17,17 @@ Pre-beta-release TODO list:
     - Write end-2-end tests for web components
   - example/minesweeper
     - Use model and state
-  - logger
-    - Make function interfaces async
   - state
+    - implement @MapStateToField(...); refactor WebComponent then
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
     - Support for immer: https://github.com/rematch/rematch/blob/master/plugins/immer/README.md
       instead of _.deepClone(state)
+  - cd
+    - change detection decorators to be impl. (see sudoku example)
+    - remove @DetectFieldChanges then
+    - update webcomponent code then
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app

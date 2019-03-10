@@ -1,106 +1,35 @@
 // import es5 adapter for backward-compatibility
-import "./adapter/es5";
+import "../adapter/es5";
 
-import {ApplicationContext, ApplicationEnvironment, Component, ComponentImpl} from "../../di";
-import {WebComponentReflector} from "./WebComponentReflector";
-import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator} from "../../tss";
-import {connectComponent} from "../../state/src/function/connectComponent";
+import {ApplicationContext, ApplicationEnvironment, Component, ComponentImpl} from "../../../di";
+import {WebComponentReflector} from "../WebComponentReflector";
+import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator} from "../../../tss";
+import {createStateGetter} from "../../../state/src/function/createStateGetter";
 import * as _ from "lodash";
-import {NestedCSSSelectors} from "typestyle/lib/types";
-import {APP_THEME} from "../../tss/src/constant/APP_THEME";
-import {VirtualElement} from "../../renderer";
-export const CHILD_ELEMENT = 'CHILD_ELEMENT';
-const PROPS_OBJECT = 'PROPS_OBJECT';
+import {APP_THEME} from "../../../tss/src/constant/APP_THEME";
+import {VirtualElement} from "../../../renderer";
+import {WebComponentImpl} from "./../interface/WebComponentImpl";
+import {WebComponentConfig} from "./../interface/WebComponentConfig";
+import {RenderStrategy} from "./../enum/RenderStrategy";
+import {WebComponentLifecycleEvent} from "./../enum/WebComponentLifecycleEvent";
+import {PropsChangeEvent} from "./../interface/PropsChangeEvent";
+import {ShadowAttachMode} from "./../enum/ShadowAttachMode";
+import {CHILD_ELEMENT} from "./../constant/CHILD_ELEMENT";
+import {AttributeChangeEvent} from "./../interface/AttributeChangeEvent";
+import {transformToElementVector} from "./../function/transformToElementVector";
+import {ComponentReflector} from "../../../di";
+import {createChangeDetector} from "../../../lang/src/decorator/detect-field-changes/function/createChangeDetector";
+import {DEFAULT_CHANGE_DETECTION_FIELD_NAME} from "./../constant/DEFAULT_CHANGE_DETECTION_FIELD_NAME";
+import {DEFAULT_STATE_FIELD_NAME} from "../../../state/src/constant/DEFAULT_STATE_FIELD_NAME";
 
-export enum ShadowAttachMode {
-    OPEN = 'open',
-    CLOSED = 'closed'
-}
-
-export enum RenderStrategy {
-    OnRequest = 'ON_REQUEST',
-    OnPropsChanged = 'ON_PROPS_CHANGED'
-}
-
-export interface WebComponentConfig {
-    tag: string;
-    shadow?: boolean;
-    mapStateToProps?: (state: any) => any;
-    shadowAttachMode?: ShadowAttachMode;
-    observeAttributes?: Array<string>;
-    renderStrategy?: RenderStrategy;
-    template?: (view: any) => VirtualElement | Array<VirtualElement>;
-    style?: (view: any, theme: any) => NestedCSSSelectors;
-    theme?: any;
-    components?: Array<ComponentImpl<any>>;
-}
-
-export interface WebComponentLifecycle extends HTMLElement {
-
-    init?(): void;
-
-    mount?(): void;
-
-    remount?(): void;
-
-    // @ts-ignore
-    render?(): JSX.Element;
-
-    createNativeElement?(reactCreateElement: VirtualElement): any;
-
-    unmount?(): void;
-
-    onPropChanged?(name: string, newValue: any, oldValue?: any): void;
-
-    onPropsChanged?(props: any, name: string | number | symbol, value: any): void;
-
-    reflow?(): void;
-
-    mountChildren?(): void;
-
-    remountChildren?(): void;
-}
-
-export interface AttributeChangeEvent {
-    name: string;
-    oldValue: any;
-    newValue: any;
-}
-
-export interface PropsChangeEvent {
-    props: any;
-    name: string | number | symbol;
-    value: any;
-}
-
-export enum WebComponentLifecycleEvent {
-    BEFORE_INIT = 'BEFORE_INIT',
-    INIT = 'INIT',
-    SHADOW_ATTACHED = 'SHADOW_ATTACHED',
-    BEFORE_MOUNT = 'BEFORE_MOUNT',
-    MOUNT = 'MOUNT',
-    REMOUNT = 'REMOUNT',
-    BEFORE_UNMOUNT = 'BEFORE_UNMOUNT',
-    UNMOUNT = 'UNMOUNT',
-    MOUNT_CHILDREN = 'MOUNT_CHILDREN',
-    REMOUNT_CHILDREN = 'REMOUNT_CHILDREN',
-    BEFORE_PROP_CHANGE = 'BEFORE_PROP_CHANGE',
-    BEFORE_PROPS_CHANGE = 'BEFORE_PROPS_CHANGE',
-    FLOW = 'FLOW',
-    REFLOW = 'REFLOW',
-    RENDER = 'RENDER',
-}
-
-export interface IWebComponent<WC> extends Function {
-    new(...args: any[]): WC;
-}
-
-export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
+export function WebComponent<WC extends WebComponentImpl<any>>(config: WebComponentConfig): any {
 
     if (!config.observeAttributes) config.observeAttributes = [];
 
     // default re-render strategy: when observeAttributes object changes
-    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.OnPropsChanged;
+    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.OnFieldChanges;
+
+    if (!config.changeDetectionField) config.changeDetectionField = DEFAULT_CHANGE_DETECTION_FIELD_NAME;
 
     if (!config.tag) {
         throw new Error("@WebComponent annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
@@ -120,33 +49,29 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             constructor(...args: Array<any>) {
                 super();
 
-                if (config.renderStrategy === RenderStrategy.OnPropsChanged) {
-                    this.props = new Proxy({}, {
-                        set: (props: any, name: string | number | symbol, value: any): boolean => {
+                // call all registered initializer functions for this WebComponent as BeanFactory is not
+                // creating instances of WebComponents but document.createElement. Thus, we need to do it here.
+                ComponentReflector.callInitializers(ComponentReflector.getInitializers(CustomWebComponent), this);
 
-                            if (!_.isEqual(props[name], value)) {
+                if (config.renderStrategy === RenderStrategy.OnFieldChanges) {
 
-                                props[name] = value;
-
-                                const cancelled = !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_PROPS_CHANGE, {
-                                    detail: <PropsChangeEvent>{
-                                        props,
-                                        name,
-                                        value
-                                    }
-                                }));
-
-                                if (!cancelled) {
-                                    this.onPropsChanged(props, name, value);
+                    createChangeDetector(
+                        this,
+                        config.changeDetectionField!,
+                        true,
+                        (props: any, name: string | number | symbol, value: any) => {
+                            this.onPropsChanged(props, name, value);
+                        },
+                        (props: any, name: string | number | symbol, value: any) => {
+                            return this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_PROPS_CHANGE, {
+                                detail: <PropsChangeEvent>{
+                                    props,
+                                    name,
+                                    value
                                 }
-                            }
-                            return true;
+                            }))
                         }
-                    });
-
-                    Object.defineProperty(this, 'props', {
-                        writable: false
-                    });
+                    );
                 }
 
                 if (config.renderStrategy === RenderStrategy.OnRequest) {
@@ -162,13 +87,12 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                 !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_INIT));
 
+                // TODO: Refactor to state module and isolate to be used for any @MapState
                 // every component is stateful, but automatically re-rendering only happens
                 // when there is a mapping from state to props and prop values actually differ
                 if (config.mapStateToProps && typeof config.mapStateToProps === 'function') {
 
                     const mapStateToProps = (state: any) => {
-
-                        const compareProps = _.cloneDeep(this.props);
 
                         const propsToChange: any = config.mapStateToProps!(state);
 
@@ -176,14 +100,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
                             if (propsToChange.hasOwnProperty(propertyName)) {
 
-                                if (!_.isEqual(propsToChange[propertyName], compareProps[propertyName])) {
+                                if (!_.isEqual(propsToChange[propertyName], this.props[propertyName])) {
                                     this.props[propertyName] = propsToChange[propertyName];
                                 }
                             }
                         }
                     };
 
-                    const store = connectComponent(this, (state: any) => {
+                    const store = createStateGetter(this, DEFAULT_STATE_FIELD_NAME, (state: any) => {
                         mapStateToProps(state);
                     });
 
@@ -198,8 +122,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 const attributesToObserve = config.observeAttributes || [];
 
                 // automatically allow for observeAttributes restore
-                if (attributesToObserve.indexOf('props') === -1) {
-                    attributesToObserve.push('props');
+                if (attributesToObserve.indexOf(config.changeDetectionField!) === -1) {
+                    attributesToObserve.push(config.changeDetectionField!);
                 }
                 return attributesToObserve;
             }
@@ -227,6 +151,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             }
 
+            // TODO: Make private / whatever with change-detector
             onPropsChanged(props: any, name: string | number | symbol, value: any): void {
 
                 if (this.mounted) {
@@ -235,6 +160,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                     this.reflow();
                 }
 
+                // TODO: Remove with change-detector
                 if (super.onPropsChanged) {
                     return super.onPropsChanged(props, name, value);
                 }
@@ -284,22 +210,6 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.UNMOUNT));
             }
 
-            /**
-             * Ensure that the destination array have no nested arrays
-             */
-            ensureVector = (destination: VirtualElement[], tsx: VirtualElement | VirtualElement[] | any) => {
-
-                if (tsx.name && tsx.name === 'st-fragment') {
-                    tsx = tsx.children;
-                }
-
-                if (Array.isArray(tsx)) {
-                    tsx.forEach(tsx => destination.push(tsx));
-                } else {
-                    destination.push(tsx)
-                }
-            };
-
             render(): VirtualElement[] {
 
                 const elements: VirtualElement[] = [];
@@ -314,13 +224,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         ...config.theme ? config.theme : {}
                     };
 
-                    this.ensureVector(
+                    transformToElementVector(
                         elements,
                         CSSDeclarationBlockGenerator.generate(config.style(this, theme))
                     );
 
                     // support for :component selector (self-referenced component styles) works even in shadow DOM
-                    const componentInlineStyle: any = CSSInlineStyleGenerator.generateComponentStyles(config.style(this, theme));
+                    const componentInlineStyle: any =
+                        CSSInlineStyleGenerator.generateComponentStyles(config.style(this, theme));
 
                     for (let styleAttributeName in componentInlineStyle) {
 
@@ -331,11 +242,12 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
 
                 if (super.render) {
-                    this.ensureVector(elements, super.render());
+                    transformToElementVector(elements, super.render());
                 } else {
+
                     if (typeof config.template == 'function') {
                         // render template by default
-                        this.ensureVector(elements, config.template(this));
+                        transformToElementVector(elements, config.template(this));
                     }
                 }
                 this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.RENDER));
@@ -351,11 +263,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             protected flow = (initial: boolean = false) => {
-                const _elements: VirtualElement[] = this.render();
-                if (_elements) {
-                    const elements: Element[] = _elements
-                        .filter(el => !!el)
-                        .map((el) => this.createNativeElement(el));
+
+                const virtualElements: VirtualElement[] = this.render();
+
+                if (virtualElements) {
+
+                    const elements: Element[] = virtualElements
+                        .filter(element => !!element)
+                        .map((element) => this.createNativeElement(element));
 
                     if (elements.length > 0) {
                         if (config.shadow) {
@@ -363,6 +278,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                         } else {
                             elements.forEach(el => this.appendChild(el));
                         }
+
                         Reflect.set(this, CHILD_ELEMENT, elements);
 
                         if (initial) {
@@ -396,7 +312,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 const attributeValue = this.getAttributeLocalProp(name, newValue);
 
                 // map local attribute field value
-                if (name !== 'props' || !this[name]) {
+                if (name !== config.changeDetectionField! || !this[name]) {
 
                     // assign
                     this[name] = attributeValue;

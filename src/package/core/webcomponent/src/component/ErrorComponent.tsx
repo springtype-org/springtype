@@ -1,4 +1,5 @@
-import {WebComponent, WebComponentLifecycle} from "../WebComponent";
+import {WebComponent} from "../decorator/WebComponent";
+import {WebComponentLifecycle} from "../..";
 
 export interface ErrorComponentProps {
     errorMessage: string;

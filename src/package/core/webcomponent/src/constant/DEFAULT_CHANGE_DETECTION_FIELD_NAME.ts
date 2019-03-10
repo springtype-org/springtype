@@ -1,0 +1,1 @@
+export const DEFAULT_CHANGE_DETECTION_FIELD_NAME = "props";

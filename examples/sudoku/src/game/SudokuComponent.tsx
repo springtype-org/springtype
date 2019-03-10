@@ -1,9 +1,20 @@
 import template from "./SudokuComponent.tpl";
 import style from "./SudokuComponent.style";
-import {Logger, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {
+    DetectFieldChanges,
+    log,
+    warn,
+    WebComponent,
+    WebComponentLifecycle,
+    ChangeDetection
+} from "@springtype/springtype-incubator-core";
 
 interface Props {
     difficulty: number;
+}
+
+interface GameState {
+    won: boolean;
 }
 
 @WebComponent({
@@ -12,17 +23,37 @@ interface Props {
     template,
     style
 })
+
+// TODO: Refactor: @ChangeDetection
+@ChangeDetection
+@DetectFieldChanges("gameState") // activate change detection just for this class field
 export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {
 
     constructor(public props: Props,
-                protected logger: Logger) {
+
+                // TODO: @DetectChanges
+                protected gameState: GameState) {
         super();
+    }
+
+    // TODO: @OnChange("gameState")
+    validate() {
+
+        console.log('Executed because gameState changed!', this.gameState);
     }
 
     init() {
 
-        this.logger.log('SudokuComponent init');
+        this.gameState.won = true;
 
-        this.logger.warn('asdasd', this);
+        setTimeout(() => {
+
+            this.gameState.won = false;
+
+        }, 500);
+
+        log('SudokuComponent init');
+
+        warn('asdasd', this);
     }
 }

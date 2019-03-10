@@ -1,0 +1,1 @@
+export const FRAGMENT_ELEMENT_TAG_NAME = 'st-fragment';

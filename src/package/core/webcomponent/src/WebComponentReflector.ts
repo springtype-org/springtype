@@ -1,6 +1,5 @@
 import {ComponentImpl} from "../../di";
-
-const TAG_NAME = 'TAG_NAME';
+import {TAG_NAME} from "./constant/TAG_NAME";
 
 export class WebComponentReflector {
 

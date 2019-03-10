@@ -5,7 +5,6 @@ import  "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
 import {LoaderType} from "../../../svg-loader/src/svg-loader/SVGLoader";
 
-import "./../components/burger/BurgerExample"
 export default (view: FeatureExample) =>
 
     <div>

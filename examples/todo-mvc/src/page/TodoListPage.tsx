@@ -1,4 +1,4 @@
-import {Router, WebComponent, WebComponentLifecycle} from "../../../../src/package/core/index";
+import {Router, UseComponent, WebComponent, WebComponentLifecycle} from "../../../../src/package/core/index";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../component/list/ListInnerPartial";
 import {AppLayout} from "../component/layout/AppLayout";
@@ -8,13 +8,10 @@ interface TodoListLocalState {
 }
 
 @WebComponent({
-    tag: 'example-todo-list',
-
-    components: [
-        AppLayout,
-        ListInnerPartial
-    ]
+    tag: 'example-todo-list'
 })
+@UseComponent(AppLayout)
+@UseComponent(ListInnerPartial)
 export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
     constructor(

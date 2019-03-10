@@ -1,12 +1,12 @@
 import {AppLogger, LogLevel, AppTheme} from "../../../src/package/core/index";
 import {theme} from "./theme";
 import {SudokuComponent} from "./game/SudokuComponent";
-import {ROUTE_DEFAULT} from "../../todo-mvc/src/routes";
 import {Route} from "../../../src/package/core";
+import {ROUTE_BASE} from "./routes";
 
 @AppLogger({
-    level: LogLevel.ERROR
+    level: LogLevel.LOG
 })
 @AppTheme(theme)
-@Route(ROUTE_DEFAULT, SudokuComponent)
+@Route(ROUTE_BASE, SudokuComponent)
 export class SudokuApp {}

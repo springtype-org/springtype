@@ -6,3 +6,4 @@ export * from "./src/decorator/StateReducer";
 export * from "./src/Store";
 export * from "./src/interface/StateModelLifecycle";
 export * from "./src/interface/StatefulLifecycle";
+export * from "./src/decorator/MapStateToField";

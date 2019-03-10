@@ -1,8 +1,8 @@
-import {connectComponent} from "./connectComponent";
+import {createStateGetter} from "./createStateGetter";
 import {ComponentReflector} from "../../../di";
 
-export const registerForConnect = (prototype: any) => {
+export const registerForConnect = (prototype: any, stateFieldName: string) => {
     ComponentReflector.addInitializer(prototype, (instance: any) => {
-        connectComponent(instance);
+        createStateGetter(instance, stateFieldName);
     })
 };
