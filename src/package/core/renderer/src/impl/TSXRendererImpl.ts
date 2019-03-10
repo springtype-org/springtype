@@ -18,14 +18,13 @@ export class TSXRendererImpl implements RendererImpl {
      * Memory is freed directly after the atomic transmission
      * operation (DOM -> WebComponent JS instance) has ended.
      */
-    propsHeapCache: RuntimeDOMAttributeCacheMap = {};
+    attributeValueCache: RuntimeDOMAttributeCacheMap = {};
 
     /**
-     * Heap pointers are used to address a certain attribute
-     * observeAttributes in transmission between DOM and WebComponent JS
-     * instance.
+     * Constantly incremented sequence to address a certain attribute
+     * observeAttributes in transmission between DOM and WebComponent JS instance.
      */
-    protected propsHeapPtr: number = 0;
+    protected attributeValueSequence: number = 0;
 
     /**
      * Original DOM/native createElement implementation reference.
@@ -53,7 +52,7 @@ export class TSXRendererImpl implements RendererImpl {
     }
 
     protected generateUniqueAttributeValueId = (): string => {
-        return 'attr-' + (++(<any>window).React.propsHeapPtr);
+        return 'attr-' + (++(<any>window).React.attributeValueSequence);
     };
 
     protected appendChild = (child: string | number | boolean | Node | Array<Node>, element: Node) => {
@@ -177,7 +176,7 @@ export class TSXRendererImpl implements RendererImpl {
 
             const attributeValueId = this.generateUniqueAttributeValueId();
 
-            this.propsHeapCache[attributeValueId] = attribute.value;
+            this.attributeValueCache[attributeValueId] = attribute.value;
 
             this.setAttribute(element, {
                 name: attribute.name,

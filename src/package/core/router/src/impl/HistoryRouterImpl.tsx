@@ -1,9 +1,8 @@
-import {Component, IComponent, WebComponentReflector} from "../../../index";
+import {Component, ComponentImpl, VirtualElement, WebComponentReflector} from "../../../index";
 import {RouterOutlet} from "../RouterOutlet";
 import {
     RouterImpl,
 } from "../interface/RouterImpl";
-import {VirtualElement} from "../../../renderer/src/interface/IReactCreateElement";
 import {TokenizedRoutes} from "../interface/TokenizedRoutes";
 import {Routes} from "../interface/Routes";
 import {RouteDefinition} from "../interface/RouteDefinition";
@@ -125,7 +124,7 @@ export class HistoryRouterImpl implements RouterImpl {
         return !!WebComponentReflector.getTagName(component);
     }
 
-    protected getComponent(cmpOrDef: RouteDefinition | VirtualElement | IComponent<any>): {
+    protected getComponent(cmpOrDef: RouteDefinition | VirtualElement | ComponentImpl<any>): {
         params: any,
         component: VirtualElement
     } {

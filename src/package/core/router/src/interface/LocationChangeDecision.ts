@@ -1,4 +1,4 @@
-import {VirtualElement} from "../../../renderer/src/interface/IReactCreateElement";
+import {VirtualElement} from "../../../renderer";
 
 export interface LocationChangeDecision {
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;

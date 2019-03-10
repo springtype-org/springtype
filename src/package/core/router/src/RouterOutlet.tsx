@@ -2,9 +2,9 @@ import {Router} from "./Router";
 import {WebComponentLifecycleEvent, WebComponent, WebComponentLifecycle} from "../../webcomponent";
 
 import "../../webcomponent/src/component/ErrorComponent";
-import {VirtualElement} from "../../renderer/src/interface/IReactCreateElement";
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
 import {AppRenderer} from "../../renderer/src/decorator/AppRenderer";
+import {VirtualElement} from "../../renderer";
 
 interface RouterProps {
     component: VirtualElement;
@@ -13,7 +13,7 @@ interface RouterProps {
 
 @AppRenderer({})
 @WebComponent({
-    tag: 'router-outlet'
+    tag: 'st-router-outlet'
 })
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 

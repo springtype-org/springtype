@@ -1,7 +1,8 @@
-import {ArgumentsInjectionMetaData, resolveInjectionParameterValue} from "./Inject";
-import {InjectionProfile} from "../BeanFactory";
 import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";
+import {InjectionProfile} from "../enum/InjectionProfile";
+import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
+import {resolveInjectionArgumentValue} from "../function/resolveInjectionArgumentValue";
 
 export function Autowired(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<Function | any>) {
 
@@ -24,7 +25,7 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
         );
 
         // replacement method impl. -> this is called when the actual @BeanMethod annotated method is called (hook)
-        const argumentsInjectionMetaData: ArgumentsInjectionMetaData =
+        const argumentsInjectionMetaData: ArgumentsInjectionMetadata =
             ComponentReflector.getMethodArgumentsInjectionMetadata(
                 target, propertyName
             );
@@ -45,7 +46,7 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
             for (let i=0; i<argumentsInjectionMetaData.arguments.length; i++) {
 
                 // resolve override injection argument
-                const injectionValue = resolveInjectionParameterValue(argumentsInjectionMetaData, i, isTestComponent);
+                const injectionValue = resolveInjectionArgumentValue(argumentsInjectionMetaData, i, isTestComponent);
 
                 // conditionally overwrite original call argument for sub-call
                 if (typeof injectionValue !== 'undefined') {

@@ -1,19 +1,7 @@
 import {BeanFactory} from "./BeanFactory";
-
-export enum ApplicationRuntime {
-    WEBBROWSER = "WEBBROWSER",
-    EMBEDDED = "EMBEDDED"
-}
-
-export enum ApplicationEnvironment {
-    PRODUCTION = "PRODUCTION",
-    E2E_TEST = "E2E_TEST",
-    INTEGRATION_TEST = "INTEGRATION_TEST",
-    STAGING = "STAGING",
-    DEV = "DEV"
-}
-
-export const SYMBOL_APPLICATION_CONTEXT = '__SPRINGTYPE_APPLICATION_CONTEXT__';
+import {APPLICATION_CONTEXT} from "./constant/APPLICATION_CONTEXT";
+import {ApplicationRuntime} from "./enum/ApplicationRuntime";
+import {ApplicationEnvironment} from "./enum/ApplicationEnvironment";
 
 export class ApplicationContext extends BeanFactory {
 
@@ -38,21 +26,24 @@ export class ApplicationContext extends BeanFactory {
 
     static getInstance(): ApplicationContext {
 
-        let globalContext = ApplicationContext.getGlobal(SYMBOL_APPLICATION_CONTEXT);
+        let globalContext = ApplicationContext.getGlobal(APPLICATION_CONTEXT);
 
         if (!globalContext) {
             globalContext = new ApplicationContext();
-            ApplicationContext.setGlobal(SYMBOL_APPLICATION_CONTEXT, globalContext);
+            ApplicationContext.setGlobal(APPLICATION_CONTEXT, globalContext);
         }
         return globalContext;
     }
 
     static getRuntimeGlobalObject(): Object {
+        
         switch (ApplicationContext.getRuntime()) {
             case ApplicationRuntime.WEBBROWSER:
                 return window;
         }
-        return {}; // FIXME?!
+
+        // return local object context
+        return {};
     }
 
     static getRuntime(): ApplicationRuntime {
@@ -60,7 +51,7 @@ export class ApplicationContext extends BeanFactory {
         if (typeof window != 'undefined') {
             return ApplicationRuntime.WEBBROWSER;
         }
-        return ApplicationRuntime.EMBEDDED;
+        return ApplicationRuntime.NODE;
     }
 
     set(name: string|number|symbol, value: any) {

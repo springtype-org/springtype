@@ -1,9 +1,9 @@
-import {IComponent} from "../../../di";
-import {LocationChangeDecision} from "./RouterImpl";
-import {VirtualElement} from "../../../renderer/src/interface/IReactCreateElement";
+import {ComponentImpl} from "../../../di";
+import {LocationChangeDecision} from "./LocationChangeDecision";
+import {VirtualElement} from "../../../renderer";
 
 export interface RouteDefinition {
-    component: VirtualElement|IComponent<any>;
+    component: VirtualElement|ComponentImpl<any>;
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;
     params?: Object;
 }

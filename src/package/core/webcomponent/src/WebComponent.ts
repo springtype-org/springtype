@@ -1,16 +1,14 @@
 // import es5 adapter for backward-compatibility
 import "./adapter/es5";
 
-import {ApplicationContext, ApplicationEnvironment, Component, IComponent} from "../../di";
+import {ApplicationContext, ApplicationEnvironment, Component, ComponentImpl} from "../../di";
 import {WebComponentReflector} from "./WebComponentReflector";
 import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator} from "../../tss";
 import {connectComponent} from "../../state/src/function/connectComponent";
 import * as _ from "lodash";
 import {NestedCSSSelectors} from "typestyle/lib/types";
-import {VirtualElement} from "../../renderer/src/interface/IReactCreateElement";
 import {APP_THEME} from "../../tss/src/constant/APP_THEME";
-import {AppRenderer} from "../../renderer/src/decorator/AppRenderer";
-
+import {VirtualElement} from "../../renderer";
 export const CHILD_ELEMENT = 'CHILD_ELEMENT';
 const PROPS_OBJECT = 'PROPS_OBJECT';
 
@@ -34,7 +32,7 @@ export interface WebComponentConfig {
     template?: (view: any) => VirtualElement | Array<VirtualElement>;
     style?: (view: any, theme: any) => NestedCSSSelectors;
     theme?: any;
-    components?: Array<IComponent<any>>;
+    components?: Array<ComponentImpl<any>>;
 }
 
 export interface WebComponentLifecycle extends HTMLElement {
@@ -208,8 +206,8 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
 
             private getAttributeLocalProp(prop: string, propHeapPtr: string): any {
 
-                const attributePropValue = (<any>window).React.propsHeapCache[propHeapPtr];
-                delete (<any>window).React.propsHeapCache[propHeapPtr];
+                const attributePropValue = (<any>window).React.attributeValueCache[propHeapPtr];
+                delete (<any>window).React.attributeValueCache[propHeapPtr];
                 return attributePropValue;
             }
 

@@ -1,33 +1,17 @@
-import {IComponent} from "./decorator/Component";
-import {ArgumentsInjectionMetaData, resolveInjectionParameterValue} from "./decorator/Inject";
 import {ComponentReflector} from "./ComponentReflector";
-
-export enum InjectionProfile {
-    DEFAULT = 'DEFAULT',
-    TEST = 'TEST',
-}
-
-export enum InjectionStrategy {
-    SINGLETON = 'SINGLETON',
-    NEW = 'NEW'
-}
-
-export const primitiveTypeNames = ['Number', 'Array', 'String', 'Boolean', 'RegExp', 'Date'];
+import {InjectionProfile} from './enum/InjectionProfile';
+import {InjectionStrategy} from "./enum/InjectionStrategy";
+import {PRIMITIVE_TYPE_NAMES} from "./constant/PRIMITIVE_TYPE_NAMES";
+import {ComponentImpl} from "./interface/ComponentImpl";
+import {resolveInjectionArgumentValue} from "./function/resolveInjectionArgumentValue";
+import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
 
 export class BeanFactory {
 
     registry = {};
     singletonInstances = {};
 
-    setComponent(componentCtor: IComponent<any>) {
-        Reflect.set(this.registry, ComponentReflector.getSymbol(componentCtor), componentCtor);
-    }
-
-    getComponent(componentCtor: IComponent<any>) {
-        return Reflect.get(this.registry, ComponentReflector.getSymbol(componentCtor)) || null;
-    }
-
-    getBean<T extends IComponent<any>>(
+    getBean<T extends ComponentImpl<any>>(
         componentCtor: T,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
         injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): any {
@@ -68,7 +52,7 @@ export class BeanFactory {
             }
         }
 
-        // injectionStrategy === InjectionStrategy.NEW || singleton instance not found
+        // injectionStrategy === InjectionStrategy.FACTORY || singleton instance not found
 
         const beanInstance = new componentCtor(
             ...this.resolveConstructorArguments(componentCtor, injectionProfile)
@@ -82,6 +66,14 @@ export class BeanFactory {
         return beanInstance;
     }
 
+    setComponent(componentCtor: ComponentImpl<any>) {
+        Reflect.set(this.registry, ComponentReflector.getSymbol(componentCtor), componentCtor);
+    }
+
+    getComponent(componentCtor: ComponentImpl<any>) {
+        return Reflect.get(this.registry, ComponentReflector.getSymbol(componentCtor)) || null;
+    }
+    
     initializeBeanInstance(instance: any, initializers: Array<Function>) {
 
         initializers.forEach((initializer) => {
@@ -102,7 +94,7 @@ export class BeanFactory {
         Reflect.set(this.singletonInstances, classSymbol, beanInstance);
     }
 
-    resolveConstructorArguments<T extends IComponent<any>>(
+    resolveConstructorArguments<T extends ComponentImpl<any>>(
         componentCtor: T,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
     ): Array<any> {
@@ -118,7 +110,7 @@ export class BeanFactory {
         }
 
         // fetch constructor parameter types from reflection metadata
-        const constructorParameterTypes: Array<IComponent<any>> = ComponentReflector.getConstructorArgumentTypes(
+        const constructorParameterTypes: Array<ComponentImpl<any>> = ComponentReflector.getConstructorArgumentTypes(
             componentCtor
         );
 
@@ -129,7 +121,7 @@ export class BeanFactory {
             injectionProfile
         );
 
-        const constructorArgumentsParameterInjectionMetdata: ArgumentsInjectionMetaData =
+        const constructorArgumentsParameterInjectionMetdata: ArgumentsInjectionMetadata =
             ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
 
         // but if there are special @Inject decorations,
@@ -146,7 +138,7 @@ export class BeanFactory {
 
                     constructorArguments[overrideInjectParamValues[i].index] =
 
-                        resolveInjectionParameterValue(
+                        resolveInjectionArgumentValue(
                             constructorArgumentsParameterInjectionMetdata,
                             overrideInjectParamValues[i].index,
                             isTestComponent
@@ -161,17 +153,17 @@ export class BeanFactory {
         return constructorArguments;
     }
 
-    getBeans<T extends IComponent<any>>(
-        types: Array<IComponent<any>>,
+    getBeans<T extends ComponentImpl<any>>(
+        types: Array<ComponentImpl<any>>,
         forComponentCtor: T,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
-    ): Array<IComponent<any>> {
+    ): Array<ComponentImpl<any>> {
 
         if (types && types.length > 0) {
 
             const beans: Array<any> = [];
 
-            types.forEach((_componentCtor: IComponent<any>) => {
+            types.forEach((_componentCtor: ComponentImpl<any>) => {
 
                 const componentCtor = this.getComponent(_componentCtor);
 
@@ -214,36 +206,25 @@ export class BeanFactory {
         return [];
     }
 
-    isNotPrimitiveType(typeName: string): boolean {
-        return primitiveTypeNames.indexOf(typeName) !== -1;
-    }
-
-    isNotElementType(typeName: string): boolean {
-        return !!typeName.match(/HTML.+Element/);
-    }
-
-    solveUnresolvableBean<T extends IComponent<any>>(
+    solveUnresolvableBean<T extends ComponentImpl<any>>(
         componentCtor: T
     ): any {
 
-        // e.g. when injecting interfaces (which resolve to Object data type ref.)
+        // inject interfaces as empty objects
         if (componentCtor.prototype.constructor === Object) {
-
-            //console.log(`Injected interface object instance ${(<any>componentCtor).name}`);
             return {};
-
         } else {
 
             const typeName = (<any>componentCtor).name;
 
-            if (!this.isNotElementType(typeName) && !this.isNotPrimitiveType(typeName)) {
+            if (!typeName.match(/HTML.+Element/) && PRIMITIVE_TYPE_NAMES.indexOf(typeName) === -1) {
                 console.warn(`The component referenced for injection is missing a @Component decorator: ${typeName}`);
             }
             return undefined;
         }
     }
 
-    solveCyclicDependency<T extends IComponent<any>>(componentCtor: T): T {
+    solveCyclicDependency<T extends ComponentImpl<any>>(componentCtor: T): T {
 
         console.warn(`Cyclic dependency detected in @Component: ${ComponentReflector.getName(componentCtor)}`);
 

@@ -1,7 +1,7 @@
-import {IComponent} from "../../../di";
+import {ComponentImpl} from "../../../di";
 import {RouteDefinition} from "./RouteDefinition";
-import {VirtualElement} from "../../../renderer/src/interface/IReactCreateElement";
+import {VirtualElement} from "../../../renderer";
 
 export interface Routes {
-    [route: string]: RouteDefinition|VirtualElement|IComponent<any>;
+    [route: string]: RouteDefinition|VirtualElement|ComponentImpl<any>;
 }

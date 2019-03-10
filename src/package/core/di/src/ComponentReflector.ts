@@ -1,18 +1,17 @@
-import {BeanConfig, COMPONENT_INITIALIZERS, IComponent} from "./decorator/Component";
-import {
-    ArgumentsInjectionMetaData,
-    createDefaultArgumentsInjectionMetadata,
-    INJECT_DECORATOR_METADATA_KEY,
-    InjectionReference
-} from "./decorator/Inject";
-import {InjectionStrategy} from "./BeanFactory";
-
-export const COMPONENT = 'COMPONENT';
-export const COMPONENT_CONSTRUCTOR_PARAMETER_METADATA = 'COMPONENT_CONSTRUCTOR_PARAMETER_METADATA';
-export const COMPONENT_NAME = 'COMPONENT_NAME';
-export const COMPONENT_CONFIG = 'COMPONENT_CONFIG';
-export const RESOLVED_CONSTRUCTOR_ARGUMENTS = 'RESOLVED_CONSTRUCTOR_ARGUMENTS';
-export const COMPONENT_IS_MOCK_FLAG = 'COMPONENT_IS_MOCK_FLAG';
+import {InjectionStrategy} from "./enum/InjectionStrategy";
+import {COMPONENT} from "./constant/COMPONENT";
+import {COMPONENT_IS_MOCK_FLAG} from "./constant/COMPONENT_IS_MOCK_FLAG";
+import {COMPONENT_CONFIG} from "./constant/COMPONENT_CONFIG";
+import {COMPONENT_NAME} from "./constant/COMPONENT_NAME";
+import {COMPONENT_CONSTRUCTOR_PARAMETER_METADATA} from "./constant/COMPONENT_CONSTRUCTOR_PARAMETER_METADATA";
+import {RESOLVED_CONSTRUCTOR_ARGUMENTS} from "./constant/RESOLVED_CONSTRUCTOR_ARGUMENTS";
+import {ComponentImpl} from "./interface/ComponentImpl";
+import {BeanConfig} from "./interface/BeanConfig";
+import {INJECT_DECORATOR_METADATA_KEY} from "./constant/INJECT_DECORATOR_METADATA_KEY";
+import {COMPONENT_INITIALIZERS} from "./constant/COMPONENT_INITIALIZERS";
+import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
+import {createDefaultArgumentsInjectionMetadata} from "./function/createDefaultArgumentsInjectionMetadata";
+import {InjectionReference} from "./type/InjectionReference";
 
 /**
  * This class uses the Reflect.metadata standard API (polyfilled)
@@ -23,26 +22,26 @@ export const COMPONENT_IS_MOCK_FLAG = 'COMPONENT_IS_MOCK_FLAG';
  */
 export class ComponentReflector {
 
-    static setIsMockComponent(componentCtor: IComponent<any>): void {
+    static setIsMockComponent(componentCtor: ComponentImpl<any>): void {
         Reflect.set(componentCtor, COMPONENT_IS_MOCK_FLAG, true);
     }
 
-    static getIsMockComponent(componentCtor: IComponent<any>): boolean {
+    static getIsMockComponent(componentCtor: ComponentImpl<any>): boolean {
         return !!Reflect.get(componentCtor, COMPONENT_IS_MOCK_FLAG);
     }
 
-    static getMethodArgumentTypes(componentCtor: IComponent<any>, propertyName: string) {
+    static getMethodArgumentTypes(componentCtor: ComponentImpl<any>, propertyName: string) {
         return Reflect.getMetadata('design:paramtypes', componentCtor, propertyName) || [];
     }
 
-    static getConstructorArgumentTypes(componentCtor: IComponent<any>): Array<IComponent<any>> {
+    static getConstructorArgumentTypes(componentCtor: ComponentImpl<any>): Array<ComponentImpl<any>> {
         return Reflect.getMetadata('design:paramtypes', componentCtor) || [];
     }
 
     static register(
-        componentCtor: IComponent<any>,
-        parameterInjectionMetadata: ArgumentsInjectionMetaData,
-        beanConfig?: BeanConfig<IComponent<any>>,
+        componentCtor: ComponentImpl<any>,
+        parameterInjectionMetadata: ArgumentsInjectionMetadata,
+        beanConfig?: BeanConfig<ComponentImpl<any>>,
     ): void {
 
         Reflect.set(componentCtor, COMPONENT_CONFIG, beanConfig);
@@ -52,8 +51,8 @@ export class ComponentReflector {
     }
 
     static registerDerived(
-        originalComponentCtor: IComponent<any>,
-        derivedComponentCtor: IComponent<any>,
+        originalComponentCtor: ComponentImpl<any>,
+        derivedComponentCtor: ComponentImpl<any>,
     ) {
 
         Reflect.set(derivedComponentCtor, COMPONENT, ComponentReflector.getSymbol(originalComponentCtor));
@@ -64,8 +63,8 @@ export class ComponentReflector {
     }
 
     static getConstructorArgumentsInjectionMetadata(
-        componentCtor: IComponent<any>
-    ): ArgumentsInjectionMetaData {
+        componentCtor: ComponentImpl<any>
+    ): ArgumentsInjectionMetadata {
         return Reflect.get(componentCtor, COMPONENT_CONSTRUCTOR_PARAMETER_METADATA);
     }
 
@@ -77,7 +76,7 @@ export class ComponentReflector {
 
 
         // fetch (probably existing) meta data
-        const parameterInjectionMetaData: ArgumentsInjectionMetaData = Reflect.getOwnMetadata(
+        const parameterInjectionMetaData: ArgumentsInjectionMetadata = Reflect.getOwnMetadata(
             INJECT_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, targetClassInstanceOrCtor.name
         ) || createDefaultArgumentsInjectionMetadata();
 
@@ -105,7 +104,7 @@ export class ComponentReflector {
     ): void {
 
         // fetch (probably existing) meta data
-        const parameterInjectionMetaData: ArgumentsInjectionMetaData = ComponentReflector.getMethodArgumentsInjectionMetadata(
+        const parameterInjectionMetaData: ArgumentsInjectionMetadata = ComponentReflector.getMethodArgumentsInjectionMetadata(
             targetClassInstanceOrCtor, propertyKey
         ) || createDefaultArgumentsInjectionMetadata();
 
@@ -123,42 +122,42 @@ export class ComponentReflector {
     static getMethodArgumentsInjectionMetadata(
         targetClassInstanceOrCtor: Object,
         propertyKey: string | symbol,
-    ): ArgumentsInjectionMetaData {
+    ): ArgumentsInjectionMetadata {
         return Reflect.getOwnMetadata(
             INJECT_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, propertyKey
         );
     }
 
-    static getSymbol(targetCtor: IComponent<any>): any {
+    static getSymbol(targetCtor: ComponentImpl<any>): any {
         return Reflect.get(targetCtor, COMPONENT);
     }
 
-    static getName(targetCtor: IComponent<any>): string {
+    static getName(targetCtor: ComponentImpl<any>): string {
         return Reflect.get(targetCtor, COMPONENT_NAME);
     }
 
-    static getConfig(targetCtor: IComponent<any>): BeanConfig<IComponent<any>> {
+    static getConfig(targetCtor: ComponentImpl<any>): BeanConfig<ComponentImpl<any>> {
         return Reflect.get(targetCtor, COMPONENT_CONFIG);
     }
 
     /* When constructor arguments (injections) are resolved, the result is cached for later use */
-    static setResolvedConstructorArguments(targetCtor: IComponent<any>, constructorArguments: Array<IComponent<any>>): void {
+    static setResolvedConstructorArguments(targetCtor: ComponentImpl<any>, constructorArguments: Array<ComponentImpl<any>>): void {
         Reflect.set(targetCtor, RESOLVED_CONSTRUCTOR_ARGUMENTS, constructorArguments);
     }
 
-    static getResolvedConstructorArguments(targetCtor: IComponent<any>): Array<IComponent<any>> {
+    static getResolvedConstructorArguments(targetCtor: ComponentImpl<any>): Array<ComponentImpl<any>> {
         return Reflect.get(targetCtor, RESOLVED_CONSTRUCTOR_ARGUMENTS);
     }
 
-    static isComponent(componentCtor: IComponent<any>): boolean {
+    static isComponent(componentCtor: ComponentImpl<any>): boolean {
         return !!ComponentReflector.getSymbol(componentCtor);
     }
 
-    static getInitializers(targetCtor: IComponent<any>): Array<Function> {
+    static getInitializers(targetCtor: ComponentImpl<any>): Array<Function> {
         return Reflect.get(targetCtor, COMPONENT_INITIALIZERS) || [];
     }
 
-    static addInitializer(targetCtor: IComponent<any>, initializer: Function): void {
+    static addInitializer(targetCtor: ComponentImpl<any>, initializer: Function): void {
         const initializers = Reflect.get(targetCtor, COMPONENT_INITIALIZERS) || [];
         initializers.push(initializer);
         Reflect.set(targetCtor, COMPONENT_INITIALIZERS, initializers);
