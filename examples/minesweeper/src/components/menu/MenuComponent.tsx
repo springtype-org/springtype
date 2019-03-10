@@ -1,6 +1,5 @@
 import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 
-
 @WebComponent({
     tag: 'sw-menu',
 })

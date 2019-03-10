@@ -6,14 +6,10 @@ import {setAppLogger} from "./setAppLogger";
 
 export const getAppLogger = (): LoggerImpl => {
 
-    let loggerImpl = ApplicationContext.getInstance().getResource(APP_LOGGER);
+    let loggerImpl = ApplicationContext.getInstance().get(APP_LOGGER);
 
     if (!loggerImpl) {
-
-        console.log('getAppLogger() !loggerImpl setAppLogger default', loggerImpl);
-
         setAppLogger(defaultAppLoggerConfig);
     }
-
-    return ApplicationContext.getInstance().getResource(APP_LOGGER);
+    return ApplicationContext.getInstance().get(APP_LOGGER);
 };

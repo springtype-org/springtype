@@ -1,4 +1,5 @@
 import {FeatureExample} from "./FeatureExample";
+// @ts-ignore
 import yoda from "./../assets/yoda-rtfm.png";
 import  "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";

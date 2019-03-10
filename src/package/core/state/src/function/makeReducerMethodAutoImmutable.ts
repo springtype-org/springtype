@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 
+// TODO: Remove and use immer
 export const makeReducerMethodAutoImmutable = (method: Function): Function => {
 
     return function(...args: Array<any>) {

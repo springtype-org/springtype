@@ -7,9 +7,6 @@ export function AppLogger(appLoggerConfig: LoggerConfig): any {
     if (!(typeof appLoggerConfig === 'function')) {
 
         return (target: any) => {
-
-            console.log('setAppLogger custom');
-
             setAppLogger(appLoggerConfig);
             return target;
         }

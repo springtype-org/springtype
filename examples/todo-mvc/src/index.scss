@@ -1,7 +1,7 @@
 @import "../node_modules/materialize-css/sass/materialize";
 
-@import "./component/list/ExampleTodoList";
-@import "./component/list/ExampleListInner";
+@import "page/TodoListPage";
+@import "component/list/ListInnerPartial";
 
 .example {
   display: block;

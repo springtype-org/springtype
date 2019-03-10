@@ -1,19 +1,6 @@
-import {connectComponent} from "../function/connectComponent";
-import {ComponentReflector} from "../../../di";
+import {registerForConnect} from "../function/registerForConnect";
 
-export interface IStateConnectedObject<CC> extends Function {
-    new(...args: any[]): CC;
-}
-
-export interface ConnectConfig<CC extends IStateConnectedObject<any>> {}
-
-const registerForConnect = (prototype: any) => {
-    ComponentReflector.addInitializer(prototype, (instance: any) => {
-        connectComponent(instance);
-    })
-};
-
-export function Stateful<CC extends IStateConnectedObject<any>>(classToConnect?: ConnectConfig<CC>|CC): CC|any {
+export function Stateful(classToConnect?: any): any {
 
     // called with @Stateful() or @Stateful({})
     if (!(typeof classToConnect === 'function')) {

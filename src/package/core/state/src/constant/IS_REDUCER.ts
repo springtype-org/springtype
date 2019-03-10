@@ -1,0 +1,1 @@
+export const IS_REDUCER = 'IS_REDUCER';

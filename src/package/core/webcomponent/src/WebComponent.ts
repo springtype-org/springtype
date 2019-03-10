@@ -3,12 +3,13 @@ import "./adapter/es5";
 
 import {ApplicationContext, ApplicationEnvironment, Component, IComponent} from "../../di";
 import {WebComponentReflector} from "./WebComponentReflector";
-import {IReactCreateElement} from "../../renderer";
 import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator} from "../../tss";
 import {connectComponent} from "../../state/src/function/connectComponent";
 import * as _ from "lodash";
 import {NestedCSSSelectors} from "typestyle/lib/types";
-import {CONTEXT_THEME} from "../../tss";
+import {VirtualElement} from "../../renderer/src/interface/IReactCreateElement";
+import {APP_THEME} from "../../tss/src/constant/APP_THEME";
+import {AppRenderer} from "../../renderer/src/decorator/AppRenderer";
 
 export const CHILD_ELEMENT = 'CHILD_ELEMENT';
 const PROPS_OBJECT = 'PROPS_OBJECT';
@@ -30,7 +31,7 @@ export interface WebComponentConfig {
     shadowAttachMode?: ShadowAttachMode;
     observeAttributes?: Array<string>;
     renderStrategy?: RenderStrategy;
-    template?: (view: any) => IReactCreateElement | IReactCreateElement[];
+    template?: (view: any) => VirtualElement | Array<VirtualElement>;
     style?: (view: any, theme: any) => NestedCSSSelectors;
     theme?: any;
     components?: Array<IComponent<any>>;
@@ -47,7 +48,7 @@ export interface WebComponentLifecycle extends HTMLElement {
     // @ts-ignore
     render?(): JSX.Element;
 
-    createNativeElement?(reactCreateElement: IReactCreateElement): any;
+    createNativeElement?(reactCreateElement: VirtualElement): any;
 
     unmount?(): void;
 
@@ -96,15 +97,7 @@ export interface IWebComponent<WC> extends Function {
     new(...args: any[]): WC;
 }
 
-
-// TODO: AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
 export function WebComponent<WC extends IWebComponent<any>>(config: WebComponentConfig): any {
-
-    if (!(<any>window).React) {
-
-        // default config for @WebApp is missing, load it!
-        import("../../webapp/src/WebApp");
-    }
 
     if (!config.observeAttributes) config.observeAttributes = [];
 
@@ -296,7 +289,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             /**
              * Ensure that the destination array have no nested arrays
              */
-            ensureVector = (destination: IReactCreateElement[], tsx: IReactCreateElement | IReactCreateElement[] | any) => {
+            ensureVector = (destination: VirtualElement[], tsx: VirtualElement | VirtualElement[] | any) => {
 
                 if (tsx.name && tsx.name === 'st-fragment') {
                     tsx = tsx.children;
@@ -309,14 +302,14 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 }
             };
 
-            render(): IReactCreateElement[] {
+            render(): VirtualElement[] {
 
-                const elements: IReactCreateElement[] = [];
+                const elements: VirtualElement[] = [];
 
                 // generate and inject styles
                 if (config.style) {
 
-                    const contextTheme = ApplicationContext.getInstance().getResource(CONTEXT_THEME);
+                    const contextTheme = ApplicationContext.getInstance().get(APP_THEME);
 
                     const theme = {
                         ...contextTheme ? contextTheme : {},
@@ -352,7 +345,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
                 return elements;
             }
 
-            protected createNativeElement(reactCreateElement: IReactCreateElement): Element {
+            protected createNativeElement(reactCreateElement: VirtualElement): Element {
                 if (super.createNativeElement) {
                     return super.createNativeElement(reactCreateElement);
                 }
@@ -360,7 +353,7 @@ export function WebComponent<WC extends IWebComponent<any>>(config: WebComponent
             }
 
             protected flow = (initial: boolean = false) => {
-                const _elements: IReactCreateElement[] = this.render();
+                const _elements: VirtualElement[] = this.render();
                 if (_elements) {
                     const elements: Element[] = _elements
                         .filter(el => !!el)

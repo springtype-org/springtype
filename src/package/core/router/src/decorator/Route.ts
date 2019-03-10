@@ -1,15 +1,8 @@
-import {ApplicationContext, IComponent, IReactCreateElement, Router} from "../../../index";
+import {ApplicationContext, IComponent, Router} from "../../../index";
+import {registerRoute} from "../function/registerRoute";
+import {VirtualElement} from "../../../renderer/src/interface/IReactCreateElement";
 
-export const registerRoute = (route: string, webComponent: any): void => {
-
-    const router: Router = ApplicationContext.getInstance().getBean(Router);
-
-    router.registerRoutes({
-        [route]: webComponent
-    })
-};
-
-export function Route(route: string, routeTargetWebComponent: IReactCreateElement|IComponent<any>): any {
+export function Route(route: string, routeTargetWebComponent: VirtualElement|IComponent<any>): any {
 
     return (targetWebComponent: any) => {
 

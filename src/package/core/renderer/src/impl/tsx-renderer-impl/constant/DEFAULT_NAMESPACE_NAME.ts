@@ -1,0 +1,1 @@
+export const DEFAULT_NAMESPACE_NAME: string = 'xmlns';

@@ -5,9 +5,8 @@ Pre-beta-release TODO list:
 - Modules:
   - webcomponent
     - Refactor @WebComponent god-like implementation
+    - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
     - components in config -> "useComponent" or "using" or "import"?
-  - renderer  
-    - Remove RenderUtils
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
@@ -17,12 +16,16 @@ Pre-beta-release TODO list:
     - @EndToEndTestSuite and @EndToEndTest want to be working
     - Adapter for TestCafe
     - Write end-2-end tests for web components
-  - hmr
-    - Implement @Entrypoint?
   - example/minesweeper
     - Use model and state
   - logger
     - Make function interfaces async
+  - state
+    - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
+    - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
+    - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
+    - Support for immer: https://github.com/rematch/rematch/blob/master/plugins/immer/README.md
+      instead of _.deepClone(state)
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app

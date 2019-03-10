@@ -1,17 +1,20 @@
 import {ApplicationContext, Component} from "../../index";
-import {IRouter, WebModuleRoutes} from "./IRouter";
+import {RouterImpl} from "./interface/RouterImpl";
 import {RouterOutlet} from "./RouterOutlet";
+import {APP_ROUTER} from "./constant/APP_ROUTER";
+import {getAppRouter} from "./function/getAppRouter";
+import {Routes} from "./interface/Routes";
 
 @Component
-export class Router implements IRouter {
+export class Router implements RouterImpl {
 
-    protected _appRouter!: IRouter;
+    protected _appRouter!: RouterImpl;
 
-    get appRouter(): IRouter {
+    get appRouter(): RouterImpl {
 
         if (this._appRouter) return this._appRouter;
 
-        const appRouter = ApplicationContext.getInstance().getWebAppConfig().router;
+        const appRouter = getAppRouter();
 
         if (appRouter) {
             this._appRouter = appRouter;
@@ -45,7 +48,7 @@ export class Router implements IRouter {
         return this.appRouter.registerRouterOutlet(routerOutlet);
     }
 
-    registerRoutes(routes: WebModuleRoutes): void {
+    registerRoutes(routes: Routes): void {
         return this.appRouter.registerRoutes(routes);
     }
 }

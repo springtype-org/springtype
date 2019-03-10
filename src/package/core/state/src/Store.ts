@@ -1,6 +1,7 @@
 import {ApplicationContext, Component} from "../../di";
 import * as R from "@rematch/core";
 import * as Redux from 'redux'
+import {STORE} from "./constant/STORE";
 
 @Component
 export class Store<S> {
@@ -9,7 +10,7 @@ export class Store<S> {
 
     get nativeStore(): R.RematchStore {
         if (this._nativeStore) return this._nativeStore;
-        return this._nativeStore = <R.RematchStore> ApplicationContext.getInstance().getWebAppConfig().store;
+        return this._nativeStore = <R.RematchStore> ApplicationContext.getInstance().get(STORE);
     }
 
     get name(): string {

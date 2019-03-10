@@ -1,8 +1,6 @@
 import * as _ from "lodash";
 import {NestedCSSProperties, NestedCSSSelectors} from "typestyle/lib/types";
-
-// see: https://developer.mozilla.org/en-US/docs/Web/CSS/:host()
-export const HOST_SELECTOR = ':host';
+import {HOST_SELECTOR} from "./constant/HOST_SELECTOR";
 
 export class CSSInlineStyleGenerator {
 

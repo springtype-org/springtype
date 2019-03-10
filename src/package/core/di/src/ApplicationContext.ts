@@ -1,5 +1,4 @@
 import {BeanFactory} from "./BeanFactory";
-import {WebAppConfig} from "../../webapp";
 
 export enum ApplicationRuntime {
     WEBBROWSER = "WEBBROWSER",
@@ -19,7 +18,6 @@ export const SYMBOL_APPLICATION_CONTEXT = '__SPRINGTYPE_APPLICATION_CONTEXT__';
 export class ApplicationContext extends BeanFactory {
 
     protected environment: ApplicationEnvironment = ApplicationEnvironment.DEV;
-    protected webAppConfig!: WebAppConfig;
     protected config: any = {};
 
     setEnvironment(environment: ApplicationEnvironment): void {
@@ -31,11 +29,11 @@ export class ApplicationContext extends BeanFactory {
     }
 
     static setGlobal(name: string|number|symbol, value: any): void {
-        (<any>ApplicationContext.getRuntimeGlobal())[name] = value;
+        (<any>ApplicationContext.getRuntimeGlobalObject())[name] = value;
     }
 
     static getGlobal(name: string|number|symbol): any {
-        return (<any>ApplicationContext.getRuntimeGlobal())[name];
+        return (<any>ApplicationContext.getRuntimeGlobalObject())[name];
     }
 
     static getInstance(): ApplicationContext {
@@ -49,7 +47,7 @@ export class ApplicationContext extends BeanFactory {
         return globalContext;
     }
 
-    static getRuntimeGlobal(): Object {
+    static getRuntimeGlobalObject(): Object {
         switch (ApplicationContext.getRuntime()) {
             case ApplicationRuntime.WEBBROWSER:
                 return window;
@@ -65,19 +63,11 @@ export class ApplicationContext extends BeanFactory {
         return ApplicationRuntime.EMBEDDED;
     }
 
-    setWebAppConfig(config: WebAppConfig) {
-        this.webAppConfig = config;
-    }
-
-    getWebAppConfig(): WebAppConfig {
-        return this.webAppConfig;
-    }
-
-    setResource(name: string|number|symbol, value: any) {
+    set(name: string|number|symbol, value: any) {
         Reflect.set(this.config, name, value);
     }
 
-    getResource(name: string|number|symbol): any {
+    get(name: string|number|symbol): any {
         return Reflect.get(this.config, name);
     }
 }

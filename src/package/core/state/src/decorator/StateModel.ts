@@ -1,10 +1,10 @@
 import {ApplicationContext, Component} from "../../../di";
-import {IS_EFFECT} from "./StateEffect";
-import {IS_REDUCER} from "./StateReducer";
 import * as R from "@rematch/core";
 import {RematchDispatcher} from "@rematch/core";
 import {StateManager} from "../StateManager";
 import {makeReducerMethodAutoImmutable} from "../function/makeReducerMethodAutoImmutable";
+import {IS_EFFECT} from "../constant/IS_EFFECT";
+import {IS_REDUCER} from "../constant/IS_REDUCER";
 
 export function StateModel(modelName: string): any {
 
@@ -13,10 +13,13 @@ export function StateModel(modelName: string): any {
         const appContext = ApplicationContext.getInstance();
         const modelInstance = appContext.getBean(injectableModel);
 
-        const modelConfig: R.ModelConfig<any> = {
+        const modelConfig: R.Model<any> = {
+            name: modelName,
             state: modelInstance.initialState,
             reducers: {},
             effects: {}
+
+            // TODO: selectors
         };
 
         const memberMethods = injectableModel.__proto__.prototype;
@@ -62,7 +65,7 @@ export function StateModel(modelName: string): any {
             modelInstance.reducers = dispatch[modelName];
             return effects;
         };
-        StateManager.createModel(injectableModel, modelConfig);
+        StateManager.addModel(injectableModel, modelConfig);
 
         return injectableModel;
     }

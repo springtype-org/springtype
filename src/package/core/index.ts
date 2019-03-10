@@ -7,5 +7,4 @@ export * from "./router/index";
 export * from "./state/index";
 export * from "./test/index";
 export * from "./tss/index";
-export * from "./webapp/index";
 export * from "./webcomponent/index";

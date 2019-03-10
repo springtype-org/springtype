@@ -1,15 +1,17 @@
 import {Router} from "./Router";
-import {IReactCreateElement} from "../../renderer";
-import {LocationChangeDecision} from "./IRouter";
 import {WebComponentLifecycleEvent, WebComponent, WebComponentLifecycle} from "../../webcomponent";
 
 import "../../webcomponent/src/component/ErrorComponent";
+import {VirtualElement} from "../../renderer/src/interface/IReactCreateElement";
+import {LocationChangeDecision} from "./interface/LocationChangeDecision";
+import {AppRenderer} from "../../renderer/src/decorator/AppRenderer";
 
 interface RouterProps {
-    component: IReactCreateElement;
+    component: VirtualElement;
     id: number;
 }
 
+@AppRenderer({})
 @WebComponent({
     tag: 'router-outlet'
 })
