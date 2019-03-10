@@ -32,7 +32,7 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
 
     constructor(
 
-        // TODO: @
+        // TODO: @RenderOnChange
         public props: Props,
         // TODO: @DetectChanges
         protected gameState: GameState) {
