@@ -1,7 +1,7 @@
 import {IRootState} from "../../state/IRootState";
 import {
     Partial,
-    Router, VirtualElement,
+    ActiveRoute, VirtualElement,
     WebComponent,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
@@ -25,13 +25,13 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
         }))
         public props: TodoListProps,
         protected model: TodoModel,
-        protected router: Router
+        protected activeRoute: ActiveRoute
     ) {
         super();
     }
 
     onListItemClick = (id: number) => {
-        this.router.navigate(ROUTE_TODO_DETIALS, {id});
+        this.activeRoute.navigate(ROUTE_TODO_DETIALS, {id});
     };
 
     onRemove = async (evt: Event, todoItem: ITodoItem) => {

@@ -4,10 +4,13 @@ Pre-beta-release TODO list:
 
 - Modules:
   - webcomponent    
-    - Better concept for observeAttributes (@ObserveAttribute("name")?)
+    - @Attribute (adds to _observableAttributes)
+    - @OnAttributeChange("name") (calls method on attribute change)
     - May implement @RenderOnChange (refactor CD out of WebComponent)
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - cd
+    - @OnFieldChange("name")
+    - @DetectFieldChanges
     - refactor DetectFieldChanges concept 
     - move code from lang/decorator to cd package
     - impl detection decorators to be impl. (see sudoku example)

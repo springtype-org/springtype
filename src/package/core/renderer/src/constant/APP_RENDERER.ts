@@ -1,1 +1,0 @@
-export const APP_RENDERER = 'APP_RENDERER';

@@ -1,4 +1,4 @@
-import {Router, WebComponent, WebComponentLifecycle} from "../../../../src/package/core/index";
+import {ActiveRoute, WebComponent, WebComponentLifecycle} from "../../../../src/package/core/index";
 import {TodoService} from "../service/TodoService";
 import {ITodoItem} from "../state/ITodoState";
 import {AppLayout} from "../component/layout/AppLayout";
@@ -12,14 +12,14 @@ export class TodoDetailsPage extends HTMLElement implements WebComponentLifecycl
 
     constructor(
         protected todoService: TodoService,
-        protected router: Router
+        protected activeRoute: ActiveRoute
     ) {
         super();
     }
 
     render() {
 
-        const params = this.router.getParams();
+        const params = this.activeRoute.getParams();
 
         const todo: ITodoItem = this.todoService.getById(parseInt(params.id, 10)) || {
             id: -1,

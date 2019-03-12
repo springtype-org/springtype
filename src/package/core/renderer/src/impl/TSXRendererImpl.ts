@@ -1,5 +1,5 @@
 import {RendererImpl} from "../interface/RendererImpl";
-import {Component, Logger, VirtualElement} from "../../../index";
+import {Component, ActiveLogger, VirtualElement} from "../../../index";
 import {parseAttributeNS} from "./tsx-renderer-impl/function/parseAttributeNS";
 import {NamespaceAttributesMap} from "./tsx-renderer-impl/interface/NamespaceAttributesMap";
 import {collectNamespaceAttributes} from "./tsx-renderer-impl/function/collectNamespaceAttributes";
@@ -33,7 +33,7 @@ export class TSXRendererImpl implements RendererImpl {
     protected _createDOMElement: any = document.createElement.bind(document);
     protected _createDOMElementNS: any = document.createElementNS.bind(document);
 
-    constructor(public logger: Logger) {
+    constructor(public activeLogger: ActiveLogger) {
         this.init();
     }
 
@@ -91,7 +91,7 @@ export class TSXRendererImpl implements RendererImpl {
                 return this._createDOMElementNS(namespace.value, namespaceTagName, nativeOptions);
             }
 
-            this.logger.error("No namespace found for attribute " + namespaceAttribute.ns, namespaceAttribute);
+            this.activeLogger.error("No namespace found for attribute " + namespaceAttribute.ns, namespaceAttribute);
 
             return this._createDOMElementNS(null, namespaceTagName, nativeOptions);
         }
@@ -134,6 +134,10 @@ export class TSXRendererImpl implements RendererImpl {
     };
 
     render = (virtualElementOrTagName: VirtualElement|string, level = 0, namespaces: Namespace[] = []): Element => {
+
+        // TODO: Tree traverse equals check on VirtualElement:
+        // TODO: - If only attribute change -> call setAttribute()
+        // TODO: - If DOM element changes -> re-render and replace element (thus subtree)
 
         const name = typeof virtualElementOrTagName === 'string' ? virtualElementOrTagName : virtualElementOrTagName.name;
         const attributes = (virtualElementOrTagName as VirtualElement).attributes || {};
@@ -191,7 +195,7 @@ export class TSXRendererImpl implements RendererImpl {
 
         // 5. log error if attribute is not mappable
         namespaceAttributes.other.forEach((attribute: Attribute) => {
-            this.logger.error(`Attribute(${attribute.name}) on element ${name} cannot be mapped.`, attribute.value)
+            this.activeLogger.error(`Attribute(${attribute.name}) on element ${name} cannot be mapped.`, attribute.value)
         });
 
         children.filter(child => !(child == null || typeof child == 'undefined')).forEach((child) => {

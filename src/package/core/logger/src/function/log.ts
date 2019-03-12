@@ -1,6 +1,6 @@
 import {ApplicationContext} from "../../../di";
-import {Logger} from "../Logger";
+import {ActiveLogger} from "../ActiveLogger";
 
 export const log = (...args: Array<any>) => {
-    ApplicationContext.getInstance().getBean(Logger).log(...args);
+    ApplicationContext.getInstance().getBean(ActiveLogger).log(...args);
 };

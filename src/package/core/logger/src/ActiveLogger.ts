@@ -1,6 +1,6 @@
 import {LoggerImpl} from "./interface/LoggerImpl";
 import {Component} from "../../di";
-import {getAppLogger} from "./function/getAppLogger";
+import {getLogger} from "./function/getLogger";
 import {LogFilterFunction} from "./interface/LogFilterFunction";
 import {LogLevel} from "./enum/LogLevel";
 import {filterByLogLevel} from "./function/filterByLogLevel";
@@ -14,7 +14,7 @@ import {filterByLogLevel} from "./function/filterByLogLevel";
  * constructor(protected logger: Logger) { ... }
  */
 @Component
-export class Logger implements LoggerImpl {
+export class ActiveLogger implements LoggerImpl {
 
     protected _loggerImpl!: LoggerImpl;
 
@@ -34,7 +34,7 @@ export class Logger implements LoggerImpl {
         // fetch cached instance
         if (this._loggerImpl) return this._loggerImpl;
 
-        const appLoggerImpl = getAppLogger();
+        const appLoggerImpl = getLogger();
 
         if (appLoggerImpl) {
             this._loggerImpl = appLoggerImpl;

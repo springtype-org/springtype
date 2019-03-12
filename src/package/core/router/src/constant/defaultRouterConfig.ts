@@ -1,4 +1,4 @@
 import {RouterConfig} from "../interface/RouterConfig";
 
-export const defaultAppRouterConfig: RouterConfig = {
+export const defaultRouterConfig: RouterConfig = {
 };

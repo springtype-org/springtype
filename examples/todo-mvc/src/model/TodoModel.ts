@@ -1,6 +1,6 @@
 import {
     log,
-    Logger,
+    ActiveLogger,
     StateEffect,
     StateModel,
     StateModelLifecycle,
@@ -32,7 +32,7 @@ export class TodoModel implements StateModelLifecycle<ITodoState, TodoModelReduc
     constructor(
         public initialState: ITodoState,
         public reducers: TodoModelReducers,
-        protected logger: Logger,
+        protected logger: ActiveLogger,
     ) {
         initialState.todos = initialTodos;
     }

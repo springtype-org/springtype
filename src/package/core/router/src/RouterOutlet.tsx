@@ -1,9 +1,9 @@
-import {Router} from "./Router";
+import {ActiveRoute} from "./ActiveRoute";
 import {WebComponent, WebComponentLifecycle, WebComponentLifecycleEvent} from "../../webcomponent";
 
 import "../../webcomponent/src/component/ErrorComponent";
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
-import {AppRenderer} from "../../renderer/src/decorator/AppRenderer";
+import {Renderer} from "../../renderer/src/decorator/Renderer";
 import {VirtualElement} from "../../renderer";
 
 interface RouterProps {
@@ -11,7 +11,7 @@ interface RouterProps {
     id: number;
 }
 
-@AppRenderer({})
+@Renderer({})
 @WebComponent({
     tag: 'st-router-outlet'
 })
@@ -20,12 +20,12 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
     mounted!: boolean;
 
     constructor(public props: RouterProps,
-                protected router: Router) {
+                protected activeRoute: ActiveRoute) {
 
         super();
 
-        this.router.registerRouterOutlet(this);
-        this.router.enable();
+        this.activeRoute.routerImpl.registerRouterOutlet(this);
+        this.activeRoute.routerImpl.enable();
     }
 
     present(locationChangeDecision: LocationChangeDecision): void {

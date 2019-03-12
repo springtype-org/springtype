@@ -4,8 +4,8 @@ import {ChangeDetectionInterceptor} from "./detect-field-changes/interface/Chang
 export function DetectFieldChanges(
     fieldName: string,
     memorize: boolean = true,
-    onChange?: ChangeDetectionInterceptor,
-    onBeforeChange?: ChangeDetectionInterceptor,
+    onChange: ChangeDetectionInterceptor = (props: any, name: string|number|symbol, value: any) => {},
+    onBeforeChange: ChangeDetectionInterceptor = (props: any, name: string|number|symbol, value: any) => { return true },
 ): any {
 
     // called with @DetectFieldChanges(...)

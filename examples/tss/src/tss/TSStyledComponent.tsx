@@ -14,7 +14,7 @@ export enum StyleMode {
     tag: 'tsstyled-component',
     shadow: true,
     template,
-    style
+    style,
 })
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
 
