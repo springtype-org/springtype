@@ -1,6 +1,6 @@
 import {registerTheme} from "../function/registerTheme";
 
-export function AppTheme(theme: any): any {
+export function Theme(theme: any): any {
 
     // called with @Theme() or @Theme({ ... })
     if (!(typeof theme === 'function')) {
