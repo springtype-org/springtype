@@ -16,9 +16,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@material/base": "^1.0.0",
-    "@material/button": "^1.0.1",
-    "@material/elevation": "^1.0.0",
     "sass": "^1.17.2",
     "typescript": "^3.3.3333"
   },

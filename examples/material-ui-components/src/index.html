@@ -5,13 +5,33 @@
 
     <title>material</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="../node_modules/@material/button/dist/mdc.button.min.css"/>
+
     <!-- main application logic entry-point -->
     <script src="MaterialExampleApp.tsx"></script>
 
 </head>
 <body>
 
-    <!-- Application starts here because the router renders here -->
-    <mwc-button label="yeah" disabled="true" />
+<!-- Application starts here because the router renders here -->
+
+    <div>
+        <mwc-button label="disabled" disabled="true" raised="true"/>
+    </div>
+    <div>
+        <mwc-button label="disabled + icon" disabled="true" icon="house"/>
+    </div>
+    <div>
+        <mwc-button label="favorite" icon="favorite"/>
+    </div>
+    <div>
+        <mwc-button label="favorite" icon="favorite" trailing-icon="true"/>
+    </div>
+    <div>
+        <mwc-button label="outlined" outlined="true"/>
+    </div>
+    <div>
+        <mwc-button label="raised" raised="true"/>
+    </div>
 </body>
 </html>

@@ -1,14 +1,16 @@
 import {Attribute, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./MWCButton.tpl";
+import style from "./MWCButton.tss";
 
 @WebComponent({
     tag: 'mwc-button',
     template,
+    style
 })
 export class MWCButton extends HTMLElement implements WebComponentLifecycle {
 
     @Attribute
-    raised = true;
+    raised = false;
 
     @Attribute
     unelevated = false;
@@ -20,13 +22,13 @@ export class MWCButton extends HTMLElement implements WebComponentLifecycle {
     dense = false;
 
     @Attribute
-    disabled= false;
+    disabled = false;
 
     @Attribute
-    trailingIcon = false;
+    'trailing-icon' = false;
 
     @Attribute
-    icon = 'favorite';
+    icon = '';
 
     @Attribute
     label = '';
