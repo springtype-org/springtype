@@ -1,26 +1,34 @@
 import {MWCButton} from "./MWCButton";
+import classNames from "classnames";
 
 export default (view: MWCButton) => {
 
-    const classes: string = [
-        {name: 'mdc-button--raised', present: view.raised},
-        {name: 'mdc-button--unelevated', present: view.unelevated},
-        {name: 'mdc-button--outlined', present: view.outlined},
-        {name: 'mdc-button--dense', present: view.dense}
-    ].filter(c => c.present)
-        .map(c => c.name)
-        .join(' ');
+    const classes = classNames({
+        'mdc-button': true,
+        'mdc-button--raised': view.raised,
+        'mdc-button--unelevated': view.unelevated,
+        'mdc-button--outlined': view.outlined,
+        'mdc-button--dense': view.dense
+    });
 
     const mdcButtonIcon = <span class="material-icons mdc-button__icon">{view.icon}</span>;
 
-    console.error(view["trailing-icon"]);
-    return <button class={`mdc-button ${classes}`}
-                   aria-label={view.label || view.icon}>
-        {view.icon && !view["trailing-icon"] ? mdcButtonIcon : ''}
-        <span class="mdc-button__label">{view.label}</span>
-        {view.icon && view["trailing-icon"] ? mdcButtonIcon : ''}
-        <slot></slot>
-    </button>
+    const innerButtonElement =
+        <st-fragment>
+            {view.icon && !view["trailing-icon"] ? mdcButtonIcon : ''}
 
+            <span class="mdc-button__label">{
+                view.label
+            }</span>
 
+            {view.icon && view["trailing-icon"] ? mdcButtonIcon : ''}
+            <slot />
+        </st-fragment>;
+
+    // TODO: ripple
+    return <st-fragment>
+        {view.disabled ?
+        <button disabled class={classes} aria-label={view.label || view.icon}>{ innerButtonElement }</button> :
+        <button className={classes} aria-label={view.label || view.icon}>{ innerButtonElement }</button>}
+    </st-fragment>;
 }

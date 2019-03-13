@@ -32,16 +32,4 @@ export class MWCButton extends HTMLElement implements WebComponentLifecycle {
 
     @Attribute
     label = '';
-
-
-    mountChildren(): void {
-        const innerButton = this.querySelector("button");
-        if (innerButton) {
-            if (this.disabled) {
-                innerButton.setAttribute("disabled", 'true');
-            } else {
-                innerButton.removeAttribute("disabled")
-            }
-        }
-    }
 }

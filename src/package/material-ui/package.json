@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../core",
+    "@types/classnames": "^2.2.7",
     "@types/node": "^11.10.5",
+    "classnames": "^2.2.6",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"
   },
