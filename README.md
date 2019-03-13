@@ -8,6 +8,7 @@ Pre-beta-release TODO list:
     - @Template
     - @Style
     - @Shadow and @Shadow(ShadowAttachMode.OPEN|CLOSED)
+    - Fix st-fragment bug (works only on 1st level)
     - May implement @RenderOnChange (refactor CD out of WebComponent)
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - i18n
