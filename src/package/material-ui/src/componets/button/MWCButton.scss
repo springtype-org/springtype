@@ -1,0 +1,10 @@
+@import "@material/button/dist/mdc.button.min.css";
+
+:host {
+  display: inline-flex;
+  outline: none;
+}
+
+.mdc-button {
+  flex: 1;
+}
