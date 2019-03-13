@@ -10,7 +10,7 @@ import {registerWebComponent} from "../function/registerWebComponent";
 export function WebComponent<WC extends WebComponentImpl<any>>(config: WebComponentConfig): any {
 
     // default re-render strategy: when observeAttributes object changes
-    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.OnFieldChanges;
+    if (!config.renderStrategy) config.renderStrategy = RenderStrategy.OnChanges;
 
     if (!config.propsField) config.propsField = DEFAULT_PROPS_FIELD_NAME;
 

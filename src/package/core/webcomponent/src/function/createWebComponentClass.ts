@@ -12,10 +12,12 @@ import {ApplicationContext, ComponentReflector} from "../../../di";
 import {APP_THEME} from "../../../tss/src/constant/APP_THEME";
 import {PropsChangeEvent} from "../interface/PropsChangeEvent";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
-import {getInternalRenderApi} from "../../../renderer/src/function/getInternalRenderApi";
 import {getObservedAttributes} from "./getObservedAttributes";
 import {AttributeChangeCallbackRegistration} from "../interface/AttributeChangeCallbackRegistration";
 import {getAttributeChangeCallbacks} from "./getAttributeChangeCallbacks";
+import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
+import {ATTRIBUTE_REGISTERED} from "../constant/ATTRIBUTE_REGISTERED";
+import {ATTRIBUTE_VALUE} from "../constant/ATTRIBUTE_VALUE";
 
 export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -35,7 +37,8 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             // creating instances of WebComponents but document.createElement. Thus, we need to do it here.
             ComponentReflector.callInitializers(ComponentReflector.getInitializers(CustomWebComponent), this);
 
-            if (config.renderStrategy === RenderStrategy.OnFieldChanges) {
+            if (config.renderStrategy === RenderStrategy.OnChanges) {
+
                 createFieldChangeDetector(
                     this,
                     config.propsField!,
@@ -78,14 +81,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             }))
         }
 
-        getAttributeReferencedValue(attributeValueIdOrValue: string): any {
-
-            // de-reference attribute value
-            const attributeValue = getInternalRenderApi().attributeValueCache[attributeValueIdOrValue];
-            delete getInternalRenderApi().attributeValueCache[attributeValueIdOrValue];
-            return attributeValue || attributeValueIdOrValue;
-        }
-
         init(): void {
 
             if (super.init) {
@@ -103,17 +98,10 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
         onPropsChanged(props: any, name: string | number | symbol, value: any): void {
 
-            this.safeReflow();
+            this.reflow();
 
             if (super.onPropsChanged) {
                 return super.onPropsChanged(props, name, value);
-            }
-        }
-
-        safeReflow(): void {
-            if (this.mounted) {
-
-                this.reflow();
             }
         }
 
@@ -127,8 +115,46 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             }));
         }
 
+        registerAttribute(name: string): void {
+
+            if (!Reflect.get(this, (ATTRIBUTE_REGISTERED + name))) {
+
+                Object.defineProperty(this, name, {
+                    set: (value: any) => {
+
+                        Reflect.set(this, (ATTRIBUTE_VALUE + name) as string, value);
+
+                        if (this.getAttribute(name) !== value) {
+                            this.setAttribute(name, value);
+                        }
+
+                        if (config.renderStrategy === RenderStrategy.OnChanges) {
+                            this.reflow();
+                        }
+                        return true;
+                    },
+                    get: (): any => Reflect.get(this, (ATTRIBUTE_VALUE + name) as string),
+                });
+                Reflect.set(this, (ATTRIBUTE_REGISTERED + name) as string, true);
+            }
+        }
+
         onAttributeChanged(name: string, oldValue: string, newValue: string): void {
 
+            if (name === config.propsField) {
+
+                if (newValue && this[name]) {
+                    Object.assign(this[name], newValue);
+                }
+
+            } else {
+
+                this.registerAttribute(name);
+
+                this[name] = newValue;
+            }
+
+            // notify
             const attributeChangeCallbacks: Array<AttributeChangeCallbackRegistration> = getAttributeChangeCallbacks(this);
 
             attributeChangeCallbacks.forEach((attributeChangeCallbackRegistration: AttributeChangeCallbackRegistration) => {
@@ -137,12 +163,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                     this[attributeChangeCallbackRegistration.methodName]();
                 }
             });
-
-            if (name === config.propsField!) {
-                Object.assign(this[name], this.getAttributeReferencedValue(newValue));
-            }
-
-            this.safeReflow();
 
             if (super.onAttributeChanged) {
                 return super.onAttributeChanged(name, oldValue, newValue);
@@ -277,29 +297,30 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
         reflow() {
 
-            if (config.shadow) {
-                this.shadowRoot.innerHTML = '';
-            } else {
-                this.innerHTML = '';
+            if (this.mounted) {
+
+                if (config.shadow) {
+                    this.shadowRoot.innerHTML = '';
+                } else {
+                    this.innerHTML = '';
+                }
+
+                this.flow();
+
+                this.remount();
+
+                this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REFLOW));
             }
-
-            this.flow();
-
-            this.remount();
-
-            this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REFLOW));
         }
 
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
-            const attributeValue = this.getAttributeReferencedValue(newValue);
+            const attributeValue = getAttributeReferencedValue(newValue);
 
             const cancelled = this.onBeforeAttributeChange(name, oldValue, attributeValue);
 
             if (!cancelled) {
-
                 this.onAttributeChanged(name, oldValue, attributeValue);
-
             }
         }
 
@@ -312,7 +333,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                 this.mount();
 
                 this.flow(true);
-
             }
         }
 

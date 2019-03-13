@@ -2,6 +2,6 @@ import {SudokuComponent} from "./SudokuComponent";
 
 export default (view: SudokuComponent) =>
     <div>
-       Hier kommt Sudoku hin { view.isActive } und { view.type }
+       Hier kommt Sudoku hin { view.active } und { view.type }
     </div>
 

@@ -46,12 +46,10 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
     type: ButtonType = ButtonType.A;
 
     @Attribute
-    isActive: boolean = false;
+    active: boolean = false;
 
     constructor(
 
-        // TODO: @RenderOnChange
-        public props: Props,
         // TODO: @DetectChanges
         protected gameState: GameState) {
         super();
@@ -78,12 +76,12 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         this.gameState.won = "true" as any;
 
         console.log('default type', this.type);
-        console.log('isActive', this.isActive);
+        console.log('isActive', this.active);
 
         setTimeout(() => {
 
             //this.type = "C" as any;
-            console.log('isActive', this.isActive);
+            console.log('isActive', this.active);
 
             this.gameState.won = false;
             this.gameState.won = false;
@@ -94,10 +92,13 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
 
             console.log('type after external mutation', this.type, this.getAttribute("type"));
 
+            this.type = "??" as any;
+
         }, 500);
 
         log('SudokuComponent init');
 
         warn('asdasd', this);
     }
+
 }
