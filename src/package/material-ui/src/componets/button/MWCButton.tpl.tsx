@@ -11,6 +11,7 @@ export default (view: MWCButton) => {
         'mdc-button--dense': view.dense
     });
 
+    const ariaLabel = view.label || view.icon;
     const mdcButtonIcon = <span class="material-icons mdc-button__icon">{view.icon}</span>;
 
     const innerButtonElement =
@@ -28,7 +29,7 @@ export default (view: MWCButton) => {
     // TODO: ripple
     return <st-fragment>
         {view.disabled ?
-        <button disabled class={classes} aria-label={view.label || view.icon}>{ innerButtonElement }</button> :
-        <button className={classes} aria-label={view.label || view.icon}>{ innerButtonElement }</button>}
+        <button disabled class={classes} aria-label={ariaLabel}>{ innerButtonElement }</button> :
+        <button className={classes} aria-label={ariaLabel}>{ innerButtonElement }</button>}
     </st-fragment>;
 }
