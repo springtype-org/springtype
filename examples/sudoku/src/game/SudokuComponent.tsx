@@ -99,5 +99,4 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
 
         warn('asdasd', this);
     }
-
 }

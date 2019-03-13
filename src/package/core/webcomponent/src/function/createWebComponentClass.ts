@@ -1,5 +1,5 @@
 import {WebComponentConfig} from "../interface/WebComponentConfig";
-import {CHILD_ELEMENT} from "../constant/CHILD_ELEMENT";
+import {CHILD_ELEMENTS} from "../constant/CHILD_ELEMENTS";
 import {transformToElementVector} from "./transformToElementVector";
 import {createFieldChangeDetector} from "../../../lang/src/decorator/detect-field-changes/function/createFieldChangeDetector";
 import {VirtualElement} from "../../../renderer";
@@ -9,7 +9,7 @@ import {AttributeChangeEvent} from "../interface/AttributeChangeEvent";
 import {WebComponentLifecycleEvent} from "../enum/WebComponentLifecycleEvent";
 import {RenderStrategy} from "../enum/RenderStrategy";
 import {ApplicationContext, ComponentReflector} from "../../../di";
-import {APP_THEME} from "../../../tss/src/constant/APP_THEME";
+import {THEME} from "../../../tss/src/constant/THEME";
 import {PropsChangeEvent} from "../interface/PropsChangeEvent";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getObservedAttributes} from "./getObservedAttributes";
@@ -219,7 +219,7 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             // generate and inject styles
             if (config.style) {
 
-                const contextTheme = ApplicationContext.getInstance().get(APP_THEME);
+                const contextTheme = ApplicationContext.getInstance().get(THEME);
 
                 const theme = {
                     ...contextTheme ? contextTheme : {},
@@ -270,19 +270,19 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
             if (virtualElements) {
 
-                const virtualElement: Element[] = virtualElements
+                const elements: Element[] = virtualElements
                     .filter(element => !!element)
                     .map((element) => this.createNativeElement(element));
 
-                if (virtualElement.length > 0) {
+                if (elements.length > 0) {
 
                     if (config.shadow) {
-                        virtualElement.forEach(el => this.shadowRoot.appendChild(el));
+                        elements.forEach(el => this.shadowRoot.appendChild(el));
                     } else {
-                        virtualElement.forEach(el => this.appendChild(el));
+                        elements.forEach(el => this.appendChild(el));
                     }
 
-                    Reflect.set(this, CHILD_ELEMENT, virtualElement);
+                    Reflect.set(this, CHILD_ELEMENTS, elements);
 
                     if (initial) {
                         this.mountChildren();
