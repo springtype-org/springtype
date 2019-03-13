@@ -4,10 +4,15 @@ Pre-beta-release TODO list:
 
 - Modules:
   - webcomponent    
-    - @Attribute (adds to _observableAttributes)
-    - @OnAttributeChange("name") (calls method on attribute change)
+    - @WebComponent('tag-name', { ... }) syntax support
+    - @Template
+    - @Style
+    - @Shadow and @Shadow(ShadowAttachMode.OPEN|CLOSED)
     - May implement @RenderOnChange (refactor CD out of WebComponent)
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
+  - i18n
+    - @Translate
+    - @Locale
   - cd
     - @OnFieldChange("name")
     - @DetectFieldChanges

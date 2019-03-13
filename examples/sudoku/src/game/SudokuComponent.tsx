@@ -28,7 +28,7 @@ enum ButtonType {
     template,
     style
 })
-// TODO: Remove with new state concept
+// TODO: Remove with new change detection concept
 @DetectFieldChanges("gameState", true, (instance: any, props) => {
     console.log('game state change', instance, props);
 }, (instance, props, value) => {
@@ -60,7 +60,6 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         console.log('onTypeChange', this.type);
     }
 
-    // TODO: @OnAttributeChange("lol")
     // TODO: @OnFieldChange("gameState")
     // TODO: @Buffer(500)
     // TODO: @Delay()
