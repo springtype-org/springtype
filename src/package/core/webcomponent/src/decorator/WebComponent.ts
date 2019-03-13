@@ -9,8 +9,6 @@ import {registerWebComponent} from "../function/registerWebComponent";
 
 export function WebComponent<WC extends WebComponentImpl<any>>(config: WebComponentConfig): any {
 
-    if (!config.observeAttributes) config.observeAttributes = [];
-
     // default re-render strategy: when observeAttributes object changes
     if (!config.renderStrategy) config.renderStrategy = RenderStrategy.OnFieldChanges;
 

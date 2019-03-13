@@ -6,6 +6,7 @@ import {
     warn,
     WebComponent,
     WebComponentLifecycle,
+    Attribute, OnAttributeChange,
 } from "@springtype/springtype-incubator-core";
 
 interface Props {
@@ -41,8 +42,11 @@ enum ButtonType {
 }) // activate change detection just for this class field
 export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {
 
-    // TODO: @Attribute
+    @Attribute
     type: ButtonType = ButtonType.A;
+
+    @Attribute
+    isActive: boolean = false;
 
     constructor(
 
@@ -51,6 +55,11 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         // TODO: @DetectChanges
         protected gameState: GameState) {
         super();
+    }
+
+    @OnAttributeChange("type")
+    onTypeChange() {
+        console.log('onTypeChange', this.type);
     }
 
     // TODO: @OnAttributeChange("lol")
@@ -68,11 +77,22 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
 
         this.gameState.won = "true" as any;
 
+        console.log('default type', this.type);
+        console.log('isActive', this.isActive);
+
         setTimeout(() => {
+
+            //this.type = "C" as any;
+            console.log('isActive', this.isActive);
 
             this.gameState.won = false;
             this.gameState.won = false;
             this.gameState.won = false;
+
+            // simulate external attribute change
+            this.setAttribute("type", "L");
+
+            console.log('type after external mutation', this.type, this.getAttribute("type"));
 
         }, 500);
 

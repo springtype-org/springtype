@@ -20,7 +20,7 @@ export function MapStateToField(
     };
 
     // called with @MapStateToField(...)
-    return (targetClass: any, methodName: string, argumentIndex: number, y: any) => {
+    return (targetClass: any, methodName: string, argumentIndex: number) => {
 
         const store: Store<any> = ApplicationContext.getInstance().getBean(Store);
         const instances: Array<ComponentImpl<any>> = [];

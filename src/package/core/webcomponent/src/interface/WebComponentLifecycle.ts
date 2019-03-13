@@ -19,9 +19,11 @@ export interface WebComponentLifecycle extends HTMLElement {
     unmount?(): void;
 
     onPropChanged?(name: string, newValue: any, oldValue?: any): void;
-
     onBeforePropsChange?(props: any, name: string | number | symbol, value: any): boolean;
     onPropsChanged?(props: any, name: string | number | symbol, value: any): void;
+
+    onAttributeChanged?(name: string, newValue: any, oldValue?: any): void;
+    onBeforeAttributeChange?(props: any, name: string | number | symbol, value: any): boolean;
 
     reflow?(): void;
 

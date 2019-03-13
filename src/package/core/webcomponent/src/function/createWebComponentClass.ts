@@ -13,6 +13,9 @@ import {APP_THEME} from "../../../tss/src/constant/APP_THEME";
 import {PropsChangeEvent} from "../interface/PropsChangeEvent";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getInternalRenderApi} from "../../../renderer/src/function/getInternalRenderApi";
+import {getObservedAttributes} from "./getObservedAttributes";
+import {AttributeChangeCallbackRegistration} from "../interface/AttributeChangeCallbackRegistration";
+import {getAttributeChangeCallbacks} from "./getAttributeChangeCallbacks";
 
 export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -42,10 +45,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                 );
             }
 
-            if (config.renderStrategy === RenderStrategy.OnRequest) {
-                this.observeAttributes = this[config.propsField!] || {};
-            }
-
             if (config.shadow) {
 
                 this.attachShadow({
@@ -60,7 +59,7 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
         static get observedAttributes() {
 
-            const attributesToObserve = config.observeAttributes || [];
+            const attributesToObserve = getObservedAttributes(CustomWebComponent);
 
             // automatically allow for observeAttributes restore
             if (attributesToObserve.indexOf(config.propsField!) === -1) {
@@ -79,12 +78,12 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             }))
         }
 
-        getAttributeReferencedValue(attributeValueId: string): any {
+        getAttributeReferencedValue(attributeValueIdOrValue: string): any {
 
             // de-reference attribute value
-            const attributeValue = getInternalRenderApi().attributeValueCache[attributeValueId];
-            delete getInternalRenderApi().attributeValueCache[attributeValueId];
-            return attributeValue;
+            const attributeValue = getInternalRenderApi().attributeValueCache[attributeValueIdOrValue];
+            delete getInternalRenderApi().attributeValueCache[attributeValueIdOrValue];
+            return attributeValue || attributeValueIdOrValue;
         }
 
         init(): void {
@@ -104,14 +103,49 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
         onPropsChanged(props: any, name: string | number | symbol, value: any): void {
 
-            if (this.mounted) {
-
-                // re-render on observeAttributes change
-                this.reflow();
-            }
+            this.safeReflow();
 
             if (super.onPropsChanged) {
                 return super.onPropsChanged(props, name, value);
+            }
+        }
+
+        safeReflow(): void {
+            if (this.mounted) {
+
+                this.reflow();
+            }
+        }
+
+        onBeforeAttributeChange(name: string, oldValue: any, newValue: any): boolean {
+            return !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_ATTRIBUTE_CHANGE, {
+                detail: <AttributeChangeEvent>{
+                    name: name,
+                    oldValue,
+                    newValue
+                }
+            }));
+        }
+
+        onAttributeChanged(name: string, oldValue: string, newValue: string): void {
+
+            const attributeChangeCallbacks: Array<AttributeChangeCallbackRegistration> = getAttributeChangeCallbacks(this);
+
+            attributeChangeCallbacks.forEach((attributeChangeCallbackRegistration: AttributeChangeCallbackRegistration) => {
+
+                if (attributeChangeCallbackRegistration.attributeName === name) {
+                    this[attributeChangeCallbackRegistration.methodName]();
+                }
+            });
+
+            if (name === config.propsField!) {
+                Object.assign(this[name], this.getAttributeReferencedValue(newValue));
+            }
+
+            this.safeReflow();
+
+            if (super.onAttributeChanged) {
+                return super.onAttributeChanged(name, oldValue, newValue);
             }
         }
 
@@ -149,7 +183,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             }
             this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REMOUNT_CHILDREN));
         }
-
 
         unmount() {
 
@@ -261,28 +294,12 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
             const attributeValue = this.getAttributeReferencedValue(newValue);
 
-            // map local attribute field value
-            if (name !== config.propsField! || !this[name]) {
-
-                // assign
-                this[name] = attributeValue;
-
-            } else {
-
-                // merge
-                Object.assign(this[name], attributeValue);
-            }
-
-            const cancelled = !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_PROP_CHANGE, {
-                detail: <AttributeChangeEvent>{
-                    name: name,
-                    oldValue,
-                    newValue
-                }
-            }));
+            const cancelled = this.onBeforeAttributeChange(name, oldValue, attributeValue);
 
             if (!cancelled) {
-                this.onPropChanged(name, oldValue, newValue);
+
+                this.onAttributeChanged(name, oldValue, attributeValue);
+
             }
         }
 

@@ -16,6 +16,7 @@ export interface LayoutProps {
 @UseComponent(Logo)
 export class AppLayout extends HTMLElement implements WebComponentLifecycle {
 
+
     constructor(
         public props: LayoutProps,
     ) {
@@ -23,7 +24,6 @@ export class AppLayout extends HTMLElement implements WebComponentLifecycle {
     }
 
     render() {
-
         return <div>
             <div style="text-align: center;">
                 <app-logo />

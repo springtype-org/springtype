@@ -1,5 +1,5 @@
 import {ActiveRoute} from "./ActiveRoute";
-import {WebComponent, WebComponentLifecycle, WebComponentLifecycleEvent} from "../../webcomponent";
+import {Attribute, WebComponent, WebComponentLifecycle, WebComponentLifecycleEvent} from "../../webcomponent";
 
 import "../../webcomponent/src/component/ErrorComponent";
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
