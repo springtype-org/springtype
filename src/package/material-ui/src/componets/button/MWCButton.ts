@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./MWCButton.tpl";
 
 @WebComponent({
@@ -7,29 +7,39 @@ import template from "./MWCButton.tpl";
 })
 export class MWCButton extends HTMLElement implements WebComponentLifecycle {
 
-  //  @Attribute
-    raised = false;
+    @Attribute
+    raised = true;
 
-    //@Attribute
+    @Attribute
     unelevated = false;
 
-    //@Attribute
-    outlined = true;
+    @Attribute
+    outlined = false;
 
-    //@Attribute
-    dense = true;
+    @Attribute
+    dense = false;
 
-    //@Attribute
-    disabled = false;
+    @Attribute
+    disabled= false;
 
-    //@Attribute
+    @Attribute
     trailingIcon = false;
 
-    //@Attribute
-    icon = '';
+    @Attribute
+    icon = 'favorite';
 
-    //@Attribute
-    label = 'click me';
+    @Attribute
+    label = '';
 
 
+    mountChildren(): void {
+        const innerButton = this.querySelector("button");
+        if (innerButton) {
+            if (this.disabled) {
+                innerButton.setAttribute("disabled", 'true');
+            } else {
+                innerButton.removeAttribute("disabled")
+            }
+        }
+    }
 }

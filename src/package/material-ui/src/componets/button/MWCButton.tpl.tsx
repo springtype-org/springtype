@@ -1,7 +1,6 @@
 import {MWCButton} from "./MWCButton";
 import './MWCButton.scss'
 
-
 export default (view: MWCButton) => {
 
     const classes: string = [
@@ -14,22 +13,15 @@ export default (view: MWCButton) => {
         .join(' ');
 
     const mdcButtonIcon = <span class="material-icons mdc-button__icon">{view.icon}</span>;
-    const inner = [view.icon && !view.trailingIcon ? mdcButtonIcon : '',
-        <span class="mdc-button__label">{view.label}</span>,
-        view.icon && view.trailingIcon ? mdcButtonIcon : '', <slot></slot>];
 
-    if (view.disabled) {
-
-        return <button class={`mdc-button ${classes}`}
-                       disabled
-                       aria-label={view.label || view.icon}>
-            {inner}
-        </button>
-    }
-
+    console.error(view.icon);
     return <button class={`mdc-button ${classes}`}
                    aria-label={view.label || view.icon}>
-        {inner}
+        {view.icon && !view.trailingIcon ? mdcButtonIcon : ''}
+        <span class="mdc-button__label">{view.label}</span>
+        {view.icon && view.trailingIcon ? mdcButtonIcon : ''}
+        <slot></slot>
     </button>
+
 
 }

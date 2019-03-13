@@ -1,5 +1,5 @@
 import {MWCButton} from "@springtype/springtype-incubator-material-ui";
-import {Route} from "@springtype/springtype-incubator-core";
+import {UseComponent} from "@springtype/springtype-incubator-core";
 
-@Route('', MWCButton)
+@UseComponent(MWCButton)
 export class MaterialExampleApp {}
