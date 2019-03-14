@@ -23,6 +23,5 @@ export class MWCCheckbox extends HTMLElement implements WebComponentLifecycle {
 
     @Attribute
     change = ()=>{
-        console.error('default change')
     };
 }
