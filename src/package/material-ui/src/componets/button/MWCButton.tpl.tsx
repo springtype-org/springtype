@@ -1,5 +1,6 @@
 import {MWCButton} from "./MWCButton";
 import classNames from "classnames";
+import {VirtualElement} from "@springtype/springtype-incubator-core";
 
 export default (view: MWCButton) => {
 
@@ -17,19 +18,17 @@ export default (view: MWCButton) => {
     const innerButtonElement =
         <st-fragment>
             {view.icon && !view["trailing-icon"] ? mdcButtonIcon : ''}
-
             <span class="mdc-button__label">{
                 view.label
             }</span>
-
             {view.icon && view["trailing-icon"] ? mdcButtonIcon : ''}
-            <slot />
+            <slot/>
         </st-fragment>;
 
+    const button: VirtualElement = <button class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
+    if (view.disabled) {
+        button.attributes.disabled = true;
+    }
     // TODO: ripple
-    return <st-fragment>
-        {view.disabled ?
-        <button disabled class={classes} aria-label={ariaLabel}>{ innerButtonElement }</button> :
-        <button className={classes} aria-label={ariaLabel}>{ innerButtonElement }</button>}
-    </st-fragment>;
+    return button;
 }
