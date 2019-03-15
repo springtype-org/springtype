@@ -13,6 +13,8 @@ import {getObservedAttributes} from "./getObservedAttributes";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
 import {getStyleForComponent} from "./getStyleForComponent";
 import {getTemplateForComponent} from "./getTemplateForComponent";
+import {getShadowAttachModeForComponent} from "./getShadowAttachModeForComponent";
+import {getShadowForComponent} from "./getShadowForComponent";
 
 export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -29,10 +31,14 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             // creating instances of WebComponents but document.createElement. Thus, we need to do it here.
             ComponentReflector.callInitializers(ComponentReflector.getInitializers(CustomWebComponent), this);
 
-            if (config.shadow) {
+            const shadow = getShadowForComponent(CustomWebComponent);
+
+            if (shadow) {
+
+                const shadowAttachMode = getShadowAttachModeForComponent(CustomWebComponent);
 
                 this.attachShadow({
-                    mode: config.shadowAttachMode ? config.shadowAttachMode : ShadowAttachMode.OPEN
+                    mode: shadowAttachMode ? shadowAttachMode : ShadowAttachMode.OPEN
                 });
             }
 
@@ -119,7 +125,7 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                 super.unmountChildren();
             }
 
-            if (config.shadow) {
+            if (getShadowForComponent(CustomWebComponent)) {
                 this.shadowRoot.innerHTML = '';
             } else {
                 this.innerHTML = '';
@@ -203,7 +209,7 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
                 if (elements.length > 0) {
 
-                    if (config.shadow) {
+                    if (getShadowForComponent(CustomWebComponent)) {
                         elements.forEach(el => this.shadowRoot.appendChild(el));
                     } else {
                         elements.forEach(el => this.appendChild(el));

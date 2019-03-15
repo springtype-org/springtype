@@ -11,3 +11,4 @@ export * from "./src/decorator/OnAttributeSet";
 export * from "./src/decorator/Style";
 export * from "./src/decorator/Template";
 export * from "./src/interface/TemplateFunction";
+export * from "./src/decorator/Shadow";

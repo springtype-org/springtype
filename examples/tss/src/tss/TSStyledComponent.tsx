@@ -2,7 +2,7 @@ import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
 import {
     Attribute,
-    OnAttributeSet,
+    OnAttributeSet, Shadow,
     Style, Template,
     WebComponent,
     WebComponentLifecycle
@@ -17,9 +17,9 @@ export enum StyleMode {
 }
 
 @WebComponent({
-    tag: 'tsstyled-component',
-    shadow: true
+    tag: 'tsstyled-component'
 })
+@Shadow
 @Template(template)
 @Style(style)
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {

@@ -5,7 +5,6 @@ Pre-beta-release TODO list:
 - Modules:
   - webcomponent    
     - @WebComponent('tag-name', { ... }) syntax support
-    - @Shadow and @Shadow(ShadowAttachMode.OPEN|CLOSED)
     - Support for <slot>
     - Improve performance for renderer
     - Fix st-fragment bug (works only on 1st level)
