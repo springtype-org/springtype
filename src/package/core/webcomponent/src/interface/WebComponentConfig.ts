@@ -8,9 +8,6 @@ export interface WebComponentConfig {
     // @Template
     template?: (view: any) => VirtualElement | Array<VirtualElement>;
 
-    // @Style
-    style?: (view: any, theme: any) => NestedCSSSelectors;
-
     // @ComponentTheme
     theme?: any;
 

@@ -11,6 +11,7 @@ import {THEME} from "../../../tss/src/constant/THEME";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getObservedAttributes} from "./getObservedAttributes";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
+import {getStyleForComponent} from "./getStyleForComponent";
 
 export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -136,9 +137,10 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
         render(): VirtualElement[] {
 
             const elements: VirtualElement[] = [];
+            const style = getStyleForComponent(CustomWebComponent);
 
             // generate and inject styles
-            if (config.style) {
+            if (style) {
 
                 const contextTheme = ApplicationContext.getInstance().get(THEME);
 
@@ -149,12 +151,12 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
                 transformToElementVector(
                     elements,
-                    CSSDeclarationBlockGenerator.generate(config.style(this, theme))
+                    CSSDeclarationBlockGenerator.generate(style(this, theme))
                 );
 
                 // support for :component selector (self-referenced component styles) works even in shadow DOM
                 const componentInlineStyle: any =
-                    CSSInlineStyleGenerator.generateComponentStyles(config.style(this, theme));
+                    CSSInlineStyleGenerator.generateComponentStyles(style(this, theme));
 
                 for (let styleAttributeName in componentInlineStyle) {
 
