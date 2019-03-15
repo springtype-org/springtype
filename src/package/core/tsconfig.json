@@ -18,7 +18,7 @@
       "dom",
       "es2017"
     ],
-    "types": ["reflect-metadata"]
+    "types": ["reflect-metadata", "node"]
   },
   "include": [
     "."

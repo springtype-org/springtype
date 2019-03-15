@@ -48,9 +48,10 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
     };
 
     render() {
+
         return <ul>
             {
-                ([...this.localTodoListState.todos] || []).sort((a: ITodoItem, b: ITodoItem) => {
+                (this.localTodoListState.todos || []).sort((a: ITodoItem, b: ITodoItem) => {
                     return a.text > b.text ? 0 : 1
                 }).map((todo: ITodoItem) => {
                         const text = todo.done ? <s>{todo.text} </s> : todo.text;

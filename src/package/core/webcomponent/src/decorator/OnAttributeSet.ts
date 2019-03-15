@@ -1,7 +1,7 @@
-import {ATTRIBUTE_CHANGE_CALLBACKS} from "../constant/ATTRIBUTE_CHANGE_CALLBACKS";
 import {getAttributeChangeCallbacks} from "../function/getAttributeChangeCallbacks";
+import {setAttributeChangeCallbacks} from "../function/setAttributeChangeCallbacks";
 
-export function OnAttributeChange(attributeName: string): any {
+export function OnAttributeSet(attributeName: string): any {
 
     return (prototype: any, methodName: any) => {
 
@@ -12,7 +12,7 @@ export function OnAttributeChange(attributeName: string): any {
             attributeName
         });
 
-        Reflect.set(prototype.constructor, ATTRIBUTE_CHANGE_CALLBACKS, attributeChangeCallbacks);
+        setAttributeChangeCallbacks(prototype.constructor, attributeChangeCallbacks);
 
         return prototype;
     };

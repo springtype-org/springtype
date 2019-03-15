@@ -1,16 +1,13 @@
 import {WebComponentConfig} from "../interface/WebComponentConfig";
 import {CHILD_ELEMENTS} from "../constant/CHILD_ELEMENTS";
 import {transformToElementVector} from "./transformToElementVector";
-import {createFieldChangeDetector} from "../../../lang/src/decorator/detect-field-changes/function/createFieldChangeDetector";
 import {VirtualElement} from "../../../renderer";
 import {ShadowAttachMode} from "../enum/ShadowAttachMode";
 import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator} from "../../../tss";
 import {AttributeChangeEvent} from "../interface/AttributeChangeEvent";
 import {WebComponentLifecycleEvent} from "../enum/WebComponentLifecycleEvent";
-import {RenderStrategy} from "../enum/RenderStrategy";
 import {ApplicationContext, ComponentReflector} from "../../../di";
 import {THEME} from "../../../tss/src/constant/THEME";
-import {PropsChangeEvent} from "../interface/PropsChangeEvent";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getObservedAttributes} from "./getObservedAttributes";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
@@ -243,8 +240,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
 
         reflowOnAttributeChange(attributeName: string, oldValue: any, newValue: any) {
 
-            console.log('reflowOnAttributeChange', attributeName, oldValue, newValue);
-
             if (this.shouldReflowOnAttributeChange(attributeName, oldValue, newValue)) {
                 this.reflow();
             }
@@ -269,8 +264,6 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                 this.mount();
 
                 this.flow(true);
-
-
             }
         }
 

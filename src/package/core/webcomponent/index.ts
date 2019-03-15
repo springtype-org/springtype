@@ -7,4 +7,4 @@ export * from "./src/enum/ShadowAttachMode";
 export * from "./src/enum/WebComponentLifecycleEvent";
 export * from "./src/decorator/UseComponent";
 export * from "./src/decorator/Attribute";
-export * from "./src/decorator/OnAttributeChange";
+export * from "./src/decorator/OnAttributeSet";

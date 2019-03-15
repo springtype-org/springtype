@@ -5,8 +5,9 @@ import {
     warn,
     WebComponent,
     WebComponentLifecycle,
-    Attribute, OnAttributeChange,
+    Attribute, OnAttributeSet, DetectChanges,
 } from "@springtype/springtype-incubator-core";
+import {OnFieldChange} from "../../../../src/package/core";
 
 interface Props {
     difficulty: number;
@@ -14,6 +15,9 @@ interface Props {
 
 interface GameState {
     won: boolean;
+    subState: {
+        foo: boolean;
+    }
 }
 
 enum ButtonType {
@@ -35,28 +39,20 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
     @Attribute
     active: boolean = false;
 
-    @Attribute
+    @DetectChanges
     protected gameState: GameState = {
-        won: false
+        won: false,
+        subState: {
+            foo: false
+        }
     };
 
-    /*
-    @ShouldAttributeChange("gameState")
-    preValidateGameState(mutatingGameState: GameState): boolean {
-
-        if (typeof mutatingGameState.won !== 'boolean') {
-            return false;
-        }
-        return true;
-    }
-    */
-
-    @OnAttributeChange("gameState")
-    validateGameState() {
-        console.log('GameState fully pre-validated and mutated: ', this.gameState);
+    @OnFieldChange("gameState")
+    validateGameState(propName: string, newValue: any) {
+        console.log('GameState fully pre-validated and mutated: ', propName, newValue);
     }
 
-    @OnAttributeChange("type")
+    @OnAttributeSet("type")
     onTypeChange() {
         console.log('onTypeChange', this.type);
     }
@@ -66,7 +62,6 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
     // TODO: @Throttle()
     // TODO: @Memorize
     validate() {
-
         console.log('Executed because gameState changed!', this.gameState);
     }
 
@@ -83,10 +78,10 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
             console.log('isActive', this.active);
 
             this.gameState.won = false;
-            this.gameState = {
-                won: true
+            this.gameState.won = true;
+            this.gameState.subState = {
+                foo: true
             };
-            this.gameState.won = false;
 
             // simulate external attribute change
             this.setAttribute("type", "L");

@@ -1,10 +1,10 @@
-import {ComponentReflector} from "../../../../../di";
-import {ChangeDetectionInterceptor} from "../../../..";
+import {ComponentReflector} from "../../../di/index";
+import {ChangeDetectionInterceptor} from "../../../lang/index";
 import {createFieldChangeDetector} from "./createFieldChangeDetector";
 
 export const registerForChangeDetection = (
     prototype: any,
-    fieldName: string,
+    fieldName: string|symbol,
     memorize: boolean,
     onChange: ChangeDetectionInterceptor = (instance: any, name: string|number|symbol, value: any) => {},
     onBeforeChange: ChangeDetectionInterceptor = (instance: any, name: string|number|symbol, value: any) => true,

@@ -1,4 +1,10 @@
-import {Attribute, OnAttributeChange, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {
+    Attribute,
+    DetectChanges,
+    OnAttributeSet, OnFieldChange,
+    WebComponent,
+    WebComponentLifecycle
+} from "@springtype/springtype-incubator-core";
 import "./FieldComponent.scss"
 import template from "./FieldComponent.tpl"
 
@@ -17,6 +23,7 @@ export interface FieldProp {
     amountMines: number;
     neighbors: Neighbors;
     position: number;
+    [x: string]: any;
 }
 
 @WebComponent({
@@ -24,13 +31,13 @@ export interface FieldProp {
     template
 })
 export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
+
     static fieldComponents: FieldComponent[] = [];
 
-    // TODO: Change Detector?
     @Attribute
     field: FieldProp;
 
-    @OnAttributeChange("field")
+    @OnAttributeSet("field")
     onFieldChanged() {
         if (this.field) {
             FieldComponent.fieldComponents[this.field.position] = this;
@@ -60,7 +67,7 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
                 FieldComponent.openFields(cmp.field, checked, level + 1)
             }
 
-            // change whole reference to trigger reflow
+            // Need to set for the whole reference to change and trigger a reflow
             // TODO: Use ChangeDetector instead
             cmp.field = {...cmp.field};
         }
@@ -74,7 +81,7 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
             FieldComponent.fieldComponents.forEach(cmp => {
                 cmp.field.showBomb = true;
 
-                // change whole reference to trigger reflow
+                // Need to set for the whole reference to change and trigger a reflow
                 // TODO: Use ChangeDetector instead
                 cmp.field = {...cmp.field};
             });

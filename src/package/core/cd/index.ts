@@ -1,1 +1,2 @@
-export * from "./src/decorator/ChangeDetection";
+export * from "./src/decorator/DetectChanges";
+export * from "./src/decorator/OnFieldChange";

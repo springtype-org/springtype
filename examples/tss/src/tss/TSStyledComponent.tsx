@@ -1,6 +1,6 @@
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
-import {Attribute, OnAttributeChange, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, OnAttributeSet, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 
 interface Props {
     styleMode: StyleMode;
@@ -20,23 +20,16 @@ export class TSStyledComponent extends HTMLElement implements WebComponentLifecy
 
     @Attribute
     props: Props = {
-        styleMode: StyleMode.STANDARD
+        styleMode: Math.random() > 0.5 ? StyleMode.INVERTED : StyleMode.STANDARD
     };
 
-    init() {
-
-        console.log('init, this.props', this);
-
-        this.props.styleMode = Math.random() > 0.5 ? StyleMode.INVERTED : StyleMode.STANDARD;
-    }
-
-    @OnAttributeChange("props")
+    @OnAttributeSet("props")
     onPropsChanged() {
-        console.log('programmatic invocation');
+        console.log('programmatic interception');
     }
 
-    @OnAttributeChange("props")
+    @OnAttributeSet("props")
     onPropsChanged2() {
-        console.log('programmatic invocation2');
+        console.log('programmatic interception 2');
     }
 }

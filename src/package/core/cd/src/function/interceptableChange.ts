@@ -1,4 +1,4 @@
-import {ChangeDetectionInterceptor} from "../../../..";
+import {ChangeDetectionInterceptor} from "../../../lang/index";
 
 export const interceptableChange = (
     props: any, 
@@ -6,14 +6,15 @@ export const interceptableChange = (
     value: any,
     onChange: ChangeDetectionInterceptor,
     onBeforeChange: ChangeDetectionInterceptor,
+    instance?: any,
 ) => {
 
-    const cancelled = !onBeforeChange(props, name, value);
+    const cancelled = !onBeforeChange(props, name, value, instance);
 
     if (!cancelled) {
         
         props[name] = value;
         
-        onChange(props, name, value);
+        onChange(props, name, value, instance);
     }
 };

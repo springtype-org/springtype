@@ -8,20 +8,13 @@ Pre-beta-release TODO list:
     - @Template
     - @Style
     - @Shadow and @Shadow(ShadowAttachMode.OPEN|CLOSED)
+    - Support for <slot>
+    - Improve performance for renderer
     - Fix st-fragment bug (works only on 1st level)
-    - May implement @RenderOnChange (refactor CD out of WebComponent)
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - i18n
     - @Translate
     - @Locale
-  - cd
-    - @OnFieldChange("name")
-    - @DetectFieldChanges
-    - refactor DetectFieldChanges concept 
-    - move code from lang/decorator to cd package
-    - impl detection decorators to be impl. (see sudoku example)
-    - remove @DetectFieldChanges then
-    - update webcomponent code then
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
@@ -34,7 +27,6 @@ Pre-beta-release TODO list:
   - example/minesweeper
     - Use model and state
   - state
-    - implement @MapStateToField(...); refactor WebComponent then
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
