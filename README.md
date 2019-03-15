@@ -5,7 +5,6 @@ Pre-beta-release TODO list:
 - Modules:
   - webcomponent    
     - @WebComponent('tag-name', { ... }) syntax support
-    - @Template
     - @Shadow and @Shadow(ShadowAttachMode.OPEN|CLOSED)
     - Support for <slot>
     - Improve performance for renderer

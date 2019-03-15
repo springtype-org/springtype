@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Template, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./BurgerButton.tpl";
 
 export interface BurgerButtonProps {
@@ -13,9 +13,9 @@ export enum BurgerType {
 }
 
 @WebComponent({
-    tag: 'burger-button',
-    template
+    tag: 'burger-button'
 })
+@Template(template)
 export class BurgerButton extends HTMLElement implements  WebComponentLifecycle {
     open = false;
 

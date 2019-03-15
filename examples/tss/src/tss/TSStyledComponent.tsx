@@ -3,7 +3,7 @@ import style from "./TSStyledComponent.style";
 import {
     Attribute,
     OnAttributeSet,
-    Style,
+    Style, Template,
     WebComponent,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
@@ -18,9 +18,9 @@ export enum StyleMode {
 
 @WebComponent({
     tag: 'tsstyled-component',
-    shadow: true,
-    template
+    shadow: true
 })
+@Template(template)
 @Style(style)
 export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
 

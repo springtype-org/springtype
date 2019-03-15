@@ -12,6 +12,7 @@ import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getObservedAttributes} from "./getObservedAttributes";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
 import {getStyleForComponent} from "./getStyleForComponent";
+import {getTemplateForComponent} from "./getTemplateForComponent";
 
 export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -167,12 +168,15 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             }
 
             if (super.render) {
+
                 transformToElementVector(elements, super.render());
+
             } else {
 
-                if (typeof config.template == 'function') {
-                    // render template by default
-                    transformToElementVector(elements, config.template(this));
+                const template = getTemplateForComponent(CustomWebComponent);
+
+                if (typeof template === 'function') {
+                    transformToElementVector(elements, template(this));
                 }
             }
             this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.RENDER));
