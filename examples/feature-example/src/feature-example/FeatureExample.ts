@@ -1,4 +1,4 @@
-import {UseComponent, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, UseComponent, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./FeatureExample.tpl";
 import {BurgerButton} from "../../../burger-button/src/burger-button/BurgerButton";
 import {BurgerExample} from "../components/burger/BurgerExample";
@@ -15,17 +15,17 @@ interface BurgerButtonProps {
 @UseComponent(BurgerExample)
 export class FeatureExample extends HTMLElement implements WebComponentLifecycle {
 
+    @Attribute
+    props: BurgerButtonProps = {
+        fill: 'yellow',
+        menuItems: []
+    };
+
     constructor(
-        public props: BurgerButtonProps,
         public btn: HTMLButtonElement
     ) {
         super();
     }
-
-    init(): void {
-        this.props.fill = this.props.fill || 'yellow';
-        this.props.menuItems = this.props.menuItems || [];
-    };
 
 
     // event listeners

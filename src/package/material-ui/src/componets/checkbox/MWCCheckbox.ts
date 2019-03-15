@@ -22,6 +22,5 @@ export class MWCCheckbox extends HTMLElement implements WebComponentLifecycle {
     value = '';
 
     @Attribute
-    change = ()=>{
-    };
+    change = () => {};
 }

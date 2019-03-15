@@ -9,7 +9,7 @@ export default (view: MinesweeperApp) => {
                     <div class="row-fields">
                         {
                             fields.map((field: FieldProp) =>
-                                <sw-field props={field}/>
+                                <sw-field field={field}/>
                             )
                         }
                     </div>

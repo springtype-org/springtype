@@ -1,1 +1,0 @@
-export const PROPS_OBJECT = 'PROPS_OBJECT';

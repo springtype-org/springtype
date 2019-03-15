@@ -3,17 +3,17 @@ import {getAttributeChangeCallbacks} from "../function/getAttributeChangeCallbac
 
 export function OnAttributeChange(attributeName: string): any {
 
-    return (instance: any, methodName: any) => {
+    return (prototype: any, methodName: any) => {
 
-        const attributeChangeCallbacks = getAttributeChangeCallbacks(instance);
+        const attributeChangeCallbacks = getAttributeChangeCallbacks(prototype.constructor);
 
         attributeChangeCallbacks.push({
             methodName,
             attributeName
         });
 
-        Reflect.set(instance, ATTRIBUTE_CHANGE_CALLBACKS, attributeChangeCallbacks);
+        Reflect.set(prototype.constructor, ATTRIBUTE_CHANGE_CALLBACKS, attributeChangeCallbacks);
 
-        return instance;
+        return prototype;
     };
 }

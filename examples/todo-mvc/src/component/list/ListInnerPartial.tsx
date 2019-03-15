@@ -10,7 +10,7 @@ import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
 import {MapStateToField} from "../../../../../src/package/core";
 
-interface TodoListProps {
+interface LocalTodoListState {
     todos: Array<ITodoItem>;
 }
 
@@ -20,10 +20,10 @@ interface TodoListProps {
 export class ListInnerPartial extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
-        @MapStateToField((state: IRootState): Partial<TodoListProps> => ({
+        @MapStateToField((state: IRootState): Partial<LocalTodoListState> => ({
             todos: TodoModel.selectTodos(state)
         }))
-        public props: TodoListProps,
+        public localTodoListState: LocalTodoListState,
         protected model: TodoModel,
         protected activeRoute: ActiveRoute
     ) {
@@ -50,7 +50,7 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
     render() {
         return <ul>
             {
-                ([...this.props.todos] || []).sort((a: ITodoItem, b: ITodoItem) => {
+                ([...this.localTodoListState.todos] || []).sort((a: ITodoItem, b: ITodoItem) => {
                     return a.text > b.text ? 0 : 1
                 }).map((todo: ITodoItem) => {
                         const text = todo.done ? <s>{todo.text} </s> : todo.text;

@@ -12,6 +12,7 @@
     "jsx": "preserve",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "sourceMap": true,
     "lib": [
       "dom",

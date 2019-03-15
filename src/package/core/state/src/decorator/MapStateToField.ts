@@ -1,23 +1,13 @@
 import {ApplicationContext, ComponentImpl, ComponentReflector} from "../../../di";
 import {Store} from "../Store";
 import {createChangeDetector} from "../../../lang/src/decorator/detect-field-changes/function/createChangeDetector";
+import {WebComponentLifecycle} from "../../../webcomponent";
+import {WebComponentImpl} from "../../../webcomponent/src/interface/WebComponentImpl";
 
 export function MapStateToField(
     mapFn: (state: any) => any,
-    updateWebComponent: boolean = true
+    callReflowOnAttributeChange: boolean = true
 ): any {
-
-    const doMapToInstanceProps = (instance: any, propsFieldName: string, value: any) => {
-
-        const props = instance[propsFieldName];
-
-        for (let key in value) {
-
-            if (value.hasOwnProperty(key)) {
-                props[key] = value[key];
-            }
-        }
-    };
 
     // called with @MapStateToField(...)
     return (targetClass: any, methodName: string, argumentIndex: number) => {
@@ -41,13 +31,17 @@ export function MapStateToField(
 
         const createField = (argumentValue: any) => {
 
+            let oldMappedState: any;
+
             argumentValue = createChangeDetector(
                 argumentValue,
                 true,
                 (props: any, name: string|number|symbol, value: any) => {
                     instances.forEach((instance) => {
-                        if (updateWebComponent && (<any>instance).propsField) {
-                            doMapToInstanceProps(instance, (<any>instance).propsField, argumentValue);
+
+                        if (callReflowOnAttributeChange) {
+                            (instance as any).reflowOnAttributeChange(name, oldMappedState, value);
+                            oldMappedState = value;
                         }
                     })
             });

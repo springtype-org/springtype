@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, OnAttributeChange, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import "./FieldComponent.scss"
 import template from "./FieldComponent.tpl"
 
@@ -23,18 +23,19 @@ export interface FieldProp {
     tag: 'sw-field',
     template
 })
-
 export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
     static fieldComponents: FieldComponent[] = [];
 
-    constructor(public props: FieldProp) {
-        super()
-    }
+    // TODO: Change Detector?
+    @Attribute
+    field: FieldProp;
 
-    // TODO: Use model and state
-    onPropsChanged() {
-        FieldComponent.fieldComponents[this.props.position] = this;
-        Window.cmp = FieldComponent.fieldComponents;
+    @OnAttributeChange("field")
+    onFieldChanged() {
+        if (this.field) {
+            FieldComponent.fieldComponents[this.field.position] = this;
+            Window.cmp = FieldComponent.fieldComponents;
+        }
     }
 
     static openFields = (props: FieldProp, checked: number[] = [], level: number = 0): boolean => {
@@ -44,28 +45,39 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
             .map((pos) => FieldComponent.fieldComponents[pos])
             .filter(cmp => {
                 if (cmp) {
-                    return !cmp.props.bomb;
+                    return !cmp.field.bomb;
                 }
-            })
-        ;
-        for (const cmp of checkNeighbors.filter(cmp => !cmp.props.open)) {
-            if (FieldComponent.checkFailed(cmp.props)) {
+            });
+
+        for (const cmp of checkNeighbors.filter(cmp => !cmp.field.open)) {
+            if (FieldComponent.checkFailed(cmp.field)) {
                 return false
             }
-            cmp.props.open = true;
-            if (checked.indexOf(cmp.props.position) == -1 && cmp.props.amountMines <= 1 || level == 0) {
-                checked.push(cmp.props.position);
+            cmp.field.open = true;
+            if (checked.indexOf(cmp.field.position) == -1 && cmp.field.amountMines <= 1 || level == 0) {
+                checked.push(cmp.field.position);
 
-                FieldComponent.openFields(cmp.props, checked, level + 1)
+                FieldComponent.openFields(cmp.field, checked, level + 1)
             }
+
+            // change whole reference to trigger reflow
+            // TODO: Use ChangeDetector instead
+            cmp.field = {...cmp.field};
         }
+
         return true;
     };
 
     static checkFailed = (props: FieldProp): boolean => {
         const loose = props.bomb || props.flag;
         if (loose) {
-            FieldComponent.fieldComponents.forEach(cmp => cmp.props.showBomb = true);
+            FieldComponent.fieldComponents.forEach(cmp => {
+                cmp.field.showBomb = true;
+
+                // change whole reference to trigger reflow
+                // TODO: Use ChangeDetector instead
+                cmp.field = {...cmp.field};
+            });
         }
 
         return loose;

@@ -47,8 +47,8 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
     render() {
 
-        return <app-layout props={{
-            children: <st-fragment>
+        return <app-layout items={
+            <st-fragment>
 
                 <app-list-inner-partial />
 
@@ -60,6 +60,6 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
                 <a className="waves-effect waves-light btn" onClick={this.onAddItem}>Add</a>
             </st-fragment>
-        }} />
+        } />
     }
 }

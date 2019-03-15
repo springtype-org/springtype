@@ -1,4 +1,4 @@
-import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./SVGLoader.tpl";
 
 export interface LoaderProps {
@@ -16,15 +16,9 @@ export enum LoaderType {
 })
 export class SVGLoader extends HTMLElement implements WebComponentLifecycle {
 
-    constructor(
-        public props: LoaderProps
-    ) {
-        super();
-        this.props.type = LoaderType.CIRCLE;
-        this.props.width = 100;
-    }
-
-    init = () => {
-    }
-
+    @Attribute
+    props: LoaderProps = {
+        type: LoaderType.CIRCLE,
+        width: 100
+    };
 }

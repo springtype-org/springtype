@@ -1,4 +1,10 @@
-import {Component, ComponentImpl, VirtualElement, WebComponentReflector} from "../../../index";
+import {
+    Component,
+    ComponentImpl,
+    ErrorMessage,
+    VirtualElement,
+    WebComponentReflector
+} from "../../../index";
 import {RouterOutlet} from "../RouterOutlet";
 import {RouterImpl,} from "../interface/RouterImpl";
 import {TokenizedRoutes} from "../interface/TokenizedRoutes";
@@ -6,8 +12,10 @@ import {Routes} from "../interface/Routes";
 import {RouteDefinition} from "../interface/RouteDefinition";
 import {LocationChangeDecision} from "../interface/LocationChangeDecision";
 import {ROUTE_NOT_FOUND} from "../constant/ROUTE_NOT_FOUND";
+import {UseComponent} from "../../../webcomponent/src/decorator/UseComponent";
 
 @Component
+@UseComponent(ErrorMessage)
 export class HistoryRouterImpl implements RouterImpl {
 
     protected TOKENIZED_ROUTES: TokenizedRoutes = {};
@@ -110,9 +118,7 @@ export class HistoryRouterImpl implements RouterImpl {
 
             return {
                 route: ROUTE_NOT_FOUND,
-                component: <st-error props={{
-                    errorMessage: `No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_NOT_FOUND}")!`
-                }} />,
+                component: <st-error-message message={`No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_NOT_FOUND}")!`} />,
                 params: {}
             } as LocationChangeDecision;
         }

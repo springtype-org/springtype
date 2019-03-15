@@ -14,10 +14,6 @@ export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle
     public mineMatrix: Array<FieldProp[]> = [];
     static mineArray: FieldProp[] = [];
 
-    constructor() {
-        super();
-    }
-
 
     buildField(value: boolean) {
         return {
@@ -94,7 +90,7 @@ export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle
             }
             this.mineMatrix.push(mineRow);
         }
-        Window.props = MinesweeperApp.mineArray;
+        Window.field = MinesweeperApp.mineArray;
     }
 
 }

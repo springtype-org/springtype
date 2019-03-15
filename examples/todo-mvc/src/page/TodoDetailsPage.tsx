@@ -29,14 +29,14 @@ export class TodoDetailsPage extends HTMLElement implements WebComponentLifecycl
         // what is returned, will be attached to this node
         return (
 
-            <app-layout props={{
-                children: <st-fragment>
+            <app-layout items={
+                <st-fragment>
                     <ul>
                         <li>ID: {todo.id}</li>
                         <li>Text: {todo.text}</li>
                     </ul>
                 </st-fragment>
-            }} />
+            } />
         );
     }
 }

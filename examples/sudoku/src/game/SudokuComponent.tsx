@@ -1,7 +1,6 @@
 import template from "./SudokuComponent.tpl";
 import style from "./SudokuComponent.style";
 import {
-    DetectFieldChanges,
     log,
     warn,
     WebComponent,
@@ -28,18 +27,6 @@ enum ButtonType {
     template,
     style
 })
-// TODO: Remove with new change detection concept
-@DetectFieldChanges("gameState", true, (instance: any, props) => {
-    console.log('game state change', instance, props);
-}, (instance, props, value) => {
-
-    if (typeof value !== 'boolean') {
-        return false;
-    }
-
-    console.log('before ', value);
-    return true;
-}) // activate change detection just for this class field
 export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {
 
     @Attribute
@@ -48,11 +35,25 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
     @Attribute
     active: boolean = false;
 
-    constructor(
+    @Attribute
+    protected gameState: GameState = {
+        won: false
+    };
 
-        // TODO: @DetectChanges
-        protected gameState: GameState) {
-        super();
+    /*
+    @ShouldAttributeChange("gameState")
+    preValidateGameState(mutatingGameState: GameState): boolean {
+
+        if (typeof mutatingGameState.won !== 'boolean') {
+            return false;
+        }
+        return true;
+    }
+    */
+
+    @OnAttributeChange("gameState")
+    validateGameState() {
+        console.log('GameState fully pre-validated and mutated: ', this.gameState);
     }
 
     @OnAttributeChange("type")
@@ -60,7 +61,6 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         console.log('onTypeChange', this.type);
     }
 
-    // TODO: @OnFieldChange("gameState")
     // TODO: @Buffer(500)
     // TODO: @Delay()
     // TODO: @Throttle()
@@ -83,7 +83,9 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
             console.log('isActive', this.active);
 
             this.gameState.won = false;
-            this.gameState.won = false;
+            this.gameState = {
+                won: true
+            };
             this.gameState.won = false;
 
             // simulate external attribute change

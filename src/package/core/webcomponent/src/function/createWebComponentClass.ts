@@ -13,11 +13,7 @@ import {THEME} from "../../../tss/src/constant/THEME";
 import {PropsChangeEvent} from "../interface/PropsChangeEvent";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getObservedAttributes} from "./getObservedAttributes";
-import {AttributeChangeCallbackRegistration} from "../interface/AttributeChangeCallbackRegistration";
-import {getAttributeChangeCallbacks} from "./getAttributeChangeCallbacks";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
-import {ATTRIBUTE_REGISTERED} from "../constant/ATTRIBUTE_REGISTERED";
-import {ATTRIBUTE_VALUE} from "../constant/ATTRIBUTE_VALUE";
 
 export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -26,27 +22,13 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
     const CustomWebComponent = class extends injectableWebComponent {
 
         mounted: boolean = false;
-        propsField: string;
 
         constructor(...args: Array<any>) {
             super();
 
-            this.propsField = config.propsField!;
-
             // call all registered initializer functions for this WebComponent as BeanFactory is not
             // creating instances of WebComponents but document.createElement. Thus, we need to do it here.
             ComponentReflector.callInitializers(ComponentReflector.getInitializers(CustomWebComponent), this);
-
-            if (config.renderStrategy === RenderStrategy.OnChanges) {
-
-                createFieldChangeDetector(
-                    this,
-                    config.propsField!,
-                    true,
-                    this.onPropsChanged.bind(this),
-                    this.onBeforePropsChange.bind(this)
-                );
-            }
 
             if (config.shadow) {
 
@@ -58,27 +40,11 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_INIT));
 
             this.init();
+
         }
 
         static get observedAttributes() {
-
-            const attributesToObserve = getObservedAttributes(CustomWebComponent);
-
-            // automatically allow for observeAttributes restore
-            if (attributesToObserve.indexOf(config.propsField!) === -1) {
-                attributesToObserve.push(config.propsField!);
-            }
-            return attributesToObserve;
-        }
-
-        onBeforePropsChange(props: any, name: string | number | symbol, value: any): boolean {
-            return this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_PROPS_CHANGE, {
-                detail: <PropsChangeEvent>{
-                    props,
-                    name,
-                    value
-                }
-            }))
+            return getObservedAttributes(CustomWebComponent);
         }
 
         init(): void {
@@ -89,80 +55,24 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.INIT));
         }
 
-        onPropChanged(name: string, oldValue: string, newValue: string): void {
-
-            if (super.onPropChanged) {
-                return super.onPropChanged(name, oldValue, newValue);
-            }
-        }
-
-        onPropsChanged(props: any, name: string | number | symbol, value: any): void {
-
-            this.reflow();
-
-            if (super.onPropsChanged) {
-                return super.onPropsChanged(props, name, value);
-            }
+        shouldAttributeChange(name: string, oldValue: any, newValue: any): boolean {
+            return true;
         }
 
         onBeforeAttributeChange(name: string, oldValue: any, newValue: any): boolean {
+
             return !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_ATTRIBUTE_CHANGE, {
                 detail: <AttributeChangeEvent>{
                     name: name,
                     oldValue,
                     newValue
                 }
-            }));
-        }
-
-        registerAttribute(name: string): void {
-
-            if (!Reflect.get(this, (ATTRIBUTE_REGISTERED + name))) {
-
-                Object.defineProperty(this, name, {
-                    set: (value: any) => {
-
-                        Reflect.set(this, (ATTRIBUTE_VALUE + name) as string, value);
-
-                        if (this.getAttribute(name) !== value) {
-                            this.setAttribute(name, value);
-                        }
-
-                        if (config.renderStrategy === RenderStrategy.OnChanges) {
-                            this.reflow();
-                        }
-                        return true;
-                    },
-                    get: (): any => Reflect.get(this, (ATTRIBUTE_VALUE + name) as string),
-                });
-                Reflect.set(this, (ATTRIBUTE_REGISTERED + name) as string, true);
-            }
+            })) && !this.shouldAttributeChange(name, oldValue, newValue);
         }
 
         onAttributeChanged(name: string, oldValue: string, newValue: string): void {
 
-            if (name === config.propsField) {
-
-                if (newValue && this[name]) {
-                    Object.assign(this[name], newValue);
-                }
-
-            } else {
-
-                this.registerAttribute(name);
-
-                this[name] = newValue;
-            }
-
-            // notify
-            const attributeChangeCallbacks: Array<AttributeChangeCallbackRegistration> = getAttributeChangeCallbacks(this);
-
-            attributeChangeCallbacks.forEach((attributeChangeCallbackRegistration: AttributeChangeCallbackRegistration) => {
-
-                if (attributeChangeCallbackRegistration.attributeName === name) {
-                    this[attributeChangeCallbackRegistration.methodName]();
-                }
-            });
+            this[name] = newValue;
 
             if (super.onAttributeChanged) {
                 return super.onAttributeChanged(name, oldValue, newValue);
@@ -202,6 +112,20 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                 super.remountChildren();
             }
             this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.REMOUNT_CHILDREN));
+        }
+
+        unmountChildren() {
+
+            if (super.unmountChildren) {
+                super.unmountChildren();
+            }
+
+            if (config.shadow) {
+                this.shadowRoot.innerHTML = '';
+            } else {
+                this.innerHTML = '';
+            }
+            this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.UNMOUNT_CHILDREN));
         }
 
         unmount() {
@@ -295,15 +219,15 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.FLOW));
         };
 
+        shouldReflow(): boolean {
+            return true;
+        }
+
         reflow() {
 
-            if (this.mounted) {
+            if (this.mounted && this.shouldReflow()) {
 
-                if (config.shadow) {
-                    this.shadowRoot.innerHTML = '';
-                } else {
-                    this.innerHTML = '';
-                }
+                this.unmountChildren();
 
                 this.flow();
 
@@ -313,10 +237,22 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             }
         }
 
+        shouldReflowOnAttributeChange(attributeName: string, oldValue: any, newValue: any): boolean {
+            return true;
+        }
+
+        reflowOnAttributeChange(attributeName: string, oldValue: any, newValue: any) {
+
+            console.log('reflowOnAttributeChange', attributeName, oldValue, newValue);
+
+            if (this.shouldReflowOnAttributeChange(attributeName, oldValue, newValue)) {
+                this.reflow();
+            }
+        }
+
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
             const attributeValue = getAttributeReferencedValue(newValue);
-
             const cancelled = this.onBeforeAttributeChange(name, oldValue, attributeValue);
 
             if (!cancelled) {
@@ -333,6 +269,8 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
                 this.mount();
 
                 this.flow(true);
+
+
             }
         }
 

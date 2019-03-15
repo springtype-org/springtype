@@ -1,0 +1,1 @@
+export const GET_ATTRIBUTE_METHOD_NAME = 'getAttribute';

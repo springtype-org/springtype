@@ -7,60 +7,61 @@ export const CLOSED_CSS_KEY = "closed";
 export default (view: FieldComponent) => {
 
     let viewBomb = '';
-    if (view.props.showBomb) {
-        if (view.props.bomb) {
+    if (view.field.showBomb) {
+        if (view.field.bomb) {
             viewBomb = (<img src={ResourceIcons.mine}/>);
 
-            if (view.props.flag) {
+            if (view.field.flag) {
                 viewBomb = (<img src={ResourceIcons.mine_correct}/>);
             }
-        }else if (view.props.flag) {
+        }else if (view.field.flag) {
             viewBomb = (<img src={ResourceIcons.mine_wrong}/>);
         }
     }
-    const viewMineAmount = view.props.open && view.props.amountMines ? view.props.amountMines : '';
-    const viewFlag = !view.props.open && !view.props.showBomb && view.props.flag ? (<img src={ResourceIcons.flag}/>) : '';
+    const viewMineAmount = view.field.open && view.field.amountMines ? view.field.amountMines : '';
+    const viewFlag = !view.field.open && !view.field.showBomb && view.field.flag ? (<img src={ResourceIcons.flag}/>) : '';
 
     return (
-        <div className={`${view.props.open ? OPEN_CSS_KEY : CLOSED_CSS_KEY} ${view.getColor(view.props.amountMines)}`}
-            //  style={view.props.bomb ? 'background-color: red;' : ''}
+        <div className={`${view.field.open ? OPEN_CSS_KEY : CLOSED_CSS_KEY} ${view.getColor(view.field.amountMines)}`}
+            //  style={view.field.bomb ? 'background-color: red;' : ''}
              onContextMenu={(evt: any) => {
                  evt.preventDefault();
-                 if (!view.props.showBomb) {
-                     if (!view.props.open) {
-                         view.props.flag = !view.props.flag;
+                 if (!view.field.showBomb) {
+                     if (!view.field.open) {
+                         view.field.flag = !view.field.flag;
                      }
                  }
              }}
              ondblclick={
                  () => {
-                     if (!view.props.showBomb) {
-                         const neighborsNotOpen = view.props.neighbors.all
+                     if (!view.field.showBomb) {
+                         const neighborsNotOpen = view.field.neighbors.all
                              .map((pos) => FieldComponent.fieldComponents[pos])
-                             .filter(nb => !nb.props.open);
+                             .filter(nb => !nb.field.open);
 
-                         const neighborsNotOpenWithoutFlag = neighborsNotOpen.filter(nb => !nb.props.flag);
-                         if (view.props.amountMines == neighborsNotOpen
-                             .map((cmp): number => (cmp.props.flag) ? 1 : 0)
+                         const neighborsNotOpenWithoutFlag = neighborsNotOpen.filter(nb => !nb.field.flag);
+                         if (view.field.amountMines == neighborsNotOpen
+                             .map((cmp): number => (cmp.field.flag) ? 1 : 0)
                              .reduce((accumulator, currentValue) => accumulator + currentValue)) {
                              for (let cmp of neighborsNotOpenWithoutFlag) {
-                                 if (FieldComponent.checkFailed(cmp.props)) {
+                                 if (FieldComponent.checkFailed(cmp.field)) {
                                      break;
                                  }
-                                 FieldComponent.openFields(cmp.props, [view.props.position], 0)
+                                 FieldComponent.openFields(cmp.field, [view.field.position], 0)
                              }
                          }
                      }
                  }
              }
              onClick={() => {
-                 if (!view.props.showBomb) {
-                     if (view.props.open || view.props.flag) {
+
+                 if (!view.field.showBomb) {
+                     if (view.field.open || view.field.flag) {
                          return;
                      }
-                     if (!FieldComponent.checkFailed(view.props)) {
-                         FieldComponent.openFields(view.props);
-                         view.props.open = true;
+                     if (!FieldComponent.checkFailed(view.field)) {
+                         FieldComponent.openFields(view.field);
+                         view.field.open = true;
                      }
                  }
              }}>

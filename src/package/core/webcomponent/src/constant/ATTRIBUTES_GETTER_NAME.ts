@@ -1,0 +1,1 @@
+export const ATTRIBUTES_GETTER_NAME = 'attributes';

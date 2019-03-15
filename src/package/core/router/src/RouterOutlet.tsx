@@ -1,26 +1,31 @@
 import {ActiveRoute} from "./ActiveRoute";
-import {Attribute, WebComponent, WebComponentLifecycle, WebComponentLifecycleEvent} from "../../webcomponent";
+import {
+    Attribute,
+    WebComponent,
+    WebComponentLifecycle,
+    WebComponentLifecycleEvent
+} from "../../webcomponent";
 
-import "../../webcomponent/src/component/ErrorComponent";
+import "../../webcomponent/src/component/ErrorMessage";
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
 import {Renderer} from "../../renderer/src/decorator/Renderer";
 import {VirtualElement} from "../../renderer";
-
-interface RouterProps {
-    component: VirtualElement;
-    id: number;
-}
+import {ErrorMessage} from "../../index";
+import {UseComponent} from "../../webcomponent/src/decorator/UseComponent";
 
 @Renderer({})
 @WebComponent({
     tag: 'st-router-outlet'
 })
+@UseComponent(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
-    mounted!: boolean;
+    mounted: boolean;
 
-    constructor(public props: RouterProps,
-                protected activeRoute: ActiveRoute) {
+    @Attribute
+    component: VirtualElement;
+
+    constructor(protected activeRoute: ActiveRoute) {
 
         super();
 
@@ -31,12 +36,12 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
     present(locationChangeDecision: LocationChangeDecision): void {
 
         const onAfterMount = () => {
-            this.props.component = locationChangeDecision.component;
+            this.component = locationChangeDecision.component;
         };
 
         const onMount = () => {
-            onAfterMount();
             this.removeEventListener(WebComponentLifecycleEvent.FLOW, onMount);
+            onAfterMount();
         };
 
 
@@ -49,12 +54,10 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
     render() {
 
-        if (this.props.component) {
-            return this.props.component;
+        if (this.component) {
+            return this.component;
         }
         // @ts-ignore
-        return (<st-error props={{
-            errorMessage: "ERROR (RouterOutlet): No component found for route!"
-        }} />);
+        return (<st-error-message message={"ERROR (RouterOutlet): No component found for route!"} />);
     }
 }
