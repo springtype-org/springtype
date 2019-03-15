@@ -4,9 +4,7 @@ import {ITodoItem} from "../state/ITodoState";
 import {AppLayout} from "../component/layout/AppLayout";
 import {UseComponent} from "../../../../src/package/core";
 
-@WebComponent({
-    tag: 'example-todo-detail'
-})
+@WebComponent('example-todo-detail')
 @UseComponent(AppLayout)
 export class TodoDetailsPage extends HTMLElement implements WebComponentLifecycle {
 

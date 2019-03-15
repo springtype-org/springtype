@@ -10,9 +10,7 @@ export enum LoaderType {
     STRANGE, CLOCK, RING, DOTS, DOT_BOUNCE, BOX_LOAD, CIRCLES, SOUND, SOUND_SMALL, CIRCLE
 }
 
-@WebComponent({
-    tag: 'svg-loader'
-})
+@WebComponent('svg-loader')
 @Template(template)
 export class SVGLoader extends HTMLElement implements WebComponentLifecycle {
 

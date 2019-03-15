@@ -2,9 +2,7 @@ import {Template, WebComponent, WebComponentLifecycle} from "@springtype/springt
 import template from "./BurgerExample.tpl";
 
 
-@WebComponent({
-    tag: 'burger-example'
-})
+@WebComponent('burger-example')
 @Template(template)
 export class BurgerExample extends HTMLElement implements WebComponentLifecycle {
 

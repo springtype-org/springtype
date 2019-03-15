@@ -1,0 +1,1 @@
+export const COMPONENT_THEME = 'COMPONENT_THEME';

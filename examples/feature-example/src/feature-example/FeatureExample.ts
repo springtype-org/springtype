@@ -14,9 +14,7 @@ interface BurgerButtonProps {
     fill: string;
 }
 
-@WebComponent({
-    tag: 'feature-example'
-})
+@WebComponent('feature-example')
 @Template(template)
 @UseComponent(BurgerExample)
 export class FeatureExample extends HTMLElement implements WebComponentLifecycle {

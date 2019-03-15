@@ -2,9 +2,7 @@ import {Attribute, Style, WebComponent, WebComponentLifecycle, Template} from "@
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
 
-@WebComponent({
-    tag: 'mwc-checkbox'
-})
+@WebComponent('mwc-checkbox')
 @Template(template)
 @Style(style)
 export class MWCCheckbox extends HTMLElement implements WebComponentLifecycle {

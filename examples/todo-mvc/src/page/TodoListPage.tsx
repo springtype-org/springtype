@@ -7,9 +7,7 @@ interface TodoListLocalState {
     newTodoItemText: string;
 }
 
-@WebComponent({
-    tag: 'example-todo-list'
-})
+@WebComponent('example-todo-list')
 @UseComponent(AppLayout)
 @UseComponent(ListInnerPartial)
 export class TodoListPage extends HTMLElement implements WebComponentLifecycle {

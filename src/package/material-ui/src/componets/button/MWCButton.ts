@@ -2,9 +2,7 @@ import {Attribute, Style, Template, WebComponent, WebComponentLifecycle} from "@
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 
-@WebComponent({
-    tag: 'mwc-button'
-})
+@WebComponent('mwc-button')
 @Template(template)
 @Style(style)
 export class MWCButton extends HTMLElement implements WebComponentLifecycle {

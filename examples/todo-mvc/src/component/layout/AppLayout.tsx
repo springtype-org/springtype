@@ -7,9 +7,7 @@ import {
 } from "@springtype/springtype-incubator-core";
 import {Logo} from "../logo/Logo";
 
-@WebComponent({
-    tag: 'app-layout'
-})
+@WebComponent('app-layout')
 @UseComponent(Logo)
 export class AppLayout extends HTMLElement implements WebComponentLifecycle {
 

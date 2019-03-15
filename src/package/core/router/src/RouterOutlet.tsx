@@ -14,9 +14,7 @@ import {ErrorMessage} from "../../index";
 import {UseComponent} from "../../webcomponent/src/decorator/UseComponent";
 
 @Renderer({})
-@WebComponent({
-    tag: 'st-router-outlet'
-})
+@WebComponent('st-router-outlet')
 @UseComponent(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 

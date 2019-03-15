@@ -10,9 +10,7 @@ import {FieldComponent, FieldProp, Neighbors} from "./components/field/FieldComp
 
 declare var Window: any;
 
-@WebComponent({
-    tag: 'sw-app'
-})
+@WebComponent('sw-app')
 @Template(template)
 @UseComponent(FieldComponent)
 export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle {

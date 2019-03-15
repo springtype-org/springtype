@@ -1,4 +1,4 @@
-import {Template, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, Template, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./BurgerButton.tpl";
 
 export interface BurgerButtonProps {
@@ -12,24 +12,17 @@ export enum BurgerType {
     SWORD, ARROW_LEFT, CLOSE, ROUND_CONNER, ARROW_LEFT_TURN, AWESOME, SWORD_CROSS, TURN
 }
 
-@WebComponent({
-    tag: 'burger-button'
-})
+@WebComponent('burger-button')
 @Template(template)
 export class BurgerButton extends HTMLElement implements  WebComponentLifecycle {
     open = false;
 
-    constructor(public props: BurgerButtonProps) {
-        super();
-    }
-
-    init() {
-        this.props.type = this.props.type || BurgerType.SWORD;
-        this.props.width = this.props.width || 50;
-        this.props.onClose = this.props.onClose || (() => {
-        });
-        this.props.onOpen = this.props.onOpen || (() => {
-        });
+    @Attribute
+    public props: BurgerButtonProps = {
+        type: BurgerType.SWORD,
+        width: 50,
+        onClose: () => {},
+        onOpen: () => {}
     };
 
     onBurgerClick = (evt: any, element: any) => {

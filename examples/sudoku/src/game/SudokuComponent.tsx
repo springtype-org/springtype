@@ -5,7 +5,7 @@ import {
     warn,
     WebComponent,
     WebComponentLifecycle,
-    Attribute, OnAttributeSet, DetectChanges, Style, Template,
+    Attribute, OnAttributeSet, DetectChanges, Style, Template, ShadowDOM,
 } from "@springtype/springtype-incubator-core";
 import {OnFieldChange} from "../../../../src/package/core";
 
@@ -25,10 +25,8 @@ enum ButtonType {
     B = "B"
 }
 
-@WebComponent({
-    tag: 'game-component',
-    shadow: true
-})
+@WebComponent('game-component')
+@ShadowDOM
 @Template(template)
 @Style(style)
 export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {

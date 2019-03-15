@@ -1,4 +1,3 @@
-import {WebComponentConfig} from "../interface/WebComponentConfig";
 import {CHILD_ELEMENTS} from "../constant/CHILD_ELEMENTS";
 import {transformToElementVector} from "./transformToElementVector";
 import {VirtualElement} from "../../../renderer";
@@ -15,8 +14,9 @@ import {getStyleForComponent} from "./getStyleForComponent";
 import {getTemplateForComponent} from "./getTemplateForComponent";
 import {getShadowAttachModeForComponent} from "./getShadowAttachModeForComponent";
 import {getShadowForComponent} from "./getShadowForComponent";
+import {getThemeForComponent} from "./getThemeForComponent";
 
-export const createWebComponentClass = (config: WebComponentConfig, injectableWebComponent: ComponentImpl<any>) => {
+export const createWebComponentClass = (tag: string, injectableWebComponent: ComponentImpl<any>) => {
 
     // custom web component extends user implemented web component class
     // which extends HTMLElement
@@ -150,10 +150,11 @@ export const createWebComponentClass = (config: WebComponentConfig, injectableWe
             if (style) {
 
                 const contextTheme = ApplicationContext.getInstance().get(THEME);
+                const componentTheme = getThemeForComponent(CustomWebComponent);
 
                 const theme = {
                     ...contextTheme ? contextTheme : {},
-                    ...config.theme ? config.theme : {}
+                    ...componentTheme ? componentTheme : {}
                 };
 
                 transformToElementVector(

@@ -14,9 +14,7 @@ interface LocalTodoListState {
     todos: Array<ITodoItem>;
 }
 
-@WebComponent({
-    tag: 'app-list-inner-partial'
-})
+@WebComponent('app-list-inner-partial')
 export class ListInnerPartial extends HTMLElement implements WebComponentLifecycle {
 
     constructor(

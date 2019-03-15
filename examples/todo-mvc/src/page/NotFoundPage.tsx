@@ -1,8 +1,6 @@
 import {WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 
-@WebComponent({
-    tag: 'app-not-found-page'
-})
+@WebComponent('app-not-found-page')
 export class NotFoundPage extends HTMLElement implements WebComponentLifecycle {
 
     render() {

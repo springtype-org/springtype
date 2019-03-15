@@ -26,9 +26,7 @@ export interface FieldProp {
     [x: string]: any;
 }
 
-@WebComponent({
-    tag: 'sw-field'
-})
+@WebComponent('sw-field')
 @Template(template)
 export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
 
