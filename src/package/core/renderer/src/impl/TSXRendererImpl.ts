@@ -1,5 +1,5 @@
 import {RendererImpl} from "../interface/RendererImpl";
-import {Component, ActiveLogger, VirtualElement} from "../../../index";
+import {Component, ActiveLogger, VirtualElement, warn} from "../../../index";
 import {parseAttributeNS} from "./tsx-renderer-impl/function/parseAttributeNS";
 import {NamespaceAttributesMap} from "./tsx-renderer-impl/interface/NamespaceAttributesMap";
 import {collectNamespaceAttributes} from "./tsx-renderer-impl/function/collectNamespaceAttributes";
@@ -9,6 +9,9 @@ import {Attribute} from "./tsx-renderer-impl/interface/Attribute";
 import {RuntimeDOMAttributeCacheMap} from "./tsx-renderer-impl/interface/RuntimeDOMAttributeCacheMap";
 import {NamespaceAttribute} from "./tsx-renderer-impl/interface/NamespaceAttribute";
 import {getInternalRenderApi} from "../function/getInternalRenderApi";
+import {FRAGMENT_ELEMENT_TAG_NAME} from "../../../webcomponent/src/constant/FRAGMENT_ELEMENT_TAG_NAME";
+import {WebComponentReflector} from "../../../webcomponent/src/WebComponentReflector";
+
 
 @Component
 export class TSXRendererImpl implements RendererImpl {
@@ -33,8 +36,21 @@ export class TSXRendererImpl implements RendererImpl {
     protected _createDOMElement: any = document.createElement.bind(document);
     protected _createDOMElementNS: any = document.createElementNS.bind(document);
 
+
+    activeWebComponent: Element;
+
+    renderStack: Array<any> = [];
+    slotStack: Array<any> = [];
+
     constructor(public activeLogger: ActiveLogger) {
         this.init();
+    }
+
+    cleanCaches() {
+        this.attributeValueCache = {};
+        this.attributeValueSequence = 0;
+        this.renderStack = [];
+        this.slotStack = [];
     }
 
     init() {
@@ -133,15 +149,16 @@ export class TSXRendererImpl implements RendererImpl {
         };
     };
 
+
     render = (virtualElementOrTagName: VirtualElement|string, level = 0, namespaces: Namespace[] = []): Element => {
 
         // TODO: Tree traverse equals check on VirtualElement:
         // TODO: - If only attribute change -> call setAttribute()
         // TODO: - If DOM element changes -> re-render and replace element (thus subtree)
 
-        const name = typeof virtualElementOrTagName === 'string' ? virtualElementOrTagName : virtualElementOrTagName.name;
-        const attributes = (virtualElementOrTagName as VirtualElement).attributes || {};
-        const children = (virtualElementOrTagName as VirtualElement).children || [];
+        let name = typeof virtualElementOrTagName === 'string' ? virtualElementOrTagName : virtualElementOrTagName.name;
+        let attributes = (virtualElementOrTagName as VirtualElement).attributes || {};
+        let children = (virtualElementOrTagName as VirtualElement).children || [];
 
         const nativeOptions = !!attributes.is ? {is: attributes.is} : undefined;
 
@@ -152,7 +169,42 @@ export class TSXRendererImpl implements RendererImpl {
         // 0. add all namespaces
         namespaces = namespaceAttributes.xmlNs;
 
+        this.renderStack.push({
+            name,
+            attributes,
+            children,
+            level,
+            namespaces
+        });
+
+        if (WebComponentReflector.getAll().indexOf(name.toUpperCase()) !== -1) {
+
+            this.activeWebComponent = this.renderStack[this.renderStack.length-1];
+
+            console.log('render FOUND webcomponent', children);
+        }
+
+        if (attributes.slot) {
+
+            console.log('render SLOT child', attributes, this.activeWebComponent, this.renderStack);
+
+            this.slotStack.push({
+                slotName: attributes.slot,
+                target: {
+                    name,
+                    attributes,
+                    children,
+                    level,
+                    namespaces
+                }
+            });
+
+            // do not render, replace it as a <template> #document-fragment
+            name = 'template';
+        }
+
         const element = this.createDOMElement(name, namespaces, nativeOptions);
+
 
         // 1. add all bindings
         namespaceAttributes.bind.forEach((attribute: Attribute) => {
@@ -198,24 +250,65 @@ export class TSXRendererImpl implements RendererImpl {
             this.activeLogger.error(`Attribute(${attribute.name}) on element ${name} cannot be mapped.`, attribute.value)
         });
 
+        if (name.toLowerCase() === 'st-slot') {
+            console.log('render Found a SLOT', element, this.activeWebComponent, this.renderStack, this.slotStack);
+
+            if (!attributes.name) {
+                warn('Each <slot> must have a unique "name" attribute!', element);
+            }
+
+            this.slotStack.forEach((slottedItem) => {
+                if (slottedItem.slotName === attributes.name) {
+
+                    // reset children (remove default content of <slot>)
+                    children = [];
+
+                    if (slottedItem.target.children) {
+
+                        slottedItem.target.children.forEach((slottedChild: any) => {
+                            children.push(slottedChild);
+                        })
+                    }
+                }
+            });
+        }
+
         children.filter(child => !(child == null || typeof child == 'undefined')).forEach((child) => {
 
             // child: string | number | boolean | Node | Array<Node>
             const append = (child: any) => {
 
-                const childType = typeof child;
+                const _append = (child: any, element: Element) => {
 
-                if (childType == 'string' ||
-                    childType == 'number' ||
-                    childType == 'boolean' ||
-                    child instanceof Node
-                ) {
+                    const childType = typeof child;
 
-                    this.appendChild(child, element);
+                    if (childType == 'string' ||
+                        childType == 'number' ||
+                        childType == 'boolean' ||
+                        child instanceof Node
+                    ) {
+
+                        this.appendChild(child, element);
+
+                    } else {
+
+                        element.appendChild(this.render(child, level + 1, namespaces));
+                    }
+                };
+
+                // <st-fragment> found in sub-tree
+                if (child.name === FRAGMENT_ELEMENT_TAG_NAME) {
+
+                    // just don't render fragments, place their children one level up
+                    if (child.children) {
+                        child.children.forEach((childOfChild: any) => {
+                            _append(childOfChild, element);
+                        });
+                    }
 
                 } else {
 
-                    element.appendChild(this.render(child, level + 1, namespaces));
+                    _append(child, element);
                 }
             };
 
@@ -229,6 +322,7 @@ export class TSXRendererImpl implements RendererImpl {
                 append(child);
             }
         });
+
         return element;
     }
 }

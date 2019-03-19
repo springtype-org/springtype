@@ -1,8 +1,8 @@
 import {
     Attribute,
-    DetectChanges,
-    OnAttributeSet, OnFieldChange, Template,
-    WebComponent,
+    Field,
+    OnAttributeChange, OnFieldChange, Template,
+    Element,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
 import "./FieldComponent.scss"
@@ -26,7 +26,7 @@ export interface FieldProp {
     [x: string]: any;
 }
 
-@WebComponent('sw-field')
+@Element('sw-field')
 @Template(template)
 export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
 
@@ -35,7 +35,7 @@ export class FieldComponent extends HTMLElement implements WebComponentLifecycle
     @Attribute
     field: FieldProp;
 
-    @OnAttributeSet("field")
+    @OnAttributeChange("field")
     onFieldChanged() {
         if (this.field) {
             FieldComponent.fieldComponents[this.field.position] = this;

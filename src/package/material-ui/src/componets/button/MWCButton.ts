@@ -1,8 +1,8 @@
-import {Attribute, Style, Template, WebComponent, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, Style, Template, Element, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 
-@WebComponent('mwc-button')
+@Element('mwc-button')
 @Template(template)
 @Style(style)
 export class MWCButton extends HTMLElement implements WebComponentLifecycle {

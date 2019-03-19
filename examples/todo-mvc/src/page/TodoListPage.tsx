@@ -1,4 +1,4 @@
-import {ActiveRoute, UseComponent, WebComponent, WebComponentLifecycle} from "../../../../src/package/core/index";
+import {ActiveRoute, UseComponent, Element, WebComponentLifecycle} from "../../../../src/package/core/index";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../component/list/ListInnerPartial";
 import {AppLayout} from "../component/layout/AppLayout";
@@ -7,7 +7,7 @@ interface TodoListLocalState {
     newTodoItemText: string;
 }
 
-@WebComponent('example-todo-list')
+@Element('example-todo-list')
 @UseComponent(AppLayout)
 @UseComponent(ListInnerPartial)
 export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
@@ -45,8 +45,8 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
     render() {
 
-        return <app-layout items={
-            <st-fragment>
+        return <app-layout>
+            <div slot="children">
 
                 <app-list-inner-partial />
 
@@ -57,7 +57,7 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
                        onKeyUp={this.onNewTodoTextChange}/>
 
                 <a className="waves-effect waves-light btn" onClick={this.onAddItem}>Add</a>
-            </st-fragment>
-        } />
+            </div>
+        </app-layout>
     }
 }

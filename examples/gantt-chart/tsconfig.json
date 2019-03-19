@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "es2015",
+        "moduleResolution": "node",
+        "importHelpers": true,
+        "outDir": "../dist",
+        "strict": true,
+        "declaration": true,
+        "noEmit": true,
+        "rootDir": ".",
+        "jsx": "preserve",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false,
+        "sourceMap": true,
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "types": ["reflect-metadata"]
+    }
+}

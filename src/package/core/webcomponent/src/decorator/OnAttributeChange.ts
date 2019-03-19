@@ -1,7 +1,7 @@
 import {getAttributeChangeCallbacks} from "../function/getAttributeChangeCallbacks";
 import {setAttributeChangeCallbacks} from "../function/setAttributeChangeCallbacks";
 
-export function OnAttributeSet(attributeName: string): any {
+export function OnAttributeChange(attributeName: string): any {
 
     return (prototype: any, methodName: any) => {
 

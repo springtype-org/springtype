@@ -2,7 +2,7 @@ import {IRootState} from "../../state/IRootState";
 import {
     Partial,
     ActiveRoute, VirtualElement,
-    WebComponent,
+    Element,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
@@ -14,7 +14,7 @@ interface LocalTodoListState {
     todos: Array<ITodoItem>;
 }
 
-@WebComponent('app-list-inner-partial')
+@Element('app-list-inner-partial')
 export class ListInnerPartial extends HTMLElement implements WebComponentLifecycle {
 
     constructor(

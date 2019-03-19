@@ -1,7 +1,7 @@
 import {ActiveRoute} from "./ActiveRoute";
 import {
     Attribute,
-    WebComponent,
+    Element,
     WebComponentLifecycle,
     WebComponentLifecycleEvent
 } from "../../webcomponent";
@@ -12,9 +12,10 @@ import {Renderer} from "../../renderer/src/decorator/Renderer";
 import {VirtualElement} from "../../renderer";
 import {ErrorMessage} from "../../index";
 import {UseComponent} from "../../webcomponent/src/decorator/UseComponent";
+import {getRenderer} from "../../renderer/src/function/getRenderer";
 
 @Renderer({})
-@WebComponent('st-router-outlet')
+@Element('st-router-outlet')
 @UseComponent(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
@@ -32,6 +33,9 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
     }
 
     present(locationChangeDecision: LocationChangeDecision): void {
+
+        // clean renderer caches on whole re-render
+        getRenderer().cleanCaches();
 
         const onAfterMount = () => {
             this.component = locationChangeDecision.component;

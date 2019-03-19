@@ -2,7 +2,7 @@ import {registerForChangeDetection} from "../function/registerForChangeDetection
 import {getOnFieldChangeCallbacks} from "../function/getOnFieldChangeCallbacks";
 import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackRegistration";
 
-export function DetectChanges(
+export function Field(
     webComponentInstance: any,
     fieldName: string | symbol
 ): any {

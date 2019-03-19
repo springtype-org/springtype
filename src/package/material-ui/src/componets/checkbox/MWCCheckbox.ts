@@ -1,8 +1,8 @@
-import {Attribute, Style, WebComponent, WebComponentLifecycle, Template} from "@springtype/springtype-incubator-core";
+import {Attribute, Style, Element, WebComponentLifecycle, Template} from "@springtype/springtype-incubator-core";
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
 
-@WebComponent('mwc-checkbox')
+@Element('mwc-checkbox')
 @Template(template)
 @Style(style)
 export class MWCCheckbox extends HTMLElement implements WebComponentLifecycle {

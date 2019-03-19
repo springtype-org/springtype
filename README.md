@@ -4,9 +4,7 @@ Pre-beta-release TODO list:
 
 - Modules:
   - webcomponent    
-    - Support for <slot>
     - Improve performance for renderer
-    - Fix st-fragment bug (works only on 1st level)
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - i18n
     - @Translate

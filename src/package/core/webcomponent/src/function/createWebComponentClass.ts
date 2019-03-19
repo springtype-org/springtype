@@ -15,8 +15,11 @@ import {getTemplateForComponent} from "./getTemplateForComponent";
 import {getShadowAttachModeForComponent} from "./getShadowAttachModeForComponent";
 import {getShadowForComponent} from "./getShadowForComponent";
 import {getThemeForComponent} from "./getThemeForComponent";
+import {log} from "../../../logger";
 
 export const createWebComponentClass = (tag: string, injectableWebComponent: ComponentImpl<any>) => {
+
+    const _shadowRoots = new WeakMap();
 
     // custom web component extends user implemented web component class
     // which extends HTMLElement
@@ -36,10 +39,10 @@ export const createWebComponentClass = (tag: string, injectableWebComponent: Com
             if (shadow) {
 
                 const shadowAttachMode = getShadowAttachModeForComponent(CustomWebComponent);
-
-                this.attachShadow({
+                const shadowRoot = this.attachShadow({
                     mode: shadowAttachMode ? shadowAttachMode : ShadowAttachMode.OPEN
                 });
+                _shadowRoots.set(this, shadowRoot);
             }
 
             !this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.BEFORE_INIT));
@@ -143,6 +146,8 @@ export const createWebComponentClass = (tag: string, injectableWebComponent: Com
 
         render(): VirtualElement[] {
 
+            log('render virtual', this.tagName);
+
             const elements: VirtualElement[] = [];
             const style = getStyleForComponent(CustomWebComponent);
 
@@ -188,6 +193,9 @@ export const createWebComponentClass = (tag: string, injectableWebComponent: Com
             }
             this.dispatchEvent(new CustomEvent(WebComponentLifecycleEvent.RENDER));
 
+
+            //console.log('render', elements);
+
             return elements;
         }
 
@@ -195,6 +203,9 @@ export const createWebComponentClass = (tag: string, injectableWebComponent: Com
             if (super.createNativeElement) {
                 return super.createNativeElement(virtualElement);
             }
+
+            log('render native', this.tagName);
+
             return (<any>window).React.render(virtualElement);
         }
 
@@ -211,7 +222,7 @@ export const createWebComponentClass = (tag: string, injectableWebComponent: Com
                 if (elements.length > 0) {
 
                     if (getShadowForComponent(CustomWebComponent)) {
-                        elements.forEach(el => this.shadowRoot.appendChild(el));
+                        elements.forEach(el => _shadowRoots.get(this).appendChild(el));
                     } else {
                         elements.forEach(el => this.appendChild(el));
                     }

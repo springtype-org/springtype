@@ -4,7 +4,7 @@ import {setStyleForComponent} from "../function/setStyleForComponent";
 import {ShadowAttachMode} from "../../index";
 import {setShadowAndAttachModeForComponent} from "../function/setShadowAndAttachModeForComponent";
 
-export function ShadowDOM(shadowAttachModeOrComponent?: any): any {
+export function ShadowDOM(shadowAttachModeOrComponent?: any|ShadowAttachMode): any {
 
     if (typeof shadowAttachModeOrComponent === 'function') {
 

@@ -20,4 +20,5 @@ export interface RendererImpl {
     render(virtualElement: VirtualElement): any;
     // MUST be named like that to fulfill TSX internal interface when tsconfig.json is set to "preserve"
     createElement(name: string, attributes?: any, ...children: Array<VirtualElement>): VirtualElement;
+    cleanCaches(): void;
 }

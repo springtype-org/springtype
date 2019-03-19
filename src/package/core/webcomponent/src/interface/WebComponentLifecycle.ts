@@ -15,6 +15,9 @@ export interface WebComponentLifecycle extends HTMLElement {
 
     createNativeElement?(reactCreateElement: VirtualElement): any;
 
+    // TODO: onFieldChanged?(name: string, propName: string, newValue: any, oldValue?: any): void;
+    // TODO: onBeforeFieldChange?(name: string, propName: string, newValue: any, oldValue?: any): boolean;
+
     onAttributeChanged?(name: string, newValue: any, oldValue?: any): void;
     onBeforeAttributeChange?(props: any, name: string | number | symbol, value: any): boolean;
 

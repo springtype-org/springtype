@@ -3,9 +3,9 @@ import style from "./SudokuComponent.style";
 import {
     log,
     warn,
-    WebComponent,
+    Element,
     WebComponentLifecycle,
-    Attribute, OnAttributeSet, DetectChanges, Style, Template, ShadowDOM,
+    Attribute, OnAttributeChange, Field, Style, Template, ShadowDOM,
 } from "@springtype/springtype-incubator-core";
 import {OnFieldChange} from "../../../../src/package/core";
 
@@ -25,7 +25,7 @@ enum ButtonType {
     B = "B"
 }
 
-@WebComponent('game-component')
+@Element('game-component')
 @ShadowDOM
 @Template(template)
 @Style(style)
@@ -37,7 +37,7 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
     @Attribute
     active: boolean = false;
 
-    @DetectChanges
+    @Field
     protected gameState: GameState = {
         won: false,
         subState: {
@@ -50,7 +50,7 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         console.log('GameState fully pre-validated and mutated: ', propName, newValue);
     }
 
-    @OnAttributeSet("type")
+    @OnAttributeChange("type")
     onTypeChange() {
         console.log('onTypeChange', this.type);
     }

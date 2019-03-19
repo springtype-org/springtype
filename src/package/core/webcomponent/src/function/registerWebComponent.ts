@@ -16,6 +16,8 @@ export const registerWebComponent = (tag: string, webComponent: ComponentImpl<an
         window.customElements.define(tag, CustomWebComponent);
 
         WebComponentReflector.setTagName(<any>CustomWebComponent, tag);
+
+        WebComponentReflector.registerByTagName(tag);
     }
     return CustomWebComponent;
 };

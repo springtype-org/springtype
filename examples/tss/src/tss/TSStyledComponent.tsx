@@ -2,9 +2,9 @@ import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
 import {
     Attribute,
-    OnAttributeSet, ShadowDOM,
+    OnAttributeChange, ShadowDOM,
     Style, Template,
-    WebComponent,
+    Element,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
 
@@ -16,7 +16,7 @@ export enum StyleMode {
     STANDARD, INVERTED
 }
 
-@WebComponent('tsstyled-component')
+@Element('tsstyled-component')
 @ShadowDOM
 @Template(template)
 @Style(style)
@@ -27,12 +27,12 @@ export class TSStyledComponent extends HTMLElement implements WebComponentLifecy
         styleMode: Math.random() > 0.5 ? StyleMode.INVERTED : StyleMode.STANDARD
     };
 
-    @OnAttributeSet("props")
+    @OnAttributeChange("props")
     onPropsChanged() {
         console.log('programmatic interception');
     }
 
-    @OnAttributeSet("props")
+    @OnAttributeChange("props")
     onPropsChanged2() {
         console.log('programmatic interception 2');
     }

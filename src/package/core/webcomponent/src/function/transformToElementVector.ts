@@ -6,10 +6,8 @@ import {isFragmentElement} from "./isFragmentElement";
  */
 export const transformToElementVector = (destination: VirtualElement[], tsx: VirtualElement | VirtualElement[] | any) => {
 
-    // in case of ts-fragment
+    // in case of top-level ts-fragment, transform up
     if (tsx.name && isFragmentElement(tsx.name)) {
-
-        // TODO: Do this in renderer and traverse the whole tree! Atm this is only removing st-fragment on first level
         tsx = tsx.children;
     }
 

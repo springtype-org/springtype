@@ -1,25 +1,24 @@
 import {
-    Attribute,
     UseComponent,
-    VirtualElement,
-    WebComponent,
+    Element,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
 import {Logo} from "../logo/Logo";
 
-@WebComponent('app-layout')
+@Element('app-layout')
 @UseComponent(Logo)
 export class AppLayout extends HTMLElement implements WebComponentLifecycle {
 
-    @Attribute
-    items: VirtualElement|Array<VirtualElement>;
-
     render() {
-        return <div>
+        console.log('app-layout render');
+
+        return <st-fragment>
             <div style="text-align: center;">
                 <app-logo />
             </div>
-            { this.items }
-        </div>;
+            <st-slot name="children">
+                Did you forget to provide some CDATA content in the component that uses {"<app-layout>"}?
+            </st-slot>
+        </st-fragment>;
     }
 }
