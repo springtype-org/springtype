@@ -13,10 +13,7 @@ export default (view: MWCCheckbox) => {
     if (view.value) {
         inputElement.attributes.value = view.value;
     }
-    if(view.change){
-        inputElement.attributes.onchange = view.change;
-    }
-    console.error(inputElement);
+
     return <div class="mdc-checkbox">
         {inputElement}
         <div class="mdc-checkbox__background">

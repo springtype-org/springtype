@@ -16,6 +16,7 @@ import {getShadowAttachModeForComponent} from "./getShadowAttachModeForComponent
 import {getShadowForComponent} from "./getShadowForComponent";
 import {getThemeForComponent} from "./getThemeForComponent";
 import {log} from "../../../logger";
+import {getAttributeEventListenerValue} from "./getAttributeEventListenerValue";
 
 export const createWebComponentClass = (tag: string, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -271,7 +272,7 @@ export const createWebComponentClass = (tag: string, injectableWebComponent: Com
 
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
-            const attributeValue = getAttributeReferencedValue(newValue);
+            const attributeValue = getAttributeEventListenerValue(CustomWebComponent, name, newValue, this) || getAttributeReferencedValue(newValue);
             const cancelled = this.onBeforeAttributeChange(name, oldValue, attributeValue);
 
             if (!cancelled) {

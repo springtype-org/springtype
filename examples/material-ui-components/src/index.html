@@ -14,31 +14,29 @@
 </head>
 <body>
 
-<!-- Application starts here because the router renders here -->
-
-<div>
-    <mwc-button label="disabled" disabled="true" raised="true"/>
-</div>
-<div>
-    <mwc-button label="disabled + icon" disabled="true" icon="house"/>
-</div>
-<div>
-    <mwc-button label="favorite" icon="favorite"/>
-</div>
-<div>
-    <mwc-button label="favorite" icon="favorite" trailing-icon="true"/>
-</div>
-<div>
-    <mwc-button label="outlined" outlined="true"/>
-</div>
-<div>
-    <mwc-button label="raised" raised="true"/>
-</div>
-<div>
-    <mwc-checkbox checked="true" change="alert('yes');"/>
-</div>
-<div>
-    <mwc-checkbox checked="true" disabled="true"/>
-</div>
+    <div>
+        <mwc-button label="disabled" disabled="true" raised="true"/>
+    </div>
+    <div>
+        <mwc-button label="disabled + icon" disabled="true" icon="house"/>
+    </div>
+    <div>
+        <mwc-button label="favorite" icon="favorite"/>
+    </div>
+    <div>
+        <mwc-button label="favorite" icon="favorite" trailing-icon="true"/>
+    </div>
+    <div>
+        <mwc-button label="outlined" outlined="true"/>
+    </div>
+    <div>
+        <mwc-button label="raised" raised="true"/>
+    </div>
+    <div>
+        <mwc-checkbox checked="true" onchange="console.log('foo', this);"/>
+    </div>
+    <div>
+        <mwc-checkbox checked="true" disabled="true"/>
+    </div>
 </body>
 </html>

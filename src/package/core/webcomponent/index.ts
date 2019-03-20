@@ -12,3 +12,4 @@ export * from "./src/decorator/Style";
 export * from "./src/decorator/Template";
 export * from "./src/interface/TemplateFunction";
 export * from "./src/decorator/ShadowDOM";
+export * from "./src/decorator/EventAttribute";

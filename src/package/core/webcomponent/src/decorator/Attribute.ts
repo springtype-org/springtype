@@ -11,7 +11,6 @@ export function Attribute(webComponentInstance: any, attributeName: string | sym
     observedAttributes.push(attributeName);
     setObservedAttributes(webComponentInstance.constructor, observedAttributes);
 
-
     ComponentReflector.addInitializer(webComponentInstance.constructor, (instance: any) => {
 
         defaultInitializeTransparentAttributes(instance, webComponentInstance.constructor, observedAttributes);

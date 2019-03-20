@@ -223,7 +223,7 @@ export class TSXRendererImpl implements RendererImpl {
         namespaceAttributes.event.forEach(([eventName, callback]) => {
             element.addEventListener(eventName, evt => {
                 // add element to event as second parameter
-                callback(evt, element)
+                callback(evt, element);
             }, false);
         });
 

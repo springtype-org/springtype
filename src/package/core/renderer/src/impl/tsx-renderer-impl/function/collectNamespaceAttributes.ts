@@ -45,7 +45,7 @@ export const collectNamespaceAttributes = (attributes: any, knownNamespaces: Arr
     collectedNamespaceAttributes = collectedNamespaceAttributes.concat(bind);
 
     // 4. filter all events
-    const event = transformedAttributes
+    let event = transformedAttributes
         .filter(e => collectedNamespaceAttributes.indexOf(e) < 0)
         .filter((attribute: Attribute) =>
             attribute.name.startsWith('on') &&
