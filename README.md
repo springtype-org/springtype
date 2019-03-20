@@ -3,8 +3,21 @@
 Pre-beta-release TODO list:
 
 - Modules:
+  - general
+    - use WeakMap instead of Reflect?
+    - constants in one file per package
+  - instrumentation
+    - @MeasurePerformance
+  - reactive
+    - @Buffer(ms)
+    - @Delay(ms)
+    - @Memorize()
   - webcomponent    
-    - Improve performance for renderer
+    - Fixme: @EventAttribute = default arrow function not overwritten by attribute value passed?!
+    - FieldChange interface declaration and hooks?
+    - HTML integration based <st-slot> support
+    - Type hinting?
+    - Improve performance for renderer: Only re-render what changes
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - i18n
     - @Translate
@@ -26,6 +39,8 @@ Pre-beta-release TODO list:
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
     - Support for immer: https://github.com/rematch/rematch/blob/master/plugins/immer/README.md
       instead of _.deepClone(state)
+  - material-ui
+    - ripple
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app

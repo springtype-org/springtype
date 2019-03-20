@@ -1,8 +1,8 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
-import {HOST_SELECTOR} from "@springtype/springtype-incubator-core";
+import {HOST_SELECTOR, NestedCSSSelectors} from "@springtype/springtype-incubator-core";
 import {AppTheme} from "../theme";
 
-export default (view: TSStyledComponent, theme: AppTheme) => ({
+export default (view: TSStyledComponent, theme: AppTheme): NestedCSSSelectors => ({
 
     // or ':host', see https://developer.mozilla.org/en-US/docs/Web/CSS/:host()
     [HOST_SELECTOR]: {

@@ -13,7 +13,11 @@ export const registerTransparentAttributeGetterAndSetter = (instance: any, proto
                 set: (newValue: any) => {
 
                     const oldValue = instance[attributeName];
-                    const changeCancelled = instance.onBeforeAttributeChange(attributeName, oldValue, newValue);
+                    let changeCancelled = false;
+
+                    if (instance.onBeforeAttributeChange) {
+                        changeCancelled = instance.onBeforeAttributeChange(attributeName, oldValue, newValue);
+                    }
 
                     if (!changeCancelled) {
 

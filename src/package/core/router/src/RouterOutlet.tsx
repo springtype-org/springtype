@@ -2,8 +2,7 @@ import {ActiveRoute} from "./ActiveRoute";
 import {
     Attribute,
     Element,
-    WebComponentLifecycle,
-    WebComponentLifecycleEvent
+    WebComponentLifecycle
 } from "../../webcomponent";
 
 import "../../webcomponent/src/component/ErrorMessage";
@@ -19,12 +18,13 @@ import {getRenderer} from "../../renderer/src/function/getRenderer";
 @UseComponent(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
-    mounted: boolean;
+    locationChangeDecision: LocationChangeDecision;
 
     @Attribute
     component: VirtualElement;
 
-    constructor(protected activeRoute: ActiveRoute) {
+    constructor(public connected: boolean,
+                protected activeRoute: ActiveRoute) {
 
         super();
 
@@ -34,23 +34,20 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
     present(locationChangeDecision: LocationChangeDecision): void {
 
+        this.locationChangeDecision = locationChangeDecision;
+
         // clean renderer caches on whole re-render
         getRenderer().cleanCaches();
 
-        const onAfterMount = () => {
-            this.component = locationChangeDecision.component;
-        };
+        if (this.connected!) {
+            this.component = this.locationChangeDecision.component;
+        }
+    }
 
-        const onMount = () => {
-            this.removeEventListener(WebComponentLifecycleEvent.FLOW, onMount);
-            onAfterMount();
-        };
+    onFlow(initial: boolean) {
 
-
-        if (this.mounted) {
-            onAfterMount();
-        } else {
-            this.addEventListener(WebComponentLifecycleEvent.FLOW, onMount);
+        if (initial) {
+            this.component = this.locationChangeDecision.component;
         }
     }
 
@@ -59,7 +56,6 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
         if (this.component) {
             return this.component;
         }
-        // @ts-ignore
-        return (<st-error-message message={"ERROR (RouterOutlet): No component found for route!"} />);
+        return <st-error-message message={"ERROR (RouterOutlet): No component found for route!"} /> as VirtualElement;
     }
 }

@@ -24,7 +24,14 @@
         <mwc-button label="favorite" icon="favorite"/>
     </div>
     <div>
-        <mwc-button label="favorite" icon="favorite" trailing-icon="true"/>
+        <mwc-button label="favorite" icon="favorite" trailing-icon="true">
+            <div slot="leading-content">
+                Before...
+            </div>
+            <div slot="trailing-content">
+                More!
+            </div>
+        </mwc-button>
     </div>
     <div>
         <mwc-button label="outlined" outlined="true"/>

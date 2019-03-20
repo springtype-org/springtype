@@ -18,6 +18,35 @@ export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle
     public mineMatrix: Array<FieldProp[]> = [];
     static mineArray: FieldProp[] = [];
 
+    constructor() {
+
+        super();
+
+        const yLength = this.matrixDimension[0];
+        const xLength = this.matrixDimension[1];
+        const total = yLength * xLength;
+        const loaded: number[] = JSON.parse(localStorage.getItem("values")||"[]");
+        const values = loaded.length > 0 ? loaded :  Randomizer.generateNumbers(0, 3, total).map(num => num > 0 ? 0 : 1);
+        localStorage.setItem("values",JSON.stringify(values));
+        for (let y = 0; y < yLength; y++) {
+            const rowLength = y * xLength;
+            const mineRow: FieldProp[] = [];
+            for (let x = 0; x < xLength; x++) {
+                const position = rowLength + x;
+                const neighbors: Neighbors = this.getNeighbors(position, total);
+                const fieldProps: FieldProp = {
+                    ...this.buildField(!!values[position]),
+                    amountMines: this.getMineAmount(neighbors.all, values),
+                    neighbors: this.getNeighbors(position, total),
+                    position: position
+                };
+                MinesweeperApp.mineArray.push(fieldProps);
+                mineRow.push(fieldProps);
+            }
+            this.mineMatrix.push(mineRow);
+        }
+        Window.field = MinesweeperApp.mineArray;
+    }
 
     buildField(value: boolean) {
         return {
@@ -68,33 +97,4 @@ export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle
         }
 
     }
-
-    init(): void {
-
-        const yLength = this.matrixDimension[0];
-        const xLength = this.matrixDimension[1];
-        const total = yLength * xLength;
-        const loaded: number[] = JSON.parse(localStorage.getItem("values")||"[]");
-        const values = loaded.length > 0 ? loaded :  Randomizer.generateNumbers(0, 3, total).map(num => num > 0 ? 0 : 1);
-        localStorage.setItem("values",JSON.stringify(values));
-        for (let y = 0; y < yLength; y++) {
-            const rowLength = y * xLength;
-            const mineRow: FieldProp[] = [];
-            for (let x = 0; x < xLength; x++) {
-                const position = rowLength + x;
-                const neighbors: Neighbors = this.getNeighbors(position, total);
-                const fieldProps: FieldProp = {
-                    ...this.buildField(!!values[position]),
-                    amountMines: this.getMineAmount(neighbors.all, values),
-                    neighbors: this.getNeighbors(position, total),
-                    position: position
-                };
-                MinesweeperApp.mineArray.push(fieldProps);
-                mineRow.push(fieldProps);
-            }
-            this.mineMatrix.push(mineRow);
-        }
-        Window.field = MinesweeperApp.mineArray;
-    }
-
 }

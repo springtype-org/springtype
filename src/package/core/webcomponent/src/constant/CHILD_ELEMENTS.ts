@@ -1,1 +1,0 @@
-export const CHILD_ELEMENTS = 'CHILD_ELEMENT';

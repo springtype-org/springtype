@@ -17,18 +17,21 @@ export default (view: MWCButton) => {
 
     const innerButtonElement =
         <st-fragment>
+            <st-slot name="leading-content" />
             {view.icon && !view["trailing-icon"] ? mdcButtonIcon : ''}
             <span class="mdc-button__label">{
                 view.label
             }</span>
             {view.icon && view["trailing-icon"] ? mdcButtonIcon : ''}
-            <slot/>
+            <st-slot name="trailing-content" />
         </st-fragment>;
 
     const button: VirtualElement = <button class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
+
     if (view.disabled) {
         button.attributes.disabled = true;
     }
+
     // TODO: ripple
     return button;
 }

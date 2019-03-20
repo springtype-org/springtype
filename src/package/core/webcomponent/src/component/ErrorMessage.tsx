@@ -2,6 +2,7 @@ import {Element} from "../decorator/Element";
 import {Attribute} from "../decorator/Attribute";
 import {WebComponentLifecycle} from "../..";
 import {Style} from "../decorator/Style";
+import {VirtualElement} from "../../../renderer";
 
 @Element('st-error-message')
 @Style((view) => ({
@@ -15,6 +16,6 @@ export class ErrorMessage extends HTMLElement implements WebComponentLifecycle {
     message: string = "Unknown error.";
 
     render() {
-        return <p>{ this.message }</p>
+        return <p>{ this.message }</p> as VirtualElement;
     }
 }

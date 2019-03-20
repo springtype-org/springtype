@@ -18,6 +18,8 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
         public textInputEl: HTMLInputElement
     ) {
         super();
+
+        console.log('textInputEl', textInputEl);
     }
 
     onAddItem = () => {

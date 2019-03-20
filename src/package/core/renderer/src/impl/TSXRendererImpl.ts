@@ -180,8 +180,6 @@ export class TSXRendererImpl implements RendererImpl {
         if (WebComponentReflector.getAll().indexOf(name.toUpperCase()) !== -1) {
 
             this.activeWebComponent = this.renderStack[this.renderStack.length-1];
-
-            console.log('render FOUND webcomponent', children);
         }
 
         if (attributes.slot) {
@@ -207,6 +205,10 @@ export class TSXRendererImpl implements RendererImpl {
 
 
         // 1. add all bindings
+
+        if (namespaceAttributes.bind.length) {
+            console.log('bind', namespaceAttributes.bind);
+        }
         namespaceAttributes.bind.forEach((attribute: Attribute) => {
 
             const scope: any = attribute.value;

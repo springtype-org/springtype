@@ -9,10 +9,6 @@ import {
 } from "@springtype/springtype-incubator-core";
 import {OnFieldChange} from "../../../../src/package/core";
 
-interface Props {
-    difficulty: number;
-}
-
 interface GameState {
     won: boolean;
     subState: {
@@ -45,25 +41,9 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         }
     };
 
-    @OnFieldChange("gameState")
-    validateGameState(propName: string, newValue: any) {
-        console.log('GameState fully pre-validated and mutated: ', propName, newValue);
-    }
+    constructor() {
 
-    @OnAttributeChange("type")
-    onTypeChange() {
-        console.log('onTypeChange', this.type);
-    }
-
-    // TODO: @Buffer(500)
-    // TODO: @Delay()
-    // TODO: @Throttle()
-    // TODO: @Memorize
-    validate() {
-        console.log('Executed because gameState changed!', this.gameState);
-    }
-
-    init() {
+        super();
 
         this.gameState.won = "true" as any;
 
@@ -93,5 +73,23 @@ export class SudokuComponent extends HTMLElement implements WebComponentLifecycl
         log('SudokuComponent init');
 
         warn('asdasd', this);
+    }
+
+    @OnFieldChange("gameState")
+    validateGameState(propName: string, newValue: any) {
+        console.log('GameState fully pre-validated and mutated: ', propName, newValue);
+    }
+
+    @OnAttributeChange("type")
+    onTypeChange() {
+        console.log('onTypeChange', this.type);
+    }
+
+    // TODO: @Buffer(500)
+    // TODO: @Delay()
+    // TODO: @Throttle()
+    // TODO: @Memorize
+    validate() {
+        console.log('Executed because gameState changed!', this.gameState);
     }
 }

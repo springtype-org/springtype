@@ -231,7 +231,7 @@ export class BeanFactory {
 
             const typeName = (<any>componentCtor).name;
 
-            if (!typeName.match(/HTML.+Element/) && PRIMITIVE_TYPE_NAMES.indexOf(typeName) === -1) {
+            if (!typeName.match(/HTML.*Element/) && !typeName.match(/SVG.*Element/) && PRIMITIVE_TYPE_NAMES.indexOf(typeName) === -1) {
                 console.warn(`The component referenced for injection is missing a @Component decorator: ${typeName}`);
             }
             return undefined;

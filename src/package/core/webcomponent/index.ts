@@ -4,7 +4,6 @@ export * from "./src/component/ErrorMessage";
 export * from "./src/interface/WebComponentLifecycle";
 export * from "./src/enum/RenderStrategy";
 export * from "./src/enum/ShadowAttachMode";
-export * from "./src/enum/WebComponentLifecycleEvent";
 export * from "./src/decorator/UseComponent";
 export * from "./src/decorator/Attribute";
 export * from "./src/decorator/OnAttributeChange";
