@@ -1,5 +1,5 @@
-import {DEFAULT_NAMESPACE_DELIMITER} from "../constant/DEFAULT_NAMESPACE_DELIMITER";
 import {NamespaceAttribute} from "../interface/NamespaceAttribute";
+import {DEFAULT_NAMESPACE_DELIMITER} from "../constants";
 
 export const parseAttributeNS = (namespace: string): NamespaceAttribute => {
 

@@ -1,6 +1,6 @@
 import {MWCButton, MWCCheckbox} from "@springtype/springtype-incubator-material-ui";
-import {UseComponent} from "@springtype/springtype-incubator-core";
+import {UseElement} from "@springtype/springtype-incubator-core";
 
-@UseComponent(MWCCheckbox)
-@UseComponent(MWCButton)
+@UseElement(MWCCheckbox)
+@UseElement(MWCButton)
 export class MaterialExampleApp {}

@@ -1,1 +1,0 @@
-export const PROPERTY_BIND_VARIABLE = 'bind';

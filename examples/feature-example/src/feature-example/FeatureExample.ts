@@ -1,7 +1,7 @@
 import {
     Attribute,
     Template,
-    UseComponent,
+    UseElement,
     Element,
     WebComponentLifecycle
 } from "@springtype/springtype-incubator-core";
@@ -16,7 +16,7 @@ interface BurgerButtonProps {
 
 @Element('feature-example')
 @Template(template)
-@UseComponent(BurgerExample)
+@UseElement(BurgerExample)
 export class FeatureExample extends HTMLElement implements WebComponentLifecycle {
 
     @Attribute
@@ -31,6 +31,14 @@ export class FeatureExample extends HTMLElement implements WebComponentLifecycle
         super();
     }
 
+
+    onFlow(initial: boolean) {
+
+        if (initial) {
+            console.log('initial flow thru');
+            (<any>window).clockScript();
+        }
+    }
 
     // event listeners
     onButtonClick = (evt: Event) => {

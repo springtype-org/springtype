@@ -1,20 +1,18 @@
 import {RendererImpl} from "../interface/RendererImpl";
-import {Component, ActiveLogger, VirtualElement, warn} from "../../../index";
-import {parseAttributeNS} from "./tsx-renderer-impl/function/parseAttributeNS";
-import {NamespaceAttributesMap} from "./tsx-renderer-impl/interface/NamespaceAttributesMap";
-import {collectNamespaceAttributes} from "./tsx-renderer-impl/function/collectNamespaceAttributes";
-import {Namespace} from "./tsx-renderer-impl/interface/Namespace";
-import {DEFAULT_NAMESPACE_NAME} from "./tsx-renderer-impl/constant/DEFAULT_NAMESPACE_NAME";
-import {Attribute} from "./tsx-renderer-impl/interface/Attribute";
-import {RuntimeDOMAttributeCacheMap} from "./tsx-renderer-impl/interface/RuntimeDOMAttributeCacheMap";
-import {NamespaceAttribute} from "./tsx-renderer-impl/interface/NamespaceAttribute";
+import {Component, ActiveLogger, VirtualElement, warn, FRAGMENT_ELEMENT_TAG_NAME} from "../../../index";
+import {parseAttributeNS} from "./tsx-to-html-renderer-impl/function/parseAttributeNS";
+import {NamespaceAttributesMap} from "./tsx-to-html-renderer-impl/interface/NamespaceAttributesMap";
+import {collectNamespaceAttributes} from "./tsx-to-html-renderer-impl/function/collectNamespaceAttributes";
+import {Namespace} from "./tsx-to-html-renderer-impl/interface/Namespace";
+import {Attribute} from "./tsx-to-html-renderer-impl/interface/Attribute";
+import {RuntimeDOMAttributeCacheMap} from "./tsx-to-html-renderer-impl/interface/RuntimeDOMAttributeCacheMap";
+import {NamespaceAttribute} from "./tsx-to-html-renderer-impl/interface/NamespaceAttribute";
 import {getInternalRenderApi} from "../function/getInternalRenderApi";
-import {FRAGMENT_ELEMENT_TAG_NAME} from "../../../webcomponent/src/constant/FRAGMENT_ELEMENT_TAG_NAME";
-import {WebComponentReflector} from "../../../webcomponent/src/WebComponentReflector";
-
+import {FlowIdReflector} from "../../../webcomponent/src/reflector/FlowIdReflector";
+import {DEFAULT_NAMESPACE_NAME} from "./tsx-to-html-renderer-impl/constants";
 
 @Component
-export class TSXRendererImpl implements RendererImpl {
+export class TSXToHTMLRendererImpl implements RendererImpl {
 
     /**
      * WebComponent observeAttributes observeAttributes heap cache.
@@ -36,12 +34,6 @@ export class TSXRendererImpl implements RendererImpl {
     protected _createDOMElement: any = document.createElement.bind(document);
     protected _createDOMElementNS: any = document.createElementNS.bind(document);
 
-
-    activeWebComponent: Element;
-
-    renderStack: Array<any> = [];
-    slotStack: Array<any> = [];
-
     constructor(public activeLogger: ActiveLogger) {
         this.init();
     }
@@ -49,8 +41,6 @@ export class TSXRendererImpl implements RendererImpl {
     cleanCaches() {
         this.attributeValueCache = {};
         this.attributeValueSequence = 0;
-        this.renderStack = [];
-        this.slotStack = [];
     }
 
     init() {
@@ -149,12 +139,7 @@ export class TSXRendererImpl implements RendererImpl {
         };
     };
 
-
-    render = (virtualElementOrTagName: VirtualElement|string, level = 0, namespaces: Namespace[] = []): Element => {
-
-        // TODO: Tree traverse equals check on VirtualElement:
-        // TODO: - If only attribute change -> call setAttribute()
-        // TODO: - If DOM element changes -> re-render and replace element (thus subtree)
+    render = (virtualElementOrTagName: VirtualElement|string, level = 0, namespaces: Array<Namespace> = [], flowId: number = -1): Element => {
 
         let name = typeof virtualElementOrTagName === 'string' ? virtualElementOrTagName : virtualElementOrTagName.name;
         let attributes = (virtualElementOrTagName as VirtualElement).attributes || {};
@@ -169,46 +154,12 @@ export class TSXRendererImpl implements RendererImpl {
         // 0. add all namespaces
         namespaces = namespaceAttributes.xmlNs;
 
-        this.renderStack.push({
-            name,
-            attributes,
-            children,
-            level,
-            namespaces
-        });
-
-        if (WebComponentReflector.getAll().indexOf(name.toUpperCase()) !== -1) {
-
-            this.activeWebComponent = this.renderStack[this.renderStack.length-1];
-        }
-
-        if (attributes.slot) {
-
-            console.log('render SLOT child', attributes, this.activeWebComponent, this.renderStack);
-
-            this.slotStack.push({
-                slotName: attributes.slot,
-                target: {
-                    name,
-                    attributes,
-                    children,
-                    level,
-                    namespaces
-                }
-            });
-
-            // do not render, replace it as a <template> #document-fragment
-            name = 'template';
-        }
-
         const element = this.createDOMElement(name, namespaces, nativeOptions);
 
+        // ...and apply common flow process id (subtree re-flow identifier)
+        FlowIdReflector.set(element, flowId);
 
         // 1. add all bindings
-
-        if (namespaceAttributes.bind.length) {
-            console.log('bind', namespaceAttributes.bind);
-        }
         namespaceAttributes.bind.forEach((attribute: Attribute) => {
 
             const scope: any = attribute.value;
@@ -223,10 +174,12 @@ export class TSXRendererImpl implements RendererImpl {
 
         // 2. add all events
         namespaceAttributes.event.forEach(([eventName, callback]) => {
-            element.addEventListener(eventName, evt => {
-                // add element to event as second parameter
-                callback(evt, element);
-            }, false);
+
+            const eventListener = callback as EventListenerOrEventListenerObject;
+
+            //ElementEventListenersReflector.setEventListener(element, eventName, eventListener);
+
+            element.addEventListener(eventName, eventListener);
         });
 
         // 3. reference JS objects to properties heap cache (to de-reference them later and fetch the JS object again)
@@ -252,29 +205,6 @@ export class TSXRendererImpl implements RendererImpl {
             this.activeLogger.error(`Attribute(${attribute.name}) on element ${name} cannot be mapped.`, attribute.value)
         });
 
-        if (name.toLowerCase() === 'st-slot') {
-            console.log('render Found a SLOT', element, this.activeWebComponent, this.renderStack, this.slotStack);
-
-            if (!attributes.name) {
-                warn('Each <slot> must have a unique "name" attribute!', element);
-            }
-
-            this.slotStack.forEach((slottedItem) => {
-                if (slottedItem.slotName === attributes.name) {
-
-                    // reset children (remove default content of <slot>)
-                    children = [];
-
-                    if (slottedItem.target.children) {
-
-                        slottedItem.target.children.forEach((slottedChild: any) => {
-                            children.push(slottedChild);
-                        })
-                    }
-                }
-            });
-        }
-
         children.filter(child => !(child == null || typeof child == 'undefined')).forEach((child) => {
 
             // child: string | number | boolean | Node | Array<Node>
@@ -294,7 +224,7 @@ export class TSXRendererImpl implements RendererImpl {
 
                     } else {
 
-                        element.appendChild(this.render(child, level + 1, namespaces));
+                        element.appendChild(this.render(child, level + 1, namespaces, flowId));
                     }
                 };
 

@@ -12,15 +12,17 @@ import {Routes} from "../interface/Routes";
 import {RouteDefinition} from "../interface/RouteDefinition";
 import {LocationChangeDecision} from "../interface/LocationChangeDecision";
 import {ROUTE_NOT_FOUND} from "../constant/ROUTE_NOT_FOUND";
-import {UseComponent} from "../../../webcomponent/src/decorator/UseComponent";
+import {UseElement} from "../../../webcomponent/src/decorator/UseElement";
 
 @Component
-@UseComponent(ErrorMessage)
+@UseElement(ErrorMessage)
 export class HistoryRouterImpl implements RouterImpl {
 
     protected TOKENIZED_ROUTES: TokenizedRoutes = {};
     protected ROUTE_MAP: Routes = {};
     protected CURRENT_PARAMS: any = {};
+    protected CURRENT_PATH: string;
+    protected CURRENT_DECISION: any;
 
     // might be unset until someone puts a <router-outlet>
     protected ROUTER_OUTLET!: RouterOutlet;
@@ -31,6 +33,18 @@ export class HistoryRouterImpl implements RouterImpl {
 
     getParams(): any {
         return this.CURRENT_PARAMS;
+    }
+
+    getPath(): string {
+        return this.CURRENT_PATH;
+    }
+
+    reload() {
+        this.navigate(this.getPath(), this.getParams());
+    }
+
+    refresh() {
+        this.ROUTER_OUTLET.refresh();
     }
 
     registerRoutes(routes: Routes): void {
@@ -157,7 +171,7 @@ export class HistoryRouterImpl implements RouterImpl {
 
     protected async decideOnLocationChange(hash: string): Promise<void> {
 
-        const decision = this.match(hash);
+        const decision = this.CURRENT_DECISION = this.match(hash);
 
         if (decision !== null) {
 
@@ -222,6 +236,9 @@ export class HistoryRouterImpl implements RouterImpl {
                 route = route.replace(':' + param, params[param]);
             }
         }
-        window.location.href = '#' + route;
+
+        this.CURRENT_PATH = '#' + route;
+
+        window.location.href = this.CURRENT_PATH;
     }
 }

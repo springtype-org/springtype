@@ -2,6 +2,7 @@ export * from "./di/index";
 export * from "./hmr/index";
 export * from "./lang/index";
 export * from "./logger/index";
+export * from "./virtualdom/index";
 export * from "./renderer/index";
 export * from "./router/index";
 export * from "./state/index";

@@ -5,7 +5,7 @@ import {
     OnAttributeChange, ShadowDOM,
     Style, Template,
     Element,
-    WebComponentLifecycle
+    WebComponentLifecycle, ActiveRoute
 } from "@springtype/springtype-incubator-core";
 
 interface Props {
@@ -27,6 +27,10 @@ export class TSStyledComponent extends HTMLElement implements WebComponentLifecy
         styleMode: Math.random() > 0.5 ? StyleMode.INVERTED : StyleMode.STANDARD
     };
 
+    constructor(protected activeRoute: ActiveRoute) {
+        super();
+    }
+
     @OnAttributeChange("props")
     onPropsChanged() {
         console.log('programmatic interception');
@@ -35,5 +39,9 @@ export class TSStyledComponent extends HTMLElement implements WebComponentLifecy
     @OnAttributeChange("props")
     onPropsChanged2() {
         console.log('programmatic interception 2');
+    }
+
+    onClick = () => {
+        this.activeRoute.refresh();
     }
 }

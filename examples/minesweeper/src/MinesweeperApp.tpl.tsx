@@ -4,9 +4,9 @@ import {FieldComponent, FieldProp} from "./components/field/FieldComponent"
 
 export default (view: MinesweeperApp) => {
     const items = view.mineMatrix
-        .map((fields: FieldProp[]) => {
+        .map((fields: FieldProp[], index: number) => {
                 return (
-                    <div class="row-fields">
+                    <div key={index} class="row-fields">
                         {
                             fields.map((field: FieldProp) =>
                                 <sw-field field={field}/>

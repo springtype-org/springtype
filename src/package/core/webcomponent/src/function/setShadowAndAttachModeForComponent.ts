@@ -7,6 +7,7 @@ import {ComponentReflector} from "../../../di";
 import {registerTransparentAttributeGetterAndSetter} from "./registerTransparentAttributeGetterAndSetter";
 import {getShadowForComponent} from "./getShadowForComponent";
 import {getShadowAttachModeForComponent} from "./getShadowAttachModeForComponent";
+import {ShadowRootReflector} from "../reflector/ShadowRootReflector";
 
 export const setShadowAndAttachModeForComponent = (webComponent: any, shadowAttachMode?: ShadowAttachMode) => {
 
@@ -18,17 +19,15 @@ export const setShadowAndAttachModeForComponent = (webComponent: any, shadowAtta
 
     ComponentReflector.addInitializer(webComponent, (instance: any) => {
 
-        console.log('@ShadowDOM initializer', instance)
-
-        // TODO: Impl as initializer
         const shadow = getShadowForComponent(webComponent);
 
         if (shadow) {
 
             const shadowAttachMode = getShadowAttachModeForComponent(webComponent);
-            instance._shadowRoot = instance.attachShadow({
+            const shadowRoot = instance.attachShadow({
                 mode: shadowAttachMode ? shadowAttachMode : ShadowAttachMode.OPEN
             });
+            ShadowRootReflector.set(instance, shadowRoot);
         }
     });
 };

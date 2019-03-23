@@ -40,7 +40,7 @@ export function MapStateToField(
                     instances.forEach((instance) => {
 
                         if (callReflowOnAttributeChange) {
-                            (instance as any).reflowOnAttributeChange(name, oldMappedState, value);
+                            (instance as any).flowOnAttributeChange(name, oldMappedState, value);
                             oldMappedState = value;
                         }
                     })

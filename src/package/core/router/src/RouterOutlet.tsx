@@ -10,26 +10,30 @@ import {LocationChangeDecision} from "./interface/LocationChangeDecision";
 import {Renderer} from "../../renderer/src/decorator/Renderer";
 import {VirtualElement} from "../../renderer";
 import {ErrorMessage} from "../../index";
-import {UseComponent} from "../../webcomponent/src/decorator/UseComponent";
+import {UseElement} from "../../webcomponent/src/decorator/UseElement";
 import {getRenderer} from "../../renderer/src/function/getRenderer";
 
 @Renderer({})
 @Element('st-router-outlet')
-@UseComponent(ErrorMessage)
+@UseElement(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
 
     locationChangeDecision: LocationChangeDecision;
 
     @Attribute
-    component: VirtualElement;
+    component: VirtualElement|null;
 
-    constructor(public connected: boolean,
-                protected activeRoute: ActiveRoute) {
+    constructor(protected activeRoute: ActiveRoute) {
 
         super();
 
         this.activeRoute.routerImpl.registerRouterOutlet(this);
         this.activeRoute.routerImpl.enable();
+    }
+
+    refresh() {
+        this.component = null; // chance reference to trigger re-flow
+        this.component = this.locationChangeDecision.component;
     }
 
     present(locationChangeDecision: LocationChangeDecision): void {
@@ -39,7 +43,7 @@ export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
         // clean renderer caches on whole re-render
         getRenderer().cleanCaches();
 
-        if (this.connected!) {
+        if (this.isConnected) {
             this.component = this.locationChangeDecision.component;
         }
     }

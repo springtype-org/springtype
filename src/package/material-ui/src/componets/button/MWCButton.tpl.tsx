@@ -17,13 +17,12 @@ export default (view: MWCButton) => {
 
     const innerButtonElement =
         <st-fragment>
-            <st-slot name="leading-content" />
             {view.icon && !view["trailing-icon"] ? mdcButtonIcon : ''}
-            <span class="mdc-button__label">{
+            <span class="mdc-button__label"><st-slot name="abc" />{
                 view.label
             }</span>
             {view.icon && view["trailing-icon"] ? mdcButtonIcon : ''}
-            <st-slot name="trailing-content" />
+            <st-slot />
         </st-fragment>;
 
     const button: VirtualElement = <button class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;

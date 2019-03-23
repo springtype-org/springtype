@@ -1,20 +1,17 @@
 import {Namespace} from "../interface/Namespace";
 import {NamespaceAttributesMap} from "../interface/NamespaceAttributesMap";
 import {Attribute} from "../interface/Attribute";
-import {DEFAULT_NAMESPACE_NAME} from "../constant/DEFAULT_NAMESPACE_NAME";
-import {DEFAULT_NAMESPACE_DELIMITER} from "../constant/DEFAULT_NAMESPACE_DELIMITER";
-import {transformTSXAttributeNames} from "./transformTSXAttributeNames";
-import {PROPERTY_BIND_VARIABLE} from "../constant/PROPERTY_BIND_VARIABLE";
+import {DEFAULT_NAMESPACE_DELIMITER, DEFAULT_NAMESPACE_NAME, PROPERTY_BIND_VARIABLE} from "../constants";
 
-export const collectNamespaceAttributes = (attributes: any, knownNamespaces: Array<Namespace>): NamespaceAttributesMap => {
+export const collectNamespaceAttributes = (attributes: Object, knownNamespaces: Array<Namespace>): NamespaceAttributesMap => {
 
     let collectedNamespaceAttributes: Array<Attribute> = [];
 
     // 0. transform TSX attribute names (like: "className") back to standard attribute names ("class")
     const transformedAttributes: Attribute[] = Object.entries(attributes)
         .map(([name, value]): Attribute => ({
-            name: transformTSXAttributeNames(name),
-            value: value
+            name,
+            value
         }));
 
     // 0.1 collect all possible namespace attributes

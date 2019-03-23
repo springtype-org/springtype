@@ -1,5 +1,5 @@
-import {Namespace} from "../impl/tsx-renderer-impl/interface/Namespace";
-import {VirtualElement} from "../impl/tsx-renderer-impl/interface/VirtualElement";
+import {Namespace} from "../impl/tsx-to-html-renderer-impl/interface/Namespace";
+import {VirtualElement} from "../../../virtualdom/src/interface/VirtualElement";
 
 /**
  * constructor must define (<any>window).React to an object implementing
@@ -17,7 +17,7 @@ import {VirtualElement} from "../impl/tsx-renderer-impl/interface/VirtualElement
  */
 export interface RendererImpl {
     createDOMElement(tagName: string, namespaces?: Array<Namespace>, domElementOptions?: any): Element;
-    render(virtualElement: VirtualElement): any;
+    render(virtualElement: VirtualElement, level?: number, namespaces?: Array<Namespace>, flowId?: number): any;
     // MUST be named like that to fulfill TSX internal interface when tsconfig.json is set to "preserve"
     createElement(name: string, attributes?: any, ...children: Array<VirtualElement>): VirtualElement;
     cleanCaches(): void;

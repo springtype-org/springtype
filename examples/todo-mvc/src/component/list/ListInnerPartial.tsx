@@ -3,7 +3,7 @@ import {
     Partial,
     ActiveRoute, VirtualElement,
     Element,
-    WebComponentLifecycle
+    WebComponentLifecycle, ShadowDOM, ShadowAttachMode
 } from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
@@ -46,7 +46,6 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
     };
 
     render() {
-
         return <ul>
             {
                 (this.localTodoListState.todos || []).sort((a: ITodoItem, b: ITodoItem) => {
@@ -57,15 +56,23 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
                         if (todo.done) {
                             input.attributes['checked'] = true;
                         }
-                        return <li onclick={() => {
+                        const onListItemClick = () => {
                             this.onListItemClick(todo.id)
-                        }} class="todo-item">
+                        };
+                        const onDoneToggleClick = (evt: Event) => {
+                            console.log('onDoneToggleClick', this);
+                            this.onDoneToggle(evt, todo);
+                        };
+
+                        const onRemoveClick = (evt: Event) => this.onRemove(evt, todo);
+
+                        return <li key={todo.id} onclick={onListItemClick} class="todo-item">
                             {input}
                             <span
-                                onClick={(evt: Event) => this.onDoneToggle(evt, todo)}/>
+                                onClick={onDoneToggleClick}/>
                             <div class="todo-item-text">{text}</div>
                             <a class="waves-effect waves-light btn"
-                               onClick={(evt: Event) => this.onRemove(evt, todo)}>Remove (after 1 sec)</a>
+                               onClick={onRemoveClick}>Remove (after 1 sec)</a>
                         </li>
                     }
                 )

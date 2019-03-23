@@ -2,7 +2,7 @@ import {TSStyledComponent} from "./TSStyledComponent";
 
 export default (view: TSStyledComponent) =>
     <div>
-        Huh!
-        <a href="#">WOOOHOOO!</a>
+        Huh! {Date.now()}
+        <a href="#" onclick={view.onClick}>WOOOHOOO!</a>
     </div>
 

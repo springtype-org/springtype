@@ -25,6 +25,18 @@ export class ActiveRoute {
         return this.routerImpl.getParams();
     }
 
+    getPath(): string {
+        return this.routerImpl.getPath();
+    }
+
+    reload() {
+        return this.routerImpl.reload();
+    }
+
+    refresh() {
+        this.routerImpl.refresh();
+    }
+
     navigate(path: string, params: any): void {
         return this.routerImpl.navigate(path, params);
     }

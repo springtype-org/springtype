@@ -58,6 +58,7 @@ export class TodoModel implements StateModelLifecycle<ITodoState, TodoModelReduc
             }
             return currentTodoItem;
         });
+
         return state;
     }
 

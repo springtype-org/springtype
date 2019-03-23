@@ -18,22 +18,12 @@ export class Logo extends HTMLElement implements WebComponentLifecycle {
     };
 
     constructor(public svg: SVGElement) {
-
         super();
-
-        /*
-        svg.addEventListener('click', (evt: Event) => {
-            this.onclick(evt);
-        })
-        */
     }
 
     onFlow(initial: boolean) {
 
         if (initial) {
-
-            console.log('onFlow!', this.svg);
-
 
             this.svg.addEventListener('click', (evt: Event) => {
                 this.onclick(evt);

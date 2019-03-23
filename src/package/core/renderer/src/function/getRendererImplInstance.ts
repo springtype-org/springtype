@@ -1,5 +1,5 @@
 import {RendererImplType} from "../enum/RendererImplType";
-import {TSXRendererImpl} from "../impl/TSXRendererImpl";
+import {TSXToHTMLRendererImpl} from "../impl/TSXToHTMLRendererImpl";
 import {ApplicationContext} from "../../../di";
 import {RendererConfig} from "../..";
 import {RendererImpl} from "../interface/RendererImpl";
@@ -20,7 +20,7 @@ export const getRendererImplInstance = (rendererConfig: RendererConfig): Rendere
 
             default:
             case RendererImplType.TSX:
-                rendererImpl = ApplicationContext.getInstance().getBean(TSXRendererImpl);
+                rendererImpl = ApplicationContext.getInstance().getBean(TSXToHTMLRendererImpl);
                 break;
         }
     }

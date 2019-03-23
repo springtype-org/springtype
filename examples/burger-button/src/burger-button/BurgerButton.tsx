@@ -25,15 +25,17 @@ export class BurgerButton extends HTMLElement implements  WebComponentLifecycle 
         onOpen: () => {}
     };
 
-    onBurgerClick = (evt: any, element: any) => {
+    // TODO: Rewrite: Never access DOM directly!
+    onBurgerClick = (evt: Event, element: any) => {
+
         this.open = !this.open;
         if (this.open) {
-            element.classList.add('active');
+            evt.currentTarget!.classList.add('active');
             if (this.props.onOpen) {
                 this.props.onOpen();
             }
         } else {
-            element.classList.remove('active');
+            evt.currentTarget!.classList.remove('active');
             if (this.props.onClose) {
                 this.props.onClose();
             }

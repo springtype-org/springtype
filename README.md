@@ -4,10 +4,13 @@ Pre-beta-release TODO list:
 
 - Modules:
   - general
+    - production build
     - use WeakMap instead of Reflect?
+      - Reflector-classes instead of Reflect getter/setter functions
     - constants in one file per package
   - instrumentation
-    - @MeasurePerformance
+    - @MeasureTiming / measureTiming
+    - @LogInputAndOutput / logInputAndOutput
   - reactive
     - @Buffer(ms)
     - @Delay(ms)
@@ -15,13 +18,13 @@ Pre-beta-release TODO list:
   - webcomponent    
     - Fixme: @EventAttribute = default arrow function not overwritten by attribute value passed?!
     - FieldChange interface declaration and hooks?
-    - HTML integration based <st-slot> support
     - Type hinting?
-    - Improve performance for renderer: Only re-render what changes
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - i18n
     - @Translate
     - @Locale
+  - router
+    - typed param getters?
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
@@ -80,7 +83,7 @@ Pre-beta-release TODO list:
       - SVG Mineweeper game using gpu.js based matrices calc
       - Featured: SVG gantt-chart component (web-component, publicly available) 
        
-
+https://stackblitz.com/edit/typescript-umcyrw
 
 # Usage
     npm i

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function fn() {
+window.clockScript = function fn() {
     var radius = 114;
     var outerRadius = radius - 10;
     var dtg = new Date();
@@ -47,7 +47,4 @@ document.addEventListener('DOMContentLoaded', function fn() {
             createMark(ticks, outerRadius, 8, rotation + j * 6);
         }
     }
-}, false);
-
-
-
+};

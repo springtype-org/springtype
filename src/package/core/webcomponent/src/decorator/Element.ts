@@ -3,19 +3,21 @@ import "../adapter/es5";
 
 import {WebComponentImpl} from "./../interface/WebComponentImpl";
 import {registerWebComponent} from "../function/registerWebComponent";
+import {error} from '../../../logger';
 
-export function Element<WC extends WebComponentImpl<any>>(tag: string): any {
-
-    if (!tag) {
-        throw new Error("@Element annotation must contain a tag name like: { tag: 'foo-bar-element', ... }");
-    }
-
-    // must contain a kebab-dash
-    if (tag.indexOf('-') === -1) {
-        throw new Error("@Element's tag name must be prefixed like: app-your-element-name. But this tag looks like: " + tag);
-    }
-
+export function Element<WC extends WebComponentImpl<any>>(tagName: string): any {
+    
     return (webComponent: WC) => {
-        return registerWebComponent(tag, webComponent);
+
+        if (!tagName) {
+            error("The @Element ", webComponent, " has no tag name! It should look like: @Element('foo-bar-element')");
+        }
+
+        // must contain a kebab-dash
+        if (tagName.indexOf('-') === -1) {
+            error("The @Element ", webComponent, " tag name is not prefixed. It should look like: app-your-element-name, but it is: " + tagName);
+        }
+
+        return registerWebComponent(tagName, webComponent);
     }
 }

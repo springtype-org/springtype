@@ -13,7 +13,16 @@
 
 </head>
 <body>
-
+    <div>
+        <mwc-button label="favorite" icon="favorite" trailing-icon="true">
+            <div slot="abc">
+                Before...
+            </div>
+            <div>
+                More!
+            </div>
+        </mwc-button>
+    </div>
     <div>
         <mwc-button label="disabled" disabled="true" raised="true"/>
     </div>
@@ -23,16 +32,7 @@
     <div>
         <mwc-button label="favorite" icon="favorite"/>
     </div>
-    <div>
-        <mwc-button label="favorite" icon="favorite" trailing-icon="true">
-            <div slot="leading-content">
-                Before...
-            </div>
-            <div slot="trailing-content">
-                More!
-            </div>
-        </mwc-button>
-    </div>
+
     <div>
         <mwc-button label="outlined" outlined="true"/>
     </div>

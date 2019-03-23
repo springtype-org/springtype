@@ -1,4 +1,4 @@
-import {ActiveRoute, UseComponent, Element, WebComponentLifecycle} from "../../../../src/package/core/index";
+import {ActiveRoute, UseElement, Element, WebComponentLifecycle, Attribute} from "../../../../src/package/core/index";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../component/list/ListInnerPartial";
 import {AppLayout} from "../component/layout/AppLayout";
@@ -8,8 +8,8 @@ interface TodoListLocalState {
 }
 
 @Element('example-todo-list')
-@UseComponent(AppLayout)
-@UseComponent(ListInnerPartial)
+@UseElement(AppLayout)
+@UseElement(ListInnerPartial)
 export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
@@ -18,11 +18,12 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
         public textInputEl: HTMLInputElement
     ) {
         super();
-
-        console.log('textInputEl', textInputEl);
     }
 
     onAddItem = () => {
+
+        console.log('onAddItem');
+
         if (this.textInputEl.value !== '') {
             this.todoModel.addTodo({
                 text: this.localState.newTodoItemText,

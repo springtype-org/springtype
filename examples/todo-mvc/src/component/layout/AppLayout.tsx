@@ -1,12 +1,12 @@
 import {
-    UseComponent,
+    UseElement,
     Element,
-    WebComponentLifecycle
+    WebComponentLifecycle, ShadowDOM
 } from "@springtype/springtype-incubator-core";
 import {Logo} from "../logo/Logo";
 
 @Element('app-layout')
-@UseComponent(Logo)
+@UseElement(Logo)
 export class AppLayout extends HTMLElement implements WebComponentLifecycle {
 
     onLogoClick(logo: Logo) {
@@ -15,7 +15,6 @@ export class AppLayout extends HTMLElement implements WebComponentLifecycle {
     }
 
     render() {
-        console.log('app-layout render');
 
         return <st-fragment>
             <div style="text-align: center;">

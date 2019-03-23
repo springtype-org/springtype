@@ -17,6 +17,8 @@ import {CONSTRUCTOR_ARGUMENT_INITIALIZERS} from "./constant/CONSTRUCTOR_ARGUMENT
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 import {ConstructorArgumentInitializerFunction} from "./interface/ConstructorArgumentInitializerFunction";
 
+// TODO: WeakMap
+
 /**
  * This class uses the Reflect.metadata standard API (polyfilled)
  * to fetch and store compile-time and runtime reflected metadata.

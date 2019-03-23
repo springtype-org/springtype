@@ -4,7 +4,7 @@ import {
     Logger,
     LogLevel,
     Theme,
-    UseComponent
+    UseElement
 } from "../../../src/package/core/index";
 import {theme} from "./theme";
 import {SudokuComponent} from "./game/SudokuComponent";
@@ -15,5 +15,5 @@ import {ROUTE_BASE} from "./routes";
     level: process.env.ENVIRONMENT === ApplicationEnvironment.DEV ? LogLevel.LOG : LogLevel.ERROR
 })
 @Theme(theme)
-@UseComponent(SudokuComponent)
+@UseElement(SudokuComponent)
 export class SudokuApp {}

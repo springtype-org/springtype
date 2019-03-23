@@ -7,3 +7,4 @@ export * from "./src/decorator/Inject";
 export * from "./src/interface/ComponentImpl";
 export * from "./src/enum/ApplicationEnvironment";
 export * from "./src/enum/ApplicationRuntime";
+export * from "./src/AbstractWeakMapReflector";

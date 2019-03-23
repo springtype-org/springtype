@@ -2,10 +2,10 @@ import {ActiveRoute, Element, WebComponentLifecycle} from "../../../../src/packa
 import {TodoService} from "../service/TodoService";
 import {ITodoItem} from "../state/ITodoState";
 import {AppLayout} from "../component/layout/AppLayout";
-import {UseComponent} from "../../../../src/package/core";
+import {UseElement} from "../../../../src/package/core";
 
 @Element('example-todo-detail')
-@UseComponent(AppLayout)
+@UseElement(AppLayout)
 export class TodoDetailsPage extends HTMLElement implements WebComponentLifecycle {
 
     constructor(

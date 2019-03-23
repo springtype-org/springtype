@@ -25,7 +25,7 @@ export const registerTransparentAttributeGetterAndSetter = (instance: any, proto
 
                         executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
 
-                        instance.reflowOnAttributeChange(attributeName, oldValue, newValue);
+                        instance.flowOnAttributeChange(attributeName, oldValue, newValue);
                     }
                     return true;
                 },
