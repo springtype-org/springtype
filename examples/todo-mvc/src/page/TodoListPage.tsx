@@ -1,7 +1,8 @@
-import {ActiveRoute, UseElement, Element, WebComponentLifecycle, Attribute} from "../../../../src/package/core/index";
+import {UseElement, Element, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../component/list/ListInnerPartial";
 import {AppLayout} from "../component/layout/AppLayout";
+import {Translate, t} from "@springtype/springtype-incubator-i18n";
 
 interface TodoListLocalState {
     newTodoItemText: string;
@@ -10,6 +11,7 @@ interface TodoListLocalState {
 @Element('example-todo-list')
 @UseElement(AppLayout)
 @UseElement(ListInnerPartial)
+@UseElement(Translate)
 export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
     constructor(
@@ -56,10 +58,12 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
                 <input bind={{textInputEl: this}}
                        type="text"
                        id="newTodoText"
-                       placeholder="What's TODO next?"
+                       placeholder={t("what_todo_next")}
                        onKeyUp={this.onNewTodoTextChange}/>
 
-                <a className="waves-effect waves-light btn" onClick={this.onAddItem}>Add</a>
+                <a className="waves-effect waves-light btn" onClick={this.onAddItem}>
+                    <st-t key="add" />
+                </a>
             </div>
         </app-layout>
     }

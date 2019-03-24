@@ -20,9 +20,6 @@ Pre-beta-release TODO list:
     - FieldChange interface declaration and hooks?
     - Type hinting?
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
-  - i18n
-    - @Translate
-    - @Locale
   - router
     - typed param getters?
   - test

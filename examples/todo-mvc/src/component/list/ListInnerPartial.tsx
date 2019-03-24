@@ -8,7 +8,7 @@ import {
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
-import {MapStateToField} from "../../../../../src/package/core";
+import {MapStateToField} from "@springtype/springtype-incubator-core";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;

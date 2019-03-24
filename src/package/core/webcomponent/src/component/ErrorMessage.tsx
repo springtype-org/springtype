@@ -2,7 +2,7 @@ import {Element} from "../decorator/Element";
 import {Attribute} from "../decorator/Attribute";
 import {WebComponentLifecycle} from "../..";
 import {Style} from "../decorator/Style";
-import {VirtualElement} from "../../../renderer";
+import {VirtualElement} from "../../../virtualdom";
 
 @Element('st-error-message')
 @Style((view) => ({

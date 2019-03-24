@@ -4,10 +4,11 @@
   "description": "It just says hello to the world.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../../src/package/core",
+    "@springtype/springtype-incubator-i18n": "file:../../src/package/i18n",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "materialize-css": "^1.0.0",
-    "parcel-bundler": "^1.10.1",
+    "parcel-bundler": "^1.12.3",
     "tslib": "^1.9.3"
   },
   "scripts": {
@@ -24,9 +25,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "^1.10.3",
+    "parcel": "^1.12.3",
     "sass": "^1.17.2",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.4000"
   },
   "browserslist": [
     "last 1 Chrome version"
