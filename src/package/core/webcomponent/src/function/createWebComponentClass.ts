@@ -377,7 +377,6 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             } else if (virtualElement && !domElement) {
 
                 // VirtualElement exists but no DOMElement: Append node
-
                 domElement = this.createNativeElement(virtualElement, flowId);
                 created = true;
 
@@ -632,6 +631,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                 const root = getShadowForComponent(CustomWebComponent) ?
                     ShadowRootReflector.get(this) as Element :
                     this as unknown as Element;
+
 
                 const transformed = this.transformVirtualElementTree({
                     name: tagName,

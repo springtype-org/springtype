@@ -3,7 +3,8 @@ import i18next from "i18next";
 import LngDetector from "i18next-browser-languagedetector";
 import {LanguageDetectorOptions} from "../interface/LanguageDetectorOptions";
 import {DEFAULT_FALLBACK_LANGUAGES, DEFAULT_NAMESPACE} from "../defaults";
-import {log} from "@springtype/springtype-incubator-core";
+import {ApplicationContext} from "@springtype/springtype-incubator-core";
+import {format} from "../function/format";
 
 // see https://www.i18next.com/overview/configuration-options
 export function Translation(translationConfig?: InitOptions, languageDetectorConfig?: LanguageDetectorOptions, onInit?: () => void): any {
@@ -32,6 +33,14 @@ export function Translation(translationConfig?: InitOptions, languageDetectorCon
 
     if (!onInit) {
         onInit = () => {};
+    }
+
+    if (!translationConfig.interpolation) {
+        translationConfig.interpolation = {};
+    }
+
+    if (!translationConfig.interpolation.format) {
+        translationConfig.interpolation.format = format;
     }
 
     i18next

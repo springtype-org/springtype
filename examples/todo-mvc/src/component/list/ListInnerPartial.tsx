@@ -3,12 +3,13 @@ import {
     Partial,
     ActiveRoute, VirtualElement,
     Element,
-    WebComponentLifecycle, ShadowDOM, ShadowAttachMode
+    WebComponentLifecycle, ShadowDOM, ShadowAttachMode, UseElement
 } from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
 import {MapStateToField} from "@springtype/springtype-incubator-core";
+import {t} from "@springtype/springtype-incubator-i18n";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;
@@ -72,7 +73,7 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
                                 onClick={onDoneToggleClick}/>
                             <div class="todo-item-text">{text}</div>
                             <a class="waves-effect waves-light btn"
-                               onClick={onRemoveClick}>Remove (after 1 sec)</a>
+                               onClick={onRemoveClick}>{t('remove')}</a>
                         </li>
                     }
                 )

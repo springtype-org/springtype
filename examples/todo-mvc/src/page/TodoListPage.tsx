@@ -27,6 +27,7 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
         console.log('onAddItem');
 
         if (this.textInputEl.value !== '') {
+
             this.todoModel.addTodo({
                 text: this.localState.newTodoItemText,
                 id: Date.now(),
@@ -50,21 +51,23 @@ export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
 
     render() {
 
-        return <app-layout>
-            <div slot="children">
+        return <st-fragment>
+            <app-layout>
+                <div slot="children">
 
-                <app-list-inner-partial />
+                    <app-list-inner-partial />
 
-                <input bind={{textInputEl: this}}
-                       type="text"
-                       id="newTodoText"
-                       placeholder={t("what_todo_next")}
-                       onKeyUp={this.onNewTodoTextChange}/>
+                    <input bind={{textInputEl: this}}
+                           type="text"
+                           id="newTodoText"
+                           placeholder={t("what_todo_next")}
+                           onKeyUp={this.onNewTodoTextChange}/>
 
-                <a className="waves-effect waves-light btn" onClick={this.onAddItem}>
-                    <st-t key="add" />
-                </a>
-            </div>
-        </app-layout>
+                    <a className="waves-effect waves-light btn" onClick={this.onAddItem}>
+                        {t('add')}
+                    </a>
+                </div>
+            </app-layout>
+        </st-fragment>
     }
 }

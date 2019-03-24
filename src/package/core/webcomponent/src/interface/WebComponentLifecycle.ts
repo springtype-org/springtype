@@ -19,7 +19,7 @@ export interface WebComponentLifecycle extends HTMLElement {
     createNativeTextNode?(data: string): Node;
 
     onBeforeRender?(): boolean|void;
-    render?(): VirtualElement|Array<VirtualElement>;
+    render?(): VirtualElement|Array<VirtualElement>|string;
     onRender?(elementsRendered: Array<VirtualElement>): void;
 
     onBeforeFlow?(initial?: boolean): boolean|void;

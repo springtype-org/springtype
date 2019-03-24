@@ -5,3 +5,4 @@ export * from "./src/decorator/Translation";
 export * from "./src/decorator/Translations";
 export * from "./src/interface/TranslationCatalog";
 export * from "./src/Translator";
+export * from "./src/decorator/TranslationFormat";

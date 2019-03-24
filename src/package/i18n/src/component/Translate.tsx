@@ -14,7 +14,16 @@ export class Translate extends HTMLElement implements WebComponentLifecycle {
     @Attribute
     options?: TranslationOptions;
 
+    cachedTranslation: string;
+
+    onBeforeRender() {
+
+        if (!this.cachedTranslation) {
+            this.cachedTranslation = t(this.key, {...this.values || {}, ...this.options || {}});
+        }
+    }
+
     render() {
-        return t(this.key, {...this.values || {}, ...this.options || {}});
+        return this.cachedTranslation;
     }
 }
