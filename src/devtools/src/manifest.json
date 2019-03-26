@@ -1,0 +1,13 @@
+{
+  "name": "SpringType DevTools",
+  "version": "0.1",
+  "description": "SpringType extension to inspect and debug SpringType elements",
+  "devtools_page": "devtools.html",
+  "permissions": ["tabs"],
+  "manifest_version": 2,
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

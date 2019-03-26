@@ -1,4 +1,4 @@
-import {ApplicationContext, Component} from "../../di";
+import {ApplicationContext, Component} from "@springtype/springtype-incubator-core";
 import * as R from "@rematch/core";
 import * as Redux from 'redux'
 import {STORE} from "./constant/STORE";

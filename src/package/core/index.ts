@@ -5,7 +5,6 @@ export * from "./logger/index";
 export * from "./virtualdom/index";
 export * from "./renderer/index";
 export * from "./router/index";
-export * from "./state/index";
 export * from "./test/index";
 export * from "./tss/index";
 export * from "./cd/index";

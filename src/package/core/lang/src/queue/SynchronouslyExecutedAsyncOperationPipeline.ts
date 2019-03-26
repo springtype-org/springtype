@@ -4,7 +4,6 @@ export class SynchronouslyExecutedAsyncOperationPipeline {
     operationRunning: boolean = false;
     runnerInterval: any;
 
-    // TODO: Implement debounceTime (execute most recent operation, evict queued ones) to prevent 2x-render
     constructor(protected runnerIntervalTime: number = 1,
                 protected debounceTime: number = 0) {
 

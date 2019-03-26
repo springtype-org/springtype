@@ -3,7 +3,7 @@ import {
     Template,
     UseElement,
     Element,
-    WebComponentLifecycle
+    Lifecycle
 } from "@springtype/springtype-incubator-core";
 import template from "./MinesweeperApp.tpl";
 import {FieldComponent, FieldProp, Neighbors} from "./components/field/FieldComponent";
@@ -13,7 +13,7 @@ declare var Window: any;
 @Element('sw-app')
 @Template(template)
 @UseElement(FieldComponent)
-export class MinesweeperApp extends HTMLElement implements WebComponentLifecycle {
+export class MinesweeperApp extends HTMLElement implements Lifecycle {
     public matrixDimension: [number, number] = [30, 30];
     public mineMatrix: Array<FieldProp[]> = [];
     static mineArray: FieldProp[] = [];

@@ -1,34 +1,20 @@
 import {
     Template,
     Element,
-    WebComponentLifecycle,
+    Lifecycle,
     ShadowDOM,
-    ShadowAttachMode, EventAttribute
+    ShadowAttachMode, EventAttribute, Style, HOST_SELECTOR
 } from "@springtype/springtype-incubator-core";
 import template from "./Logo.tpl";
 
 @Element('app-logo')
 @ShadowDOM(ShadowAttachMode.CLOSED)
 @Template(template)
-export class Logo extends HTMLElement implements WebComponentLifecycle {
+@Style(() => ({
+    [HOST_SELECTOR]: 'margin: 5px;'
+}))
+export class Logo extends HTMLElement implements Lifecycle {
 
     @EventAttribute
-    onclick = (evt: Event) => {
-        console.log('wtf?');
-    };
-
-    constructor(public svg: SVGElement) {
-        super();
-    }
-
-    onFlow(initial: boolean) {
-
-        if (initial) {
-
-            this.svg.addEventListener('click', (evt: Event) => {
-                this.onclick(evt);
-                evt.stopPropagation();
-            });
-        }
-    }
+    onclick = () => {};
 }

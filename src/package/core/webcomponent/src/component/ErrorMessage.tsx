@@ -1,6 +1,6 @@
 import {Element} from "../decorator/Element";
 import {Attribute} from "../decorator/Attribute";
-import {WebComponentLifecycle} from "../..";
+import {Lifecycle} from "../..";
 import {Style} from "../decorator/Style";
 import {VirtualElement} from "../../../virtualdom";
 
@@ -10,7 +10,7 @@ import {VirtualElement} from "../../../virtualdom";
         color: '#ff0000'
     }
 }))
-export class ErrorMessage extends HTMLElement implements WebComponentLifecycle {
+export class ErrorMessage extends HTMLElement implements Lifecycle {
 
     @Attribute
     message: string = "Unknown error.";

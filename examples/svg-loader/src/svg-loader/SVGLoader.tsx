@@ -1,4 +1,4 @@
-import {Attribute, Template, Element, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, Template, Element, Lifecycle} from "@springtype/springtype-incubator-core";
 import template from "./SVGLoader.tpl";
 
 export interface LoaderProps {
@@ -12,7 +12,7 @@ export enum LoaderType {
 
 @Element('svg-loader')
 @Template(template)
-export class SVGLoader extends HTMLElement implements WebComponentLifecycle {
+export class SVGLoader extends HTMLElement implements Lifecycle {
 
     @Attribute
     props: LoaderProps = {

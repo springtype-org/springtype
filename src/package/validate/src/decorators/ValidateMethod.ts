@@ -1,4 +1,3 @@
-import "reflect-metadata"
 import {getParamNames} from "@springtype/springtype-incubator-core";
 import {IValidator, VALIDATOR_DEFAULT} from "./Validator";
 import {validate} from "./validators/Required";

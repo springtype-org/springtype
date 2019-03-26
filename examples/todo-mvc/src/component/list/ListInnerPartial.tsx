@@ -3,20 +3,22 @@ import {
     Partial,
     ActiveRoute, VirtualElement,
     Element,
-    WebComponentLifecycle, ShadowDOM, ShadowAttachMode, UseElement
+    Lifecycle, Style
 } from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
-import {MapStateToField} from "@springtype/springtype-incubator-core";
+import {MapStateToField} from "@springtype/springtype-incubator-state";
 import {t} from "@springtype/springtype-incubator-i18n";
+import {style} from "./ListInnerPartial.style";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;
 }
 
+@Style(style)
 @Element('app-list-inner-partial')
-export class ListInnerPartial extends HTMLElement implements WebComponentLifecycle {
+export class ListInnerPartial extends HTMLElement implements Lifecycle {
 
     constructor(
         @MapStateToField((state: IRootState): Partial<LocalTodoListState> => ({
@@ -52,14 +54,18 @@ export class ListInnerPartial extends HTMLElement implements WebComponentLifecyc
                 (this.localTodoListState.todos || []).sort((a: ITodoItem, b: ITodoItem) => {
                     return a.text > b.text ? 0 : 1
                 }).map((todo: ITodoItem) => {
+
                         const text = todo.done ? <s>{todo.text} </s> : todo.text;
                         const input: VirtualElement = <input type="checkbox"/>;
+
                         if (todo.done) {
                             input.attributes['checked'] = true;
                         }
+
                         const onListItemClick = () => {
                             this.onListItemClick(todo.id)
                         };
+
                         const onDoneToggleClick = (evt: Event) => {
                             console.log('onDoneToggleClick', this);
                             this.onDoneToggle(evt, todo);

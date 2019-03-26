@@ -1,6 +1,6 @@
-import * as _ from "lodash";
 import {interceptableChange} from "./interceptableChange";
-import {ChangeDetectionInterceptor} from "../../../lang/index";
+import {ChangeDetectionInterceptor} from "../interface/ChangeDetectionInterceptor";
+import {Comparator} from "../../../lang/src/object/Comparator";
 
 export const createChangeDetector = (
     initialValue: any,
@@ -15,7 +15,7 @@ export const createChangeDetector = (
 
             if (memorize) {
 
-                if (!_.isEqual(props[name], value)) {
+                if (!Comparator.isEqual(props[name], value)) {
                     interceptableChange(props, name, value, onChange, onBeforeChange, instance);
                 }
 

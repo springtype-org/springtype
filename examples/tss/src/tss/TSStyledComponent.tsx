@@ -5,7 +5,7 @@ import {
     OnAttributeChange, ShadowDOM,
     Style, Template,
     Element,
-    WebComponentLifecycle, ActiveRoute
+    Lifecycle, ActiveRoute
 } from "@springtype/springtype-incubator-core";
 
 interface Props {
@@ -20,7 +20,7 @@ export enum StyleMode {
 @ShadowDOM
 @Template(template)
 @Style(style)
-export class TSStyledComponent extends HTMLElement implements WebComponentLifecycle {
+export class TSStyledComponent extends HTMLElement implements Lifecycle {
 
     @Attribute
     props: Props = {

@@ -1,18 +1,20 @@
-import {UseElement, Element, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {UseElement, Element, Lifecycle, Style} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../component/list/ListInnerPartial";
 import {AppLayout} from "../component/layout/AppLayout";
 import {Translate, t} from "@springtype/springtype-incubator-i18n";
+import {style} from "./TodoListPage.style";
 
 interface TodoListLocalState {
     newTodoItemText: string;
 }
 
 @Element('example-todo-list')
+@Style(style)
 @UseElement(AppLayout)
 @UseElement(ListInnerPartial)
 @UseElement(Translate)
-export class TodoListPage extends HTMLElement implements WebComponentLifecycle {
+export class TodoListPage extends HTMLElement implements Lifecycle {
 
     constructor(
         public localState: TodoListLocalState,

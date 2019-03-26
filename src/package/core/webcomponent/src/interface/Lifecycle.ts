@@ -1,6 +1,6 @@
 import {VirtualElement} from "../../../virtualdom";
 
-export interface WebComponentLifecycle extends HTMLElement {
+export interface Lifecycle extends HTMLElement {
 
     onBeforeConnect?(): boolean|void;
     connect?(): void;

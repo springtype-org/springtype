@@ -3,19 +3,9 @@
   "version": "0.9.1",
   "description": "It just works.",
   "dependencies": {
-    "@babel/types": "^7.1.3",
-    "@rematch/core": "^1.0.6",
-    "@types/lodash": "^4.14.122",
     "@types/node": "^10.14.1",
-    "@webcomponents/custom-elements": "^1.2.1",
-    "@webcomponents/shadycss": "^1.9.0",
-    "@webcomponents/shadydom": "^1.5.0",
-    "@webcomponents/webcomponentsjs": "^2.2.7",
-    "lodash": "^4.17.11",
     "reflect-metadata": "^0.1.12",
-    "ts-node": "^7.0.1",
-    "tslib": "^1.9.3",
-    "typestyle": "^2.0.1"
+    "tslib": "^1.9.3"
   },
   "source": "./index.ts",
   "repository": {
@@ -29,6 +19,6 @@
   },
   "homepage": "https://github.com/kyr0/springtype-incubator#readme",
   "devDependencies": {
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.4000"
   }
 }

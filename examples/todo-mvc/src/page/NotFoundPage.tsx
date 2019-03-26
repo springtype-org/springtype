@@ -1,4 +1,4 @@
-import {ActiveRoute, Element, UseElement, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {ActiveRoute, Element, UseElement, Lifecycle} from "@springtype/springtype-incubator-core";
 import {Translate, Translations, t} from "@springtype/springtype-incubator-i18n";
 
 import * as englishTranslations from "./translation/en.json";
@@ -12,7 +12,7 @@ interface NotFoundPageTranslationValues {
 @Translations('en', englishTranslations)
 @Element('app-not-found-page')
 @UseElement(Translate)
-export class NotFoundPage extends HTMLElement implements WebComponentLifecycle {
+export class NotFoundPage extends HTMLElement implements Lifecycle {
 
     constructor(private activeRoute: ActiveRoute) {
         super();

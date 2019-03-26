@@ -3,7 +3,7 @@ import {
     Field,
     OnAttributeChange, OnFieldChange, Template,
     Element,
-    WebComponentLifecycle
+    Lifecycle
 } from "@springtype/springtype-incubator-core";
 import "./FieldComponent.scss"
 import template from "./FieldComponent.tpl"
@@ -28,7 +28,7 @@ export interface FieldProp {
 
 @Element('sw-field')
 @Template(template)
-export class FieldComponent extends HTMLElement implements WebComponentLifecycle {
+export class FieldComponent extends HTMLElement implements Lifecycle {
 
     static fieldComponents: FieldComponent[] = [];
 

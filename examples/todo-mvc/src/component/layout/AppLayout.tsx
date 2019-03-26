@@ -1,10 +1,10 @@
 import {
     UseElement,
     Element,
-    WebComponentLifecycle, Style
+    Lifecycle, Style, ActiveRoute
 } from "@springtype/springtype-incubator-core";
+import {t, Translator} from "@springtype/springtype-incubator-i18n";
 import {Logo} from "../logo/Logo";
-import {t} from "../../../../../src/package/i18n";
 
 @Element('app-layout')
 @Style((view: AppLayout) => ({
@@ -15,21 +15,26 @@ import {t} from "../../../../../src/package/i18n";
     }
 }))
 @UseElement(Logo)
-export class AppLayout extends HTMLElement implements WebComponentLifecycle {
+export class AppLayout extends HTMLElement implements Lifecycle {
+
+    constructor(protected translator: Translator,
+                protected activeRoute: ActiveRoute) {
+        super();
+    }
+
 
     onLogoClick(logo: Logo) {
 
         console.log('onLogoClick', logo);
     }
 
-    onSetGerman = () => {
+    setLanguage = (language: string) => {
 
-        console.log('German language set');
-    };
-    
-    onSetEnglish = () => {
+        if (this.translator.getActiveLanguage() !== language) {
 
-        console.log('German language set');
+            this.translator.changeLanguage(language);
+            this.activeRoute.refresh();
+        }
     };
 
     render() {
@@ -42,12 +47,12 @@ export class AppLayout extends HTMLElement implements WebComponentLifecycle {
                 Did you forget to provide some CDATA content in the component that uses {"<app-layout>"}?
             </st-slot>
 
-            <div>
+            <div style="margin-top: 20px">
                 <a className="waves-effect waves-light btn"
-                   onclick={this.onSetGerman}>{t('german')}</a>
+                   onclick={() => this.setLanguage('de')}>{t('german')}</a>
 
                 <a className="waves-effect waves-light btn"
-                   onClick={this.onSetEnglish}>{t('english')}</a>
+                   onClick={() => this.setLanguage('en')}>{t('english')}</a>
             </div>
 
             <st-slot class="copyright-footer" name="copyright">

@@ -3,7 +3,7 @@ import {
     Template,
     UseElement,
     Element,
-    WebComponentLifecycle
+    Lifecycle
 } from "@springtype/springtype-incubator-core";
 import template from "./FeatureExample.tpl";
 import {BurgerButton} from "../../../burger-button/src/burger-button/BurgerButton";
@@ -17,7 +17,7 @@ interface BurgerButtonProps {
 @Element('feature-example')
 @Template(template)
 @UseElement(BurgerExample)
-export class FeatureExample extends HTMLElement implements WebComponentLifecycle {
+export class FeatureExample extends HTMLElement implements Lifecycle {
 
     @Attribute
     props: BurgerButtonProps = {

@@ -1,11 +1,11 @@
 import {Component} from "@springtype/springtype-incubator-core";
-import i18next from "i18next";
+import * as i18next from "i18next";
 import {LanguageChangedHandler} from "./interface/LanguageChangedHandler";
 
 @Component
 export class Translator {
 
-    async setLanguage(language: string): Promise<void> {
+    async changeLanguage(language: string): Promise<void> {
         return new Promise((resolve) => {
             i18next.changeLanguage(language, resolve);
         });
@@ -16,6 +16,10 @@ export class Translator {
         return new Promise((resolve) => {
             i18next.init({}, resolve);
         });
+    }
+
+    getActiveLanguage(): string {
+        return i18next.language;
     }
 
     onLanguageChanged(eventHandler: LanguageChangedHandler) {

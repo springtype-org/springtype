@@ -1,5 +1,5 @@
-import {ChangeDetectionInterceptor} from "../../../lang/index";
 import {createChangeDetector} from "./createChangeDetector";
+import {ChangeDetectionInterceptor} from "../interface/ChangeDetectionInterceptor";
 
 export const createFieldChangeDetector = (
     instance: any,

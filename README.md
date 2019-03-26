@@ -16,12 +16,9 @@ Pre-beta-release TODO list:
     - @Delay(ms)
     - @Memorize()
   - webcomponent    
-    - Fixme: @EventAttribute = default arrow function not overwritten by attribute value passed?!
     - FieldChange interface declaration and hooks?
     - Type hinting?
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
-  - router
-    - typed param getters?
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
@@ -34,11 +31,11 @@ Pre-beta-release TODO list:
   - example/minesweeper
     - Use model and state
   - state
+    - Allow to configure StoreConfig
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
-    - Support for immer: https://github.com/rematch/rematch/blob/master/plugins/immer/README.md
-      instead of _.deepClone(state)
+   
   - material-ui
     - ripple
     

@@ -1,4 +1,4 @@
-import {ChangeDetectionInterceptor} from "../../../lang/index";
+import {ChangeDetectionInterceptor} from "../interface/ChangeDetectionInterceptor";
 
 export const interceptableChange = (
     props: any, 

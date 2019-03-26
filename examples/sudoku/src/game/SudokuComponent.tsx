@@ -4,7 +4,7 @@ import {
     log,
     warn,
     Element,
-    WebComponentLifecycle,
+    Lifecycle,
     Attribute, OnAttributeChange, Field, Style, Template, ShadowDOM,
 } from "@springtype/springtype-incubator-core";
 import {OnFieldChange} from "../../../../src/package/core";
@@ -25,7 +25,7 @@ enum ButtonType {
 @ShadowDOM
 @Template(template)
 @Style(style)
-export class SudokuComponent extends HTMLElement implements WebComponentLifecycle {
+export class SudokuComponent extends HTMLElement implements Lifecycle {
 
     @Attribute
     type: ButtonType = ButtonType.A;

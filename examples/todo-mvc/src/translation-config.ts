@@ -27,9 +27,12 @@ export class AppTranslationConfig {
 
     constructor(private translator: Translator) {
 
+
         // keep translations in sync
         translator.onLanguageChanged((language: string) => {
-            console.log('i18n language changed', language);
+
+            //debugger;
+            console.log('FIXME: @Buffer i18n language changed', language);
         });
     }
 }

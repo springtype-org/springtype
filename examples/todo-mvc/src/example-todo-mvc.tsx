@@ -1,6 +1,6 @@
 import "materialize-css";
 
-import {ReloadOnCodeChange, WebComponentLifecycle, Element} from "@springtype/springtype-incubator-core";
+import {ReloadOnCodeChange, Lifecycle, Element} from "@springtype/springtype-incubator-core";
 import {ROUTE_BASE, ROUTE_TODO_DETIALS, ROUTE_TODO_LIST} from "./routes";
 import {TodoListPage} from "./page/TodoListPage";
 import {TodoDetailsPage} from "./page/TodoDetailsPage";
@@ -8,6 +8,7 @@ import {NotFoundPage} from "./page/NotFoundPage";
 import {Route} from "../../../src/package/core";
 import {ROUTE_NOT_FOUND} from "@springtype/springtype-incubator-core";
 import {AppTranslationConfig} from "./translation-config";
+import {CaseTransformer} from "@springtype/springtype-incubator-core";
 
 @ReloadOnCodeChange
 
@@ -17,7 +18,7 @@ import {AppTranslationConfig} from "./translation-config";
 @Route(ROUTE_NOT_FOUND, NotFoundPage)
 
 @Element('example-todo-mvc')
-export class ExampleTodoMVC extends HTMLElement implements WebComponentLifecycle {
+export class ExampleTodoMVC extends HTMLElement implements Lifecycle {
 
     // inject AppTranslation to
     constructor(private appTranslation: AppTranslationConfig) {
@@ -25,7 +26,6 @@ export class ExampleTodoMVC extends HTMLElement implements WebComponentLifecycle
     }
 
     render() {
-
         // use the router for this app
         return <st-router-outlet />;
     }

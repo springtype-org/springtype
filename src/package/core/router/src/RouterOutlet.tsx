@@ -2,7 +2,7 @@ import {ActiveRoute} from "./ActiveRoute";
 import {
     Attribute,
     Element,
-    WebComponentLifecycle
+    Lifecycle
 } from "../../webcomponent";
 
 import "../../webcomponent/src/component/ErrorMessage";
@@ -16,7 +16,7 @@ import {getRenderer} from "../../renderer/src/function/getRenderer";
 @Renderer({})
 @Element('st-router-outlet')
 @UseElement(ErrorMessage)
-export class RouterOutlet extends HTMLElement implements WebComponentLifecycle {
+export class RouterOutlet extends HTMLElement implements Lifecycle {
 
     locationChangeDecision: LocationChangeDecision;
 

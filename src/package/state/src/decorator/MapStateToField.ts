@@ -1,8 +1,6 @@
-import {ApplicationContext, ComponentImpl, ComponentReflector} from "../../../di";
+import {ApplicationContext, ComponentImpl, ComponentReflector} from "@springtype/springtype-incubator-core";
 import {Store} from "../Store";
-import {createChangeDetector} from "../../../cd/src/function/createChangeDetector";
-import {WebComponentLifecycle} from "../../../webcomponent";
-import {WebComponentImpl} from "../../../webcomponent/src/interface/WebComponentImpl";
+import {createChangeDetector} from "@springtype/springtype-incubator-core";
 
 export function MapStateToField(
     mapFn: (state: any) => any,

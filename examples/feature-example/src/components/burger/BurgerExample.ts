@@ -1,10 +1,10 @@
-import {Template, Element, WebComponentLifecycle} from "@springtype/springtype-incubator-core";
+import {Template, Element, Lifecycle} from "@springtype/springtype-incubator-core";
 import template from "./BurgerExample.tpl";
 
 
 @Element('burger-example')
 @Template(template)
-export class BurgerExample extends HTMLElement implements WebComponentLifecycle {
+export class BurgerExample extends HTMLElement implements Lifecycle {
 
     constructor() {
         super()

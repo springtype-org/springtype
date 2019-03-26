@@ -1,8 +1,7 @@
-import {ApplicationContext, Component} from "../../../di";
+import {ApplicationContext, Component} from "@springtype/springtype-incubator-core";
 import * as R from "@rematch/core";
 import {RematchDispatcher} from "@rematch/core";
 import {StateManager} from "../StateManager";
-import {makeReducerMethodAutoImmutable} from "../function/makeReducerMethodAutoImmutable";
 import {IS_EFFECT} from "../constant/IS_EFFECT";
 import {IS_REDUCER} from "../constant/IS_REDUCER";
 
@@ -37,7 +36,7 @@ export function StateModel(modelName: string): any {
                 }
 
                 if (memberMethods[methodName][IS_REDUCER]) {
-                    (<any>modelConfig.reducers)[methodName] = makeReducerMethodAutoImmutable(memberMethods[methodName]);
+                    (<any>modelConfig.reducers)[methodName] = memberMethods[methodName];
                     reducerCount++;
                 }
             }

@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import {ComponentReflector} from "../ComponentReflector";
 import {InjectionStrategy} from "../enum/InjectionStrategy";
 import {InjectionReference} from "../type/InjectionReference";

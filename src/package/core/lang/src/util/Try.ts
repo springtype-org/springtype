@@ -1,8 +1,5 @@
 export abstract class Try<T> {
 
-    protected constructor() {
-    }
-
     private static requireNonNullDefined<T>(value: T, message: string): T {
         if (typeof value === 'undefined') {
             throw new UndefinedError(message + ' was undefined');

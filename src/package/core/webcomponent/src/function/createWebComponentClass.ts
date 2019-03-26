@@ -129,7 +129,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
                     // support for :component selector (self-referenced component styles) works even in shadow DOM
                     const componentInlineStyle: any =
-                        CSSInlineStyleGenerator.generateComponentStyles(style(this, theme));
+                        CSSInlineStyleGenerator.generateForStyleAttribute(style(this, theme));
 
                     for (let styleAttributeName in componentInlineStyle) {
 

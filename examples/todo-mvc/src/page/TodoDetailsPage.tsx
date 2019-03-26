@@ -1,11 +1,11 @@
-import {ActiveRoute, Element, WebComponentLifecycle, UseElement} from "@springtype/springtype-incubator-core";
+import {ActiveRoute, Element, Lifecycle, UseElement} from "@springtype/springtype-incubator-core";
 import {TodoService} from "../service/TodoService";
 import {ITodoItem} from "../state/ITodoState";
 import {AppLayout} from "../component/layout/AppLayout";
 
 @Element('example-todo-detail')
 @UseElement(AppLayout)
-export class TodoDetailsPage extends HTMLElement implements WebComponentLifecycle {
+export class TodoDetailsPage extends HTMLElement implements Lifecycle {
 
     constructor(
         protected todoService: TodoService,
