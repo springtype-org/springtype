@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import '@springtype/springtype-incubator-gantt-chart/dist/GanttChart';
 

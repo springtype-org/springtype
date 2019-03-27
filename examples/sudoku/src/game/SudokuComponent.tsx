@@ -1,11 +1,16 @@
 import template from "./SudokuComponent.tpl";
 import style from "./SudokuComponent.style";
 import {
-    log,
-    warn,
+    Attribute,
     Element,
+    Field,
     Lifecycle,
-    Attribute, OnAttributeChange, Field, Style, Template, ShadowDOM,
+    log,
+    OnAttributeChange,
+    ShadowDOM,
+    Style,
+    Template,
+    warn,
 } from "@springtype/springtype-incubator-core";
 import {OnFieldChange} from "../../../../src/package/core";
 

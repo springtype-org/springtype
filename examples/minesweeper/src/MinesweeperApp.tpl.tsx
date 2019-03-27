@@ -1,6 +1,6 @@
 import {MinesweeperApp} from "./MinesweeperApp";
 import "./MinesweeperApp.scss"
-import {FieldComponent, FieldProp} from "./components/field/FieldComponent"
+import {FieldProp} from "./components/field/FieldComponent"
 
 export default (view: MinesweeperApp) => {
     const items = view.mineMatrix

@@ -1,4 +1,4 @@
-import {Translator, Translations, t, TranslationFormat} from "@springtype/springtype-incubator-i18n";
+import {TranslationFormat, Translations, Translator} from "@springtype/springtype-incubator-i18n";
 import {buffer, Component} from "@springtype/springtype-incubator-core";
 import {format} from "date-fns";
 

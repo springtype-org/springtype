@@ -1,14 +1,6 @@
-import {
-    log,
-    ActiveLogger,
-} from "@springtype/springtype-incubator-core";
+import {ActiveLogger, log,} from "@springtype/springtype-incubator-core";
 
-import {
-    StateEffect,
-    StateModel,
-    StateModelLifecycle,
-    StateReducer
-} from "@springtype/springtype-incubator-state";
+import {StateEffect, StateModel, StateModelLifecycle, StateReducer} from "@springtype/springtype-incubator-state";
 import {ITodoItem, ITodoState} from "../state/ITodoState";
 import {IRootState} from "../state/IRootState";
 import {getPhantomId} from "../function/getPhantomId";

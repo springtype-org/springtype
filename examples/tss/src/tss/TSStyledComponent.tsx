@@ -1,11 +1,14 @@
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
 import {
+    ActiveRoute,
     Attribute,
-    OnAttributeChange, ShadowDOM,
-    Style, Template,
     Element,
-    Lifecycle, ActiveRoute
+    Lifecycle,
+    OnAttributeChange,
+    ShadowDOM,
+    Style,
+    Template
 } from "@springtype/springtype-incubator-core";
 
 interface Props {

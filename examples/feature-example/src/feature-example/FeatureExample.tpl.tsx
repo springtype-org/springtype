@@ -1,7 +1,7 @@
 import {FeatureExample} from "./FeatureExample";
 // @ts-ignore
 import yoda from "./../assets/yoda-rtfm.png";
-import  "./FeatureExample.scss";
+import "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
 import {LoaderType} from "../../../svg-loader/src/svg-loader/SVGLoader";
 

@@ -1,12 +1,5 @@
-import {
-    Attribute,
-    Template,
-    UseElement,
-    Element,
-    Lifecycle
-} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Template, UseElement} from "@springtype/springtype-incubator-core";
 import template from "./FeatureExample.tpl";
-import {BurgerButton} from "../../../burger-button/src/burger-button/BurgerButton";
 import {BurgerExample} from "../components/burger/BurgerExample";
 
 interface BurgerButtonProps {

@@ -1,5 +1,5 @@
 import {BurgerButton, BurgerType} from "./BurgerButton";
-import  "./BurgerButton.scss";
+import "./BurgerButton.scss";
 
 const svgSword = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham1" viewBox="0 0 100 100"

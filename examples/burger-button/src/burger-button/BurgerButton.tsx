@@ -1,4 +1,4 @@
-import {Attribute, Template, Element, Lifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Template} from "@springtype/springtype-incubator-core";
 import template from "./BurgerButton.tpl";
 
 export interface BurgerButtonProps {

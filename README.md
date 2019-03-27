@@ -12,18 +12,11 @@ Pre-beta-release TODO list:
     - Refactor virtual DOM rendering code
     - FieldChange interface declaration and hooks?
     - Type hinting?
-    - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
     - Write more tests
     - @Test and @TestSuite to be working
-  - end-to-end-test
-    - @EndToEndTestSuite and @EndToEndTest want to be working
-    - Adapter for TestCafe
-    - Write end-2-end tests for web components
-  - example/minesweeper
-    - Use model and state
   - state
     - Allow to configure StoreConfig
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
@@ -32,6 +25,10 @@ Pre-beta-release TODO list:
   - material-ui
     - ripple
     - UI elements
+  - end-to-end-test
+    - @EndToEndTestSuite and @EndToEndTest want to be working
+    - Adapter for TestCafe
+    - Write end-2-end tests for web components
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app

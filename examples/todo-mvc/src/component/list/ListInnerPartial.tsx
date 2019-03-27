@@ -1,10 +1,5 @@
 import {IRootState} from "../../state/IRootState";
-import {
-    Partial,
-    ActiveRoute, VirtualElement,
-    Element,
-    Lifecycle, Style
-} from "@springtype/springtype-incubator-core";
+import {ActiveRoute, Element, Lifecycle, Partial, Style, VirtualElement} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";

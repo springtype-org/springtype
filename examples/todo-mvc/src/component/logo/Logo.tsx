@@ -1,9 +1,12 @@
 import {
-    Template,
     Element,
+    EventAttribute,
+    HOST_SELECTOR,
     Lifecycle,
+    ShadowAttachMode,
     ShadowDOM,
-    ShadowAttachMode, EventAttribute, Style, HOST_SELECTOR
+    Style,
+    Template
 } from "@springtype/springtype-incubator-core";
 import template from "./Logo.tpl";
 

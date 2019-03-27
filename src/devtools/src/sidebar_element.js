@@ -6,7 +6,7 @@ const getSelectedSpringTypeElement = () => {
     }
 
     if (Reflect.get($0.constructor, 'SHADOW')) {
-        data['@Shadow'] = Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE');
+        data['@Shadow'] = Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE') || true;
     }
 
     if (Reflect.get($0.constructor, 'TEMPLATE')) {
@@ -22,7 +22,12 @@ const getSelectedSpringTypeElement = () => {
     }
 
     if (Reflect.get($0.constructor, 'OBSERVED_ATTRIBUTES')) {
-        data['@Attribute'] = Reflect.get($0.constructor, 'OBSERVED_ATTRIBUTES');
+        data['@Attribute'] = Reflect.get($0.constructor, 'OBSERVED_ATTRIBUTES') || [];
+
+        // show attribute values
+        for (let i=0; i<data['@Attribute'].length; i++) {
+            data[data['@Attribute'][i]] = $0[data['@Attribute'][i]];
+        }
     }
 
     if (typeof Reflect.get($0.constructor, 'STYLE') === 'function') {
@@ -30,14 +35,14 @@ const getSelectedSpringTypeElement = () => {
     }
 
     if (Reflect.get($0, 'VIRTUAL_ELEMENT')) {
-        data['virtualElement'] = Reflect.get($0, 'VIRTUAL_ELEMENT');
+        data['$virtualElement'] = Reflect.get($0, 'VIRTUAL_ELEMENT');
     }
 
     if (Reflect.get($0, 'MAPPED_STATE')) {
-        data['mappedState'] = Reflect.get($0, 'MAPPED_STATE');
+        data['$mappedState'] = Reflect.get($0, 'MAPPED_STATE');
     }
 
-    data['instance'] = $0;
+    data['$instance'] = $0;
 
     // SpringType Element data
     window.$ste = data;
@@ -47,10 +52,7 @@ const getSelectedSpringTypeElement = () => {
 
 chrome.devtools.panels.elements.createSidebarPane("SpringType Element", (sidebar) => {
 
-    const updateElementProperties = (element) => {
-
-        alert($0);
-
+    const updateElementProperties = () => {
         sidebar.setExpression("(" + getSelectedSpringTypeElement.toString() + ")()", 'SpringType Element');
     };
 

@@ -1,8 +1,8 @@
-import {UseElement, Element, Lifecycle, Style} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Style, UseElement} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../component/list/ListInnerPartial";
 import {AppLayout} from "../component/layout/AppLayout";
-import {Translate, t} from "@springtype/springtype-incubator-i18n";
+import {t, Translate} from "@springtype/springtype-incubator-i18n";
 import {style} from "./TodoListPage.style";
 
 interface TodoListLocalState {

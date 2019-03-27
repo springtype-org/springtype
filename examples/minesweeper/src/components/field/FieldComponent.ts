@@ -1,10 +1,4 @@
-import {
-    Attribute,
-    Field,
-    OnAttributeChange, OnFieldChange, Template,
-    Element,
-    Lifecycle
-} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, OnAttributeChange, Template} from "@springtype/springtype-incubator-core";
 import "./FieldComponent.scss"
 import template from "./FieldComponent.tpl"
 

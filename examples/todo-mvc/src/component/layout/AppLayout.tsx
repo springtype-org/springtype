@@ -1,8 +1,4 @@
-import {
-    UseElement,
-    Element,
-    Lifecycle, Style, ActiveRoute
-} from "@springtype/springtype-incubator-core";
+import {ActiveRoute, Element, Lifecycle, Style, UseElement} from "@springtype/springtype-incubator-core";
 import {t, Translator} from "@springtype/springtype-incubator-i18n";
 import {Logo} from "../logo/Logo";
 

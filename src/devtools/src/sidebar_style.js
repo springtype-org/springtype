@@ -5,7 +5,7 @@ const getSelectedSpringTypeElementStyle = () => {
     if (typeof Reflect.get($0.constructor, 'STYLE') === 'function') {
 
         if (Reflect.get($0.constructor, 'SHADOW') &&
-            Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE') === 'open') {
+            (!Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE') || Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE') === 'open')) {
 
             Array.prototype.slice.apply($0.shadowRoot.styleSheets[0].cssRules)
                 .forEach(x => { styles[x.selectorText] = x.cssText });
