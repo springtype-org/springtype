@@ -1,43 +1,3 @@
-const getSelectedSpringTypeElement = () => {
-    const data = {__proto__: null};
-
-
-    if (Reflect.get($0.constructor, 'TAG_NAME')) {
-        data['@Element'] = Reflect.get($0.constructor, 'TAG_NAME');
-    }
-
-    if (Reflect.get($0.constructor, 'SHADOW')) {
-        data['@Shadow'] = true;
-    }
-
-    if (Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE')) {
-        data['@Shadow AttachMode'] = Reflect.get($0.constructor, 'SHADOW_ATTACH_MODE');
-    }
-
-    if (Reflect.get($0.constructor, 'TEMPLATE')) {
-        data['@Template'] = Reflect.get($0.constructor, 'TEMPLATE');
-    }
-
-    if (Reflect.get($0.constructor, 'COMPONENT_THEME')) {
-        data['@ComponentTheme'] = Reflect.get($0.constructor, 'COMPONENT_THEME');
-    }
-
-    if (Reflect.get($0.constructor, 'EVENT_ATTRIBUTES')) {
-        data['@EventAttribute list'] = Reflect.get($0.constructor, 'EVENT_ATTRIBUTES');
-    }
-
-    if (Reflect.get($0.constructor, 'OBSERVED_ATTRIBUTES')) {
-        data['@Attribute list'] = Reflect.get($0.constructor, 'OBSERVED_ATTRIBUTES');
-    }
-
-    if (typeof Reflect.get($0.constructor, 'STYLE') === 'function') {
-        data['@Style'] = Reflect.get($0.constructor, 'STYLE');
-    }
-
-    window.$st = data;
-    return data;
-};
-
 const getSelectedSpringTypeElementStyle = () => {
 
     const styles = {__proto__: null};
@@ -63,7 +23,7 @@ const getSelectedSpringTypeElementStyle = () => {
                             for (let j=0; j<cssRule.styleMap.size; j++) {
                                 styles[cssRule.selectorText][cssRule.style[j]] = cssRule.style[cssRule.style[j]];
                             }
-                    });
+                        });
                 }
             }
 
@@ -80,17 +40,6 @@ const getSelectedSpringTypeElementStyle = () => {
     }
     return styles
 };
-
-chrome.devtools.panels.elements.createSidebarPane("SpringType Element", (sidebar) => {
-
-    const updateElementProperties = () => {
-        sidebar.setExpression("(" + getSelectedSpringTypeElement.toString() + ")()", 'SpringType Element');
-    };
-
-    updateElementProperties();
-
-    chrome.devtools.panels.elements.onSelectionChanged.addListener(updateElementProperties);
-});
 
 chrome.devtools.panels.elements.createSidebarPane("SpringType Style", (sidebar) => {
 

@@ -39,7 +39,11 @@ export class ApplicationContext extends BeanFactory {
         
         switch (ApplicationContext.getRuntime()) {
             case ApplicationRuntime.WEBBROWSER:
-                return window;
+
+                if (!(window as any)['$st']) {
+                    (window as any)['$st'] = {};
+                }
+                return (window as any).$st;
         }
 
         // return local object context

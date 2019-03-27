@@ -2,12 +2,24 @@
   "name": "SpringType DevTools",
   "version": "0.1",
   "description": "SpringType extension to inspect and debug SpringType elements",
-  "devtools_page": "devtools.html",
+  "devtools_page": "main.html",
   "permissions": ["tabs"],
   "manifest_version": 2,
+  "minimum_chrome_version": "49",
+  "browser_action": {
+    "default_icon": {
+      "16": "icons/icon16_disabled.png",
+      "32": "icons/icon32_disabled.png",
+      "48": "icons/icon48_disabled.png",
+      "128": "icons/icon128_disabled.png"
+    },
+
+    "default_popup": "popups/disabled.html"
+  },
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "icons/icon16_development.png",
+    "32": "icons/icon32_development.png",
+    "48": "icons/icon48_development.png",
+    "128": "icons/icon128_development.png"
   }
 }

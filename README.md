@@ -8,14 +8,8 @@ Pre-beta-release TODO list:
     - use WeakMap instead of Reflect?
       - Reflector-classes instead of Reflect getter/setter functions
     - constants in one file per package
-  - instrumentation
-    - @MeasureTiming / measureTiming
-    - @LogInputAndOutput / logInputAndOutput
-  - reactive
-    - @Buffer(ms)
-    - @Delay(ms)
-    - @Memorize()
   - webcomponent    
+    - Refactor virtual DOM rendering code
     - FieldChange interface declaration and hooks?
     - Type hinting?
     - SSR/AOT: https://github.com/skatejs/skatejs/tree/master/packages/ssr
@@ -35,9 +29,9 @@ Pre-beta-release TODO list:
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
-   
   - material-ui
     - ripple
+    - UI elements
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app

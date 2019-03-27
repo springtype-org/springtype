@@ -1,16 +1,16 @@
 import {Translator, Translations, t, TranslationFormat} from "@springtype/springtype-incubator-i18n";
-import {Component} from "@springtype/springtype-incubator-core";
+import {buffer, Component} from "@springtype/springtype-incubator-core";
 import {format} from "date-fns";
 
 import * as englishTranslations from "./translation/en.json";
 import * as germanTranslations from "./translation/de.json";
 
-const dateFnsLocales = {
+const dateFnsLocales: any = {
     en: require('date-fns/locale/en'),
     de: require('date-fns/locale/de')
 };
 
-const localeId = 'de';
+let localeId = 'de';
 
 export const dateFormat = (date: any, dateFormat: string) => {
     return format(date, dateFormat, {
@@ -21,18 +21,25 @@ export const dateFormat = (date: any, dateFormat: string) => {
 @Translations('en', englishTranslations)
 @Translations('de', germanTranslations)
 @TranslationFormat('uppercase', (value: string) => (value || '').toUpperCase())
-@TranslationFormat('DD-MM-YYYY_HH:mm:ss', (value: string) => dateFormat(value, 'DD-MM-YYYY HH:mm:ss'))
+@TranslationFormat('DD-MM-YYYY_HH:mm:ss', (value: string) => dateFormat(value, 'dddd, DD-MM-YYYY HH:mm:ss'))
 @Component
 export class AppTranslationConfig {
 
     constructor(private translator: Translator) {
 
+        // this method is called 4 times by the framework internally.
+        // this is because of language detection and expected behaviour,
+        // but we want to aggregate those calls and listen to only the
+        // last one in a time-frame of 10ms. Thus, we buffer the event listener:
+        const onLanguageChange = buffer(
+            (language: string) => {
 
-        // keep translations in sync
-        translator.onLanguageChanged((language: string) => {
+                // keep translations in sync: when language changes, tell date-fns to change accordingly
+                localeId = language;
 
-            //debugger;
-            console.log('FIXME: @Buffer i18n language changed', language);
-        });
+            }, 10 /* ms */
+        );
+
+        translator.onLanguageChanged(onLanguageChange);
     }
 }

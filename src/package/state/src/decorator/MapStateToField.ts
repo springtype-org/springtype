@@ -25,6 +25,7 @@ export function MapStateToField(
                     argumentValue[key] = mappedState[key];
                 }
             }
+            return mappedState;
         };
 
         const createField = (argumentValue: any) => {
@@ -40,6 +41,8 @@ export function MapStateToField(
                         if (callReflowOnAttributeChange) {
                             (instance as any).flowOnAttributeChange(name, oldMappedState, value);
                             oldMappedState = value;
+
+                            Reflect.set((instance as any), 'MAPPED_STATE', value);
                         }
                     })
             });

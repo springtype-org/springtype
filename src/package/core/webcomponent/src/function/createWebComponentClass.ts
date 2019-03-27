@@ -22,6 +22,7 @@ import {
 import {SlotChildrenReflector} from "../reflector/SlotChildrenReflector";
 import {ShadowRootReflector} from "../reflector/ShadowRootReflector";
 import {getShadowForComponent} from "./getShadowForComponent";
+import {measureSpeed, memoize} from "../../../lang";
 
 export const createWebComponentClass = (tagName: string, injectableWebComponent: ComponentImpl<any>) => {
 
@@ -178,58 +179,6 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             return (<any>window).React.render(virtualElementOrString, 0, [], flowId);
         }
 
-        /*
-        updateEventListeners = (virtualElement: VirtualElement, domElement: Element, attributeName: string) => {
-
-            debugger;
-
-            const eventName = attributeName.substring(2, attributeName.length);
-            const currentEventListeners = ElementEventListenersReflector.getEventListenersOfType(domElement, eventName);
-            const eventListener = virtualElement.attributes[attributeName];
-
-            let eventListenerFound = 0;
-
-            // remove existing event listeners of this type
-            for (let l=0; l<currentEventListeners.length; l++) {
-
-                if (currentEventListeners[l] === eventListener) {
-                    eventListenerFound++;
-                }
-
-                // prevent duplicates
-                if (eventListenerFound > 1) {
-                    domElement.removeEventListener(eventName, currentEventListeners[l]);
-                }
-            }
-
-            // if not found, add
-            if (!eventListenerFound) {
-
-                console.log('no event listener found', eventName, eventListener);
-                domElement.addEventListener(eventName, eventListener);
-            }
-
-            ElementEventListenersReflector.setEventListenersOfType(domElement, eventName, [eventListener]);
-        };
-
-        updateAllAttributeEventListeners = (virtualElement: VirtualElement, domElement: Element) => {
-
-            if (virtualElement && virtualElement.attributes) {
-
-                const attributes: Array<Attr> = Array.from(domElement.attributes);
-
-                for (let a=0; a<attributes.length; a++) {
-
-                    if (attributes[a].name.startsWith('on')) {
-
-                        debugger;
-                        this.updateEventListeners(virtualElement, domElement, attributes[a].name);
-                    }
-                }
-            }
-        };
-        */
-
         cacheSlotChildren = (virtualElement: VirtualElement, domElement: Element) => {
 
             // in case a WebComponent is found, all virtual children are assigned to it's DOM element
@@ -314,8 +263,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             });
         };
 
-        // TODO: Fix: Event listener changes -> re-renders elements
-        mutateElementTree = (
+        mutateElementTree = memoize((
             domElements: NodeListOf<Element>,
             virtualElements: Array<VirtualElement|string>,
             parent: Element,
@@ -345,7 +293,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     this.mutateTextNode(parent, domElement, virtualElements[i] as string, flowId);
                 }
             }
-        };
+        }, [3 /* ignore flowId in memorization check */]);
 
         mutateElement = (parent: Element, domElement: Element, virtualElement: VirtualElement, flowId: number) => {
 
@@ -569,8 +517,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             }
         };
 
-        // TODO: Memoize
-        transformVirtualElementTree = (virtualElement: VirtualElement|string): VirtualElement|string => {
+        transformVirtualElementTree = measureSpeed('transformVirtualElementTree', (virtualElement: VirtualElement|string): VirtualElement|string => {
 
             if (typeof virtualElement === 'object') {
 
@@ -620,11 +567,11 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                 }
             }
             return virtualElement;
-        };
+        });
 
         doFlow() {
 
-            let virtualElements: Array<VirtualElement> = this.render();
+            const virtualElements: Array<VirtualElement> = this.render();
 
             if (virtualElements) {
 
@@ -633,14 +580,16 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     this as unknown as Element;
 
 
-                const transformed = this.transformVirtualElementTree({
+                const virtualElementRoot = this.transformVirtualElementTree({
                     name: tagName,
                     children: virtualElements
                 });
 
+                Reflect.set(this, 'VIRTUAL_ELEMENT', virtualElementRoot);
+
                 this.mutateElementTree(
                     root.childNodes as NodeListOf<Element>,
-                    transformed && typeof transformed === 'object' ? transformed.children : [],
+                    virtualElementRoot && typeof virtualElementRoot === 'object' ? virtualElementRoot.children : [],
                     root,
                     performance.now()
                 );
