@@ -4,7 +4,7 @@ import "./BurgerButton.scss";
 const svgSword = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham1" viewBox="0 0 100 100"
          width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40"/>
@@ -18,7 +18,7 @@ const svgSword = (view: BurgerButton) => (
 );
 const svgArrowLeft = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham ham2" viewBox="0 0 100 100" width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 70,33 h -40 c -6.5909,0 -7.763966,-4.501509 -7.763966,-7.511428 0,-4.721448 3.376452,-9.583771 13.876919,-9.583771 14.786182,0 11.409257,14.896182 9.596449,21.970818 -1.812808,7.074636 -15.709402,12.124381 -15.709402,12.124381"/>
@@ -32,7 +32,7 @@ const svgArrowLeft = (view: BurgerButton) => (
 );
 const svgClose = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham ham3" viewBox="0 0 100 100" width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 70,33 h -40 c -11.092231,0 11.883874,13.496726 -3.420361,12.956839 -0.962502,-2.089471 -2.222071,-3.282996 -4.545687,-3.282996 -2.323616,0 -5.113897,2.622752 -5.113897,7.071068 0,4.448316 2.080609,7.007933 5.555839,7.007933 2.401943,0 2.96769,-1.283974 4.166879,-3.282995 2.209342,0.273823 4.031294,1.642466 5.857227,-0.252538 v -13.005715 16.288404 h 7.653568"/>
@@ -47,7 +47,7 @@ const svgClose = (view: BurgerButton) => (
 const svgRoundConner = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham4" viewBox="0 0 100 100"
          width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 70,33 h -40 c 0,0 -8.5,-0.149796 -8.5,8.5 0,8.649796 8.5,8.5 8.5,8.5 h 20 v -20"/>
@@ -62,7 +62,7 @@ const svgRoundConner = (view: BurgerButton) => (
 const svgArrowLeftTurn = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate180 ham5" viewBox="0 0 100 100"
          width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 30,33 h 40 c 0,0 8.5,-0.68551 8.5,10.375 0,8.292653 -6.122707,9.002293 -8.5,6.625 l -11.071429,-11.071429"/>
@@ -76,7 +76,7 @@ const svgArrowLeftTurn = (view: BurgerButton) => (
 );
 const svgAwesome = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham ham6" viewBox="0 0 100 100" width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 30,33 h 40 c 13.100415,0 14.380204,31.80258 6.899646,33.421777 -24.612039,5.327373 9.016154,-52.337577 -12.75751,-30.563913 l -28.284272,28.284272"/>
@@ -92,7 +92,7 @@ const svgAwesome = (view: BurgerButton) => (
 const svgSwordCross = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham7" viewBox="0 0 100 100"
          width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 70,33 h -40 c 0,0 -6,1.368796 -6,8.5 0,7.131204 6,8.5013 6,8.5013 l 20,-0.0013"/>
@@ -108,7 +108,7 @@ const svgSwordCross = (view: BurgerButton) => (
 const svgTurn = (view: BurgerButton) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham8" viewBox="0 0 100 100"
          width={view.props.width}
-         onClick={view.onBurgerClick}>
+         onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"/>

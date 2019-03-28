@@ -11,7 +11,7 @@ export default (view: FeatureExample) =>
 
         <div>Burger Example</div>
         <burger-example/>
-        <button class="burger-button" onclick={view.onButtonClick} bind={{btn: view}}>
+        <button class="burger-button" onclick={view.onButtonClick} inject={{btn: view}}>
             {
                 view.props.menuItems.map((text) => (<b>{text}, </b>))
             }
@@ -43,7 +43,7 @@ export default (view: FeatureExample) =>
 
         <svg width="100%"
              height="100%"
-             xmlns$$xlink="http://www.w3.org/1999/xlink"
+             xmlnsXlink="http://www.w3.org/1999/xlink"
              xmlns="http://www.w3.org/2000/svg"
         >
             <style>
@@ -56,10 +56,10 @@ export default (view: FeatureExample) =>
             </defs>
 
             <text y="15">black</text>
-            <use x="70" y="10" xlink$$href="#Port"/>
+            <use x="70" y="10" xlinkHref="#Port"/>
             <text y="35">{view.props.fill}</text>
-            <use x="70" y="30" xlink$$href="#Port" className="classA"/>
+            <use x="70" y="30" xlinkHref="#Port" className="classA"/>
             <text y="55">blue</text>
-            <use x="70" y="50" xlink$$href="#Port" style="fill:blue"/>
+            <use x="70" y="50" xlinkHref="#Port" style="fill:blue"/>
         </svg>
     </div>

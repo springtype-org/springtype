@@ -25,12 +25,10 @@ export default (view: MWCButton) => {
             <st-slot />
         </st-fragment>;
 
-    const button: VirtualElement = <button class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
+    const button: VirtualElement = <button inject={{button: view}} class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
 
     if (view.disabled) {
         button.attributes.disabled = true;
     }
-
-    // TODO: ripple
     return button;
 }

@@ -59,13 +59,13 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
 
                     <app-list-inner-partial />
 
-                    <input bind={{textInputEl: this}}
+                    <input inject={{textInputEl: this}}
                            type="text"
                            id="newTodoText"
                            placeholder={t("what_todo_next")}
-                           onKeyUp={this.onNewTodoTextChange}/>
+                           onkeyup={this.onNewTodoTextChange}/>
 
-                    <a className="waves-effect waves-light btn" onClick={this.onAddItem}>
+                    <a className="waves-effect waves-light btn" onclick={this.onAddItem}>
                         {t('add')}
                     </a>
                 </div>

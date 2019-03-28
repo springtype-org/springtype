@@ -4,7 +4,7 @@ import {BurgerExample} from "../components/burger/BurgerExample";
 
 interface BurgerButtonProps {
     menuItems: Array<string>;
-    fill: string;
+    fill?: string;
 }
 
 @Element('feature-example')
@@ -34,7 +34,7 @@ export class FeatureExample extends HTMLElement implements Lifecycle {
     }
 
     // event listeners
-    onButtonClick = (evt: Event) => {
+    onButtonClick = (evt: MouseEvent) => {
 
         console.log('Burger button was clicked', evt, this.props.menuItems, evt.currentTarget);
         console.log('Access element via this.btn', this.btn);
@@ -44,4 +44,15 @@ export class FeatureExample extends HTMLElement implements Lifecycle {
 
         console.log('clicked on SVG button', evt.target);
     };
+}
+
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'feature-example': {
+                props: BurgerButtonProps
+            }
+        }
+    }
 }

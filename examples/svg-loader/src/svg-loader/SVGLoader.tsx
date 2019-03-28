@@ -2,8 +2,8 @@ import {Attribute, Element, Lifecycle, Template} from "@springtype/springtype-in
 import template from "./SVGLoader.tpl";
 
 export interface LoaderProps {
-    type: LoaderType;
-    width: number;
+    type?: LoaderType;
+    width?: number;
 }
 
 export enum LoaderType {
@@ -19,4 +19,14 @@ export class SVGLoader extends HTMLElement implements Lifecycle {
         type: LoaderType.CIRCLE,
         width: 100
     };
+}
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'svg-loader': {
+                props: LoaderProps
+            }
+        }
+    }
 }

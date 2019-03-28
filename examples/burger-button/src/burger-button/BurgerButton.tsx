@@ -3,9 +3,9 @@ import template from "./BurgerButton.tpl";
 
 export interface BurgerButtonProps {
     type: BurgerType;
-    width: number;
-    onClose: Function;
-    onOpen: Function;
+    width?: number;
+    onClose?: Function;
+    onOpen?: Function;
 }
 
 export enum BurgerType {
@@ -26,7 +26,7 @@ export class BurgerButton extends HTMLElement implements  Lifecycle {
     };
 
     // TODO: Rewrite: Never access DOM directly!
-    onBurgerClick = (evt: Event, element: any) => {
+    onBurgerClick = (evt: MouseEvent) => {
 
         this.open = !this.open;
         if (this.open) {
@@ -42,4 +42,14 @@ export class BurgerButton extends HTMLElement implements  Lifecycle {
         }
     };
 
+}
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'burger-button': {
+                props: BurgerButtonProps
+            }
+        }
+    }
 }

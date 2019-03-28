@@ -1,6 +1,7 @@
 import {Attribute, Element, Lifecycle} from "@springtype/springtype-incubator-core";
 import {t} from "../i18nextAdaper";
 import {TranslationOptions} from "i18next";
+import {Partial} from "../../../core/src/lang";
 
 @Element('st-t')
 export class Translate extends HTMLElement implements Lifecycle {
@@ -25,5 +26,13 @@ export class Translate extends HTMLElement implements Lifecycle {
 
     render() {
         return this.cachedTranslation;
+    }
+}
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'st-t': Partial<Translate>;
+        }
     }
 }

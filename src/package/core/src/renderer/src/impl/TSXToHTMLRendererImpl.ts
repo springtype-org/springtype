@@ -10,6 +10,7 @@ import {NamespaceAttribute} from "./tsx-to-html-renderer-impl/interface/Namespac
 import {getInternalRenderApi} from "../function/getInternalRenderApi";
 import {FlowIdReflector} from "../../../webcomponent/src/reflector/cross-instance/FlowIdReflector";
 import {DEFAULT_NAMESPACE_NAME} from "./tsx-to-html-renderer-impl/constants";
+import {CaseTransformer} from "../../../lang/src/string/CaseTransformer";
 
 @Component
 export class TSXToHTMLRendererImpl implements RendererImpl {
@@ -107,7 +108,9 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
                 return this._createDOMElementNS(namespace.value, namespaceTagName, nativeOptions);
             }
 
-            this.activeLogger.error("No namespace found for attribute " + namespaceAttribute.ns, namespaceAttribute);
+            debugger;
+
+            this.activeLogger.error("No namespace found for attribute ", namespaceAttribute.ns, namespaceAttribute);
 
             return this._createDOMElementNS(null, namespaceTagName, nativeOptions);
         }
@@ -170,14 +173,14 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
         FlowIdReflector.set(element, flowId);
 
         // 1. add all bindings
-        namespaceAttributes.bind.forEach((attribute: Attribute) => {
+        namespaceAttributes.injections.forEach((attribute: Attribute) => {
 
             const scope: any = attribute.value;
 
-            for (let bindName in scope) {
-                if (scope.hasOwnProperty(bindName)) {
-                    const view = scope[bindName];
-                    view[bindName] = element;
+            for (let injectionFieldName in scope) {
+                if (scope.hasOwnProperty(injectionFieldName)) {
+                    const view = scope[injectionFieldName];
+                    view[injectionFieldName] = element;
                 }
             }
         });

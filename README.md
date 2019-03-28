@@ -3,11 +3,16 @@
 Pre-beta-release TODO list:
 
 - Modules:
+  - devtools
+    - production mode support
   - general
-    - production build (double framework?); runtime error?
+    - production mode switch
+    - production build size (double framework include? pre-build core?)
+    - why does mvc not work in production?
+    - why does "disabled" attribute not work in production mode?!
   - webcomponent
+    - allow attribute "shadow" to override @ShadowDOM at runtime?
     - FieldChange interface declaration and hooks?
-    - Type hinting?
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
     - Split tests
@@ -20,8 +25,7 @@ Pre-beta-release TODO list:
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
   - material-ui
-    - ripple
-    - UI elements
+    - More UI elements
   - end-to-end-test
     - @EndToEndTestSuite and @EndToEndTest want to be working
     - Adapter for TestCafe

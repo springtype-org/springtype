@@ -10,6 +10,7 @@ import {
 } from "@springtype/springtype-incubator-core";
 
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
+import {Partial} from "../../core/src/lang";
 
 @Element('st-router-outlet')
 @UseElement(ErrorMessage)
@@ -58,5 +59,13 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
             return this.component;
         }
         return <st-error-message message={"ERROR (RouterOutlet): No component found for route!"} /> as VirtualElement;
+    }
+}
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'st-router-outlet': Partial<RouterOutlet>;
+        }
     }
 }

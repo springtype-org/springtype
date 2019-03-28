@@ -1,6 +1,14 @@
-import {Attribute, Element, Lifecycle, Style, Template} from "@springtype/springtype-incubator-core";
+import {
+    Attribute,
+    Element,
+    Lifecycle,
+    Style,
+    Template
+} from "@springtype/springtype-incubator-core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
+import {MDCRipple} from '@material/ripple';
+import {Partial} from "../../../../core/src/lang";
 
 @Element('mwc-button')
 @Template(template)
@@ -23,6 +31,9 @@ export class MWCButton extends HTMLElement implements Lifecycle {
     disabled = false;
 
     @Attribute
+    ripple = true;
+
+    @Attribute
     'trailing-icon' = false;
 
     @Attribute
@@ -30,4 +41,26 @@ export class MWCButton extends HTMLElement implements Lifecycle {
 
     @Attribute
     label = '';
+
+    constructor(
+        // forward-referenced binding and DI (@see template bind={{...}} on <button>)
+        protected button: HTMLButtonElement
+    ) {
+        super();
+    }
+
+    onFlow(initial: boolean) {
+
+        if (initial && this.ripple) {
+            MDCRipple.attachTo(this.button);
+        }
+    }
+}
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'mwc-button': Partial<MWCButton>;
+        }
+    }
 }

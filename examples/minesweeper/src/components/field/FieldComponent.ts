@@ -1,6 +1,7 @@
 import {Attribute, Element, Lifecycle, OnAttributeChange, Template} from "@springtype/springtype-incubator-core";
 import "./FieldComponent.scss"
 import template from "./FieldComponent.tpl"
+import {Partial} from "../../../../../src/package/core/src/lang";
 
 export interface Neighbors {
     all: number[]
@@ -103,6 +104,15 @@ export class FieldComponent extends HTMLElement implements Lifecycle {
             case 0:
             default:
                 return '';
+        }
+    }
+}
+
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'sw-field': Partial<FieldComponent>;
         }
     }
 }

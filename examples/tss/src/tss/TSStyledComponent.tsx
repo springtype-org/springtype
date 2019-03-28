@@ -44,7 +44,7 @@ export class TSStyledComponent extends HTMLElement implements Lifecycle {
         console.log('programmatic interception 2');
     }
 
-    onClick = () => {
+    onClick = (evt: MouseEvent) => {
         this.activeRoute.refresh();
     }
 }

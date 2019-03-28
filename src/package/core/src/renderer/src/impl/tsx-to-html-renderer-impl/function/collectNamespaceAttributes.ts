@@ -1,7 +1,9 @@
 import {Namespace} from "../interface/Namespace";
 import {NamespaceAttributesMap} from "../interface/NamespaceAttributesMap";
 import {Attribute} from "../interface/Attribute";
-import {DEFAULT_NAMESPACE_DELIMITER, DEFAULT_NAMESPACE_NAME, PROPERTY_BIND_VARIABLE} from "../constants";
+import {DEFAULT_NAMESPACE_DELIMITER, DEFAULT_NAMESPACE_NAME, DOM_ELEMENT_INJECT_ATTRIBUTE_NAME} from "../constants";
+import {CaseTransformer} from "../../../../../lang/src/string/CaseTransformer";
+import {parseAttributeNS} from "./parseAttributeNS";
 
 export const collectNamespaceAttributes = (attributes: Object, knownNamespaces: Array<Namespace>): NamespaceAttributesMap => {
 
@@ -24,22 +26,34 @@ export const collectNamespaceAttributes = (attributes: Object, knownNamespaces: 
 
     // 1.1 get namespace values
     const xmlNs = knownNamespaces.concat(
-        rawXmlNs.map((attribute: Attribute): Attribute => ({
-            name: attribute.name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s).pop() || '',
-            value: attribute.value
-        }))
-        .filter((attrib) => !!attrib.name)
+
+        rawXmlNs
+            .map((attribute) => {
+                if (parseAttributeNS(attribute.name).found) {
+                    return {
+                        name: CaseTransformer.camelCaseToColonCase(attribute.name)
+                            .split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s).pop() || '',
+                        value: attribute.value
+                    };
+                } else {
+                    return {
+                        name: attribute.name.split(DEFAULT_NAMESPACE_DELIMITER).filter(s => !!s).pop() || '',
+                        value: attribute.value
+                    };
+                }
+            })
+            .filter((attrib) => !!attrib.name)
     );
 
     collectedNamespaceAttributes = collectedNamespaceAttributes.concat(rawXmlNs);
 
-    // 3. filter all bindings
-    const bind = transformedAttributes
+    // 3. filter all DOM element injections
+    const injections = transformedAttributes
         .filter(e => collectedNamespaceAttributes.indexOf(e) < 0)
         .filter((attribute) =>
-            PROPERTY_BIND_VARIABLE === attribute.name);
+            DOM_ELEMENT_INJECT_ATTRIBUTE_NAME === attribute.name);
 
-    collectedNamespaceAttributes = collectedNamespaceAttributes.concat(bind);
+    collectedNamespaceAttributes = collectedNamespaceAttributes.concat(injections);
 
     // 4. filter all events
     let event = transformedAttributes
@@ -71,7 +85,7 @@ export const collectNamespaceAttributes = (attributes: Object, knownNamespaces: 
     collectedNamespaceAttributes = collectedNamespaceAttributes.concat(html);
 
     return {
-        bind: bind,
+        injections: injections,
         xmlNs: xmlNs,
         event: event.map(
             (attribute: Attribute) =>

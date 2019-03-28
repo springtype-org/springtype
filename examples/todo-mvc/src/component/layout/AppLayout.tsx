@@ -19,10 +19,9 @@ export class AppLayout extends HTMLElement implements Lifecycle {
         super();
     }
 
+    onLogoClick(evt: Event) {
 
-    onLogoClick(logo: Logo) {
-
-        console.log('onLogoClick', logo);
+        console.log('onLogoClick', evt);
     }
 
     setLanguage = (language: string) => {
@@ -37,19 +36,19 @@ export class AppLayout extends HTMLElement implements Lifecycle {
     render() {
 
         return <st-fragment>
-            <div style="text-align: center;">
+            <div style="margin-top: 20px">
                 <app-logo onclick={this.onLogoClick} />
             </div>
             <st-slot name="children">
                 Did you forget to provide some CDATA content in the component that uses {"<app-layout>"}?
             </st-slot>
-
+ 
             <div style="margin-top: 20px">
                 <a className="waves-effect waves-light btn"
                    onclick={() => this.setLanguage('de')}>{t('german')}</a>
 
                 <a className="waves-effect waves-light btn"
-                   onClick={() => this.setLanguage('en')}>{t('english')}</a>
+                   onclick={() => this.setLanguage('en')}>{t('english')}</a>
             </div>
 
             <st-slot class="copyright-footer" name="copyright">

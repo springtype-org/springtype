@@ -1,11 +1,15 @@
 import {NamespaceAttribute} from "../interface/NamespaceAttribute";
 import {DEFAULT_NAMESPACE_DELIMITER} from "../constants";
+import {CaseTransformer} from "../../../../../lang";
 
-export const parseAttributeNS = (namespace: string): NamespaceAttribute => {
+// TODO: Suppport all namespace indicator attributes!
+const NS_INDICATOR_ATTRIBUTES = ['xmlnsXlink', 'xmlnsSvgjs', 'xlinkHref'];
 
-    if (!!namespace) {
+export const parseAttributeNS = (name: string): NamespaceAttribute => {
 
-        const nsParts = namespace.split(DEFAULT_NAMESPACE_DELIMITER)
+    if (!!name && NS_INDICATOR_ATTRIBUTES.indexOf(name) > -1) {
+
+        const nsParts = CaseTransformer.camelCaseToColonCase(name).split(DEFAULT_NAMESPACE_DELIMITER)
             .filter(nsPart => !!nsPart);
 
         if (nsParts.length == 2) {
@@ -20,6 +24,6 @@ export const parseAttributeNS = (namespace: string): NamespaceAttribute => {
 
     return {
         found: false,
-        name: namespace
+        name: name
     };
 };
