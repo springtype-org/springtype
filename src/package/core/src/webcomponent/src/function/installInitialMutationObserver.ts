@@ -1,4 +1,4 @@
-import {transformElementToVirtualElement} from "../../../virtualdom";
+import {transformElementToVirtualElement, VirtualDOMMutator} from "../../../virtualdom";
 import {FlowIdReflector} from "../reflector/cross-instance/FlowIdReflector";
 import {isWebComponent} from "./isWebComponent";
 
@@ -35,7 +35,7 @@ export const installInitialMutationObserver = (instance: any, tagName: string) =
 
         if (initialChildren && initialChildren.length > 0) {
 
-            instance.cacheSlotChildren({
+            VirtualDOMMutator.cacheSlotChildren({
                 name: tagName,
                 children: initialChildren.map(element => transformElementToVirtualElement(element))
             }, instance);
