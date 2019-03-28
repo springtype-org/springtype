@@ -1,1 +1,0 @@
-export const COMPONENT_CONFIG = 'COMPONENT_CONFIG';

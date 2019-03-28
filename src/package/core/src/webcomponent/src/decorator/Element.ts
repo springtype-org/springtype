@@ -2,7 +2,7 @@
 import "../adapter/es5";
 
 import {WebComponentImpl} from "./../interface/WebComponentImpl";
-import {registerWebComponent} from "../function/registerWebComponent";
+import {decorateWebComponent} from "../function/decorateWebComponent";
 import {error} from '../../../logger';
 
 export function Element<WC extends WebComponentImpl<any>>(tagName: string): any {
@@ -18,6 +18,6 @@ export function Element<WC extends WebComponentImpl<any>>(tagName: string): any 
             error("The @Element ", webComponent, " tag name is not prefixed. It should look like: app-your-element-name, but it is: " + tagName);
         }
 
-        return registerWebComponent(tagName, webComponent);
+        return decorateWebComponent(tagName, webComponent);
     }
 }

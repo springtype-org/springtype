@@ -1,6 +1,5 @@
-import {getOnFieldChangeCallbacks} from "../function/getOnFieldChangeCallbacks";
 import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackRegistration";
-import {setOnFieldChangeCallbacks} from "../function/setOnFieldChangeCallbacks";
+import {getOnFieldChangeCallbacks, setOnFieldChangeCallbacks} from "../reflector/fieldChangeCallbacks";
 
 export function OnFieldChange(fieldName: string): any {
 

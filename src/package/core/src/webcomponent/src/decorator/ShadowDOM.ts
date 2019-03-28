@@ -1,17 +1,17 @@
 import {ShadowAttachMode} from "../../index";
-import {setShadowAndAttachModeForComponent} from "../function/setShadowAndAttachModeForComponent";
+import {decorateShadowAndAttachModeForComponent} from "../function/decorateShadowAndAttachModeForComponent";
 
 export function ShadowDOM(shadowAttachModeOrComponent?: any|ShadowAttachMode): any {
 
     if (typeof shadowAttachModeOrComponent === 'function') {
 
-        setShadowAndAttachModeForComponent(shadowAttachModeOrComponent);
+        decorateShadowAndAttachModeForComponent(shadowAttachModeOrComponent);
 
     } else {
 
         return (targetWebComponent: any) => {
 
-            setShadowAndAttachModeForComponent(targetWebComponent, shadowAttachModeOrComponent);
+            decorateShadowAndAttachModeForComponent(targetWebComponent, shadowAttachModeOrComponent);
 
             return targetWebComponent;
         }

@@ -1,1 +1,0 @@
-export const ATTRIBUTE_VALUE = "ATTRIBUTE_VALUE_";

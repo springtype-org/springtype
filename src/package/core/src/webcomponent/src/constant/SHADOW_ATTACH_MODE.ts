@@ -1,1 +1,0 @@
-export const SHADOW_ATTACH_MODE = 'SHADOW_ATTACH_MODE';

@@ -1,6 +1,6 @@
 const getApplicationContext = () => {
 
-    const data = {...window.$st.__SPRINGTYPE_APPLICATION_CONTEXT__};
+    const data = {...window.$st.APPLICATION_CONTEXT};
 
     data.__proto__ = null;
 

@@ -4,12 +4,8 @@ Pre-beta-release TODO list:
 
 - Modules:
   - general
-    - production build
-    - use WeakMap instead of Reflect?
-      - Reflector-classes instead of Reflect getter/setter functions
-    - constants in one file per package
-  - webcomponent    
-    - Refactor virtual DOM rendering code
+    - production build (double framework?); runtime error?
+  - webcomponent
     - FieldChange interface declaration and hooks?
     - Type hinting?
   - test
@@ -18,6 +14,7 @@ Pre-beta-release TODO list:
     - Write more tests
     - @Test and @TestSuite to be working
   - state
+    - .state property?
     - Allow to configure StoreConfig
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md

@@ -1,11 +1,12 @@
 import {ComponentReflector} from "./ComponentReflector";
 import {InjectionProfile} from './enum/InjectionProfile';
 import {InjectionStrategy} from "./enum/InjectionStrategy";
-import {PRIMITIVE_TYPE_NAMES} from "./constant/PRIMITIVE_TYPE_NAMES";
 import {ComponentImpl} from "./interface/ComponentImpl";
 import {resolveInjectionArgumentValue} from "./function/resolveInjectionArgumentValue";
 import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
+
+const PRIMITIVE_TYPE_NAMES = ['Number', 'Array', 'String', 'Boolean', 'RegExp', 'Date'];
 
 export class BeanFactory {
 

@@ -34,8 +34,8 @@ const getSelectedSpringTypeElement = () => {
         data['@Style'] = Reflect.get($0.constructor, 'STYLE');
     }
 
-    if (Reflect.get($0, 'VIRTUAL_ELEMENT')) {
-        data['$virtualElement'] = Reflect.get($0, 'VIRTUAL_ELEMENT');
+    if (Reflect.get($0, 'VIRTUAL_DOM')) {
+        data['$virtualDOM'] = Reflect.get($0, 'VIRTUAL_DOM');
     }
 
     if (Reflect.get($0, 'MAPPED_STATE')) {

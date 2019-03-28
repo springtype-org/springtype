@@ -1,8 +1,9 @@
-import {ActiveRoute, Element, Lifecycle, UseElement} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, UseElement} from "@springtype/springtype-incubator-core";
 import {Translate, Translations} from "@springtype/springtype-incubator-i18n";
 
 import * as englishTranslations from "./translation/en.json";
 import * as germanTranslations from "./translation/de.json";
+import {ActiveRoute} from "@springtype/springtype-incubator-router";
 
 interface NotFoundPageTranslationValues {
     siteUrl?: string;

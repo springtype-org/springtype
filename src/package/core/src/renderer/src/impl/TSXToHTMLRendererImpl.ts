@@ -8,7 +8,7 @@ import {Attribute} from "./tsx-to-html-renderer-impl/interface/Attribute";
 import {RuntimeDOMAttributeCacheMap} from "./tsx-to-html-renderer-impl/interface/RuntimeDOMAttributeCacheMap";
 import {NamespaceAttribute} from "./tsx-to-html-renderer-impl/interface/NamespaceAttribute";
 import {getInternalRenderApi} from "../function/getInternalRenderApi";
-import {FlowIdReflector} from "../../../webcomponent/src/reflector/FlowIdReflector";
+import {FlowIdReflector} from "../../../webcomponent/src/reflector/cross-instance/FlowIdReflector";
 import {DEFAULT_NAMESPACE_NAME} from "./tsx-to-html-renderer-impl/constants";
 
 @Component
@@ -55,6 +55,16 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
         document.createElement = getInternalRenderApi().render.bind(
             getInternalRenderApi().createElement.bind((getInternalRenderApi()))
         );
+    }
+
+    createNativeElement(virtualElementOrString: VirtualElement|string, flowId: number): Element {
+        return (<any>window).React.render(virtualElementOrString, 0, [], flowId);
+    }
+
+    createNativeTextNode(data: string, flowId: number): Node {
+        const textNode = document.createTextNode(data);
+        FlowIdReflector.set(textNode, flowId);
+        return textNode;
     }
 
     protected generateUniqueAttributeValueId = (): string => {

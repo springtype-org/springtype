@@ -1,4 +1,4 @@
-import {registerTheme} from "../function/registerTheme";
+import {setTheme} from "../context/theme";
 
 export function Theme(theme: any): any {
 
@@ -6,7 +6,7 @@ export function Theme(theme: any): any {
     if (!(typeof theme === 'function')) {
 
         return (target: any) => {
-            registerTheme(target, theme);
+            setTheme(target, theme);
             return target;
         }
     }

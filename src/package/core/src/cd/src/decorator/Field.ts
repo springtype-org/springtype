@@ -1,6 +1,6 @@
 import {registerForChangeDetection} from "../function/registerForChangeDetection";
-import {getOnFieldChangeCallbacks} from "../function/getOnFieldChangeCallbacks";
 import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackRegistration";
+import {getOnFieldChangeCallbacks} from "../reflector/fieldChangeCallbacks";
 
 export function Field(
     webComponentInstance: any,

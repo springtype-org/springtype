@@ -1,9 +1,9 @@
 import {LoggerImpl} from "./interface/LoggerImpl";
 import {Component} from "../../di";
-import {getLogger} from "./function/getLogger";
 import {LogFilterFunction} from "./interface/LogFilterFunction";
 import {LogLevel} from "./enum/LogLevel";
 import {filterByLogLevel} from "./function/filterByLogLevel";
+import {getLogger} from "./context/logger";
 
 /**
  * Logger to inject which uses the decorator-provided application logger (@AppLogger(...))

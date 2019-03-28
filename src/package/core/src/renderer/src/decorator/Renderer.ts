@@ -1,5 +1,5 @@
-import {setRenderer} from "../function/setRenderer";
 import {RendererConfig} from "../interface/RendererConfig";
+import {setRenderer} from "../context/renderer";
 
 export function Renderer(rendererConfig: RendererConfig): any {
 
@@ -12,3 +12,7 @@ export function Renderer(rendererConfig: RendererConfig): any {
         }
     }
 }
+
+
+@Renderer({})
+class DefaultRenderer {}

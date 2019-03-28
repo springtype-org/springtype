@@ -1,10 +1,8 @@
-import {getObservedAttributes} from "../function/getObservedAttributes";
 import {ComponentReflector} from "../../../di";
-import {setObservedAttributes} from "../function/setObservedAttributes";
-import {registerTransparentAttributeHooks} from "../function/registerTransparentAttributeHooks";
-import {defaultInitializeTransparentAttributes} from "../function/defaultInitializeTransparentAttributes";
-import {registerTransparentAttributeGetterAndSetter} from "../function/registerTransparentAttributeGetterAndSetter";
+import {decorateTransparentAttributeGetterAndSetter} from "../function/decorateTransparentAttributeGetterAndSetter";
 import {warn} from '../../../logger';
+import {getObservedAttributes, setObservedAttributes} from "../reflector/protoype/observedAttributes";
+import {initializeAttributes, registerAttributeHooks} from "../reflector/instance/attributes";
 
 export function Attribute(webComponentInstance: any, attributeName: string | symbol): any {
 
@@ -19,10 +17,10 @@ export function Attribute(webComponentInstance: any, attributeName: string | sym
 
     ComponentReflector.addInitializer(webComponentInstance.constructor, (instance: any) => {
 
-        defaultInitializeTransparentAttributes(instance, webComponentInstance.constructor, observedAttributes);
+        initializeAttributes(instance, webComponentInstance.constructor, observedAttributes);
 
-        registerTransparentAttributeGetterAndSetter(instance, webComponentInstance.constructor, observedAttributes);
+        decorateTransparentAttributeGetterAndSetter(instance, webComponentInstance.constructor, observedAttributes);
 
-        registerTransparentAttributeHooks(instance, observedAttributes);
+        registerAttributeHooks(instance, observedAttributes);
     });
 }

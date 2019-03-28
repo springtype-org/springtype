@@ -1,5 +1,5 @@
-import {getEventAttributes} from "./getEventAttributes";
 import {error} from "../../../logger";
+import {getEventAttributes} from "../reflector/protoype/eventAttributes";
 
 export const getAttributeEventListenerValue = (prototype: any, attributeName: string, attributeValueIdOrValue: any, scope: any): any => {
 

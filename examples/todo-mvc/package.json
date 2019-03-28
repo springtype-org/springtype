@@ -6,6 +6,7 @@
     "@springtype/springtype-incubator-core": "file:../../src/package/core",
     "@springtype/springtype-incubator-i18n": "file:../../src/package/i18n",
     "@springtype/springtype-incubator-state": "file:../../src/package/state",
+    "@springtype/springtype-incubator-router": "file:../../src/package/router",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "date-fns": "^1.30.1",

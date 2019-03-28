@@ -1,5 +1,4 @@
-import {getAttributeChangeCallbacks} from "../function/getAttributeChangeCallbacks";
-import {setAttributeChangeCallbacks} from "../function/setAttributeChangeCallbacks";
+import {getAttributeChangeCallbacks, setAttributeChangeCallbacks} from "../reflector/protoype/attributeChangeCallbacks";
 
 export function OnAttributeChange(attributeName: string): any {
 

@@ -1,7 +1,6 @@
 import template from "./TSStyledComponent.tpl";
 import style from "./TSStyledComponent.style";
 import {
-    ActiveRoute,
     Attribute,
     Element,
     Lifecycle,
@@ -10,6 +9,7 @@ import {
     Style,
     Template
 } from "@springtype/springtype-incubator-core";
+import {ActiveRoute} from "@springtype/springtype-incubator-router";
 
 interface Props {
     styleMode: StyleMode;

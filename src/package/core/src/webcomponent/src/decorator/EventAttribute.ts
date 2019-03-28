@@ -1,6 +1,5 @@
 import {Attribute} from "./Attribute";
-import {getEventAttributes} from "../function/getEventAttributes";
-import {setEventAttributes} from "../function/setEventAttributes";
+import {getEventAttributes, setEventAttributes} from "../reflector/protoype/eventAttributes";
 
 export function EventAttribute(webComponentInstance: any, attributeName: string | symbol): any {
 
@@ -11,5 +10,4 @@ export function EventAttribute(webComponentInstance: any, attributeName: string 
     const eventAttributes = getEventAttributes(webComponentInstance.constructor);
     eventAttributes.push(attributeName);
     setEventAttributes(webComponentInstance.constructor, eventAttributes);
-
 }

@@ -4,8 +4,6 @@ export * from "./src/lang/index";
 export * from "./src/logger/index";
 export * from "./src/virtualdom/index";
 export * from "./src/renderer/index";
-export * from "./src/router/index";
-export * from "./src/test/index";
 export * from "./src/tss/index";
 export * from "./src/cd/index";
 export * from "./src/webcomponent/index";

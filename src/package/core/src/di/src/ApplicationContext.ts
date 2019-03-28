@@ -1,7 +1,8 @@
 import {BeanFactory} from "./BeanFactory";
-import {APPLICATION_CONTEXT} from "./constant/APPLICATION_CONTEXT";
 import {ApplicationRuntime} from "./enum/ApplicationRuntime";
 import {ApplicationEnvironment} from "./enum/ApplicationEnvironment";
+
+const APPLICATION_CONTEXT = 'APPLICATION_CONTEXT';
 
 export class ApplicationContext extends BeanFactory {
 

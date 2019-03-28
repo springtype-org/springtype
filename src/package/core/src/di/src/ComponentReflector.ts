@@ -1,23 +1,22 @@
 import {InjectionStrategy} from "./enum/InjectionStrategy";
-import {COMPONENT} from "./constant/COMPONENT";
-import {COMPONENT_IS_MOCK_FLAG} from "./constant/COMPONENT_IS_MOCK_FLAG";
-import {COMPONENT_CONFIG} from "./constant/COMPONENT_CONFIG";
-import {COMPONENT_NAME} from "./constant/COMPONENT_NAME";
-import {COMPONENT_CONSTRUCTOR_PARAMETER_METADATA} from "./constant/COMPONENT_CONSTRUCTOR_PARAMETER_METADATA";
-import {RESOLVED_CONSTRUCTOR_ARGUMENTS} from "./constant/RESOLVED_CONSTRUCTOR_ARGUMENTS";
 import {ComponentImpl} from "./interface/ComponentImpl";
 import {BeanConfig} from "./interface/BeanConfig";
 import {INJECT_DECORATOR_METADATA_KEY} from "./constant/INJECT_DECORATOR_METADATA_KEY";
-import {COMPONENT_INITIALIZERS} from "./constant/COMPONENT_INITIALIZERS";
 import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
 import {createDefaultArgumentsInjectionMetadata} from "./function/createDefaultArgumentsInjectionMetadata";
 import {InjectionReference} from "./type/InjectionReference";
 import {BeanInitializer} from "./interface/BeanInitializer";
-import {CONSTRUCTOR_ARGUMENT_INITIALIZERS} from "./constant/CONSTRUCTOR_ARGUMENT_INITIALIZERS";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 import {ConstructorArgumentInitializerFunction} from "./interface/ConstructorArgumentInitializerFunction";
 
-// TODO: WeakMap
+const COMPONENT = 'COMPONENT';
+const COMPONENT_CONFIG = 'COMPONENT_CONFIG';
+const COMPONENT_CONSTRUCTOR_PARAMETER_METADATA = 'COMPONENT_CONSTRUCTOR_PARAMETER_METADATA';
+const COMPONENT_INITIALIZERS = 'COMPONENT_INITIALIZERS';
+const COMPONENT_IS_MOCK_FLAG = 'COMPONENT_IS_MOCK_FLAG';
+const COMPONENT_NAME = 'COMPONENT_NAME';
+const CONSTRUCTOR_ARGUMENT_INITIALIZERS = 'CONSTRUCTOR_ARGUMENT_INITIALIZERS';
+const RESOLVED_CONSTRUCTOR_ARGUMENTS = 'RESOLVED_CONSTRUCTOR_ARGUMENTS';
 
 /**
  * This class uses the Reflect.metadata standard API (polyfilled)

@@ -1,14 +1,6 @@
 import {measureSpeed} from "../function/measureSpeed";
 
-export const MeasureSpeed = (target: any, methodName: string, descriptor: PropertyDescriptor) => {
+export const MeasureSpeed = (target: any, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
 
-    if (typeof target !== 'function') {
-
-        return function (target: any, methodName: string, descriptor: PropertyDescriptor) {
-            descriptor.value = measureSpeed(methodName, target[methodName]);
-        };
-
-    } else {
-        descriptor.value = measureSpeed(methodName, target[methodName]);
-    }
+    descriptor.value = measureSpeed(target.constructor.name + '.' + methodName, target[methodName]);
 };

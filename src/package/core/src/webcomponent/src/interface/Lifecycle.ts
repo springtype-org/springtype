@@ -15,9 +15,6 @@ export interface Lifecycle extends HTMLElement {
     mount?(): void;
     onMount?(): void;
 
-    createNativeElement?(virtualElementOrString: VirtualElement|string): Element;
-    createNativeTextNode?(data: string): Node;
-
     onBeforeRender?(): boolean|void;
     render?(): VirtualElement|Array<VirtualElement>|string;
     onRender?(elementsRendered: Array<VirtualElement>): void;

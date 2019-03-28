@@ -1,11 +1,12 @@
 import {IRootState} from "../../state/IRootState";
-import {ActiveRoute, Element, Lifecycle, Partial, Style, VirtualElement} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Partial, Style, VirtualElement} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
 import {MapStateToField} from "@springtype/springtype-incubator-state";
 import {t} from "@springtype/springtype-incubator-i18n";
 import {style} from "./ListInnerPartial.style";
+import {ActiveRoute} from "@springtype/springtype-incubator-router";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;

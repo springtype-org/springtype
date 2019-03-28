@@ -1,5 +1,5 @@
-import {setLogger} from "../function/setLogger";
 import {LoggerConfig} from "../interface/LoggerConfig";
+import {setLogger} from "../context/logger";
 
 export function Logger(loggerConfig: LoggerConfig): any {
 

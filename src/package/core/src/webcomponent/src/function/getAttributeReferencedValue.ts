@@ -6,4 +6,4 @@ export const getAttributeReferencedValue = (attributeValueIdOrValue: string): an
     const attributeValue = getInternalRenderApi().attributeValueCache[attributeValueIdOrValue];
     delete getInternalRenderApi().attributeValueCache[attributeValueIdOrValue];
     return attributeValue || attributeValueIdOrValue;
-}
+};
