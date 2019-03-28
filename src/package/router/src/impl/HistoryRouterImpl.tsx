@@ -1,4 +1,11 @@
-import {Component, ComponentImpl, ErrorMessage, VirtualElement, WebComponentReflector} from "@springtype/springtype-incubator-core";
+import {
+    Component,
+    ComponentImpl,
+    ErrorMessage,
+    UseElement,
+    VirtualElement,
+    WebComponentReflector
+} from "@springtype/springtype-incubator-core";
 import {RouterOutlet} from "../RouterOutlet";
 import {RouterImpl} from "../interface/RouterImpl";
 import {TokenizedRoutes} from "../interface/TokenizedRoutes";
@@ -6,7 +13,6 @@ import {Routes} from "../interface/Routes";
 import {RouteDefinition} from "../interface/RouteDefinition";
 import {LocationChangeDecision} from "../interface/LocationChangeDecision";
 import {ROUTE_NOT_FOUND} from "../constant/ROUTE_NOT_FOUND";
-import {UseElement} from "@springtype/springtype-incubator-core";
 
 @Component
 @UseElement(ErrorMessage)

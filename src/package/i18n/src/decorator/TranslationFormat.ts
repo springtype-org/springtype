@@ -1,5 +1,5 @@
 import {ApplicationContext} from "@springtype/springtype-incubator-core";
-import {default as i18next, FormatFunction} from "i18next";
+import {FormatFunction} from "i18next";
 import {TranslationFormatterMap} from "../interface/TranslationFormatterMap";
 import {TRANSLATION_FORMAT} from "../constants";
 

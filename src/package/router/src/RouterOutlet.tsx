@@ -1,11 +1,15 @@
 import {ActiveRoute} from "./ActiveRoute";
-import {Attribute, Element, ErrorMessage, Lifecycle} from "@springtype/springtype-incubator-core";
+import {
+    Attribute,
+    Element,
+    ErrorMessage,
+    getRenderer,
+    Lifecycle,
+    UseElement,
+    VirtualElement
+} from "@springtype/springtype-incubator-core";
 
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
-import {Renderer} from "@springtype/springtype-incubator-core";
-import {UseElement} from "@springtype/springtype-incubator-core";
-import {getRenderer} from "@springtype/springtype-incubator-core";
-import {VirtualElement} from "@springtype/springtype-incubator-core";
 
 @Element('st-router-outlet')
 @UseElement(ErrorMessage)

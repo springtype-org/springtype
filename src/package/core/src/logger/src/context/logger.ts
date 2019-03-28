@@ -4,7 +4,7 @@ import {defaultLoggerConfig} from "../defaultLoggerConfig";
 import {getLoggerImplInstance} from "../function/getLoggerImplInstance";
 import {LoggerConfig} from "../..";
 
- const LOGGER = 'LOGGER';
+const LOGGER = 'LOGGER';
 
 export const getLogger = (): LoggerImpl => {
 

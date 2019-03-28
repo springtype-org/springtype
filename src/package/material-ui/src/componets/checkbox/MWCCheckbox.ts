@@ -1,4 +1,4 @@
-import {Attribute, Style, Element, Lifecycle, Template, EventAttribute} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, EventAttribute, Lifecycle, Style, Template} from "@springtype/springtype-incubator-core";
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
 

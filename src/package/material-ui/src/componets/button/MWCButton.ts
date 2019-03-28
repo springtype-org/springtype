@@ -1,4 +1,4 @@
-import {Attribute, Style, Template, Element, Lifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Style, Template} from "@springtype/springtype-incubator-core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 

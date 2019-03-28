@@ -1,9 +1,6 @@
-import {
-    transformToFlatElementList, VirtualDOMTransformer,
-    VirtualElement
-} from "../../../virtualdom";
+import {transformToFlatElementList, VirtualDOMTransformer, VirtualElement} from "../../../virtualdom";
 import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator, getTheme} from "../../../tss";
-import {ApplicationContext, ComponentReflector} from "../../../di";
+import {ComponentReflector} from "../../../di";
 import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
 import {getAttributeEventListenerValue} from "./getAttributeEventListenerValue";

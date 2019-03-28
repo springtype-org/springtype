@@ -1,9 +1,7 @@
-import {InitOptions} from "i18next";
-import i18next from "i18next";
+import i18next, {InitOptions} from "i18next";
 import LngDetector from "i18next-browser-languagedetector";
 import {LanguageDetectorOptions} from "../interface/LanguageDetectorOptions";
 import {DEFAULT_FALLBACK_LANGUAGES, DEFAULT_NAMESPACE} from "../defaults";
-import {ApplicationContext} from "@springtype/springtype-incubator-core";
 import {format} from "../function/format";
 
 // see https://www.i18next.com/overview/configuration-options
