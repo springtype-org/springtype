@@ -2,8 +2,20 @@ import {NamespaceAttribute} from "../interface/NamespaceAttribute";
 import {DEFAULT_NAMESPACE_DELIMITER} from "../constants";
 import {CaseTransformer} from "../../../../../lang";
 
-// TODO: Suppport all namespace indicator attributes!
-const NS_INDICATOR_ATTRIBUTES = ['xmlnsXlink', 'xmlnsSvgjs', 'xlinkHref'];
+const NS_INDICATOR_ATTRIBUTES = [
+    'xmlnsXlink',
+    'xmlnsSvgjs',
+    'xlinkHref',
+    'xlinkActuate',
+    'xlinkArcrole',
+    'xlinkRole',
+    'xlinkShow',
+    'xlinkTitle',
+    'xlinkType',
+    'xmlBase',
+    'xmlLang',
+    'xmlSpace',
+];
 
 export const parseAttributeNS = (name: string): NamespaceAttribute => {
 

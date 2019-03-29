@@ -24,7 +24,7 @@ export default (view: FieldComponent) => {
     return (
         <div className={`${view.field.open ? OPEN_CSS_KEY : CLOSED_CSS_KEY} ${view.getColor(view.field.amountMines)}`}
             //  style={view.field.bomb ? 'background-color: red;' : ''}
-             onContextMenu={(evt: any) => {
+             oncontextmenu={(evt: any) => {
                  evt.preventDefault();
                  if (!view.field.showBomb) {
                      if (!view.field.open) {
@@ -53,7 +53,7 @@ export default (view: FieldComponent) => {
                      }
                  }
              }
-             onClick={() => {
+             onclick={() => {
 
                  if (!view.field.showBomb) {
                      if (view.field.open || view.field.flag) {

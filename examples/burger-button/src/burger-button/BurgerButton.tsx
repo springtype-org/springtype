@@ -15,7 +15,6 @@ export enum BurgerType {
 @Element('burger-button')
 @Template(template)
 export class BurgerButton extends HTMLElement implements  Lifecycle {
-    open = false;
 
     @Attribute
     public props: BurgerButtonProps = {
@@ -25,23 +24,23 @@ export class BurgerButton extends HTMLElement implements  Lifecycle {
         onOpen: () => {}
     };
 
-    // TODO: Rewrite: Never access DOM directly!
+    @Attribute
+    public isOpen: boolean = false;
+
     onBurgerClick = (evt: MouseEvent) => {
 
-        this.open = !this.open;
-        if (this.open) {
-            evt.currentTarget!.classList.add('active');
+        this.isOpen = !this.isOpen;
+
+        if (this.isOpen) {
             if (this.props.onOpen) {
                 this.props.onOpen();
             }
         } else {
-            evt.currentTarget!.classList.remove('active');
             if (this.props.onClose) {
                 this.props.onClose();
             }
         }
     };
-
 }
 
 declare global {

@@ -2,7 +2,7 @@ import {BurgerButton, BurgerType} from "./BurgerButton";
 import "./BurgerButton.scss";
 
 const svgSword = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham1" viewBox="0 0 100 100"
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham hamRotate ham1 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100"
          width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
@@ -17,7 +17,7 @@ const svgSword = (view: BurgerButton) => (
     </svg>
 );
 const svgArrowLeft = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham ham2" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham ham2 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100" width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
             className="line top"
@@ -31,7 +31,7 @@ const svgArrowLeft = (view: BurgerButton) => (
     </svg>
 );
 const svgClose = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham ham3" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham ham3 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100" width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
             className="line top"
@@ -45,7 +45,7 @@ const svgClose = (view: BurgerButton) => (
     </svg>
 );
 const svgRoundConner = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham4" viewBox="0 0 100 100"
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham hamRotate ham4 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100"
          width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
@@ -60,7 +60,7 @@ const svgRoundConner = (view: BurgerButton) => (
     </svg>
 );
 const svgArrowLeftTurn = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate180 ham5" viewBox="0 0 100 100"
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham hamRotate180 ham5 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100"
          width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
@@ -75,7 +75,7 @@ const svgArrowLeftTurn = (view: BurgerButton) => (
     </svg>
 );
 const svgAwesome = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham ham6" viewBox="0 0 100 100" width={view.props.width}
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham ham6 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100" width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
             className="line top"
@@ -90,7 +90,7 @@ const svgAwesome = (view: BurgerButton) => (
 );
 
 const svgSwordCross = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham7" viewBox="0 0 100 100"
+    <svg xmlns="http://www.w3.org/2000/svg" className={"ham hamRotate ham7 " + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100"
          width={view.props.width}
          onclick={view.onBurgerClick}>
         <path
@@ -106,9 +106,9 @@ const svgSwordCross = (view: BurgerButton) => (
 );
 
 const svgTurn = (view: BurgerButton) => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="ham hamRotate ham8" viewBox="0 0 100 100"
-         width={view.props.width}
-         onclick={view.onBurgerClick}>
+    <svg xmlns="http://www.w3.org/2000/svg" className={'ham hamRotate ham8 ' + (view.isOpen ? 'active' : '')} viewBox="0 0 100 100"
+                                              width={view.props.width}
+                                              onclick={view.onBurgerClick}>
         <path
             className="line top"
             d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"/>

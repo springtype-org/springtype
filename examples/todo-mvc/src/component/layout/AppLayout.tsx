@@ -36,7 +36,7 @@ export class AppLayout extends HTMLElement implements Lifecycle {
     render() {
 
         return <st-fragment>
-            <div style="margin-top: 20px">
+            <div style="margin-top: 20px; text-align: center">
                 <app-logo onclick={this.onLogoClick} />
             </div>
             <st-slot name="children">

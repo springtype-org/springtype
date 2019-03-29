@@ -72,10 +72,10 @@ export class ListInnerPartial extends HTMLElement implements Lifecycle {
                         return <li key={todo.id} onclick={onListItemClick} class="todo-item">
                             {input}
                             <span
-                                onClick={onDoneToggleClick}/>
+                                onclick={onDoneToggleClick}/>
                             <div class="todo-item-text">{text}</div>
                             <a class="waves-effect waves-light btn"
-                               onClick={onRemoveClick}>{t('remove')}</a>
+                               onclick={onRemoveClick}>{t('remove')}</a>
                         </li>
                     }
                 )
