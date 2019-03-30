@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "moduleResolution": "node",
+    "module": "es2015",
+    "outDir": "dist",
+    "strict": true,
+    "declaration": true,
+    "noEmit": false,
+    "rootDir": ".",
+    "jsx": "react",
+    "jsxFactory": "ActiveRenderer.createElement",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
+    "lib": [
+      "dom",
+      "es2017"
+    ],
+    "types": ["reflect-metadata"]
+  },
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

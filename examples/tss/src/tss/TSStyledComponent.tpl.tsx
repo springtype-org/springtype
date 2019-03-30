@@ -1,4 +1,5 @@
 import {TSStyledComponent} from "./TSStyledComponent";
+import {ActiveRenderer} from '@springtype/springtype-incubator-core';
 
 export default (view: TSStyledComponent) =>
     <div>

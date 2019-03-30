@@ -2,6 +2,7 @@ import {FeatureExampleApp} from "./FeatureExampleApp";
 import {BurgerType} from "../../burger-button/src/burger-button/BurgerButton";
 import "./clock.scss"
 import "./clockScript.js"
+import {ActiveRenderer} from '@springtype/springtype-incubator-core';
 
 export default (view: FeatureExampleApp) =>
 

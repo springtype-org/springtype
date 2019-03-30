@@ -1,4 +1,4 @@
-import {Element, Lifecycle, Template} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Template, Partial} from "@springtype/springtype-incubator-core";
 import template from "./BurgerExample.tpl";
 
 @Element('burger-example')
@@ -10,5 +10,13 @@ export class BurgerExample extends HTMLElement implements Lifecycle {
     }
 
     init(): void {
+    }
+}
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'burger-example': Partial<BurgerExample>;
+        }
     }
 }

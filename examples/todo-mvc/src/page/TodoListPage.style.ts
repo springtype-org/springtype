@@ -1,4 +1,8 @@
-export const style = () => ({
+import {TemplateStringStyleSheet} from "@springtype/springtype-incubator-core";
+
+export const style = (): TemplateStringStyleSheet => ({
+
+    // template string based styling
     '.todo-item': `
           cursor: pointer;
           background-color: #efefef;

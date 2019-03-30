@@ -1,0 +1,34 @@
+{
+  "name": "@springtype/springtype-incubator-i18n",
+  "version": "0.0.1",
+  "dependencies": {
+    "@springtype/springtype-incubator-core": "file:../core",
+    "@types/i18next": "^12.1.0",
+    "@types/node": "^11.10.5",
+    "i18next": "12.0.0",
+    "i18next-browser-languagedetector": "^3.0.1",
+    "reflect-metadata": "^0.1.12",
+    "ts-polyfill": "^3.3.3",
+    "tslib": "^1.9.3"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist node_modules",
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "MIT",
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
+  "devDependencies": {
+    "rimraf": "2.6.3",
+    "typescript": "^3.3.4000"
+  }
+}

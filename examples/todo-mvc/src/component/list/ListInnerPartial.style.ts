@@ -1,12 +1,16 @@
-export const style = () => ({
+import {TypedStyleSheet} from "@springtype/springtype-incubator-core";
+
+export const style = (): TypedStyleSheet => ({
+
     'app-list-inner-partial .btn': {
         marginRight: '10px',
-        marginTop: '19.5px'
+        // traditional style
+        'margin-top': '19.5px'
     },
 
     'app-list-inner-partial .todo-item': {
         height: '75px',
-        lineHeight: '75px',
+        'line-height': '75px',
         display: 'flex',
     },
 

@@ -1,0 +1,35 @@
+{
+  "name": "@springtype/springtype-incubator-material-ui",
+  "version": "0.0.1",
+  "dependencies": {
+    "@material/ripple": "^1.1.0",
+    "@springtype/springtype-incubator-core": "file:../core",
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^11.10.5",
+    "classnames": "^2.2.6",
+    "reflect-metadata": "^0.1.12",
+    "ts-polyfill": "^3.3.3",
+    "tslib": "^1.9.3"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist node_modules",
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "rimraf": "2.6.3",
+    "sass": "^1.17.2",
+    "typescript": "^3.3.4000"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

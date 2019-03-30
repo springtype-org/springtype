@@ -1,6 +1,7 @@
 import {MinesweeperApp} from "./MinesweeperApp";
 import "./MinesweeperApp.scss"
 import {FieldProp} from "./components/field/FieldComponent"
+import {ActiveRenderer} from '@springtype/springtype-incubator-core';
 
 export default (view: MinesweeperApp) => {
     const items = view.mineMatrix

@@ -3,10 +3,9 @@
   "version": "1.0.1",
   "description": "The real burger button as svg.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../../src/package/core",
+    "@springtype/springtype-incubator-core": "file:../../src/packages/core",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
-    "parcel-bundler": "^1.10.1",
     "tslib": "^1.9.3"
   },
   "scripts": {},
@@ -17,9 +16,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "^1.10.2",
+    "parcel": "^1.12.3",
     "sass": "^1.17.2",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.4000"
   },
   "browserslist": [
     "last 1 Chrome version"

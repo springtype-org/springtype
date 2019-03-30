@@ -2,16 +2,17 @@
 
 Pre-beta-release TODO list:
 
+Conventional Commits
+
 - Modules:
   - devtools
     - production mode support
   - general
     - production mode switch
-    - production build size (double framework include? pre-build core?)
-    - why does mvc not work in production?
     - why does "disabled" attribute not work in production mode?!
   - webcomponent
-    - allow attribute "shadow" to override @ShadowDOM at runtime?
+    - add initial rendering algorithm ("spark")
+    - use differential rendering algorithm ("graphmaster") only for 1+n 
     - FieldChange interface declaration and hooks?
   - test
     - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)

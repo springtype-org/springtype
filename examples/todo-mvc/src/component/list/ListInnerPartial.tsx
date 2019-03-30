@@ -83,3 +83,11 @@ export class ListInnerPartial extends HTMLElement implements Lifecycle {
         </ul>;
     }
 }
+
+declare global {
+    namespace JSX {
+        interface IntrinsicElements {
+            'app-list-inner-partial': Partial<ListInnerPartial>;
+        }
+    }
+}

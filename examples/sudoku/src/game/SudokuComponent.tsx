@@ -10,9 +10,9 @@ import {
     ShadowDOM,
     Style,
     Template,
+    OnFieldChange,
     warn,
 } from "@springtype/springtype-incubator-core";
-import {OnFieldChange} from "../../../../src/package/core";
 
 interface GameState {
     won: boolean;

@@ -1,5 +1,6 @@
 import {FieldComponent} from "./FieldComponent";
 import {ResourceIcons} from "./Resources";
+import {ActiveRenderer} from '@springtype/springtype-incubator-core';
 
 export const OPEN_CSS_KEY = "open";
 export const CLOSED_CSS_KEY = "closed";

@@ -3,15 +3,15 @@
   "version": "1.0.1",
   "description": "It shows a burger button to the world.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../../src/package/core",
+    "@springtype/springtype-incubator-core": "file:../../src/packages/core",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
-    "parcel-bundler": "^1.10.1",
     "tslib": "^1.9.3"
   },
   "scripts": {
-    "clean": "rm -rf dist && rm -rf .cache",
-    "start": "npx parcel src/index.html --no-cache",
+    "clean": "npx rimraf dist .cache",
+    "start": "npx parcel src/index.html",
+    "serve": "npx parcel serve src/index.html --public-url .",
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
   },
   "repository": {
@@ -21,9 +21,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "parcel": "^1.10.2",
+    "parcel": "^1.12.3",
     "sass": "^1.17.2",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.4000"
   },
   "browserslist": {
     "production": [

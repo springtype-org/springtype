@@ -1,0 +1,27 @@
+{
+  "name": "@springtype/springtype-incubator",
+  "version": "0.9.1",
+  "description": "It just works.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "scripts": {
+    "test": "lerna run test",
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "bootstrap": "lerna exec npm install",
+    "new-version": "lerna version --conventional-commits --yes",
+    "diff": "lerna diff"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyr0/springtype-incubator/issues"
+  },
+  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "devDependencies": {
+    "lerna": "^3.13.1",
+    "typescript": "^3.3.4000"
+  }
+}

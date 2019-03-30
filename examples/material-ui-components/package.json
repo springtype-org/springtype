@@ -3,15 +3,17 @@
   "version": "1.0.1",
   "description": "TypeScript Style Sheets.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../../src/package/core",
-    "@springtype/springtype-incubator-material-ui": "file:../../src/package/material-ui",
+    "@springtype/springtype-incubator-core": "file:../../src/packages/core",
+    "@springtype/springtype-incubator-material-ui": "file:../../src/packages/material-ui",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"
   },
   "scripts": {
-    "start": "npx parcel src/index.html --no-cache",
-    "build": "npx parcel build src/index.html --no-cache --public-url ."
+    "clean": "npx rimraf dist .cache",
+    "start": "npx parcel src/index.html",
+    "serve": "npx parcel serve src/index.html --public-url .",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
   },
   "repository": {
     "type": "git",

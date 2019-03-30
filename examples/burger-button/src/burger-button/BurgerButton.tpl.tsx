@@ -1,4 +1,6 @@
 import {BurgerButton, BurgerType} from "./BurgerButton";
+import {ActiveRenderer} from '@springtype/springtype-incubator-core';
+
 import "./BurgerButton.scss";
 
 const svgSword = (view: BurgerButton) => (

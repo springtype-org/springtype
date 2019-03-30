@@ -2,13 +2,13 @@
     "compilerOptions": {
         "target": "es5",
         "moduleResolution": "node",
-        "module": "commonjs",
-        "importHelpers": true,
+        "module": "es2015",
         "strict": true,
         "declaration": true,
         "noEmit": true,
         "rootDir": ".",
-        "jsx": "preserve",
+        "jsx": "react",
+        "jsxFactory": "ActiveRenderer.createElement",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
@@ -17,5 +17,13 @@
             "dom",
             "es2017"
         ]
-    }
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        ".cache"
+    ],
+    "include": [
+        "src"
+    ]
 }

@@ -1,0 +1,34 @@
+{
+  "name": "@springtype/springtype-incubator-validate",
+  "version": "0.9.1",
+  "description": "It just works.",
+  "dependencies": {
+    "@springtype/springtype-incubator-core": "file:../core",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.10.5",
+    "reflect-metadata": "^0.1.12",
+    "ts-polyfill": "^3.3.3",
+    "tslib": "^1.9.3"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist node_modules",
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyr0/springtype-incubator/issues"
+  },
+  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "devDependencies": {
+    "rimraf": "2.6.3",
+    "typescript": "^3.3.4000"
+  }
+}
