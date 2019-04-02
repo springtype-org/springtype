@@ -9,9 +9,11 @@
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
   },
   "scripts": {
-    "clean": "npx rimraf dist node_modules",
+    "clean": "npx rimraf dist",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "npm run clean && tsc",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "test-with-coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register test/**/*.test.ts && nyc report"
   },
   "author": "",
   "license": "MIT",
@@ -20,12 +22,20 @@
   },
   "homepage": "https://github.com/kyr0/springtype-incubator#readme",
   "dependencies": {
-    "@types/node": "^11.10.5",
+    "@types/node": "^11.12.2",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
+    "@tbranyen/jsdom": "^13.0.0",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0",
     "rimraf": "2.6.3",
+    "source-map-support": "^0.5.11",
+    "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   }
 }

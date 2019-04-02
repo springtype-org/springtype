@@ -31,7 +31,7 @@ export default (view: MWCButton) => {
     const button: VirtualElement = <button inject={{button: view}} class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
 
     if (view.disabled) {
-        debugger;
+        //debugger;
         button.attributes.disabled = true;
     }
     return button;

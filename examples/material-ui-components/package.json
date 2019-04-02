@@ -10,9 +10,10 @@
     "tslib": "^1.9.3"
   },
   "scripts": {
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
     "clean": "npx rimraf dist .cache",
     "start": "npx parcel src/index.html",
-    "serve": "npx parcel serve src/index.html --public-url .",
+    "serve": "npx parcel serve src/index.html",
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
   },
   "repository": {

@@ -1,5 +1,5 @@
 import {IRootState} from "../../state/IRootState";
-import {Element, Lifecycle, Partial, Style, VirtualElement} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Partial, Style, VirtualElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
@@ -7,13 +7,14 @@ import {MapStateToField} from "@springtype/springtype-incubator-state";
 import {t} from "@springtype/springtype-incubator-i18n";
 import {style} from "./ListInnerPartial.style";
 import {ActiveRoute} from "@springtype/springtype-incubator-router";
+import {e2e} from "../../e2e";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;
 }
 
 @Style(style)
-@Element('app-list-inner-partial')
+@Element(e2e.element["app-list-inner-partial"])
 export class ListInnerPartial extends HTMLElement implements Lifecycle {
 
     constructor(

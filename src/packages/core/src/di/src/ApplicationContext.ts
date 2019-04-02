@@ -37,7 +37,9 @@ export class ApplicationContext extends BeanFactory {
     }
 
     static getRuntimeGlobalObject(): Object {
-        
+
+        // Note: maybe use globalThis someday
+
         switch (ApplicationContext.getRuntime()) {
             case ApplicationRuntime.WEBBROWSER:
 

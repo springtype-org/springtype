@@ -14,26 +14,23 @@ Conventional Commits
     - add initial rendering algorithm ("spark")
     - use differential rendering algorithm ("graphmaster") only for 1+n 
     - FieldChange interface declaration and hooks?
+    - collectNamespaceAttributes: Better ways?
   - test
-    - Fix mocha/chai based tests ("Set' only refers to a type, but is being used as a value here"?!)
-    - Split tests
-    - Write more tests
-    - @Test and @TestSuite to be working
+    - Impl. @Before and @After
+    - Proof injects working
   - state
     - .state property?
+    - @MapStateToField - instances -> WeakSet (memory leak!)
     - Allow to configure StoreConfig
     - Support for selectors: https://github.com/rematch/rematch/blob/master/plugins/select/README.md
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
   - material-ui
     - More UI elements
-  - end-to-end-test
-    - @EndToEndTestSuite and @EndToEndTest want to be working
-    - Adapter for TestCafe
-    - Write end-2-end tests for web components
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app
+  - 
 - Create beautiful next-gen SVG website using our own framework
 
 - Write tests (70 to 90% goal)

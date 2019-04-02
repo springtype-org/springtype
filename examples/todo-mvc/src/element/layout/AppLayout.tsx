@@ -1,4 +1,4 @@
-import {Element, Lifecycle, Style, UseElement, Partial} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Style, UseElement, Partial, ActiveRenderer} from "@springtype/springtype-incubator-core";
 import {t, Translator} from "@springtype/springtype-incubator-i18n";
 import {Logo} from "../logo/Logo";
 import {ActiveRoute} from "@springtype/springtype-incubator-router";
@@ -16,6 +16,7 @@ export class AppLayout extends HTMLElement implements Lifecycle {
 
     constructor(protected translator: Translator,
                 protected activeRoute: ActiveRoute) {
+
         super();
     }
 

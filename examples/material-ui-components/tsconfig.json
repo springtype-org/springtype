@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "moduleResolution": "node",
-        "module": "es2015",
+        "module": "commonjs",
         "importHelpers": true,
         "strict": true,
         "declaration": true,

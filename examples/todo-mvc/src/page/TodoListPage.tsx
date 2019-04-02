@@ -1,9 +1,10 @@
-import {Element, Lifecycle, Style, UseElement} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Style, UseElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
 import {TodoModel} from "../model/TodoModel";
-import {ListInnerPartial} from "../component/list/ListInnerPartial";
-import {AppLayout} from "../component/layout/AppLayout";
+import {ListInnerPartial} from "../element/list/ListInnerPartial";
+import {AppLayout} from "../element/layout/AppLayout";
 import {t, Translate} from "@springtype/springtype-incubator-i18n";
 import {style} from "./TodoListPage.style";
+import {e2e} from '../e2e';
 
 interface TodoListLocalState {
     newTodoItemText: string;
@@ -61,11 +62,11 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
 
                     <input inject={{textInputEl: this}}
                            type="text"
-                           id="newTodoText"
+                           id={e2e.page.TodoListPage.newTodoItemText}
                            placeholder={t("what_todo_next")}
                            onkeyup={this.onNewTodoTextChange}/>
 
-                    <a className="waves-effect waves-light btn" onclick={this.onAddItem}>
+                    <a className="waves-effect waves-light btn" id={e2e.page.TodoListPage.addButton} onclick={this.onAddItem}>
                         {t('add')}
                     </a>
                 </div>

@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "target": "es2015",
+        "target": "es5",
         "moduleResolution": "node",
-        "module": "es2015",
+        "module": "commonjs",
         "esModuleInterop": true,
         "importHelpers": true,
         "outDir": "dist",

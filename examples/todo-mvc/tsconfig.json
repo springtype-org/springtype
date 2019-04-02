@@ -2,13 +2,15 @@
     "compilerOptions": {
         "target": "es5",
         "moduleResolution": "node",
-        "module": "es2015",
+        "module": "commonjs",
         "importHelpers": true,
+        "esModuleInterop": true,
         "strict": true,
         "declaration": true,
         "noEmit": true,
         "rootDir": ".",
         "jsx": "react",
+        "resolveJsonModule": true,
         "jsxFactory": "ActiveRenderer.createElement",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
@@ -25,6 +27,6 @@
         ".cache"
     ],
     "include": [
-        "src"
+        "."
     ]
 }

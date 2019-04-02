@@ -1,4 +1,4 @@
-import {Element, Lifecycle, UseElement} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, UseElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
 import {Translate, Translations} from "@springtype/springtype-incubator-i18n";
 
 import * as englishTranslations from "./translation/en.json";

@@ -5,7 +5,6 @@
     "@springtype/springtype-incubator-core": "file:../core",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
-    "ts-polyfill": "^3.3.3",
     "tslib": "^1.9.3"
   },
   "main": "dist/index.js",
@@ -15,9 +14,10 @@
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
   },
   "scripts": {
-    "clean": "npx rimraf dist node_modules",
+    "clean": "npx rimraf dist",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "npm run clean && tsc",
+    "test": "mocha -r ts-node/register test/**/*.test.ts"
   },
   "author": "",
   "license": "MIT",
@@ -25,7 +25,13 @@
     "last 1 Chrome version"
   ],
   "devDependencies": {
+    "@tbranyen/jsdom": "^13.0.0",
     "rimraf": "2.6.3",
-    "typescript": "^3.3.4000"
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3.4000",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2"
   }
 }

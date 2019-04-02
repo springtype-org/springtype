@@ -114,7 +114,7 @@ export class HistoryRouterImpl implements RouterImpl {
                         ...resolvedComponentAndParams.params,
                         ...params,
                     },
-                    component: resolvedComponentAndParams.component,
+                    element: resolvedComponentAndParams.component,
                     route
                 } as LocationChangeDecision;
             }
@@ -126,14 +126,14 @@ export class HistoryRouterImpl implements RouterImpl {
 
             return {
                 route: ROUTE_NOT_FOUND,
-                component: resolvedComponentAndParams.component,
+                element: resolvedComponentAndParams.component,
                 params: resolvedComponentAndParams.params
             } as LocationChangeDecision;
         } else {
 
             return {
                 route: ROUTE_NOT_FOUND,
-                component: <st-error-message message={`No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_NOT_FOUND}")!`} />,
+                element: <st-error-message message={`No Web Component found for rendering this route. Please specify a route for ${realRoute.replace('#', '')} or ROUTE_WILDCARD("${ROUTE_NOT_FOUND}")!`} />,
                 params: {}
             } as LocationChangeDecision;
         }
@@ -165,7 +165,7 @@ export class HistoryRouterImpl implements RouterImpl {
         const params = (cmpOrDef as RouteDefinition).params || {};
 
         return {
-            component,
+            component: element,
             params
         };
     }

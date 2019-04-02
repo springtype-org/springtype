@@ -5,18 +5,21 @@
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../../src/packages/core",
     "@springtype/springtype-incubator-i18n": "file:../../src/packages/i18n",
-    "@springtype/springtype-incubator-state": "file:../../src/packages/state",
     "@springtype/springtype-incubator-router": "file:../../src/packages/router",
+    "@springtype/springtype-incubator-state": "file:../../src/packages/state",
+    "@springtype/springtype-incubator-test": "file:../../src/packages/test",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "date-fns": "^1.30.1",
     "materialize-css": "^1.0.0",
+    "testcafe": "^1.1.0",
     "tslib": "^1.9.3"
   },
   "scripts": {
-    "test": "ts-node test/service/TodoService.spec.ts",
-    "clean": "rm -rf dist",
-    "start": "npx parcel src/index.html --no-cache",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "e2e": "testcafe chrome e2e",
+    "clean": "npx rimraf dist .cache",
+    "start": "npx parcel src/index.html",
     "serve": "npx parcel serve src/index.html",
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
   },
@@ -29,7 +32,10 @@
   "devDependencies": {
     "parcel": "^1.12.3",
     "sass": "^1.17.3",
-    "typescript": "^3.3.4000"
+    "ts-node": "^7.0.1",
+    "mocha": "^6.0.2",
+    "typescript": "^3.4.1",
+    "rimraf": "2.6.3"
   },
   "browserslist": [
     "last 1 Chrome version"
