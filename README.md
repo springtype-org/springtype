@@ -5,11 +5,8 @@ Pre-beta-release TODO list:
 Conventional Commits
 
 - Modules:
-  - devtools
-    - production mode support
   - general
-    - production mode switch
-    - why does "disabled" attribute not work in production mode?!
+    - solve cyclic dep. & double source include
   - webcomponent
     - add initial rendering algorithm ("spark")
     - use differential rendering algorithm ("graphmaster") only for 1+n 

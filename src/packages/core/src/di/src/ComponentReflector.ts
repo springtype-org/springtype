@@ -1,13 +1,13 @@
 import {InjectionStrategy} from "./enum/InjectionStrategy";
 import {ComponentImpl} from "./interface/ComponentImpl";
 import {BeanConfig} from "./interface/BeanConfig";
-import {INJECT_DECORATOR_METADATA_KEY} from "./constant/INJECT_DECORATOR_METADATA_KEY";
 import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
 import {createDefaultArgumentsInjectionMetadata} from "./function/createDefaultArgumentsInjectionMetadata";
 import {InjectionReference} from "./type/InjectionReference";
 import {BeanInitializer} from "./interface/BeanInitializer";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 import {ConstructorArgumentInitializerFunction} from "./interface/ConstructorArgumentInitializerFunction";
+import {INJECT_DECORATOR_METADATA_KEY} from "./function/registerBean";
 
 const COMPONENT = 'COMPONENT';
 const COMPONENT_CONFIG = 'COMPONENT_CONFIG';

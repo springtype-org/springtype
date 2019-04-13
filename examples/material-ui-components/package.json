@@ -14,7 +14,7 @@
     "clean": "npx rimraf dist .cache",
     "start": "npx parcel src/index.html",
     "serve": "npx parcel serve src/index.html",
-    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
+    "build": "npx rimraf dist && cross-env NODE_ENV=production parcel build src/index.html --public-url ."
   },
   "repository": {
     "type": "git",

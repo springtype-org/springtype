@@ -1,39 +1,39 @@
 import {
-    Attribute,
+    Attribute, AttributeType,
     Element,
     Lifecycle,
     Style,
-    Template
+    Template,
+    Partial
 } from "@springtype/springtype-incubator-core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 import {MDCRipple} from '@material/ripple';
-import {Partial} from "../../../../core/src/lang";
 
 @Element('mwc-button')
 @Template(template)
 @Style(style)
 export class MWCButton extends HTMLElement implements Lifecycle {
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     raised = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     unelevated = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     outlined = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     dense = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     disabled = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     ripple = true;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     'trailing-icon' = false;
 
     @Attribute

@@ -2,7 +2,7 @@ import {ComponentImpl, VirtualElement} from "@springtype/springtype-incubator-co
 import {LocationChangeDecision} from "./LocationChangeDecision";
 
 export interface RouteDefinition {
-    component: VirtualElement|ComponentImpl<any>;
+    element: VirtualElement|ComponentImpl<any>;
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;
     params?: Object;
 }

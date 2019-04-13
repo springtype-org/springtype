@@ -1,5 +1,6 @@
 import {getAttributeChangeCallbacks} from "../protoype/attributeChangeCallbacks";
 import {AttributeChangeCallbackRegistration} from "../../interface/AttributeChangeCallbackRegistration";
+import {ATTRIBUTE_TRANSFORM_FN_NAME} from "../../..";
 
 const ATTRIBUTE_DEFAULT_INITIALIZED = 'ATTRIBUTE_DEFAULT_INITIALIZED';
 const ATTRIBUTE_VALUE = "ATTRIBUTE_VALUE_";
@@ -22,7 +23,9 @@ export const initializeAttributes = (instance: any, prototype: any, observedAttr
 
         if (!Reflect.get(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName))) {
 
-            setAttribute(instance, attributeName, instance[attributeName]);
+            const transformFn = Reflect.get(instance, ATTRIBUTE_TRANSFORM_FN_NAME + attributeName.toString());
+
+            setAttribute(instance, attributeName, transformFn ? transformFn(instance[attributeName]) : instance[attributeName]);
             executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
 
             Reflect.set(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName) as string, true);

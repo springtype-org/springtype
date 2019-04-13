@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-state",
-  "version": "0.0.1",
+  "version": "0.1.1",
+  "description": "Redux/Rematch based state management for SpringType.",
   "dependencies": {
     "@rematch/core": "1.1.0",
     "@rematch/immer": "1.0.2",
@@ -19,7 +20,8 @@
   "scripts": {
     "clean": "npx rimraf dist node_modules",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "publish": "npm publish --access public"
   },
   "author": "",
   "license": "MIT",

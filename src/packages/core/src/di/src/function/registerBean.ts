@@ -3,7 +3,8 @@ import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";
 import {ComponentImpl} from "../interface/ComponentImpl";
 import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
-import {INJECT_DECORATOR_METADATA_KEY} from "../constant/INJECT_DECORATOR_METADATA_KEY";
+
+export const INJECT_DECORATOR_METADATA_KEY = "@Inject";
 
 export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, beanConfig?: BeanConfig<T>) {
 

@@ -1,7 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-validate",
-  "version": "0.9.1",
-  "description": "It just works.",
+  "version": "0.1.1",
+  "description": "Validation for SpringType.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../core",
     "@types/mocha": "^5.2.6",
@@ -19,7 +19,8 @@
   "scripts": {
     "clean": "npx rimraf dist node_modules",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "publish": "npm publish --access public"
   },
   "author": "",
   "license": "MIT",

@@ -1,3 +1,4 @@
+export * from "./src/environment/index";
 export * from "./src/di/index";
 export * from "./src/hmr/index";
 export * from "./src/lang/index";

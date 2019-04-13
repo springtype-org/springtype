@@ -167,7 +167,6 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             }
 
             if (!cancelled && this.shouldAttributeChange(name, oldValue, newValue)) {
-
                 this.changeAttribute(name, attributeValue);
 
                 if (super.onAttributeChanged) {

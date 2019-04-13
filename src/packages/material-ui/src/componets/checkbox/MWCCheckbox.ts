@@ -1,20 +1,27 @@
-import {Attribute, Element, EventAttribute, Lifecycle, Style, Template} from "@springtype/springtype-incubator-core";
+import {
+    Attribute, AttributeType,
+    Element,
+    EventAttribute,
+    Lifecycle,
+    Style,
+    Template,
+    Partial
+} from "@springtype/springtype-incubator-core";
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
-import {Partial} from "../../../../core/src/lang";
 
 @Element('mwc-checkbox')
 @Template(template)
 @Style(style)
 export class MWCCheckbox extends HTMLElement implements Lifecycle {
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     checked = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     indeterminate = false;
 
-    @Attribute
+    @Attribute(AttributeType.BOOLEAN)
     disabled = false;
 
     @Attribute

@@ -1,6 +1,5 @@
 import {BeanFactory} from "./BeanFactory";
-import {ApplicationRuntime} from "./enum/ApplicationRuntime";
-import {ApplicationEnvironment} from "./enum/ApplicationEnvironment";
+import {ApplicationEnvironment, getRuntimeGlobalObject} from "../../environment";
 
 const APPLICATION_CONTEXT = 'APPLICATION_CONTEXT';
 
@@ -18,11 +17,11 @@ export class ApplicationContext extends BeanFactory {
     }
 
     static setGlobal(name: string|number|symbol, value: any): void {
-        (<any>ApplicationContext.getRuntimeGlobalObject())[name] = value;
+        (<any>getRuntimeGlobalObject())[name] = value;
     }
 
     static getGlobal(name: string|number|symbol): any {
-        return (<any>ApplicationContext.getRuntimeGlobalObject())[name];
+        return (<any>getRuntimeGlobalObject())[name];
     }
 
     static getInstance(): ApplicationContext {
@@ -34,31 +33,6 @@ export class ApplicationContext extends BeanFactory {
             ApplicationContext.setGlobal(APPLICATION_CONTEXT, globalContext);
         }
         return globalContext;
-    }
-
-    static getRuntimeGlobalObject(): Object {
-
-        // Note: maybe use globalThis someday
-
-        switch (ApplicationContext.getRuntime()) {
-            case ApplicationRuntime.WEBBROWSER:
-
-                if (!(window as any)['$st']) {
-                    (window as any)['$st'] = {};
-                }
-                return (window as any).$st;
-        }
-
-        // return local object context
-        return {};
-    }
-
-    static getRuntime(): ApplicationRuntime {
-
-        if (typeof window != 'undefined') {
-            return ApplicationRuntime.WEBBROWSER;
-        }
-        return ApplicationRuntime.NODE;
     }
 
     set(name: string|number|symbol, value: any) {

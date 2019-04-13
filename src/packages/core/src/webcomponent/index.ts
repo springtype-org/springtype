@@ -11,3 +11,5 @@ export * from "./src/decorator/Template";
 export * from "./src/interface/TemplateFunction";
 export * from "./src/decorator/ShadowDOM";
 export * from "./src/decorator/EventAttribute";
+export * from "./src/function/DOMAttributeValueTransformers";
+export * from "./src/enum/AttributeType";

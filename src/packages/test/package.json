@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-test",
-  "version": "0.0.1",
+  "version": "0.1.1",
+  "description": "Mocha/Chai test adapters for SpringType.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../core",
     "@types/node": "^11.10.5",
@@ -17,7 +18,8 @@
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
     "build": "npm run clean && tsc",
-    "test": "mocha -r ts-node/register test/**/*.test.ts"
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "publish": "npm publish --access public"
   },
   "author": "",
   "license": "MIT",

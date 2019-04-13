@@ -114,7 +114,7 @@ export class HistoryRouterImpl implements RouterImpl {
                         ...resolvedComponentAndParams.params,
                         ...params,
                     },
-                    element: resolvedComponentAndParams.component,
+                    element: resolvedComponentAndParams.element,
                     route
                 } as LocationChangeDecision;
             }
@@ -126,7 +126,7 @@ export class HistoryRouterImpl implements RouterImpl {
 
             return {
                 route: ROUTE_NOT_FOUND,
-                element: resolvedComponentAndParams.component,
+                element: resolvedComponentAndParams.element,
                 params: resolvedComponentAndParams.params
             } as LocationChangeDecision;
         } else {
@@ -145,17 +145,17 @@ export class HistoryRouterImpl implements RouterImpl {
 
     protected getComponent(cmpOrDef: RouteDefinition | VirtualElement | ComponentImpl<any>): {
         params: any,
-        component: VirtualElement
+        element: VirtualElement
     } {
-        let component: any = (cmpOrDef as RouteDefinition).component ?
-            (cmpOrDef as RouteDefinition).component :
+        let element: any = (cmpOrDef as RouteDefinition).element ?
+            (cmpOrDef as RouteDefinition).element :
             (cmpOrDef as VirtualElement);
 
-        if (this.isWebComponentClass(component)) {
+        if (this.isWebComponentClass(element)) {
 
-            const tagName = WebComponentReflector.getTagName(component as any);
+            const tagName = WebComponentReflector.getTagName(element as any);
 
-            component = {
+            element = {
                 name: tagName,
                 attributes: [],
                 children: []
@@ -165,7 +165,7 @@ export class HistoryRouterImpl implements RouterImpl {
         const params = (cmpOrDef as RouteDefinition).params || {};
 
         return {
-            component: element,
+            element,
             params
         };
     }

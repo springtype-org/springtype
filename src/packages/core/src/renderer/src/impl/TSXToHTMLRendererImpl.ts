@@ -11,6 +11,8 @@ import {getInternalRenderApi} from "../function/getInternalRenderApi";
 import {FlowIdReflector} from "../../../webcomponent/src/reflector/cross-instance/FlowIdReflector";
 import {DEFAULT_NAMESPACE_NAME} from "./tsx-to-html-renderer-impl/constants";
 
+console.log('include TSXToHTMLRendererImpl');
+
 @Component
 export class TSXToHTMLRendererImpl implements RendererImpl {
 
@@ -26,7 +28,7 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
      * Constantly incremented sequence to address a certain attribute
      * observeAttributes in transmission between DOM and WebComponent JS instance.
      */
-    protected attributeValueSequence: number = 0;
+    attributeValueSequence: number = 0;
 
     /**
      * Original DOM/native createElement implementation reference.
@@ -45,10 +47,17 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
 
     init() {
 
+        console.log('TSXToHTMLRendererImpl init1', (<any>window).ActiveRenderer);
+
+        if ((<any>window).ActiveRenderer) {
+            console.log('sequence', (<any>window).ActiveRenderer.attributeValueSequence);
+        }
+
         // tsconfig.json tsx -> preserve
         // implement React TSX rendering API
         // (used globally by TypeScript compiler --jsx emitted code)
         (<any>window).ActiveRenderer = this;
+
 
         // assign at global scope for the native DOM functions to instantiate
         // WebComponents using this TSX renderer

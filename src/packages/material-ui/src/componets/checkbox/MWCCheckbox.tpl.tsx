@@ -1,7 +1,13 @@
 import {MWCCheckbox} from "./MWCCheckbox";
 import {VirtualElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
+import classNames from "classnames";
 
 export default (view: MWCCheckbox) => {
+
+    const classes = classNames({
+        'mdc-checkbox': true,
+        'mdc-checkbox--disabled': view.disabled,
+    });
 
     const inputElement: VirtualElement = <input type="checkbox" class="mdc-checkbox__native-control" />;
     if (view.checked) {
@@ -14,7 +20,7 @@ export default (view: MWCCheckbox) => {
         inputElement.attributes.value = view.value;
     }
 
-    return <div class="mdc-checkbox">
+    return <div class={classes}>
         {inputElement}
 
         <div class="mdc-checkbox__background">

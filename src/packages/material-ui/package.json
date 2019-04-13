@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-material-ui",
-  "version": "0.0.1",
+  "version": "0.1.1",
+  "description": "Material UI for SpringType.",
   "dependencies": {
     "@material/ripple": "^1.1.0",
     "@springtype/springtype-incubator-core": "file:../core",
@@ -20,7 +21,8 @@
   "scripts": {
     "clean": "npx rimraf dist node_modules",
     "watch": "tsc -w",
-    "build": "tsc"
+    "build": "tsc",
+    "publish": "npm publish --access public"
   },
   "author": "",
   "license": "MIT",

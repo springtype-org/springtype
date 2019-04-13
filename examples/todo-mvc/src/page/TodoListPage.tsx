@@ -12,9 +12,7 @@ interface TodoListLocalState {
 
 @Element('example-todo-list')
 @Style(style)
-@UseElement(AppLayout)
-@UseElement(ListInnerPartial)
-@UseElement(Translate)
+@UseElement(AppLayout, ListInnerPartial, Translate)
 export class TodoListPage extends HTMLElement implements Lifecycle {
 
     constructor(

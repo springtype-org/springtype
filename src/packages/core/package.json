@@ -1,9 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-core",
-  "version": "0.9.1",
-  "description": "It just works.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "0.1.1",
+  "description": "SpringType core implementation with DI, web components, typed stylesheets and virtual DOM rendering.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
@@ -13,8 +11,11 @@
     "watch": "tsc -w",
     "build": "npm run clean && tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "test-with-coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register test/**/*.test.ts && nyc report"
+    "test-with-coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register test/**/*.test.ts && nyc report",
+    "publish": "npm publish --access public"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
   "bugs": {
@@ -22,7 +23,7 @@
   },
   "homepage": "https://github.com/kyr0/springtype-incubator#readme",
   "dependencies": {
-    "@types/node": "^11.12.2",
+    "@types/node": "^11.13.4",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
   },
@@ -30,6 +31,7 @@
     "@tbranyen/jsdom": "^13.0.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
+    "@springtype/springtype-incubator-test": "../test",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",

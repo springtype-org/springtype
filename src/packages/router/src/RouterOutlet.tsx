@@ -20,7 +20,7 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
     locationChangeDecision: LocationChangeDecision;
 
     @Attribute
-    component: VirtualElement|null;
+    element: VirtualElement|null;
 
     constructor(protected activeRoute: ActiveRoute) {
 
@@ -31,8 +31,8 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
     }
 
     refresh() {
-        this.component = null; // chance reference to trigger re-flow
-        this.component = this.locationChangeDecision.component;
+        this.element = null; // chance reference to trigger re-flow
+        this.element = this.locationChangeDecision.element;
     }
 
     present(locationChangeDecision: LocationChangeDecision): void {
@@ -43,21 +43,21 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
         getRenderer().cleanCaches();
 
         if (this.isConnected) {
-            this.component = this.locationChangeDecision.component;
+            this.element = this.locationChangeDecision.element;
         }
     }
 
     onFlow(initial: boolean) {
 
         if (initial) {
-            this.component = this.locationChangeDecision.component;
+            this.element = this.locationChangeDecision.element;
         }
     }
 
     render() {
 
-        if (this.component) {
-            return this.component;
+        if (this.element) {
+            return this.element;
         }
         return <st-error-message message={"ERROR (RouterOutlet): No component found for route!"} /> as VirtualElement;
     }
