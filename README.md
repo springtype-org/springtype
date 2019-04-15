@@ -5,8 +5,6 @@ Pre-beta-release TODO list:
 Conventional Commits
 
 - Modules:
-  - general
-    - solve cyclic dep. & double source include
   - ssr
     - implement express router bridge
   - webcomponent

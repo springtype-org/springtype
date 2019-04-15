@@ -3,8 +3,8 @@
   "version": "1.0.1",
   "description": "TypeScript Style Sheets.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../../src/packages/core",
-    "@springtype/springtype-incubator-material-ui": "file:../../src/packages/material-ui",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.0",
+    "@springtype/springtype-incubator-material-ui": "^1.0.3-alpha.0",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"

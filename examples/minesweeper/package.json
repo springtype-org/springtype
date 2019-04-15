@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "It shows a burger button to the world.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../../src/packages/core",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.0",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"

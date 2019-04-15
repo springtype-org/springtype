@@ -11,8 +11,6 @@ import {getInternalRenderApi} from "../function/getInternalRenderApi";
 import {FlowIdReflector} from "../../../webcomponent/src/reflector/cross-instance/FlowIdReflector";
 import {DEFAULT_NAMESPACE_NAME} from "./tsx-to-html-renderer-impl/constants";
 
-console.log('include TSXToHTMLRendererImpl');
-
 @Component
 export class TSXToHTMLRendererImpl implements RendererImpl {
 
@@ -46,12 +44,6 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
     }
 
     init() {
-
-        console.log('TSXToHTMLRendererImpl init1', (<any>window).ActiveRenderer);
-
-        if ((<any>window).ActiveRenderer) {
-            console.log('sequence', (<any>window).ActiveRenderer.attributeValueSequence);
-        }
 
         // tsconfig.json tsx -> preserve
         // implement React TSX rendering API

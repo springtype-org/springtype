@@ -25,7 +25,7 @@
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
     "build": "npm run clean && tsc",
-    "publish": "npm publish --access public"
+    "publish": "npm publish"
   },
   "author": "Michael Mannseicher, Aron Homberg",
   "license": "MIT",
@@ -37,5 +37,5 @@
   "browserslist": [
     "last 1 Chrome version"
   ],
-  "gitHead": "3607ada58ccb90dc393e7344ad5667ae7ae2a145"
+  "gitHead": "f27750e7b38a78d3cd547f5e9d645d41e90ce912"
 }
