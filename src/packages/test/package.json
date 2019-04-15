@@ -1,6 +1,5 @@
 {
   "name": "@springtype/springtype-incubator-test",
-  "private": true,
   "version": "1.0.0-alpha.0",
   "description": "Mocha/Chai test adapters for SpringType.",
   "dependencies": {

@@ -1,6 +1,5 @@
 {
   "name": "@springtype/springtype-incubator-material-ui",
-  "private": true,
   "version": "1.0.0-alpha.0",
   "description": "Material UI for SpringType.",
   "dependencies": {

@@ -1,6 +1,5 @@
 {
   "name": "@springtype/springtype-incubator-i18n",
-  "private": true,
   "version": "1.0.0-alpha.0",
   "description": "Internationalization API for SpringType.",
   "dependencies": {

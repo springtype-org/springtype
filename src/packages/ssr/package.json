@@ -1,6 +1,5 @@
 {
   "name": "@springtype/springtype-incubator-ssr",
-  "private": true,
   "version": "1.0.0-alpha.0",
   "description": "JSDOM based server-side rendering for SpringType.",
   "dependencies": {
