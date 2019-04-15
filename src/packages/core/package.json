@@ -15,6 +15,7 @@
     "build": "npm run clean && tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "test-with-coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register test/**/*.test.ts && nyc report",
+    "prepublish": "npm run build",
     "publish": "npm publish"
   },
   "main": "dist/index.js",
@@ -41,5 +42,5 @@
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "f27750e7b38a78d3cd547f5e9d645d41e90ce912"
+  "gitHead": "8c70c406b2baad773e63782a85dde9abe19e164b"
 }

@@ -22,6 +22,7 @@
     "watch": "tsc -w",
     "build": "npm run clean && tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "prepublish": "npm run build",
     "publish": "npm publish"
   },
   "author": "Aron Homberg",
@@ -34,5 +35,5 @@
     "rimraf": "2.6.3",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "f27750e7b38a78d3cd547f5e9d645d41e90ce912"
+  "gitHead": "8c70c406b2baad773e63782a85dde9abe19e164b"
 }
