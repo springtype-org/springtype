@@ -1,12 +1,12 @@
 {
   "name": "@springtype/springtype-incubator-ssr",
-  "version": "1.0.3-alpha.0",
+  "version": "1.0.3-alpha.1",
   "publishConfig": {
     "access": "public"
   },
   "description": "JSDOM based server-side rendering for SpringType.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.0",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.1",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
