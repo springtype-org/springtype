@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-router",
-  "version": "0.1.1",
+  "private": true,
+  "version": "0.0.0",
   "description": "DOM router for SpringType.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../core",
@@ -21,7 +22,7 @@
     "build": "tsc",
     "publish": "npm publish --access public"
   },
-  "author": "",
+  "author": "Aron Homberg",
   "license": "MIT",
   "browserslist": [
     "last 1 Chrome version"

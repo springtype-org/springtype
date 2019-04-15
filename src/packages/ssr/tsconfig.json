@@ -15,12 +15,13 @@
         "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
         "sourceMap": true,
-        "downlevelIteration": true,
+        "noImplicitAny": false,
         "lib": [
             "dom",
             "es2017"
         ],
         "types": ["reflect-metadata", "node"],
+        "downlevelIteration": true,
         "rootDirs": [
             "../core",
             "src"

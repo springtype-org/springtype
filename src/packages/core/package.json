@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-core",
-  "version": "0.1.1",
+  "private": true,
+  "version": "0.0.0",
   "description": "SpringType core implementation with DI, web components, typed stylesheets and virtual DOM rendering.",
   "repository": {
     "type": "git",
@@ -16,7 +17,7 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "",
+  "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kyr0/springtype-incubator/issues"
@@ -28,10 +29,8 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@tbranyen/jsdom": "^13.0.0",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
-    "@springtype/springtype-incubator-test": "../test",
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0",

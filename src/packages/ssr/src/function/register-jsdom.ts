@@ -20,6 +20,7 @@ export const registerJSDOM = (html: any = null, options: any = {}) => {
         return _global.document.destroy
     }
 
+    // JSDOM patched with support for web component API (custom elements etc.)
     const jsdom = require('@tbranyen/jsdom');
     const document = new jsdom.JSDOM(html, options);
     const window = document.window;

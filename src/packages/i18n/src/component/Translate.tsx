@@ -1,7 +1,6 @@
-import {Attribute, Element, Lifecycle} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Partial} from "@springtype/springtype-incubator-core";
 import {t} from "../i18nextAdaper";
 import {TranslationOptions} from "i18next";
-import {Partial} from "../../../core/src/lang";
 
 @Element('st-t')
 export class Translate extends HTMLElement implements Lifecycle {

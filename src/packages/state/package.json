@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-state",
-  "version": "0.1.1",
+  "private": true,
+  "version": "0.0.0",
   "description": "Redux/Rematch based state management for SpringType.",
   "dependencies": {
     "@rematch/core": "1.1.0",
@@ -23,7 +24,7 @@
     "build": "tsc",
     "publish": "npm publish --access public"
   },
-  "author": "",
+  "author": "Aron Homberg",
   "license": "MIT",
   "browserslist": [
     "last 1 Chrome version"

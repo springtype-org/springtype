@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-material-ui",
-  "version": "0.1.1",
+  "private": true,
+  "version": "0.0.0",
   "description": "Material UI for SpringType.",
   "dependencies": {
     "@material/ripple": "^1.1.0",
@@ -19,12 +20,12 @@
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
   },
   "scripts": {
-    "clean": "npx rimraf dist node_modules",
+    "clean": "npx rimraf dist",
     "watch": "tsc -w",
-    "build": "tsc",
+    "build": "npm run clean && tsc",
     "publish": "npm publish --access public"
   },
-  "author": "",
+  "author": "Michael Mannseicher, Aron Homberg",
   "license": "MIT",
   "devDependencies": {
     "rimraf": "2.6.3",

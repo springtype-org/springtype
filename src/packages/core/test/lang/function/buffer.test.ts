@@ -1,4 +1,4 @@
-import {TestCase, TestSuite} from "@springtype/springtype-incubator-test";
+import {TestCase, TestSuite} from "../../../../test";
 import {buffer} from "../../../src/lang";
 
 @TestSuite

@@ -15,6 +15,7 @@
         "emitDecoratorMetadata": true,
         "strictPropertyInitialization": false,
         "sourceMap": true,
+        "downlevelIteration": true,
         "lib": [
             "dom",
             "es2017"

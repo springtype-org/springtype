@@ -1,7 +1,7 @@
 {
   "name": "@springtype/springtype-incubator",
-  "version": "0.9.1",
-  "description": "It just works.",
+  "version": "0.1.1",
+  "description": "SpringType meta package.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
@@ -14,7 +14,7 @@
     "new-version": "lerna version --conventional-commits --yes",
     "diff": "lerna diff"
   },
-  "author": "",
+  "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kyr0/springtype-incubator/issues"

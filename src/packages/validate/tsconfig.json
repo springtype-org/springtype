@@ -13,11 +13,12 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
+    "downlevelIteration": true,
     "lib": [
       "dom",
       "es2017"
     ],
-    "types": ["reflect-metadata", "mocha"],
+    "types": ["reflect-metadata", "mocha", "node"],
     "rootDirs": [
       "../core",
       "src"

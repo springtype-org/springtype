@@ -1,5 +1,5 @@
 import "mocha";
-import {registerJSDOM} from "../function/register-jsdom";
+import {registerJSDOM} from "@springtype/springtype-incubator-ssr";
 
 // register JSDOM with web component support
 registerJSDOM();

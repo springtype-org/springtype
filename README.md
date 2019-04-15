@@ -7,6 +7,8 @@ Conventional Commits
 - Modules:
   - general
     - solve cyclic dep. & double source include
+  - ssr
+    - implement express router bridge
   - webcomponent
     - add initial rendering algorithm ("spark")
     - use differential rendering algorithm ("graphmaster") only for 1+n 
