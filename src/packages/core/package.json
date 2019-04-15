@@ -1,7 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-core",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "SpringType core implementation with DI, web components, typed stylesheets and virtual DOM rendering.",
   "repository": {
     "type": "git",

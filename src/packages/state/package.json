@@ -1,7 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-state",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "Redux/Rematch based state management for SpringType.",
   "dependencies": {
     "@rematch/core": "1.1.0",

@@ -1,7 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-test",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "Mocha/Chai test adapters for SpringType.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../core",
@@ -30,12 +30,12 @@
   ],
   "devDependencies": {
     "@tbranyen/jsdom": "^13.0.0",
-    "rimraf": "2.6.3",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.3.4000",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
+    "rimraf": "2.6.3",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3.4000"
   }
 }
