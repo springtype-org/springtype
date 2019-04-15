@@ -1,10 +1,13 @@
 {
   "name": "@springtype/springtype-incubator-test",
-  "version": "0.9.1",
+  "version": "1.0.2-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "It just works.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../package/core",
-    "@springtype/springtype-incubator-validate": "file:../package/validate",
+    "@springtype/springtype-incubator-core": "^1.0.2-alpha.0",
+    "@springtype/springtype-incubator-validate": "^1.0.2-alpha.0",
     "@types/node": "^10.12.30",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"

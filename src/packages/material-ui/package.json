@@ -1,6 +1,9 @@
 {
   "name": "@springtype/springtype-incubator-material-ui",
   "version": "1.0.2-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Material UI for SpringType.",
   "dependencies": {
     "@material/ripple": "^1.1.0",
@@ -34,5 +37,5 @@
   "browserslist": [
     "last 1 Chrome version"
   ],
-  "gitHead": "3af93866a3dad43eb563a5ace89d40e9dbdd97b2"
+  "gitHead": "3607ada58ccb90dc393e7344ad5667ae7ae2a145"
 }

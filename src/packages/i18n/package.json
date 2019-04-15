@@ -1,6 +1,9 @@
 {
   "name": "@springtype/springtype-incubator-i18n",
   "version": "1.0.2-alpha.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Internationalization API for SpringType.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "^1.0.2-alpha.0",
@@ -33,5 +36,5 @@
     "rimraf": "2.6.3",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "3af93866a3dad43eb563a5ace89d40e9dbdd97b2"
+  "gitHead": "3607ada58ccb90dc393e7344ad5667ae7ae2a145"
 }
