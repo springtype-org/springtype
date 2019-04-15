@@ -1,11 +1,11 @@
 {
   "name": "@springtype/springtype-incubator-state",
-  "version": "1.0.1-alpha.0",
+  "version": "1.0.2-alpha.0",
   "description": "Redux/Rematch based state management for SpringType.",
   "dependencies": {
     "@rematch/core": "1.1.0",
     "@rematch/immer": "1.0.2",
-    "@springtype/springtype-incubator-core": "^1.0.1-alpha.0",
+    "@springtype/springtype-incubator-core": "^1.0.2-alpha.0",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "ts-polyfill": "^3.3.3",
