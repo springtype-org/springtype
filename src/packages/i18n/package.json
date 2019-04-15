@@ -1,6 +1,6 @@
 {
   "name": "@springtype/springtype-incubator-i18n",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.1-alpha.0",
   "description": "Internationalization API for SpringType.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "file:../core",
