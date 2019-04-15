@@ -1,6 +1,6 @@
 {
   "name": "@springtype/springtype-incubator-core",
-  "version": "1.0.3-alpha.1",
+  "version": "1.0.3-alpha.2",
   "publishConfig": {
     "access": "public"
   },
