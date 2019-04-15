@@ -3,8 +3,8 @@
   "version": "1.0.1-alpha.0",
   "description": "Mocha/Chai test adapters for SpringType.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../core",
-    "@springtype/springtype-incubator-ssr": "file:../ssr",
+    "@springtype/springtype-incubator-core": "^1.0.1-alpha.0",
+    "@springtype/springtype-incubator-ssr": "^1.0.1-alpha.0",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
@@ -36,5 +36,6 @@
     "rimraf": "2.6.3",
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
-  }
+  },
+  "gitHead": "3af93866a3dad43eb563a5ace89d40e9dbdd97b2"
 }

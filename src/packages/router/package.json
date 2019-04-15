@@ -3,7 +3,7 @@
   "version": "1.0.1-alpha.0",
   "description": "DOM router for SpringType.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "file:../core",
+    "@springtype/springtype-incubator-core": "^1.0.1-alpha.0",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "ts-polyfill": "^3.3.3",
@@ -29,5 +29,6 @@
   "devDependencies": {
     "rimraf": "2.6.3",
     "typescript": "^3.3.4000"
-  }
+  },
+  "gitHead": "3af93866a3dad43eb563a5ace89d40e9dbdd97b2"
 }
