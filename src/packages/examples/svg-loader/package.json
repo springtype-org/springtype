@@ -1,5 +1,6 @@
 {
   "name": "@springtype/springtype-incubator-loader",
+  "private": true,
   "version": "1.0.1",
   "description": "The real burger button as svg.",
   "dependencies": {

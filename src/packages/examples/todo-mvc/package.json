@@ -1,5 +1,6 @@
 {
   "name": "@springtype/springtype-incubator-example-todo-mvc",
+  "private": true,
   "version": "1.0.1",
   "description": "It just says hello to the world.",
   "dependencies": {
