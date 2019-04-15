@@ -21,10 +21,10 @@
   "scripts": {
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
-    "build": "npm run clean && tsc",
+    "prebuild": "npm run clean",
+    "build": "tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "prepublish": "npm run build",
-    "publish": "npm publish"
+    "prepublishOnly": "npm run build"
   },
   "author": "Aron Homberg",
   "license": "MIT",

@@ -24,9 +24,9 @@
   "scripts": {
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
-    "build": "npm run clean && tsc",
-    "prepublish": "npm run build",
-    "publish": "npm publish"
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "author": "Michael Mannseicher, Aron Homberg",
   "license": "MIT",

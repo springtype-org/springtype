@@ -12,11 +12,11 @@
   "scripts": {
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
-    "build": "npm run clean && tsc",
+    "prebuild": "npm run clean",
+    "build": "tsc",
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "test-with-coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register test/**/*.test.ts && nyc report",
-    "prepublish": "npm run build",
-    "publish": "npm publish"
+    "prepublishOnly": "npm run build"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
