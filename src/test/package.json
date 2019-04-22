@@ -6,16 +6,18 @@
   },
   "description": "It just works.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.3",
-    "@springtype/springtype-incubator-validate": "^1.0.3-alpha.3",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.4",
+    "@springtype/springtype-incubator-validate": "^1.0.3-alpha.4",
     "@types/node": "^10.12.30",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
   },
-  "test": "mocha",
-  "types": "types.d.ts",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --require ts-node/register ./**/*.spec.ts"
+    "clean": "npx rimraf dist",
+    "watch": "tsc -w",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "test": "mocha -r ts-node/register ./**/*.spec.ts"
   },
   "repository": {
     "type": "git",
@@ -32,7 +34,10 @@
     "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
+    "nyc": "^14.0.0",
+    "rimraf": "2.6.3",
+    "source-map-support": "^0.5.11",
     "ts-node": "^7.0.1",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.4000"
   }
 }

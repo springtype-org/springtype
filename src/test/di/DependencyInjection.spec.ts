@@ -1,6 +1,6 @@
 import {Gain} from "./components/Gain";
 import {ApplicationContext, InjectionProfile, InjectionStrategy} from "@springtype/springtype-incubator-core";
-import {validateRequired} from "@springtype/springtype-incubator-validate/src";
+import {validateRequired} from "@springtype/springtype-incubator-validate";
 import {Simple} from "./components/Simple";
 import {expect} from "chai";
 import 'mocha';
@@ -12,8 +12,8 @@ describe('DI', () => {
         expect(validateRequired(gain.testInject())).to.equal(true);
     });
     it('simple starter I', () => {
-        let simple = ApplicationContext.getInstance().getBean(Simple, InjectionProfile.DEFAULT, InjectionStrategy.NEW);
-        let simple2 = ApplicationContext.getInstance().getBean(Simple, InjectionProfile.DEFAULT, InjectionStrategy.NEW);
+        let simple = ApplicationContext.getInstance().getBean(Simple, InjectionProfile.DEFAULT, InjectionStrategy.FACTORY);
+        let simple2 = ApplicationContext.getInstance().getBean(Simple, InjectionProfile.DEFAULT, InjectionStrategy.FACTORY);
 
         expect(simple === simple2).to.equal(false, 'NEW does NOT work.');
         expect(simple.calc(7, 7)).to.any;
