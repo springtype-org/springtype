@@ -6,8 +6,8 @@
   },
   "description": "It just works.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.2-alpha.0",
-    "@springtype/springtype-incubator-validate": "^1.0.2-alpha.0",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.3",
+    "@springtype/springtype-incubator-validate": "^1.0.3-alpha.3",
     "@types/node": "^10.12.30",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
@@ -31,7 +31,7 @@
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "chai": "^4.2.0",
-    "mocha": "^6.0.2",
+    "mocha": "^6.1.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.3.3333"
   }

@@ -13,6 +13,10 @@ Conventional Commits
     - for bootstrapping a new project
   - ssr
     - implement express router bridge
+    - API for environment check
+    - initial state for server-side rendering
+    - how to identify first whole rendering
+    - export router ($st.Router)
   - webcomponent
     - add initial rendering algorithm ("spark")
     - use differential rendering algorithm ("graphmaster") only for 1+n 
@@ -29,7 +33,10 @@ Conventional Commits
     - Support for loading: https://github.com/rematch/rematch/blob/master/plugins/loading/README.md
     - Support for persist: https://github.com/rematch/rematch/blob/master/plugins/persist/README.md
   - material-ui
+    - Theme support
+    - setTheme
     - More UI elements
+    - icon typing: https://github.com/mui-org/material-ui/pull/7820/files
     
 - Write documentation for all modules (inline)
 - Write a developer guide like facebook did with react-create-app

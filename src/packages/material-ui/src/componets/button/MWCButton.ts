@@ -34,7 +34,7 @@ export class MWCButton extends HTMLElement implements Lifecycle {
     ripple = true;
 
     @Attribute(AttributeType.BOOLEAN)
-    trailingIcon = false;
+    'trailing-icon' = false;
 
     @Attribute
     icon = '';

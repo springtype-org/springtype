@@ -22,7 +22,7 @@ import {
     validateNumberRange,
     validatePast,
     validateRequired
-} from "@springtype/springtype-incubator-validate/src";
+} from "@springtype/springtype-incubator-validate";
 import 'mocha';
 import {futureDate, now, nowDate, pastDate, ValidateOnClass, ValidateOnMethod} from "./helper/ValidateMe";
 
