@@ -18,13 +18,13 @@ export default (view: MWCButton) => {
 
     const innerButtonElement =
         <st-fragment>
-            {view.icon && !view["trailing-icon"] ? mdcButtonIcon : ''}
+            {view.icon && !view["trailingIcon"] ? mdcButtonIcon : ''}
             <span class="mdc-button__label">
             {
                 view.label
             }
             </span>
-            {view.icon && view["trailing-icon"] ? mdcButtonIcon : ''}
+            {view.icon && view["trailingIcon"] ? mdcButtonIcon : ''}
             <st-slot />
         </st-fragment>;
 

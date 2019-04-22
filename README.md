@@ -5,6 +5,12 @@ Pre-beta-release TODO list:
 Conventional Commits
 
 - Modules:
+  - devtools
+    - Packaging for Chrome & Firefox
+  - general
+    - tslint + rules
+  - create-st-app CLI
+    - for bootstrapping a new project
   - ssr
     - implement express router bridge
   - webcomponent
