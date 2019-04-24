@@ -23,10 +23,9 @@
   "engines": {
     "node": ">=10"
   },
-  "files": [
-    "dist/index.js",
-    "dist/cli.js"
-  ],
+  "directories": {
+    "dist": "dist"
+  },
   "bin": {
     "st-create-app": "./dist/index.js"
   },
