@@ -23,9 +23,14 @@
   "engines": {
     "node": ">=10"
   },
-  "directories": {
-    "dist": "dist"
-  },
+  "bundledDependencies": [
+    "fs-extra",
+    "envinfo",
+    "chalk",
+    "commander",
+    "cross-spawn",
+    "validate-npm-package-name"
+  ],
   "bin": {
     "st-create-app": "./dist/index.js"
   },
