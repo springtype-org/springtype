@@ -1,0 +1,56 @@
+{
+  "name": "st-create-app",
+  "version": "1.0.3-alpha.4",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "springtype",
+    "scaffold"
+  ],
+  "description": "Scaffold SpringType projects.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist",
+    "watch": "tsc -w",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "run": "node dist/index.js"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/cli.js"
+  ],
+  "bin": {
+    "st-create-app": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Aron Homberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyr0/springtype-incubator/issues"
+  },
+  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "dependencies": {
+    "@types/node": "^11.13.7",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "cross-spawn": "^6.0.5",
+    "envinfo": "^7.2.0",
+    "reflect-metadata": "^0.1.13",
+    "tslib": "^1.9.3",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
+    "rimraf": "2.6.3",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3.4000"
+  }
+}
