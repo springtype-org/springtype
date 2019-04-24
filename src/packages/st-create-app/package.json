@@ -8,7 +8,7 @@
     "springtype",
     "scaffold"
   ],
-  "description": "Scaffold SpringType projects.",
+  "description": "Scaffold SpringType apps.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
