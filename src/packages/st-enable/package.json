@@ -1,0 +1,55 @@
+{
+  "name": "st-enable",
+  "version": "1.0.3-alpha.8",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "springtype",
+    "scaffold"
+  ],
+  "description": "Enables SpringType features in existing projects.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist",
+    "watch": "tsc -w",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "run": "node dist/index.js"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "bundledDependencies": [
+    "chalk",
+    "commander",
+    "cross-spawn"
+  ],
+  "bin": {
+    "st-enable": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Aron Homberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kyr0/springtype-incubator/issues"
+  },
+  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "cross-spawn": "^6.0.5",
+    "reflect-metadata": "^0.1.13",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7",
+    "rimraf": "2.6.3",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3.4000"
+  }
+}
