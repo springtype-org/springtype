@@ -15,134 +15,145 @@ import {logErrors} from "./logErrors";
 import {devDependencies} from "../definition/devDependencies";
 import {isSafeToCreateAppIn} from "./isSafeToCreateAppIn";
 
-export const createApp = (projectPath: string) => {
+export const createApp = async(projectPath: string) => {
 
-    const root = path.resolve(projectPath);
-    const appName = path.basename(root);
+    return new Promise((resolve, reject) => {
 
-    validateAppName(appName);
-    fs.ensureDirSync(projectPath);
+        const root = path.resolve(projectPath);
+        const appName = path.basename(root);
 
-    if (!isSafeToCreateAppIn(root, projectPath)) {
-        process.exit(1);
-    }
+        validateAppName(appName);
+        fs.ensureDirSync(projectPath);
 
-    console.log(`Creating a new SpringType app in ${chalk.green(root)}.`);
-    console.log();
-
-    // write package.json
-    fs.writeFileSync(
-        path.join(root, 'package.json'),
-        JSON.stringify(packageJsonTemplate(appName), null, 2) + os.EOL
-    );
-
-    // write tsconfig.json
-    fs.writeFileSync(
-        path.join(root, 'tsconfig.json'),
-        JSON.stringify(tsConfigTemplate, null, 4) + os.EOL
-    );
-
-    fs.ensureDirSync(path.join(root, 'src'));
-    fs.ensureDirSync(path.join(root, 'src', 'element'));
-    fs.ensureDirSync(path.join(root, 'test'));
-
-    // write index.html
-    fs.writeFileSync(
-        path.join(root, 'src', 'index.html'),
-        indexHtmlTemplate(appName) + os.EOL
-    );
-
-    // write $projectName.tsx
-    fs.writeFileSync(
-        path.join(root, 'src', `${appName}-app.tsx`),
-        appTsxTemplate(appName) + os.EOL
-    );
-
-    process.chdir(root);
-
-    console.log('Installing dependencies... This might take a couple of minutes.');
-
-    const child = spawn('npm', ['install', ...dependencies], { stdio: 'inherit' });
-
-    child.on('close', (code: number) => {
-
-        if (code !== 0) {
-
-            logErrors([
-                'npm exited with error code: ' + code
-            ]);
-
-            return;
-
-        } else {
-
-            const child = spawn('npm', ['install', ...devDependencies, '--save-dev'], { stdio: 'inherit' });
-
-            child.on('close', (code: number) => {
-
-                if (code !== 0) {
-
-                    logErrors([
-                        'npm exited with error code: ' + code
-                    ]);
-                    return;
-
-                } else {
-
-                    console.log('Thank you for choosing SpringType!');
-                    console.log('');
-                    console.log('You can run (and develop) your app via:');
-                    console.log();
-                    console.log('    npm start');
-                    console.log();
-                    console.log('Create a production build (see ./dist folder) via:');
-                    console.log();
-                    console.log('    npm run build');
-                    console.log('');
-                    console.log('And clean files cached while compilation:');
-                    console.log();
-                    console.log('    npm run clean');
-                    console.log('');
-                    /*
-                    console.log('End-2-end test via (make sure the app is running!):');
-                    console.log('');
-                    console.log('    npm run e2e');
-                    console.log('');
-                    console.log('    In case you want to test a production build (prod. server on port 4567):');
-                    console.log('');
-                    console.log('    npm run e2e -- --port 4567');
-                    console.log('');
-                    console.log('Unit-test your app via:');
-                    console.log('');
-                    console.log('    npm test');
-                    console.log('');
-                     */
-                    console.log('This is a very basic app example.');
-                    /*
-                    console.log('');
-                    console.log('If you need more features, check out the st-create-app guide:');
-                    console.log('');
-                    console.log('    https://www.springtype.org/docs/st-create-app');
-                    console.log('');
-                    console.log('But basically, you can just enable/disable features like that:');
-                    console.log('');
-                    console.log('    npx st-create-app enable routing');
-                    console.log('');
-                    console.log('Features available:');
-                    console.log('');
-                    console.log('    material-ui');
-                    console.log('    routing');
-                    console.log('    state');
-                    console.log('    i18n');
-                    console.log('    ssr');
-                    console.log('    validate');
-                    console.log('    test');
-                    console.log('    e2e');
-                    */
-
-                    console.log('Find your app in: ', root);
-                }
-            });
+        if (!isSafeToCreateAppIn(root, projectPath)) {
+            process.exit(1);
         }
+
+        console.log(`Creating a new SpringType app in ${chalk.green(root)}.`);
+        console.log();
+
+        // write package.json
+        fs.writeFileSync(
+            path.join(root, 'package.json'),
+            JSON.stringify(packageJsonTemplate(appName), null, 2) + os.EOL
+        );
+
+        // write tsconfig.json
+        fs.writeFileSync(
+            path.join(root, 'tsconfig.json'),
+            JSON.stringify(tsConfigTemplate, null, 4) + os.EOL
+        );
+
+        fs.ensureDirSync(path.join(root, 'src'));
+        fs.ensureDirSync(path.join(root, 'src', 'element'));
+        fs.ensureDirSync(path.join(root, 'test'));
+
+        // write index.html
+        fs.writeFileSync(
+            path.join(root, 'src', 'index.html'),
+            indexHtmlTemplate(appName) + os.EOL
+        );
+
+        // write $projectName.tsx
+        fs.writeFileSync(
+            path.join(root, 'src', `${appName}-app.tsx`),
+            appTsxTemplate(appName) + os.EOL
+        );
+
+        process.chdir(root);
+
+        console.log('Installing dependencies... This might take a couple of minutes.');
+
+        const child = spawn('npm', ['install', ...dependencies], { stdio: 'inherit' });
+
+        child.on('close', (code: number) => {
+
+            if (code !== 0) {
+
+                logErrors([
+                    'npm exited with error code: ' + code
+                ]);
+                reject(code);
+
+            } else {
+
+                const child = spawn('npm', ['install', ...devDependencies, '--save-dev'], { stdio: 'inherit' });
+
+                child.on('close', (code: number) => {
+
+                    if (code !== 0) {
+
+                        logErrors([
+                            'npm exited with error code: ' + code
+                        ]);
+                        reject(code);
+
+                    } else {
+
+                        console.log(chalk.green('Thank you for choosing SpringType!'));
+                        console.log('');
+                        console.log('You can run (and develop) your app via:');
+                        console.log();
+                        console.log(`    ${chalk.grey('npm start')}`);
+                        console.log();
+                        console.log('Create a production build (see ./dist folder) via:');
+                        console.log();
+                        console.log(`    ${chalk.grey('npm run build')}`);
+                        console.log('');
+                        console.log('And clean files cached while compilation:');
+                        console.log();
+                        console.log(`    ${chalk.grey('npm run clean')}`);
+                        console.log('');
+
+                        console.log('This is a very basic app example.');
+                        console.log('You can enable more SpringType features like this:');
+                        console.log();
+                        console.log(`    ${chalk.grey('npx st-enable')}`);
+                        console.log();
+                        console.log('Find your app in: ', chalk.cyan(root));
+                        console.log();
+
+                        resolve();
+
+                        /*
+                        console.log('End-2-end test via (make sure the app is running!):');
+                        console.log('');
+                        console.log('    npm run e2e');
+                        console.log('');
+                        console.log('    In case you want to test a production build (prod. server on port 4567):');
+                        console.log('');
+                        console.log('    npm run e2e -- --port 4567');
+                        console.log('');
+                        console.log('Unit-test your app via:');
+                        console.log('');
+                        console.log('    npm test');
+                        console.log('');
+                         */
+                        /*
+                        console.log('');
+                        console.log('If you need more features, check out the st-create-app guide:');
+                        console.log('');
+                        console.log('    https://www.springtype.org/docs/st-create-app');
+                        console.log('');
+                        console.log('But basically, you can just enable/disable features like that:');
+                        console.log('');
+                        console.log('    npx st-create-app enable routing');
+                        console.log('');
+                        console.log('Features available:');
+                        console.log('');
+                        console.log('    material-ui');
+                        console.log('    routing');
+                        console.log('    state');
+                        console.log('    i18n');
+                        console.log('    ssr');
+                        console.log('    validate');
+                        console.log('    test');
+                        console.log('    e2e');
+                        */
+
+                    }
+                });
+            }
+        });
     });
 };

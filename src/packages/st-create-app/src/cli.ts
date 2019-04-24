@@ -1,5 +1,7 @@
 import {getAppName} from "./function/getAppName";
 import {createApp} from "./function/createApp";
+import {printBanner} from "./function/printBanner";
+import {donationUrl} from "./definition/donationUrl";
 
 const commander = require('commander');
 const envinfo = require('envinfo');
@@ -16,7 +18,6 @@ const program = new commander.Command(packageJson.name)
     .action((name: string) => {
         projectPath = name;
         projectName = getAppName(projectPath);
-
     })
     .option('--info', 'print environment debug info')
     .allowUnknownOption()
@@ -33,42 +34,48 @@ const program = new commander.Command(packageJson.name)
     })
     .parse(process.argv);
 
-if (program.info) {
+(async() => {
 
-    console.log(chalk.bold('\nEnvironment Info:'));
+    if (program.info) {
 
-    envinfo.run(
-        {
-            System: ['OS', 'CPU'],
-            Binaries: ['Node', 'npm', 'Yarn'],
-            Browsers: ['Chrome', 'Edge', 'Internet Explorer', 'Firefox', 'Safari'],
-            npmPackages: ['react', 'react-dom', 'react-scripts'],
-            npmGlobalPackages: ['st-create-app', 'st-create-element'],
-        },
-        {
-            duplicates: true,
-            showNotFound: true,
-        }
-    )
-    .then(console.log);
-}
+        console.log(chalk.bold('\nEnvironment Info:'));
 
-if (typeof projectPath === 'undefined') {
+        envinfo.run(
+            {
+                System: ['OS', 'CPU'],
+                Binaries: ['Node', 'npm', 'Yarn'],
+                Browsers: ['Chrome', 'Edge', 'Internet Explorer', 'Firefox', 'Safari'],
+                npmPackages: ['react', 'react-dom', 'react-scripts'],
+                npmGlobalPackages: ['st-create-app', 'st-create-element'],
+            },
+            {
+                duplicates: true,
+                showNotFound: true,
+            }
+        )
+            .then(console.log);
+    }
 
-    console.error('Please specify the project directory:');
-    console.log(
-        `  ${chalk.cyan(program.name())} ${chalk.green('<project-directory>')}`
-    );
-    console.log();
-    console.log('For example:');
-    console.log(`  ${chalk.cyan(program.name())} ${chalk.green('st-my-app')}`);
-    console.log();
-    console.log(
-        `Run ${chalk.cyan(`${program.name()} --help`)} to see all options.`
-    );
-    process.exit(1);
+    if (typeof projectPath === 'undefined') {
 
-} else {
+        console.error('Please specify the project directory:');
+        console.log(
+            `  ${chalk.cyan(program.name())} ${chalk.green('<project-directory>')}`
+        );
+        console.log();
+        console.log('For example:');
+        console.log(`  ${chalk.cyan(program.name())} ${chalk.green('st-my-app')}`);
+        console.log();
+        console.log(
+            `Run ${chalk.cyan(`${program.name()} --help`)} to see all options.`
+        );
+        process.exit(1);
 
-    createApp(projectPath);
-}
+    } else {
+
+        await createApp(projectPath);
+
+        printBanner(packageJson.homepage, packageJson.bugs.url, donationUrl);
+    }
+
+})();
