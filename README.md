@@ -1,3 +1,13 @@
+
+      ____             _            _____                 
+     / ___| _ __  _ __(_)_ __   __ |_   _|   _ _ __   ___ 
+     \___ \| '_ \| '__| | '_ \ / _` || || | | | '_ \ / _ \
+      ___) | |_) | |  | | | | | (_| || || |_| | |_) |  __/
+     |____/| .__/|_|  |_|_| |_|\__, ||_| \__, | .__/ \___|
+           |_|                 |___/     |___/|_|         
+
+
+
 ## TODO
 
 Pre-beta-release TODO list:
@@ -78,6 +88,10 @@ Conventional Commits
       - Featured: SVG gantt-chart component (web-component, publicly available) 
        
 https://stackblitz.com/edit/typescript-umcyrw
+
+#### Love SpringType?
+Please donate:
+https://www.patreon.com/springtype
 
 # Usage
     npm i
