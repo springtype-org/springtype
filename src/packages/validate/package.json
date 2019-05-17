@@ -1,12 +1,12 @@
 {
   "name": "@springtype/springtype-incubator-validate",
-  "version": "1.0.3-alpha.13",
+  "version": "1.0.3-alpha.11",
   "publishConfig": {
     "access": "public"
   },
   "description": "Validation for SpringType.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.13",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.11",
     "@types/mocha": "^5.2.6",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
@@ -36,5 +36,5 @@
     "rimraf": "2.6.3",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "8c70c406b2baad773e63782a85dde9abe19e164b"
+  "gitHead": "c31dedc55e26e713012ec8ee7a6b2c5534137df8"
 }
