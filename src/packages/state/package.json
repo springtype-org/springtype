@@ -1,6 +1,6 @@
 {
   "name": "@springtype/springtype-incubator-state",
-  "version": "1.0.3-alpha.11",
+  "version": "1.0.3-1.0.3-alpha.14.0",
   "publishConfig": {
     "access": "public"
   },
@@ -8,7 +8,7 @@
   "dependencies": {
     "@rematch/core": "1.1.0",
     "@rematch/immer": "1.0.2",
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.11",
+    "@springtype/springtype-incubator-core": "^1.0.3-1.0.3-alpha.14.0",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "ts-polyfill": "^3.3.3",
