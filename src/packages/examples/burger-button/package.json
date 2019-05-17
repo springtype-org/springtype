@@ -1,10 +1,10 @@
 {
   "name": "@springtype/springtype-incubator-burger-button",
   "private": true,
-  "version": "1.0.3-1.0.3-alpha.14.0",
+  "version": "1.0.3-alpha.11",
   "description": "The real burger button as svg.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-1.0.3-alpha.14.0",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.11",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"
