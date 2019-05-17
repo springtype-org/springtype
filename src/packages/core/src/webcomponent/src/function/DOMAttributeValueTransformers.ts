@@ -2,11 +2,9 @@ export const transformBooleanDOMAttributeValue = (value: string | boolean) => {
     if (typeof value === 'boolean') {
         return value;
     } else {
+        //check if variable is false
         if (value === 'false') {
             return false;
-        }
-        if (value === 'true') {
-            return true;
         }
         // i.e.: "disabled" on an HTML element ends in an empty string which should
         // be transformed to: true. Likewise disabled="disabled" should end up as true whereas
