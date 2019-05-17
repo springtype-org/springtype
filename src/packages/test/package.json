@@ -1,13 +1,13 @@
 {
   "name": "@springtype/springtype-incubator-test",
-  "version": "1.0.3-alpha.12",
+  "version": "1.0.3-alpha.13",
   "publishConfig": {
     "access": "public"
   },
   "description": "Mocha/Chai test adapters for SpringType.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.12",
-    "@springtype/springtype-incubator-ssr": "^1.0.3-alpha.12",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.13",
+    "@springtype/springtype-incubator-ssr": "^1.0.3-alpha.13",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
