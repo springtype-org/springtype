@@ -1,11 +1,11 @@
 {
   "name": "@springtype/example-material-ui",
   "private": true,
-  "version": "1.0.3-alpha.14.3",
+  "version": "1.0.3-alpha.14.4",
   "description": "TypeScript Style Sheets.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.3",
-    "@springtype/springtype-incubator-material-ui": "^1.0.3-alpha.14.3",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.4",
+    "@springtype/springtype-incubator-material-ui": "^1.0.3-alpha.14.4",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"
