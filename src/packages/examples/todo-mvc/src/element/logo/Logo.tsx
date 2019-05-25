@@ -7,7 +7,7 @@ import {
     ShadowDOM,
     Style,
     Template, TypedMediaQueryStyleSheet, Partial
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 import template from "./Logo.tpl";
 
 @Element('app-logo')

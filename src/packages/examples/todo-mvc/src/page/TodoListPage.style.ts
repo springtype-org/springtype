@@ -1,4 +1,4 @@
-import {TemplateStringStyleSheet} from "@springtype/springtype-incubator-core";
+import {TemplateStringStyleSheet} from "@springtype/core";
 
 export const style = (): TemplateStringStyleSheet => ({
 

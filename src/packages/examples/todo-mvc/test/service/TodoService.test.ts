@@ -1,4 +1,4 @@
-import {TestSuite} from "@springtype/springtype-incubator-test";
+import {TestSuite} from "@springtype/test";
 import {TodoService} from "../../src/service/TodoService";
 
 @TestSuite

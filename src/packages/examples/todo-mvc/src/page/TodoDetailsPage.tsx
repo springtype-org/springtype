@@ -1,8 +1,8 @@
-import {Element, Lifecycle, UseElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, UseElement, ActiveRenderer} from "@springtype/core";
 import {TodoService} from "../service/TodoService";
 import {ITodoItem} from "../state/ITodoState";
 import {AppLayout} from "../element/layout/AppLayout";
-import {ActiveRoute} from "@springtype/springtype-incubator-router";
+import {ActiveRoute} from "@springtype/router";
 
 @Element('example-todo-detail')
 @UseElement(AppLayout)

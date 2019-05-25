@@ -1,7 +1,7 @@
-import {Element, Lifecycle, Style, UseElement, Partial, ActiveRenderer} from "@springtype/springtype-incubator-core";
-import {t, Translator} from "@springtype/springtype-incubator-i18n";
+import {Element, Lifecycle, Style, UseElement, Partial, ActiveRenderer} from "@springtype/core";
+import {t, Translator} from "@springtype/i18n";
 import {Logo} from "../logo/Logo";
-import {ActiveRoute} from "@springtype/springtype-incubator-router";
+import {ActiveRoute} from "@springtype/router";
 
 @Element('app-layout')
 @Style((view: AppLayout) => ({

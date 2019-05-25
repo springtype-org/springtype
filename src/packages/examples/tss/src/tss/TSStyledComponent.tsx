@@ -8,8 +8,8 @@ import {
     ShadowDOM,
     Style,
     Template
-} from "@springtype/springtype-incubator-core";
-import {ActiveRoute} from "@springtype/springtype-incubator-router";
+} from "@springtype/core";
+import {ActiveRoute} from "@springtype/router";
 
 interface Props {
     styleMode: StyleMode;

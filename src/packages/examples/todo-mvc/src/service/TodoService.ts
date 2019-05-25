@@ -1,5 +1,5 @@
-import {Component} from "@springtype/springtype-incubator-core";
-import {Stateful, StatefulLifecycle} from "@springtype/springtype-incubator-state";
+import {Component} from "@springtype/core";
+import {Stateful, StatefulLifecycle} from "@springtype/state";
 import {IRootState} from "../state/IRootState";
 import {ITodoItem} from "../state/ITodoState";
 

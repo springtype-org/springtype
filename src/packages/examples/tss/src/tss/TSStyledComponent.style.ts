@@ -1,7 +1,7 @@
 import {StyleMode, TSStyledComponent} from "./TSStyledComponent";
-import {HOST_SELECTOR, TypedStyleSheet} from "@springtype/springtype-incubator-core";
+import {HOST_SELECTOR, TypedStyleSheet} from "@springtype/core";
 import {AppTheme} from "../theme";
-import {TypedMediaQueryStyleSheet} from "@springtype/springtype-incubator-core";
+import {TypedMediaQueryStyleSheet} from "@springtype/core";
 
 export default (view: TSStyledComponent, theme: AppTheme): TypedMediaQueryStyleSheet => ({
 

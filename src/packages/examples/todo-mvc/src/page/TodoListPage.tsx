@@ -1,8 +1,8 @@
-import {Element, Lifecycle, Style, UseElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Style, UseElement, ActiveRenderer} from "@springtype/core";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../element/list/ListInnerPartial";
 import {AppLayout} from "../element/layout/AppLayout";
-import {t, Translate} from "@springtype/springtype-incubator-i18n";
+import {t, Translate} from "@springtype/i18n";
 import {style} from "./TodoListPage.style";
 import {e2e} from '../e2e';
 

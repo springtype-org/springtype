@@ -1,4 +1,4 @@
-import {TypedStyleSheet} from "@springtype/springtype-incubator-core";
+import {TypedStyleSheet} from "@springtype/core";
 
 export const style = (): TypedStyleSheet => ({
 

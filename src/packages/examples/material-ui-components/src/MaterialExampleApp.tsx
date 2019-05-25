@@ -1,5 +1,5 @@
-import {MWCButton, MWCCheckbox} from "@springtype/springtype-incubator-material-ui";
-import {setTheme, Theme, UseElement} from "@springtype/springtype-incubator-core";
+import {MWCButton, MWCCheckbox} from "@springtype/material-ui";
+import {setTheme, Theme, UseElement} from "@springtype/core";
 
 @UseElement(MWCCheckbox, MWCButton)
 @Theme({

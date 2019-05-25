@@ -1,5 +1,5 @@
 import {AppLayout} from "../layout/AppLayout";
-import {ActiveRenderer} from '@springtype/springtype-incubator-core';
+import {ActiveRenderer} from '@springtype/core';
 
 export default (component: AppLayout) =>
 
