@@ -19,8 +19,9 @@ export class CSSDeclarationBlockGenerator {
 
                 if (declaration.hasOwnProperty(selector)) {
 
-                    if (selector.indexOf('@media') > -1) {
+                    if (selector.indexOf('@') === 0) {
 
+                        console.log('TSS @');
                         styles = `${styles}\n\n${selector} {${generateDeclaration(declaration[selector], true)}    \n}\n\n`;
 
                     } else {

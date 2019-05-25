@@ -11,7 +11,6 @@
       "src"
     ],
     "jsx": "react",
-    "jsxFactory": "ActiveRenderer.createElement",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
@@ -24,7 +23,7 @@
     "types": ["reflect-metadata", "node"]
   },
   "include": [
-    "src", "test"
+    "src", "test", "../cli-common/src"
   ],
   "exclude": [
     "dist",

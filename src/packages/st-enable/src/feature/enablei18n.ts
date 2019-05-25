@@ -8,6 +8,8 @@ export const enablei18n = async(): Promise<void> => {
 
     await installDependencies([dependency]);
 
+    // TODO: create src/translation and put some translation files (de.json, en.json)
+
     console.log(`${chalk.green('Successfully enabled module: ')} ${chalk.cyan(dependency)}`);
     console.log('');
     console.log('Now you can head on and assign translations like that:');

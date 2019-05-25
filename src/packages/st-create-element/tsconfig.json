@@ -24,7 +24,7 @@
     "types": ["reflect-metadata", "node"]
   },
   "include": [
-    "src", "test", "../cli-common/src"
+    "src", "test"
   ],
   "exclude": [
     "dist",

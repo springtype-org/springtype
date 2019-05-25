@@ -1,12 +1,12 @@
 import {getAppName} from "./function/getAppName";
 import {createApp} from "./function/createApp";
-import {printBanner} from "./function/printBanner";
 import {donationUrl} from "./definition/donationUrl";
+import {printBanner} from "../../cli-common/src/function/printBanner";
 
 const commander = require('commander');
 const envinfo = require('envinfo');
 const chalk = require('chalk');
-const packageJson = require('../package.json');
+const packageJson = require('../../../package.json');
 
 let projectPath: string|undefined = undefined;
 let projectName: string|undefined = undefined;

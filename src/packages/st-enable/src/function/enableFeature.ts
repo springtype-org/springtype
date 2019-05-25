@@ -1,7 +1,7 @@
 import {validateFeatureName} from "./validateFeatureName";
 import {enableRouter} from "../feature/enableRouter";
-import {validateIsSpringTypeProject} from "./validateIsSpringTypeProject";
 import {enablei18n} from "../feature/enablei18n";
+import {validateIsSpringTypeProject} from "../../../cli-common/src/function/validateIsSpringTypeProject";
 
 const chalk = require('chalk');
 

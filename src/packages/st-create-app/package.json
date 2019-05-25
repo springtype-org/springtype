@@ -32,10 +32,10 @@
     "validate-npm-package-name"
   ],
   "bin": {
-    "st-create-app": "./dist/index.js"
+    "st-create-app": "./dist/st-create-app/src/index.js"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/st-create-app/src/index.js",
+  "types": "dist/st-create-app/src/index.d.ts",
   "author": "Aron Homberg",
   "license": "MIT",
   "bugs": {

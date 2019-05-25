@@ -4,7 +4,7 @@ export const packageJsonTemplate = (appName: string) => ({
     private: true,
     "scripts": {
         "clean": "npx rimraf dist .cache",
-        "start": "npx parcel src/index.html",
+        "start": "npx parcel src/index.html --open",
         "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
     },
 });

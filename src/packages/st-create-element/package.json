@@ -1,6 +1,6 @@
 {
-  "name": "st-enable",
-  "version": "1.0.3-alpha.14.0",
+  "name": "st-create-element",
+  "version": "1.0.3-alpha.10",
   "publishConfig": {
     "access": "public"
   },
@@ -8,7 +8,7 @@
     "springtype",
     "scaffold"
   ],
-  "description": "Enables SpringType features in existing projects.",
+  "description": "Scaffold SpringType elements.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kyr0/springtype-incubator.git"
@@ -24,15 +24,15 @@
     "node": ">=10"
   },
   "bundledDependencies": [
+    "fs-extra",
     "chalk",
-    "commander",
-    "cross-spawn"
+    "commander"
   ],
   "bin": {
-    "st-enable": "./dist/st-enable/src/index.js"
+    "st-create-element": "./dist/st-create-element/src/index.js"
   },
-  "main": "dist/st-enable/src/index.js",
-  "types": "dist/st-enable/src/index.d.ts",
+  "main": "dist/st-create-element/src/index.js",
+  "types": "dist/st-create-element/src/index.d.ts",
   "author": "Aron Homberg",
   "license": "MIT",
   "bugs": {
@@ -42,7 +42,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
-    "cross-spawn": "^6.0.5",
+    "fs-extra": "^7.0.1",
     "reflect-metadata": "^0.1.13",
     "tslib": "^1.9.3"
   },

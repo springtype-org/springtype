@@ -1,4 +1,4 @@
-import {kebabToCamelCase} from "../function/kebabToCamelCase";
+import {kebabToCamelCase} from "../../../cli-common/src/function/kebabToCamelCase";
 
 export const indexHtmlTemplate = (appName: string) => `<!DOCTYPE html>
 <html lang="en">
@@ -8,12 +8,10 @@ export const indexHtmlTemplate = (appName: string) => `<!DOCTYPE html>
     <title>${kebabToCamelCase(appName)}</title>
 
     <!-- main application logic entry-point -->
-    <script src="${appName}-app.tsx"></script>
+    <script src="element/${appName}-app/${appName}-app.tsx"></script>
 
 </head>
 <body>
-    <div class="container">
-        <${appName}-app />
-    </div>
+    <${appName}-app />
 </body>
 </html>`;

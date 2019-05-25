@@ -21,7 +21,7 @@ export const validateIsSpringTypeProject = () => {
 
         console.error(
             chalk.red(
-                `This project doesn't look like a SpringType project because package.json is missing.\n`
+                `This project doesn't look like a SpringType project because ${projectPackageJsonFile} is missing.\n`
             )
         );
         printHowToInstallCorrectly();
