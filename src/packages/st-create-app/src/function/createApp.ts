@@ -63,27 +63,27 @@ export const createApp = async(projectPath: string) => {
 
         console.log('Installing dependencies... This might take a couple of minutes.');
 
-        const child = spawn('yarn', ['add', ...dependencies], { stdio: 'inherit' });
+        const child = spawn('npm', ['install', ...dependencies], { stdio: 'inherit' });
 
         child.on('close', (code: number) => {
 
             if (code !== 0) {
 
                 logErrors([
-                    'yarn exited with error code: ' + code
+                    'npm exited with error code: ' + code
                 ]);
                 reject(code);
 
             } else {
 
-                const child = spawn('yarn', ['add', ...devDependencies, '--save-dev'], { stdio: 'inherit' });
+                const child = spawn('npm', ['install', ...devDependencies, '--save-dev'], { stdio: 'inherit' });
 
                 child.on('close', async(code: number) => {
 
                     if (code !== 0) {
 
                         logErrors([
-                            'yarn exited with error code: ' + code
+                            'npm exited with error code: ' + code
                         ]);
                         reject(code);
 
@@ -102,15 +102,15 @@ export const createApp = async(projectPath: string) => {
                         console.log('');
                         console.log('Run (and develop) your app via:');
                         console.log();
-                        console.log(`    ${chalk.grey('yarn start')}`);
+                        console.log(`    ${chalk.grey('npm start')}`);
                         console.log();
                         console.log('Create a production build (see ./dist folder) via:');
                         console.log();
-                        console.log(`    ${chalk.grey('yarn run build')}`);
+                        console.log(`    ${chalk.grey('npm run build')}`);
                         console.log('');
                         console.log('And clean files cached while compilation:');
                         console.log();
-                        console.log(`    ${chalk.grey('yarn run clean')}`);
+                        console.log(`    ${chalk.grey('npm run clean')}`);
                         console.log('');
                         console.log('This is a very basic app example.');
                         console.log('You can enable more SpringType features with:');
@@ -120,7 +120,7 @@ export const createApp = async(projectPath: string) => {
 
                         console.log(chalk.green('Starting development server now...'));
 
-                        spawn('yarn', ['start'], { stdio: 'inherit' });
+                        spawn('npm', ['start'], { stdio: 'inherit' });
 
                         resolve();
 
