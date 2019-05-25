@@ -1,6 +1,9 @@
 {
   "name": "@springtype/springtype-incubator-cli-common",
   "version": "1.0.3-alpha.14.2",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Common functions for CLI apps of SpringType.",
   "repository": {
     "type": "git",
@@ -27,5 +30,5 @@
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "10b7459ec67db7dae7ef91f106013d5340fb8d55"
+  "gitHead": "31674843338389115fc689d3c28599e470840f8e"
 }
