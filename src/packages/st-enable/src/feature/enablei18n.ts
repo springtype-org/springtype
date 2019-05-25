@@ -2,7 +2,7 @@ import {installDependencies} from "../function/installDependencies";
 
 const chalk = require('chalk');
 
-const dependency = '@springtype/springtype-incubator-i18n';
+const dependency = '@springtype/i18n';
 
 export const enablei18n = async(): Promise<void> => {
 

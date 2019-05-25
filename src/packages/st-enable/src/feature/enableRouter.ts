@@ -2,7 +2,7 @@ import {installDependencies} from "../function/installDependencies";
 
 const chalk = require('chalk');
 
-const dependency = '@springtype/springtype-incubator-router';
+const dependency = '@springtype/router';
 
 export const enableRouter = async(): Promise<void> => {
 
