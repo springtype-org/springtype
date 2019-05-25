@@ -1,13 +1,13 @@
 {
   "name": "@springtype/springtype-incubator-material-ui",
-  "version": "1.0.3-alpha.14.1",
+  "version": "1.0.3-alpha.14.2",
   "publishConfig": {
     "access": "public"
   },
   "description": "Material UI for SpringType.",
   "dependencies": {
     "@material/ripple": "^1.1.0",
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.1",
+    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.2",
     "@types/classnames": "^2.2.7",
     "@types/node": "^11.10.5",
     "classnames": "^2.2.6",

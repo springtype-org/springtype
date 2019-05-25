@@ -1,6 +1,6 @@
 {
   "name": "st-create-element",
-  "version": "1.0.3-alpha.14.1",
+  "version": "1.0.3-alpha.14.2",
   "publishConfig": {
     "access": "public"
   },
