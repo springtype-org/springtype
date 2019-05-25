@@ -1,6 +1,7 @@
 {
   "name": "@springtype/springtype",
   "version": "1.0.0-alpha.0",
+  "private": true,
   "description": "SpringType meta package.",
   "repository": {
     "type": "git",
