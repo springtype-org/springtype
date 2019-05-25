@@ -4,7 +4,7 @@ import {printBanner} from "../../cli-common/src/function/printBanner";
 
 const commander = require('commander');
 const chalk = require('chalk');
-const packageJson = require('../package.json');
+const packageJson = require('../../../package.json');
 
 let featureName: string|undefined = undefined;
 
