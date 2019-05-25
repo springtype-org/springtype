@@ -8,6 +8,9 @@
     "springtype",
     "scaffold"
   ],
+  "files": [
+    "dist/*"
+  ],
   "description": "Scaffold SpringType elements.",
   "repository": {
     "type": "git",
