@@ -1,4 +1,4 @@
-export const springTypeCorePackageDependency = '@springtype/springtype-incubator-core';
+export const springTypeCorePackageDependency = '@springtype/core';
 
 export const dependencies = [
     springTypeCorePackageDependency
