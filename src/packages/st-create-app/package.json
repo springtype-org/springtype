@@ -21,7 +21,8 @@
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "run": "node dist/index.js"
+    "run": "node dist/index.js",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">=10"
