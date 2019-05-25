@@ -1,6 +1,6 @@
 {
   "name": "st-enable",
-  "version": "1.0.0-alpha.1.5",
+  "version": "1.0.0-alpha.1.6",
   "publishConfig": {
     "access": "public"
   },
