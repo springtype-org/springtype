@@ -1,7 +1,7 @@
 {
   "name": "@springtype/springtype-incubator-example-todo-mvc",
   "private": true,
-  "version": "1.0.0-alpha.1.8",
+  "version": "1.0.0-alpha.1.9",
   "description": "It just says hello to the world.",
   "dependencies": {
     "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.1",
