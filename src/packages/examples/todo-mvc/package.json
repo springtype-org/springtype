@@ -1,14 +1,14 @@
 {
-  "name": "@springtype/springtype-incubator-example-todo-mvc",
+  "name": "@springtype/example-todo-mvc",
   "private": true,
-  "version": "1.0.3-alpha.14.6",
+  "version": "1.0.0-alpha.1.0",
   "description": "It just says hello to the world.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.6",
-    "@springtype/springtype-incubator-i18n": "^1.0.3-alpha.14.6",
-    "@springtype/springtype-incubator-router": "^1.0.3-alpha.14.6",
-    "@springtype/springtype-incubator-state": "^1.0.3-alpha.14.6",
-    "@springtype/springtype-incubator-test": "^1.0.3-alpha.14.6",
+    "@springtype/core": "^1.0.0-alpha.1.0",
+    "@springtype/i18n": "^1.0.0-alpha.1.0",
+    "@springtype/router": "^1.0.0-alpha.1.0",
+    "@springtype/state": "^1.0.0-alpha.1.0",
+    "@springtype/test": "^1.0.0-alpha.1.0",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "date-fns": "^1.30.1",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "author": "",
   "license": "MIT",

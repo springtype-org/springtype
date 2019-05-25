@@ -1,17 +1,17 @@
 {
-  "name": "@springtype/springtype-incubator-loader",
+  "name": "@springtype/example-svg-loader",
   "private": true,
   "version": "1.0.3-alpha.14.6",
   "description": "The real burger button as svg.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.6",
+    "@springtype/core": "^1.0.0-alpha.1.0",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "author": "",
   "license": "MIT",

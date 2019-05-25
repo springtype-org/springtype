@@ -1,10 +1,10 @@
 {
-  "name": "@springtype/springtype-incubator",
+  "name": "@springtype/springtype",
   "version": "1.0.0-alpha.0",
   "description": "SpringType meta package.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
     "test": "lerna run test",
@@ -18,9 +18,9 @@
   "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyr0/springtype-incubator/issues"
+    "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "homepage": "https://github.com/springtype-org/springtype#readme",
   "devDependencies": {
     "lerna": "^3.13.3",
     "typescript": "^3.3.4000"

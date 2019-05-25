@@ -1,6 +1,6 @@
 {
-  "name": "@springtype/springtype-incubator-i18n",
-  "version": "1.0.3-alpha.14.6",
+  "name": "@springtype/i18n",
+  "version": "1.0.0-alpha.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -19,7 +19,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
     "clean": "npx rimraf dist",
@@ -37,5 +37,5 @@
     "rimraf": "2.6.3",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "7bd5e5f09bf306f2357b47a6ea7183b12897e7b0"
+  "gitHead": "a40ef2202a6f5e6e208c9fc229075e5c50fc75c3"
 }

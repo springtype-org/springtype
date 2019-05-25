@@ -1,13 +1,13 @@
 {
-  "name": "@springtype/springtype-incubator-cli-common",
-  "version": "1.0.3-alpha.14.6",
+  "name": "@springtype/cli-common",
+  "version": "1.0.0-alpha.1.0",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Common functions for CLI apps of SpringType.",
+  "description": "Common functions for scaffolding CLI apps of SpringType.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
     "clean": "npx rimraf dist",
@@ -21,9 +21,9 @@
   "author": "Aron Homberg",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyr0/springtype-incubator/issues"
+    "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "homepage": "https://github.com/springtype-org/springtype#readme",
   "dependencies": {
     "reflect-metadata": "^0.1.13",
     "tslib": "^1.9.3"
@@ -33,5 +33,5 @@
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "7bd5e5f09bf306f2357b47a6ea7183b12897e7b0"
+  "gitHead": "a40ef2202a6f5e6e208c9fc229075e5c50fc75c3"
 }

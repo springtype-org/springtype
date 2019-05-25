@@ -23,7 +23,7 @@
     "types": ["reflect-metadata", "node"]
   },
   "include": [
-    "src", "test"
+    "."
   ],
   "exclude": [
     "dist",

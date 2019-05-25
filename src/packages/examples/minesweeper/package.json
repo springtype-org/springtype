@@ -1,10 +1,10 @@
 {
-  "name": "@springtype/springtype-incubator-hackerthon-b4y3rw4ld-minesweeper",
+  "name": "@springtype/example-hackerthon-b4y3rw4ld-minesweeper",
   "private": true,
-  "version": "1.0.3-alpha.14.6",
+  "version": "1.0.0-alpha.1.0",
   "description": "It shows a burger button to the world.",
   "dependencies": {
-    "@springtype/springtype-incubator-core": "^1.0.3-alpha.14.6",
+    "@springtype/core": "^1.0.0-alpha.1.0",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "tslib": "^1.9.3"
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "author": "",
   "license": "MIT",

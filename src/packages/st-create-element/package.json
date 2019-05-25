@@ -1,6 +1,6 @@
 {
   "name": "st-create-element",
-  "version": "1.0.3-alpha.14.6",
+  "version": "1.0.4-alpha.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -11,7 +11,7 @@
   "description": "Scaffold SpringType elements.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
     "clean": "npx rimraf dist",
@@ -36,9 +36,9 @@
   "author": "Aron Homberg",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyr0/springtype-incubator/issues"
+    "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "homepage": "https://github.com/springtype-org/springtype#readme",
   "dependencies": {
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
@@ -52,5 +52,5 @@
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "7bd5e5f09bf306f2357b47a6ea7183b12897e7b0"
+  "gitHead": "a40ef2202a6f5e6e208c9fc229075e5c50fc75c3"
 }
