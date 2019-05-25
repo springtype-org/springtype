@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/springtype-org/springtype#readme",
+  "homepage": "https://springtype.org",
   "devDependencies": {
     "rimraf": "2.6.3",
     "typescript": "^3.3.4000"

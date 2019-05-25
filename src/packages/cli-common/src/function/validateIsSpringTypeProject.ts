@@ -13,7 +13,7 @@ const printHowToInstallCorrectly = () => {
 
 export const validateIsSpringTypeProject = () => {
 
-    const coreDependency = '@springtype/springtype-incubator-core';
+    const coreDependency = '@springtype/core';
     const projectPackageJsonFile = path.resolve(path.join(process.cwd(), 'package.json'));
 
 

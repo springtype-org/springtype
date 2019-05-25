@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/springtype-org/springtype#readme",
+  "homepage": "https://springtype.org",
   "dependencies": {
     "@types/node": "^11.13.4",
     "reflect-metadata": "^0.1.12",

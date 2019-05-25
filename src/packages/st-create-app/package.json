@@ -45,7 +45,7 @@
   "bugs": {
     "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/springtype-org/springtype#readme",
+  "homepage": "https://springtype.org",
   "dependencies": {
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
