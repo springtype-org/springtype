@@ -1,5 +1,5 @@
 import {BurgerType} from "../../../../burger-button/src/burger-button/BurgerButton";
-import {ActiveRenderer} from '@springtype/springtype-incubator-core';
+import {ActiveRenderer} from '@springtype/core';
 
 export default () =>
 

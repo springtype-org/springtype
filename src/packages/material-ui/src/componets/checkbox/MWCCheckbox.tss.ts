@@ -1,6 +1,6 @@
-import {HOST_SELECTOR} from "@springtype/springtype-incubator-core";
+import {HOST_SELECTOR} from "@springtype/core";
 import {MWCCheckbox} from "./MWCCheckbox";
-import {TypedStyleSheet} from "@springtype/springtype-incubator-core";
+import {TypedStyleSheet} from "@springtype/core";
 
 export default (view: MWCCheckbox): TypedStyleSheet => ({
 

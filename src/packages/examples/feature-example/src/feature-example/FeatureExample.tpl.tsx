@@ -4,7 +4,7 @@ import yoda from "./../assets/yoda-rtfm.png";
 import "./FeatureExample.scss";
 import {BurgerType} from "../../../burger-button/src/burger-button/BurgerButton";
 import {LoaderType} from "../../../svg-loader/src/svg-loader/SVGLoader";
-import {ActiveRenderer} from '@springtype/springtype-incubator-core';
+import {ActiveRenderer} from '@springtype/core';
 
 export default (view: FeatureExample) =>
 

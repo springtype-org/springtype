@@ -5,7 +5,7 @@ import {
     Style,
     Template,
     Partial
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 import {MDCRipple} from '@material/ripple';

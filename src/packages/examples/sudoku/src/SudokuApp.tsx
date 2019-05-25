@@ -1,4 +1,4 @@
-import {ApplicationEnvironment, Logger, LogLevel, Theme, UseElement} from "@springtype/springtype-incubator-core";
+import {ApplicationEnvironment, Logger, LogLevel, Theme, UseElement} from "@springtype/core";
 import {theme} from "./theme";
 import {SudokuComponent} from "./game/SudokuComponent";
 

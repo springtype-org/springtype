@@ -8,10 +8,10 @@ import {
     UseElement,
     VirtualElement,
     ActiveRenderer,
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
-import {Partial} from "@springtype/springtype-incubator-core";
+import {Partial} from "@springtype/core";
 
 @Element('st-router-outlet')
 @UseElement(ErrorMessage)

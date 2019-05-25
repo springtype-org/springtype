@@ -21,14 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyr0/springtype-incubator.git"
+    "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyr0/springtype-incubator/issues"
+    "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "homepage": "https://github.com/kyr0/springtype-incubator#readme",
+  "homepage": "https://springtype.org",
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",

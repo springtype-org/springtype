@@ -1,4 +1,4 @@
-import {Attribute, Element, Lifecycle, Template, UseElement} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Template, UseElement} from "@springtype/core";
 import template from "./FeatureExample.tpl";
 import {BurgerExample} from "../components/burger/BurgerExample";
 

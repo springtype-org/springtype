@@ -1,4 +1,4 @@
-import {Component} from "@springtype/springtype-incubator-core";
+import {Component} from "@springtype/core";
 import * as i18next from "i18next";
 import {LanguageChangedHandler} from "./interface/LanguageChangedHandler";
 

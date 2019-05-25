@@ -1,4 +1,4 @@
-import {ApplicationContext} from "@springtype/springtype-incubator-core";
+import {ApplicationContext} from "@springtype/core";
 import {ActiveRoute} from "../ActiveRoute";
 
 export const registerRoute = (route: string, webComponent: any): void => {

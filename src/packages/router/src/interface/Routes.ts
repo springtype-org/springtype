@@ -1,4 +1,4 @@
-import {ComponentImpl, VirtualElement} from "@springtype/springtype-incubator-core";
+import {ComponentImpl, VirtualElement} from "@springtype/core";
 import {RouteDefinition} from "./RouteDefinition";
 
 export interface Routes {

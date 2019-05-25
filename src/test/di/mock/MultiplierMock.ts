@@ -1,5 +1,5 @@
 import {UnresolvableBean} from "../helper/UnresolvableBean";
-import {Component} from "@springtype/springtype-incubator-core";
+import {Component} from "@springtype/core";
 
 @Component
 export class MultiplierMock {

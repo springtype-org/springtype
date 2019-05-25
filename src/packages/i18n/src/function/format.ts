@@ -1,4 +1,4 @@
-import {ApplicationContext} from "@springtype/springtype-incubator-core";
+import {ApplicationContext} from "@springtype/core";
 import {FormatFunction} from "i18next";
 import {TranslationFormatterMap} from "../interface/TranslationFormatterMap";
 import {TRANSLATION_FORMAT} from "../constants";

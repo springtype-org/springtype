@@ -1,4 +1,4 @@
-import {VirtualElement} from "@springtype/springtype-incubator-core";
+import {VirtualElement} from "@springtype/core";
 
 export interface LocationChangeDecision {
     guard?: (locationChangeDecision?: LocationChangeDecision) => Promise<boolean>;

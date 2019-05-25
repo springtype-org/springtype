@@ -6,7 +6,7 @@ import {
     VirtualElement,
     WebComponentReflector,
     ActiveRenderer,
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 import {RouterOutlet} from "../RouterOutlet";
 import {RouterImpl} from "../interface/RouterImpl";
 import {TokenizedRoutes} from "../interface/TokenizedRoutes";

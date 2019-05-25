@@ -1,4 +1,4 @@
-import {ApplicationContext, Component} from "@springtype/springtype-incubator-core";
+import {ApplicationContext, Component} from "@springtype/core";
 import * as R from "@rematch/core";
 import {RematchDispatcher} from "@rematch/core";
 import {StateManager} from "../StateManager";

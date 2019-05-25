@@ -1,5 +1,5 @@
 import {SudokuComponent} from "./SudokuComponent";
-import {HOST_SELECTOR} from "@springtype/springtype-incubator-core";
+import {HOST_SELECTOR} from "@springtype/core";
 import {AppTheme} from "../theme";
 
 export default (view: SudokuComponent, theme: AppTheme) => ({

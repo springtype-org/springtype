@@ -1,4 +1,4 @@
-import {Attribute, Element, Lifecycle, Template} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Template} from "@springtype/core";
 import template from "./SVGLoader.tpl";
 
 export interface LoaderProps {

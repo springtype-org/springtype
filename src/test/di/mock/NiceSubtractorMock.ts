@@ -1,4 +1,4 @@
-import {Component} from "@springtype/springtype-incubator-core";
+import {Component} from "@springtype/core";
 import {AbstractSubtractor} from "../helper/AbstractSubtractor";
 
 @Component

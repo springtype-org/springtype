@@ -1,4 +1,4 @@
-import {getParamNames} from "@springtype/springtype-incubator-core";
+import {getParamNames} from "@springtype/core";
 import {IValidator, VALIDATOR_DEFAULT} from "./Validator";
 import {validate} from "./validators/Required";
 

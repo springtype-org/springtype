@@ -1,7 +1,7 @@
-import {Attribute, Element, Lifecycle, OnAttributeChange, Template} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, OnAttributeChange, Template} from "@springtype/core";
 import "./FieldComponent.scss"
 import template from "./FieldComponent.tpl"
-import {Partial} from "@springtype/springtype-incubator-core";
+import {Partial} from "@springtype/core";
 
 export interface Neighbors {
     all: number[]

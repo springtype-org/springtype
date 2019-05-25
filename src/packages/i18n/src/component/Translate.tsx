@@ -1,4 +1,4 @@
-import {Attribute, Element, Lifecycle, Partial} from "@springtype/springtype-incubator-core";
+import {Attribute, Element, Lifecycle, Partial} from "@springtype/core";
 import {t} from "../i18nextAdaper";
 import {TranslationOptions} from "i18next";
 

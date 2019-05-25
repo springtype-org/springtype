@@ -1,5 +1,5 @@
 import {AbstractSubtractor} from "../helper/AbstractSubtractor";
-import {Component} from "@springtype/springtype-incubator-core";
+import {Component} from "@springtype/core";
 import {NiceSubtractorMock} from "../mock/NiceSubtractorMock";
 
 @Component({

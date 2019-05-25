@@ -1,5 +1,5 @@
 import {Store} from "../Store";
-import {ApplicationContext} from "@springtype/springtype-incubator-core";
+import {ApplicationContext} from "@springtype/core";
 import {DEFAULT_STATE_FIELD_NAME} from "../constant/DEFAULT_STATE_FIELD_NAME";
 
 export const createStateGetter = (

@@ -1,6 +1,6 @@
 import {Gain} from "./components/Gain";
-import {ApplicationContext, InjectionProfile, InjectionStrategy} from "@springtype/springtype-incubator-core";
-import {validateRequired} from "@springtype/springtype-incubator-validate";
+import {ApplicationContext, InjectionProfile, InjectionStrategy} from "@springtype/core";
+import {validateRequired} from "@springtype/validate";
 import {Simple} from "./components/Simple";
 import {expect} from "chai";
 import 'mocha';

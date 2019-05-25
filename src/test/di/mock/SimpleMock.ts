@@ -1,4 +1,4 @@
-import {Autowired, Component, Inject} from "@springtype/springtype-incubator-core";
+import {Autowired, Component, Inject} from "@springtype/core";
 import {NiceSubtractor} from "../components/NiceSubtractor";
 import {Subtractor} from "../components/Subtractor";
 import {Multiplier} from "../components/Multiplier";

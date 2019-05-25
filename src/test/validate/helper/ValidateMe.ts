@@ -13,7 +13,7 @@ import {
     Required,
     Validate,
     Validation
-} from "@springtype/springtype-incubator-validate";
+} from "@springtype/validate";
 
 export const now = Date.now();
 export const pastDate = new Date(now - 1000);

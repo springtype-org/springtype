@@ -1,4 +1,4 @@
-import {Try, UndefinedError} from "@springtype/springtype-incubator-core";
+import {Try, UndefinedError} from "@springtype/core";
 import {expect} from "chai";
 import 'mocha';
 

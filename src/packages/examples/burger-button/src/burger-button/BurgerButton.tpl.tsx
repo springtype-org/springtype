@@ -1,5 +1,5 @@
 import {BurgerButton, BurgerType} from "./BurgerButton";
-import {ActiveRenderer} from '@springtype/springtype-incubator-core';
+import {ActiveRenderer} from '@springtype/core';
 
 import "./BurgerButton.scss";
 

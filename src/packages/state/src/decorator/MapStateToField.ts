@@ -3,7 +3,7 @@ import {
     ComponentImpl,
     ComponentReflector,
     createChangeDetector
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 import {Store} from "../Store";
 
 export function MapStateToField(

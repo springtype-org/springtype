@@ -1,5 +1,5 @@
 import {MWCCheckbox} from "./MWCCheckbox";
-import {VirtualElement, ActiveRenderer} from "@springtype/springtype-incubator-core";
+import {VirtualElement, ActiveRenderer} from "@springtype/core";
 import classNames from "classnames";
 
 export default (view: MWCCheckbox) => {

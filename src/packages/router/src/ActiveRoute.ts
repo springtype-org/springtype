@@ -1,4 +1,4 @@
-import {Component} from "@springtype/springtype-incubator-core";
+import {Component} from "@springtype/core";
 import {RouterImpl} from "./interface/RouterImpl";
 import {Routes} from "./interface/Routes";
 import {getRouter} from "./context/router";

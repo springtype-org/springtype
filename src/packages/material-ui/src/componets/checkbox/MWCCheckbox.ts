@@ -6,7 +6,7 @@ import {
     Style,
     Template,
     Partial
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
 

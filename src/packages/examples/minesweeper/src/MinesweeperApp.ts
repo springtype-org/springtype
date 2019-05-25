@@ -1,4 +1,4 @@
-import {Element, Lifecycle, Memoize, Randomizer, Template, UseElement} from "@springtype/springtype-incubator-core";
+import {Element, Lifecycle, Memoize, Randomizer, Template, UseElement} from "@springtype/core";
 import template from "./MinesweeperApp.tpl";
 import {FieldComponent, FieldProp, Neighbors} from "./components/field/FieldComponent";
 

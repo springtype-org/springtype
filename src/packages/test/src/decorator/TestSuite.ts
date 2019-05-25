@@ -1,11 +1,11 @@
 import "mocha";
-import {registerJSDOM} from "@springtype/springtype-incubator-ssr";
+import {registerJSDOM} from "@springtype/ssr";
 
 // register JSDOM with web component support
 registerJSDOM();
 
 import {ITestRegistration, TEST_CONFIGS} from "./TestCase";
-import {ComponentReflector, Component} from "@springtype/springtype-incubator-core";
+import {ComponentReflector, Component} from "@springtype/core";
 import {expect} from "chai";
 
 export interface ITestClass<TC> extends Function {

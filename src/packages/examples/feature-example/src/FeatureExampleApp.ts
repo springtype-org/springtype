@@ -1,4 +1,4 @@
-import {Element, Template, UseElement} from "@springtype/springtype-incubator-core";
+import {Element, Template, UseElement} from "@springtype/core";
 import template from "./FeatureExampleApp.tpl";
 import {BurgerButton} from "../../burger-button/src/burger-button/BurgerButton";
 

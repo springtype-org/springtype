@@ -12,7 +12,7 @@ import {
     Template,
     OnFieldChange,
     warn,
-} from "@springtype/springtype-incubator-core";
+} from "@springtype/core";
 
 interface GameState {
     won: boolean;

@@ -1,5 +1,5 @@
 import * as Rematch from "@rematch/core";
-import {ApplicationContext} from "@springtype/springtype-incubator-core";
+import {ApplicationContext} from "@springtype/core";
 import {STORE} from "./constant/STORE";
 import {MODEL} from "./constant/MODEL";
 import immerPlugin from "@rematch/immer";

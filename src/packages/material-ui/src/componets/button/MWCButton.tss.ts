@@ -1,5 +1,5 @@
 import {MWCButton} from "./MWCButton";
-import {HOST_SELECTOR, TypedStyleSheet} from "@springtype/springtype-incubator-core";
+import {HOST_SELECTOR, TypedStyleSheet} from "@springtype/core";
 
 export default (view: MWCButton): TypedStyleSheet => ({
 
