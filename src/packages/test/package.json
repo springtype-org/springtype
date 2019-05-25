@@ -1,13 +1,13 @@
 {
   "name": "@springtype/test",
-  "version": "1.0.0-alpha.1.0",
+  "version": "1.0.0-alpha.1.1",
   "publishConfig": {
     "access": "public"
   },
   "description": "Mocha/Chai test adapters for SpringType.",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.0",
-    "@springtype/ssr": "^1.0.0-alpha.1.0",
+    "@springtype/core": "^1.0.0-alpha.1.1",
+    "@springtype/ssr": "^1.0.0-alpha.1.1",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
