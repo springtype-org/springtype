@@ -1,6 +1,6 @@
 {
   "name": "st-create-app",
-  "version": "1.0.3-alpha.14.2",
+  "version": "1.0.3-alpha.14.3",
   "publishConfig": {
     "access": "public"
   },

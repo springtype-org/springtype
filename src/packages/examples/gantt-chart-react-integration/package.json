@@ -1,6 +1,6 @@
 {
   "name": "gantt-chart-react-integration",
-  "version": "1.0.3-alpha.14.2",
+  "version": "1.0.3-alpha.14.3",
   "private": true,
   "dependencies": {
     "@springtype/springtype-incubator-gantt-chart": "file:../gantt-chart",
