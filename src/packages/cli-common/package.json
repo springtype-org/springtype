@@ -1,6 +1,6 @@
 {
   "name": "@springtype/springtype-incubator-cli-common",
-  "version": "1.0.3-alpha.14.4",
+  "version": "1.0.3-alpha.14.5",
   "publishConfig": {
     "access": "public"
   },
