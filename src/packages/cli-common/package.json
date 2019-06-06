@@ -1,6 +1,6 @@
 {
   "name": "@springtype/cli-common",
-  "version": "1.0.0-alpha.1.10",
+  "version": "1.0.0-alpha.1.11",
   "publishConfig": {
     "access": "public"
   },

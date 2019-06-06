@@ -1,10 +1,10 @@
 {
   "name": "@springtype/example-sudoku",
   "private": true,
-  "version": "1.0.0-alpha.1.10",
+  "version": "1.0.0-alpha.1.11",
   "description": "TypeScript Style Sheets.",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.10",
+    "@springtype/core": "^1.0.0-alpha.1.11",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "parcel-bundler": "^1.10.1",

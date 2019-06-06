@@ -1,6 +1,6 @@
 {
   "name": "@springtype/state",
-  "version": "1.0.0-alpha.1.10",
+  "version": "1.0.0-alpha.1.11",
   "publishConfig": {
     "access": "public"
   },
@@ -8,7 +8,7 @@
   "dependencies": {
     "@rematch/core": "1.1.0",
     "@rematch/immer": "1.0.2",
-    "@springtype/core": "^1.0.0-alpha.1.10",
+    "@springtype/core": "^1.0.0-alpha.1.11",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
     "ts-polyfill": "^3.3.3",

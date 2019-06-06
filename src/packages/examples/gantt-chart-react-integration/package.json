@@ -1,6 +1,6 @@
 {
   "name": "@springtype/example-gantt-chart-react-integration",
-  "version": "1.0.0-alpha.1.10",
+  "version": "1.0.0-alpha.1.11",
   "private": true,
   "dependencies": {
     "@springtype/gantt-chart": "file:../gantt-chart",
