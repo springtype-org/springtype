@@ -71,12 +71,18 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     const componentInlineStyle: any =
                         CSSInlineStyleGenerator.generateForStyleAttribute(style(this, theme));
 
+                    const allStyles: any = {};
+
                     for (let styleAttributeName in componentInlineStyle) {
 
                         if (componentInlineStyle.hasOwnProperty(styleAttributeName)) {
-                            this.style[styleAttributeName] = componentInlineStyle[styleAttributeName];
+
+                            // cannot set directly, because browsers removed the setter / DOM API change
+                            allStyles[styleAttributeName] = componentInlineStyle[styleAttributeName];
                         }
                     }
+
+                    this.style = allStyles;
                 }
 
                 if (super.render) {
