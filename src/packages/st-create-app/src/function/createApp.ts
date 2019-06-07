@@ -92,7 +92,7 @@ export const createApp = async(projectPath: string) => {
                         const elementName = appName + '-app';
 
                         // write $appName-app.tsx
-                        await createElement(elementName, appElementTemplate(`src/element/${elementName}/${elementName}.tsx`), appElementStyleTemplate());
+                        await createElement(elementName, appElementTemplate(`src/element/${elementName}/${elementName}.tsx`), appElementStyleTemplate(elementName));
 
                         console.log(chalk.green('Thank you for choosing SpringType!'));
                         console.log('');

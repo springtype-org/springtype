@@ -1,10 +1,11 @@
-export default () => ({
+export default (elementName: string) => ({
 
     'body, html': {
         'padding': '0',
         'margin': '0',
         'height': '100%',
     },
+
     '.container': {
         'margin': 'auto',
         'border-radius': '5px',
@@ -17,7 +18,7 @@ export default () => ({
         'border-radius': '4px',
         'padding': '2px 5px',
     },
-    ':host': {
+    [elementName]: {
         'display': 'flex',
         'flex-direction': 'column',
         'font-family': 'sans-serif',
