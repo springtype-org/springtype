@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "lerna run test",
+    "prune": "lerna run prune",
     "clean": "lerna run clean",
     "publish": "lerna publish",
     "build": "lerna run build",

@@ -10,6 +10,7 @@
     "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
+    "prune": "npx rimraf dist node_modules package-lock.json",
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
