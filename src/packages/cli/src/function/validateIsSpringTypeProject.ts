@@ -6,7 +6,7 @@ const printHowToInstallCorrectly = () => {
     console.log();
     console.log('You can create a valid SpringType app in this folder using:');
     console.log();
-    console.log('\tnpx st create');
+    console.log('\tnpx springtype create');
     console.log();
 };
 

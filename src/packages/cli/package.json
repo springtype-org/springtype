@@ -21,7 +21,7 @@
     "clean": "rimraf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
-    "build": "tsc && npx ncp template dist/template",
+    "build": "tsc  && npx ncp template dist/template && npx ncp package.json dist/package.json",
     "run": "node dist/index.js",
     "prepublishOnly": "npm run build"
   },
@@ -37,11 +37,12 @@
     "validate-npm-package-name"
   ],
   "bin": {
-    "st": "./dist/st/src/index.js"
+    "springtype": "./dist/st/src/index.js",
+    "st-create-app": "./dist/st/src/index.js create"
   },
   "main": "dist/st/src/index.js",
   "types": "dist/st/src/index.d.ts",
-  "author": "Aron Homberg",
+  "author": "Aron Homberg Michael Mannseicher",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/springtype-org/springtype/issues"
@@ -49,6 +50,10 @@
   "homepage": "https://springtype.org",
   "dependencies": {
     "@springtype/core": "^1.0.0-alpha.1.11",
+    "@springtype/i18n": "^1.0.0-alpha.1.11",
+    "@springtype/router": "^1.0.0-alpha.1.11",
+    "@springtype/state": "^1.0.0-alpha.1.11",
+    "@springtype/test": "^1.0.0-alpha.1.11",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "cross-spawn": "^6.0.5",

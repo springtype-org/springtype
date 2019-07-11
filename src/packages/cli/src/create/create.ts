@@ -1,20 +1,30 @@
 import {Command} from "commander";
-import {createApp} from "./app/app";
 import {createComponent} from "./component/component";
+import {createProject} from "./project/project";
 
 const inquirer = require('inquirer');
+
+enum Category {
+    PROJECT = 'project',
+    COMPONENT = 'component'
+}
+
+export const enumToArray = (enumme: any) => {
+    return Object.keys(enumme)
+        .map(key => enumme[key]);
+};
 
 export default function create(program: Command) {
     program.command('create')
         .alias('c')
-        .description('create an new app, component or page')
+        .description('create an new')
         .action(async () => {
 
-            const choices = ['app', 'component', 'page'];
-            const answer = await inquirer.prompt([
+            const categories = enumToArray(Category);
+            const choice: { action: Category } = await inquirer['prompt']([
                 {
                     type: 'list',
-                    choices: choices,
+                    choices: categories,
                     name: 'action',
                     default: 'component',
                     message: 'Please select create action',
@@ -23,16 +33,15 @@ export default function create(program: Command) {
                     }
                 }
             ]);
-            const action: 'component' | 'page' | 'app' = answer.action;
+            const action: Category = choice.action;
             const projectPath = process.cwd();
 
             switch (action) {
-                case 'component':
-                case 'page':
+                case Category.COMPONENT:
                     await createComponent(projectPath, action);
                     break;
-                case 'app':
-                    await createApp(projectPath);
+                case Category.PROJECT:
+                    await createProject(projectPath);
                     break;
             }
         });
