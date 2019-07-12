@@ -1,20 +1,12 @@
 import {Command} from "commander";
-import {createComponent} from "./component/component";
-import {createProject} from "./project/project";
+import {enumToArray} from "./enumToArray";
+import {Category} from "../definition/category";
+import {createComponent} from "../component/component";
+import {createProject} from "../project/function/createProject";
 
 const inquirer = require('inquirer');
 
-enum Category {
-    PROJECT = 'project',
-    COMPONENT = 'component'
-}
-
-export const enumToArray = (enumme: any) => {
-    return Object.keys(enumme)
-        .map(key => enumme[key]);
-};
-
-export default function create(program: Command) {
+export default function registerCreateCommand(program: Command) {
     program.command('create')
         .alias('c')
         .description('create an new')

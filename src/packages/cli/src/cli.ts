@@ -1,18 +1,57 @@
-import create from "./create/create";
 import {printHeader} from "./function/printHeader";
+import registerCreateCommand from "./create/function/registerCreateCommand";
 
-const program = require('commander');
-const VERSION: string = "0.1.0";
+const commander = require('commander');
+const envinfo = require('envinfo');
+const chalk = require('chalk');
+const packageJson = require('./package.json');
 
+// always print the header first
 printHeader();
 
-program.version(VERSION).description('SpringType commandline interface');
+if (process.argv.length < 3) {
+    process.argv.push('--help')
+}
 
-//load programs
-create(program);
+const program = new commander.Command(packageJson.name)
+    .version(packageJson.version)
+    .option('--info', 'print environment debug info')
+    .allowUnknownOption()
+    .on('--help', () => {
+        console.log();
+        console.log(
+            `    If you have any problems, do not hesitate to file an issue:`
+        );
+        console.log(
+            `      ${chalk.cyan(packageJson.bugs.url)}`
+        );
+        console.log();
+    });
 
-program.parse(process.argv);
+(async() => {
 
+    if (program.info) {
 
+        console.log(chalk.bold('\nEnvironment Info:'));
 
+        envinfo.run(
+            {
+                System: ['OS', 'CPU'],
+                Binaries: ['Node', 'npm', 'Yarn'],
+                Browsers: ['Chrome', 'Edge', 'Internet Explorer', 'Firefox', 'Safari'],
+                npmPackages: ['@springtype/core'],
+                npmGlobalPackages: ['st-create'],
+            },
+            {
+                duplicates: true,
+                showNotFound: true,
+            }
+        )
+        .then(console.log);
+    }
 
+    await registerCreateCommand(program);
+
+    program.parse(process.argv);
+
+})();

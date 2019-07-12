@@ -1,4 +1,5 @@
 import {TemplateNameApp} from "./templatename-app";
+import {ActiveRenderer} from '@springtype/core';
 
 export default (component: TemplateNameApp) =>
     <div class="container">

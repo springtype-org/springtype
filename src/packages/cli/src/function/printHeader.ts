@@ -6,6 +6,8 @@ export const printHeader = () => {
       ___) | |_) | |  | | | | | (_| || || |_| | |_) |  __/
      |____/| .__/|_|  |_|_| |_|\\__, ||_| \\__, | .__/ \\___|
            |_|                 |___/     |___/|_|         
+     by Aron Homberg && Michael Mannseicher
+     Please support our work @ https://www.patreon.com/springtype
 `
     );
 };

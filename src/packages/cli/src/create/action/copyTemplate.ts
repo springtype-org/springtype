@@ -1,30 +1,30 @@
-import {copyRenameReplaceFile} from "../../function/copyRenameReplaceFile";
+import {copyAndConcreteFile} from "../../function/copyAndConcreteFile";
 
 const fs = require('fs');
 
-export const copyTemplate = (projectPath: string, templateFolderPath: string, appName: string): boolean => {
+export const copyTemplate = (projectPath: string, templateFolderPath: string, concreteName: string): boolean => {
 
     console.log();
     console.log('creating files:');
-    getFiles(templateFolderPath, (filePath: string) => copyRenameReplaceFile({
-        filePath: filePath,
-        templateFolderPath: templateFolderPath,
-        projectPath: projectPath,
-        appName: appName
+    getFiles(templateFolderPath, (filePath: string) => copyAndConcreteFile({
+        filePath,
+        templateFolderPath,
+        projectPath,
+        concreteName
     }));
 
     return true;
 };
 
 
-const getFiles = (dir: string, fun: (filePath: string) => void) => {
+const getFiles = (dir: string, fileDiscoveredCb: (filePath: string) => void) => {
     const files = fs.readdirSync(dir);
     for (const i in files) {
-        const name = dir + '/' + files[i];
-        if (fs.statSync(name).isDirectory()) {
-            getFiles(name, fun);
+        const path = dir + '/' + files[i];
+        if (fs.statSync(path).isDirectory()) {
+            getFiles(path, fileDiscoveredCb);
         } else {
-            fun(name);
+            fileDiscoveredCb(path);
         }
     }
 };

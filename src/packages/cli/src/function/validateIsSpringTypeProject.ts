@@ -4,12 +4,13 @@ const path = require('path');
 
 const printHowToInstallCorrectly = () => {
     console.log();
-    console.log('You can create a valid SpringType app in this folder using:');
+    console.log('You can create a SpringType project simply by running:');
     console.log();
-    console.log('\tnpx springtype create');
+    console.log('\tnpx st-create project');
     console.log();
 };
 
+// TODO: Re-use in component generation
 export const validateIsSpringTypeProject = () => {
 
     const coreDependency = '@springtype/core';
@@ -22,6 +23,7 @@ export const validateIsSpringTypeProject = () => {
     }
 
     const projectPackageJson = require(projectPackageJsonFile);
+
     if (!projectPackageJson.dependencies || !projectPackageJson.dependencies[coreDependency]) {
 
         console.error(

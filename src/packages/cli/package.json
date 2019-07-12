@@ -1,5 +1,5 @@
 {
-  "name": "st",
+  "name": "springtype",
   "version": "1.0.0-alpha.1.12",
   "publishConfig": {
     "access": "public"
@@ -11,7 +11,7 @@
   "files": [
     "dist/*"
   ],
-  "description": "Scaffold SpringType apps.",
+  "description": "Scaffolding for SpringType.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/springtype-org/springtype.git"
@@ -21,7 +21,7 @@
     "clean": "rimraf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
-    "build": "tsc  && npx ncp template dist/template && npx ncp package.json dist/package.json",
+    "build": "tsc && npx ncp template dist/template && npx ncp package.json dist/package.json",
     "run": "node dist/index.js",
     "prepublishOnly": "npm run build"
   },
@@ -38,7 +38,7 @@
   ],
   "bin": {
     "springtype": "./dist/st/src/index.js",
-    "st-create-app": "./dist/st/src/index.js create"
+    "st-create": "./dist/st/src/index.js create"
   },
   "main": "dist/st/src/index.js",
   "types": "dist/st/src/index.d.ts",
