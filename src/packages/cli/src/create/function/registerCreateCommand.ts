@@ -1,8 +1,8 @@
 import {Command} from "commander";
 import {enumToArray} from "./enumToArray";
 import {Category} from "../definition/category";
-import {createComponent} from "../component/component";
 import {createProject} from "../project/function/createProject";
+import {createWebComponent} from "../web-component/function/createWebComponent";
 
 const inquirer = require('inquirer');
 
@@ -29,8 +29,8 @@ export default function registerCreateCommand(program: Command) {
             const projectPath = process.cwd();
 
             switch (action) {
-                case Category.COMPONENT:
-                    await createComponent(projectPath, action);
+                case Category.WEB_COMPONENT:
+                    await createWebComponent(projectPath);
                     break;
                 case Category.PROJECT:
                     await createProject(projectPath);

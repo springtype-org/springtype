@@ -11,7 +11,7 @@ export const createProjectFolder = (projectPath: string, projectName: string): b
         return false;
     }
 
-    console.log(`Creating a new SpringType app in ${chalk.green(projectPath)}.`);
+    console.log(`Creating a new SpringType project in ${chalk.green(projectPath)}.`);
 
     return true;
 };

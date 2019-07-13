@@ -1,4 +1,4 @@
 export enum Category {
     PROJECT = 'project',
-    COMPONENT = 'component'
+    WEB_COMPONENT = 'web-component'
 }

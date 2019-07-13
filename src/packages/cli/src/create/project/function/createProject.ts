@@ -1,11 +1,11 @@
 import {validateProjectDirectoryInput} from "./validateProjectDirectoryInput";
-import {Dirent} from "fs";
 import {createProjectFolder} from "./createProjectFolder";
 import {copyTemplate} from "../../action/copyTemplate";
 import {installModules} from "../action/installModules";
-import {printBanner} from "../../../function/printBanner";
 import {donationUrl} from "../../../definition/donationUrl";
 import {startApp} from "../action/startApp";
+import {getTemplatesFromFolder} from "../../../function/getTemplates";
+import {printFooter} from "./printFooter";
 
 const inquirer = require('inquirer');
 const chalk = require('chalk');
@@ -25,13 +25,10 @@ const transformPackageDependenciesToStrings = (packageJson: any, key: string): A
     return dependencies;
 };
 
-export async function createProject(executePath: string) {
+export async function createProject(cwd: string) {
 
     const templateFolderPath = path.resolve(__dirname, '../../../template/project');
-
-    const templates = fs.readdirSync(templateFolderPath, {withFileTypes: true})
-        .filter((directoryEntry: Dirent) => directoryEntry.isDirectory())
-        .map((directoryEntry: Dirent) => directoryEntry.name);
+    const templates = getTemplatesFromFolder(templateFolderPath);
 
     const templateFolderChoice: { templateFolder: string } = await inquirer['prompt']([
         {
@@ -53,13 +50,14 @@ export async function createProject(executePath: string) {
         {
             type: 'input',
             name: 'name',
-            message: `Please specify the project directory (${chalk.cyan('st-my-app')}):`,
+            message: `Please specify the project directory (e.g. ${chalk.cyan('my-project')}):`,
             validate: validateProjectDirectoryInput
         }
     ]);
 
     const appName = choiceProjectName.name;
-    const projectPath = path.join(executePath, appName);
+    const projectPath = path.join(cwd, appName);
+
     if (!createProjectFolder(projectPath, appName)) {
         return false;
     }
@@ -81,7 +79,7 @@ export async function createProject(executePath: string) {
     const packageJson: { homepage: string; bugs: { url: string } } =
         JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../package.json'), {encoding: 'utf8'}));
 
-    printBanner(packageJson.homepage, projectPath, packageJson.bugs.url, donationUrl);
+    printFooter(packageJson.homepage, projectPath, packageJson.bugs.url, donationUrl);
 
     if (!(await startApp(projectPath))) {
         return false;

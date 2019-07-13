@@ -4,7 +4,7 @@ const validateProjectName = require('validate-npm-package-name');
 const chalk = require('chalk');
 const path = require('path');
 
-export const validateProjectDirectoryInput = (projectDirectory: string) => {
+export const validateProjectDirectoryInput = (projectDirectory: string): boolean|string => {
     if(projectDirectory.startsWith('/')){
         return `Could not create a project called ${chalk.red(`"${projectDirectory}"`)}:`
             + concatErrors(['use relative path'])
