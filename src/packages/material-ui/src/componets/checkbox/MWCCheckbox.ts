@@ -1,6 +1,6 @@
 import {
     Attribute, AttributeType,
-    Element,
+    WebComponent,
     EventAttribute,
     Lifecycle,
     Style,
@@ -10,7 +10,7 @@ import {
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
 
-@Element('mwc-checkbox')
+@WebComponent('mwc-checkbox')
 @Template(template)
 @Style(style)
 export class MWCCheckbox extends HTMLElement implements Lifecycle {

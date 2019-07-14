@@ -1,0 +1,30 @@
+{
+  "name": "templatename-from-scratch",
+  "private": true,
+  "version": "0.0.1",
+  "description": "templatename is a SpringType project based on template: scratch.",
+  "dependencies": {
+    "@springtype/core": "^1.0.0-alpha.1.11",
+    "@springtype/router": "^1.0.0-alpha.1.11",
+    "@types/node": "^11.10.5",
+    "cross-env": "^5.2.0",
+    "parcel-bundler": "^1.10.1",
+    "tslib": "^1.9.3"
+  },
+  "scripts": {
+    "clean": "npx rimraf dist .cache",
+    "start": "npx parcel src/index.html",
+    "serve": "npx parcel serve src/index.html --public-url .",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "parcel": "^1.11.0",
+    "sass": "^1.17.2",
+    "typescript": "^3.1.1"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

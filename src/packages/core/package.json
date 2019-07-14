@@ -15,8 +15,6 @@
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "test": "mocha -r ts-node/register test/**/*.test.ts",
-    "test-with-coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" mocha -r ts-node/register test/**/*.test.ts && nyc report",
     "prepublishOnly": "npm run build"
   },
   "main": "dist/core/index.js",
@@ -33,12 +31,6 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/mocha": "^5.2.6",
-    "chai": "^4.2.0",
-    "mocha": "^6.1.4",
-    "nyc": "^14.0.0",
-    "rimraf": "2.6.3",
     "source-map-support": "^0.5.11",
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"

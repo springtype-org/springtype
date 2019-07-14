@@ -2,7 +2,7 @@ const getSelectedSpringTypeElement = () => {
     const data = {__proto__: null};
 
     if (Reflect.get($0.constructor, 'TAG_NAME')) {
-        data['@Element'] = Reflect.get($0.constructor, 'TAG_NAME');
+        data['@WebComponent'] = Reflect.get($0.constructor, 'TAG_NAME');
     }
 
     if (Reflect.get($0.constructor, 'SHADOW')) {
