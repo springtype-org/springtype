@@ -4,7 +4,7 @@ import registerCreateCommand from "./create/function/registerCreateCommand";
 const commander = require('commander');
 const envinfo = require('envinfo');
 const chalk = require('chalk');
-const packageJson = require('./package.json');
+const packageJson = require('../package.json');
 
 // always print the header first
 printHeader();

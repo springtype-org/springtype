@@ -21,7 +21,7 @@
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
-    "build": "tsc && npx ncp template dist/template && npx ncp package.json dist/package.json",
+    "build": "tsc && npx ncp template dist/template",
     "run": "node dist/index.js",
     "prepublishOnly": "npm run build"
   },
