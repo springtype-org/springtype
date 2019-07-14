@@ -84,7 +84,7 @@ Conventional Commits
        
     - Real-world apps:
       - SVG TODO MVC PWA (Android, iOS, Web) with offline-first methodology (and firebase API, live demo page)
-      - SVG Mineweeper game using gpu.js based matrices calc
+      - SVG Minesweeper game using gpu.js based matrices calc
       - Featured: SVG gantt-chart component (web-component, publicly available) 
        
 https://stackblitz.com/edit/typescript-umcyrw
