@@ -1,11 +1,11 @@
 import {ActiveRoute} from "./ActiveRoute";
 import {
     Attribute,
-    Element,
+    WebComponent,
     ErrorMessage,
     getRenderer,
     Lifecycle,
-    UseElement,
+    UseWebComponent,
     VirtualElement,
     ActiveRenderer,
 } from "@springtype/core";
@@ -13,8 +13,8 @@ import {
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
 import {Partial} from "@springtype/core";
 
-@Element('st-router-outlet')
-@UseElement(ErrorMessage)
+@WebComponent('st-router-outlet')
+@UseWebComponent(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements Lifecycle {
 
     locationChangeDecision: LocationChangeDecision;

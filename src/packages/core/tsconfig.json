@@ -8,7 +8,6 @@
     "declaration": true,
     "noEmit": false,
     "rootDirs": [
-      "../test",
       "src"
     ],
     "jsx": "react",
@@ -25,11 +24,10 @@
     "types": ["reflect-metadata", "node"]
   },
   "include": [
-    "src", "test"
+    "src"
   ],
   "exclude": [
     "dist",
-    "node_modules",
-    "../test"
+    "node_modules"
   ]
 }

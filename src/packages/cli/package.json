@@ -18,7 +18,7 @@
   },
   "scripts": {
     "prune": "npx rimraf dist node_modules package-lock.json",
-    "clean": "rimraf dist",
+    "clean": "npx rimraf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc && npx ncp template dist/template && npx ncp package.json dist/package.json",
@@ -50,10 +50,6 @@
   "homepage": "https://springtype.org",
   "dependencies": {
     "@springtype/core": "^1.0.0-alpha.1.11",
-    "@springtype/i18n": "^1.0.0-alpha.1.11",
-    "@springtype/router": "^1.0.0-alpha.1.11",
-    "@springtype/state": "^1.0.0-alpha.1.11",
-    "@springtype/test": "^1.0.0-alpha.1.11",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "cross-spawn": "^6.0.5",
@@ -66,7 +62,6 @@
   },
   "devDependencies": {
     "@types/node": "^11.13.7",
-    "rimraf": "2.6.3",
     "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   },

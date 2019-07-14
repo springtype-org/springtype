@@ -1,6 +1,6 @@
 import {
     Attribute, AttributeType,
-    Element,
+    WebComponent,
     Lifecycle,
     Style,
     Template,
@@ -10,7 +10,7 @@ import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 import {MDCRipple} from '@material/ripple';
 
-@Element('mwc-button')
+@WebComponent('mwc-button')
 @Template(template)
 @Style(style)
 export class MWCButton extends HTMLElement implements Lifecycle {

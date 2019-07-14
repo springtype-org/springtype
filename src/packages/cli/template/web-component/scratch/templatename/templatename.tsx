@@ -1,8 +1,8 @@
-import {Element, Lifecycle, Style, Template} from "@springtype/core";
+import {WebComponent, Lifecycle, Style, Template} from "@springtype/core";
 import tpl from "./templatename.tpl";
 import style from "./templatename.style";
 
-@Element('templatename')
+@WebComponent('templatename')
 @Template(tpl)
 @Style(style)
 export class TemplateName extends HTMLElement implements Lifecycle {

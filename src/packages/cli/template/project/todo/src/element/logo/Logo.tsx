@@ -1,5 +1,5 @@
 import {
-    Element,
+    WebComponent,
     EventAttribute,
     HOST_SELECTOR,
     Lifecycle,
@@ -12,7 +12,7 @@ import {
 } from "@springtype/core";
 import template from "./Logo.tpl";
 
-@Element('app-logo')
+@WebComponent('app-logo')
 @ShadowDOM(ShadowAttachMode.CLOSED)
 @Template(template)
 @Style((): TypedMediaQueryStyleSheet => ({

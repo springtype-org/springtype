@@ -1,4 +1,4 @@
-import {Element, Lifecycle, UseElement, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, UseWebComponent, ActiveRenderer} from "@springtype/core";
 import {Translate, Translations} from "@springtype/i18n";
 
 import * as englishTranslations from "../translation/en.json";
@@ -12,8 +12,8 @@ interface NotFoundPageTranslationValues {
 
 @Translations('de', germanTranslations)
 @Translations('en', englishTranslations)
-@Element('app-not-found-page')
-@UseElement(Translate)
+@WebComponent('app-not-found-page')
+@UseWebComponent(Translate)
 export class NotFoundPage extends HTMLElement implements Lifecycle {
 
     constructor(private activeRoute: ActiveRoute) {

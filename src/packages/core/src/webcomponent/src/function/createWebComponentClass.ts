@@ -10,7 +10,6 @@ import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
 import {VirtualDOMMutator} from "../../../virtualdom/src/mutation/VirtualDOMMutator";
-import {Merge, Partial} from "../../../lang";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 
@@ -82,6 +81,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                         }
                     }
 
+                    // @ts-ignore
                     this.style = allStyles;
                 }
 

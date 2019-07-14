@@ -18,7 +18,7 @@ export function Attribute(webComponentInstanceOrTransformFnOrAttributeType: Attr
         // test for uppercase characters
         if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
             warn(
-                'The @Element', webComponentInstance.constructor,
+                'The @WebComponent', webComponentInstance.constructor,
                 ' has an @Attribute with camelCase naming: ', attributeName, '. Use kebab-case instead!');
         }
 
@@ -46,7 +46,7 @@ export function Attribute(webComponentInstanceOrTransformFnOrAttributeType: Attr
         } else if (typeof webComponentInstanceOrTransformFnOrAttributeType !== 'undefined') {
 
             warn(
-                'The @Element', webComponentInstance.constructor,
+                'The @WebComponent', webComponentInstance.constructor,
                 ' has an @Attribute(attributeTypeOrTransformFn) with an invalid AttributeType / no transform function: ',
                 attributeName, ' value cannot be transformed by: ', webComponentInstanceOrTransformFnOrAttributeType
             );

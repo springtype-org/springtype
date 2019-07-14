@@ -1,9 +1,9 @@
-import {Element, Lifecycle, Style, UseElement, Partial, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, Style, UseWebComponent, Partial, ActiveRenderer} from "@springtype/core";
 import {t, Translator} from "@springtype/i18n";
 import {Logo} from "../logo/Logo";
 import {ActiveRoute} from "@springtype/router";
 
-@Element('app-layout')
+@WebComponent('app-layout')
 @Style((view: AppLayout) => ({
     '.copyright-footer': {
         marginTop: '20px',
@@ -11,7 +11,7 @@ import {ActiveRoute} from "@springtype/router";
         flexDirection: 'column'
     }
 }))
-@UseElement(Logo)
+@UseWebComponent(Logo)
 export class AppLayout extends HTMLElement implements Lifecycle {
 
     constructor(protected translator: Translator,

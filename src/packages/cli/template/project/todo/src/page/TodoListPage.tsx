@@ -1,4 +1,4 @@
-import {Element, Lifecycle, Style, UseElement, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, Style, UseWebComponent, ActiveRenderer} from "@springtype/core";
 import {TodoModel} from "../model/TodoModel";
 import {ListInnerPartial} from "../element/list/ListInnerPartial";
 import {AppLayout} from "../element/layout/AppLayout";
@@ -10,9 +10,9 @@ interface TodoListLocalState {
     newTodoItemText: string;
 }
 
-@Element('example-todo-list')
+@WebComponent('example-todo-list')
 @Style(style)
-@UseElement(AppLayout, ListInnerPartial, Translate)
+@UseWebComponent(AppLayout, ListInnerPartial, Translate)
 export class TodoListPage extends HTMLElement implements Lifecycle {
 
     constructor(

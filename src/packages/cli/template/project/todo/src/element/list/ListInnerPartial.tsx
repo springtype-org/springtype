@@ -1,5 +1,5 @@
 import {IRootState} from "../../state/IRootState";
-import {Element, Lifecycle, Partial, Style, VirtualElement, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, Partial, Style, VirtualElement, ActiveRenderer} from "@springtype/core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
 import {ROUTE_TODO_DETIALS} from "../../routes";
@@ -14,7 +14,7 @@ interface LocalTodoListState {
 }
 
 @Style(style)
-@Element(e2e.element["app-list-inner-partial"])
+@WebComponent(e2e.element["app-list-inner-partial"])
 export class ListInnerPartial extends HTMLElement implements Lifecycle {
 
     constructor(

@@ -1,4 +1,4 @@
-import {Element} from "../decorator/Element";
+import {WebComponent} from "../decorator/WebComponent";
 import {Attribute} from "../decorator/Attribute";
 import {Lifecycle} from "../..";
 import {Style} from "../decorator/Style";
@@ -6,7 +6,7 @@ import {VirtualElement} from "../../../virtualdom";
 import {Partial} from "../../../lang";
 import {ActiveRenderer} from "../../../renderer";
 
-@Element('st-error-message')
+@WebComponent('st-error-message')
 @Style((view) => ({
     'p': {
         color: '#ff0000'
