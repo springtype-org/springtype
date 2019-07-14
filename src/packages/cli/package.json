@@ -37,8 +37,7 @@
     "validate-npm-package-name"
   ],
   "bin": {
-    "springtype": "./dist/index.js",
-    "st-create": "./dist/index.js create"
+    "springtype": "./dist/index.js"
   },
   "main": "dist/st/src/index.js",
   "types": "dist/st/src/index.d.ts",
