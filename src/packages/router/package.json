@@ -1,6 +1,6 @@
 {
   "name": "@springtype/router",
-  "version": "1.0.0-alpha.1.11",
+  "version": "1.0.0-alpha.1.13",
   "publishConfig": {
     "access": "public"
   },
