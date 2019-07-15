@@ -1,14 +1,15 @@
-const path = require('path');
-const fs = require('fs-extra');
-const chalk = require('chalk');
+import chalk from "chalk";
+import {join} from "path";
+import {readdirSync} from "fs";
+
 
 import {logFiles} from "../definition/logFiles";
 import {filesAllowedToResistInAppDir} from "../definition/filesAllowedToResistInAppDir";
+import {removePathOrFile} from "st-rm-rf/dist/st-fs";
 
-export const isSafeToCreateAppIn = (rootPath: string, name: string) => {
+export const isSafeToCreateAppIn = async (rootPath: string, name: string) => {
     console.log();
-    const conflicts = fs
-        .readdirSync(rootPath)
+    const conflicts = readdirSync(rootPath)
         .filter((file: string) => !filesAllowedToResistInAppDir.includes(file))
         // IntelliJ IDEA creates module files before CRA is launched
         .filter((file: string) => !/\.iml$/.test(file))
@@ -34,14 +35,12 @@ export const isSafeToCreateAppIn = (rootPath: string, name: string) => {
     }
 
     // Remove any remnant files from a previous installation
-    const currentFiles = fs.readdirSync(path.join(rootPath));
-    currentFiles.forEach((file: string) => {
-        logFiles.forEach(errorLogFilePattern => {
-            // This will catch `(npm-debug|yarn-error|yarn-debug).log*` files
-            if (file.indexOf(errorLogFilePattern) === 0) {
-                fs.removeSync(path.join(rootPath, file));
-            }
-        });
-    });
+    const currentFiles = readdirSync(join(rootPath));
+    for (let i = 0; i < currentFiles.length; i++) {
+        const file = currentFiles[i];
+        if (logFiles.find((errorLogFilePattern: string) => file.indexOf(errorLogFilePattern) === 0)) {
+            await removePathOrFile(join(rootPath, file));
+        }
+    }
     return true;
 };

@@ -1,11 +1,10 @@
 import {isSafeToCreateAppIn} from "./isSafeToCreateAppIn";
-
-const fsx = require('fs-extra');
-const chalk = require('chalk');
+import {mkdirSync} from "fs"
+import chalk from "chalk";
 
 export const createProjectFolder = (projectPath: string, projectName: string): boolean => {
 
-    fsx.ensureDirSync(projectPath);
+    mkdirSync(projectPath);
 
     if (!isSafeToCreateAppIn(projectPath, projectName)) {
         return false;

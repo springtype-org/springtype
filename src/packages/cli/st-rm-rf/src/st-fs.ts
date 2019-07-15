@@ -3,8 +3,6 @@ const fs = require('fs');
 const fss = fs.promises;
 
 export const removePathOrFile = async (deletePath: string, printError: boolean = false): Promise<boolean> => {
-
-
     const stat = await fss.lstat(deletePath);
     if (stat.isDirectory()) {
         const deletePaths = await fss.readdir(deletePath);

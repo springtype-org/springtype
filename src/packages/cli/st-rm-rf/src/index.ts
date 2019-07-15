@@ -18,7 +18,7 @@ const deletePaths = process.argv.slice(2);
         console.log(chalk.green('Start deleting paths'));
         for (let i = 0; i < deletePaths.length; i++) {
             const deletePath = path.resolve(deletePaths[i]);
-            if (await filePathExist(deletePath, true)) {
+            if (await filePathExist(deletePath)) {
                 if (await removePathOrFile(deletePath, true)) {
                     console.log(chalk.cyan(`+ deleted ${deletePath}`))
                 } else {

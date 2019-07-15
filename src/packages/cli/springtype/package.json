@@ -29,9 +29,10 @@
     "node": ">=10"
   },
   "bundledDependencies": [
-    "fs-extra",
     "envinfo",
     "chalk",
+    "st-rm-rf",
+    "inquirer",
     "commander",
     "cross-spawn",
     "validate-npm-package-name"
@@ -49,11 +50,11 @@
   "homepage": "https://springtype.org",
   "dependencies": {
     "@springtype/core": "^1.0.0-alpha.1.22",
+    "st-rm-rf": "^1.0.0-alpha.1.22",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "cross-spawn": "^6.0.5",
     "envinfo": "^7.2.0",
-    "fs-extra": "^7.0.1",
     "inquirer": "^6.4.1",
     "reflect-metadata": "^0.1.13",
     "tslib": "^1.9.3",
