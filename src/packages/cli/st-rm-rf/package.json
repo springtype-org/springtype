@@ -1,17 +1,18 @@
 {
-  "name": "springtype",
+  "name": "st-rm-rf",
   "version": "1.0.0-alpha.1.16",
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
-    "springtype",
+    "springtype create",
+    "st-rm-rf",
     "scaffold"
   ],
   "files": [
     "dist/*"
   ],
-  "description": "Scaffolding for SpringType.",
+  "description": "SpringType create shortcut.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/springtype-org/springtype.git"
@@ -21,7 +22,7 @@
     "clean": "npx rimraf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
-    "build": "tsc && npx ncp template dist/template",
+    "build": "tsc",
     "run": "node dist/index.js",
     "prepublishOnly": "npm run build"
   },
@@ -29,15 +30,10 @@
     "node": ">=10"
   },
   "bundledDependencies": [
-    "fs-extra",
-    "envinfo",
-    "chalk",
-    "commander",
-    "cross-spawn",
-    "validate-npm-package-name"
+    "chalk"
   ],
   "bin": {
-    "springtype": "./dist/index.js"
+    "st-rm-rf": "./dist/index.js"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -48,16 +44,7 @@
   },
   "homepage": "https://springtype.org",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.13",
-    "chalk": "^2.4.2",
-    "commander": "^2.20.0",
-    "cross-spawn": "^6.0.5",
-    "envinfo": "^7.2.0",
-    "fs-extra": "^7.0.1",
-    "inquirer": "^6.4.1",
-    "reflect-metadata": "^0.1.13",
-    "tslib": "^1.9.3",
-    "validate-npm-package-name": "^3.0.0"
+    "chalk": "^2.4.2"
   },
   "devDependencies": {
     "@types/node": "^11.13.7",
