@@ -18,7 +18,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.test.ts",
     "e2e": "testcafe chrome e2e",
-    "clean": "npx rimraf dist",
+    "clean": "npx st-rm-rf dist",
     "start": "npx parcel src/index.html",
     "serve": "npx parcel serve src/index.html",
     "build": "npm run clean && cross-env NODE_ENV=production parcel build src/index.html --public-url ."
@@ -26,7 +26,6 @@
   "devDependencies": {
     "mocha": "^6.0.2",
     "parcel": "^1.12.3",
-    "rimraf": "2.6.3",
     "sass": "^1.17.3",
     "testcafe": "latest",
     "ts-node": "^7.0.1",

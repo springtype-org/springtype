@@ -1,34 +1,10 @@
 #!/usr/bin/env node
 
 
-const path = require('path');
-const fs = require('fs');
-const fss = fs.promises;
-const chalk = require('chalk');
+import {filePathExist, removePathOrFile} from "./st-fs";
 
-const removePathOrFile = async (deletePath: string): Promise<boolean> => {
-    const stat = await fss.lstat(deletePath);
-    if (stat.isDirectory()) {
-        const deletePaths = await fss.readdir(deletePath);
-        for (let i = 0; i < deletePaths.length; i++) {
-            const _deletePath = deletePaths[i];
-            await removePathOrFile(path.join(deletePath, _deletePath));
-        }
-        await fss.rmdir(deletePath);
-    } else if (stat.isFile() || stat.isSymbolicLink()) {
-        try {
-            await fss.unlink(deletePath)
-            //file removed
-        } catch (err) {
-            console.error(err);
-            return false;
-        }
-    } else {
-        console.log(`- error ${deletePath}`);
-        return false;
-    }
-    return true;
-};
+const path = require('path');
+const chalk = require('chalk');
 
 const deletePaths = process.argv.slice(2);
 
@@ -42,15 +18,13 @@ const deletePaths = process.argv.slice(2);
         console.log(chalk.green('Start deleting paths'));
         for (let i = 0; i < deletePaths.length; i++) {
             const deletePath = path.resolve(deletePaths[i]);
-            try {
-                await fss.access(deletePath);
-                if (await removePathOrFile(deletePath)) {
+            if (await filePathExist(deletePath, true)) {
+                if (await removePathOrFile(deletePath, true)) {
                     console.log(chalk.cyan(`+ deleted ${deletePath}`))
                 } else {
                     console.log(chalk.red(`- error  ${deletePath}`))
                 }
-
-            } catch (err) {
+            } else {
                 console.log(`/ nothing ${deletePath}`)
             }
         }
