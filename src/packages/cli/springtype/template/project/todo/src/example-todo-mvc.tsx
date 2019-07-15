@@ -1,6 +1,6 @@
 import "materialize-css";
 
-import {WebComponent, Lifecycle, MeasureSpeed, UseWebComponent, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, MeasureSpeed, Use, ActiveRenderer} from "@springtype/core";
 import {ROUTE_BASE, ROUTE_TODO_DETIALS, ROUTE_TODO_LIST} from "./routes";
 import {TodoListPage} from "./page/TodoListPage";
 import {TodoDetailsPage} from "./page/TodoDetailsPage";
@@ -16,7 +16,7 @@ import {Logo} from "./element/logo/Logo";
 @Route(ROUTE_NOT_FOUND, NotFoundPage)
 
 @WebComponent('example-todo-mvc')
-@UseWebComponent(Logo)
+@Use(Logo)
 export class ExampleTodoMVC extends HTMLElement implements Lifecycle {
 
     // inject AppTranslation to

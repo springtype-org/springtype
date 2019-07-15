@@ -3,7 +3,7 @@ export * from "./src/WebComponentReflector";
 export * from "./src/component/ErrorMessage";
 export * from "./src/interface/Lifecycle";
 export * from "./src/enum/ShadowAttachMode";
-export * from "./src/decorator/UseWebComponent";
+export * from "./src/decorator/Use";
 export * from "./src/decorator/Attribute";
 export * from "./src/decorator/OnAttributeChange";
 export * from "./src/decorator/Style";

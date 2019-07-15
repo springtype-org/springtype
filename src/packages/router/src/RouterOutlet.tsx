@@ -5,7 +5,7 @@ import {
     ErrorMessage,
     getRenderer,
     Lifecycle,
-    UseWebComponent,
+    Use,
     VirtualElement,
     ActiveRenderer,
 } from "@springtype/core";
@@ -14,7 +14,7 @@ import {LocationChangeDecision} from "./interface/LocationChangeDecision";
 import {Partial} from "@springtype/core";
 
 @WebComponent('st-router-outlet')
-@UseWebComponent(ErrorMessage)
+@Use(ErrorMessage)
 export class RouterOutlet extends HTMLElement implements Lifecycle {
 
     locationChangeDecision: LocationChangeDecision;

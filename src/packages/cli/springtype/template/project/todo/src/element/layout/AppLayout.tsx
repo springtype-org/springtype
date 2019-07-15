@@ -1,4 +1,4 @@
-import {WebComponent, Lifecycle, Style, UseWebComponent, Partial, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, Style, Use, Partial, ActiveRenderer} from "@springtype/core";
 import {t, Translator} from "@springtype/i18n";
 import {Logo} from "../logo/Logo";
 import {ActiveRoute} from "@springtype/router";
@@ -11,7 +11,7 @@ import {ActiveRoute} from "@springtype/router";
         flexDirection: 'column'
     }
 }))
-@UseWebComponent(Logo)
+@Use(Logo)
 export class AppLayout extends HTMLElement implements Lifecycle {
 
     constructor(protected translator: Translator,

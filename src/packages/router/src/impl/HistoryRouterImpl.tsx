@@ -2,7 +2,7 @@ import {
     Component,
     ComponentImpl,
     ErrorMessage,
-    UseWebComponent,
+    Use,
     VirtualElement,
     WebComponentReflector,
     ActiveRenderer,
@@ -16,7 +16,7 @@ import {LocationChangeDecision} from "../interface/LocationChangeDecision";
 import {ROUTE_NOT_FOUND} from "../constants";
 
 @Component
-@UseWebComponent(ErrorMessage)
+@Use(ErrorMessage)
 export class HistoryRouterImpl implements RouterImpl {
 
     protected TOKENIZED_ROUTES: TokenizedRoutes = {};

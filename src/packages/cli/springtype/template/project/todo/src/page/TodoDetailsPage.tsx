@@ -1,11 +1,11 @@
-import {WebComponent, Lifecycle, UseWebComponent, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, Use, ActiveRenderer} from "@springtype/core";
 import {TodoService} from "../service/TodoService";
 import {ITodoItem} from "../state/ITodoState";
 import {AppLayout} from "../element/layout/AppLayout";
 import {ActiveRoute} from "@springtype/router";
 
 @WebComponent('example-todo-detail')
-@UseWebComponent(AppLayout)
+@Use(AppLayout)
 export class TodoDetailsPage extends HTMLElement implements Lifecycle {
 
     constructor(
