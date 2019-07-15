@@ -1,6 +1,6 @@
 {
   "name": "@springtype/i18n",
-  "version": "1.0.0-alpha.1.26",
+  "version": "1.0.0-alpha.1.27",
   "publishConfig": {
     "access": "public"
   },
