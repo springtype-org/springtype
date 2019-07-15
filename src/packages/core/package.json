@@ -1,6 +1,6 @@
 {
   "name": "@springtype/core",
-  "version": "1.0.0-alpha.1.13",
+  "version": "1.0.0-alpha.1.17",
   "publishConfig": {
     "access": "public"
   },
