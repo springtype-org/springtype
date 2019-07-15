@@ -25,8 +25,7 @@ export default (component: TemplateNameApp) =>
         <br/>
         <p>Thank you for choosing SpringType!️</p>
         <p>👉 Find me here: <code>src/component/templatename-app/templatename-app.tsx</code> 👈</p>
-        <p>Create new sfuff: <code>npx st create</code></p>
-        <p>Enable/disable features: <code>npx st enable</code></p>
+        <p>Create new Web Components: <code>npx st-create</code></p>
         <br/>
         <a href="https://springtype.org" target="_blank">📚 Get to know SpringType 📚</a>
         <br/><br/>
