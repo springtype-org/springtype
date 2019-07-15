@@ -1,7 +1,7 @@
-import {TemplateNameApp} from "./templatename-app";
+import {TemplateNameMain} from "./templatename-main";
 import {ActiveRenderer} from '@springtype/core';
 
-export default (component: TemplateNameApp) =>
+export default (view: TemplateNameMain) =>
     <div class="container">
         <svg id="logo"
              xmlns="http://www.w3.org/2000/svg"
@@ -24,8 +24,8 @@ export default (component: TemplateNameApp) =>
         </svg>
         <br/>
         <p>Thank you for choosing SpringType!️</p>
-        <p>👉 Find me here: <code>src/component/templatename-app/templatename-app.tsx</code> 👈</p>
-        <p>Create new Web Components: <code>npx st-create</code></p>
+        <p>👉 Find me here: <code>src/component/templatename-main/templatename-main.tsx</code> 👈</p>
+        <p>Create new Web Components using: <code>npx st-create</code></p>
         <br/>
         <a href="https://springtype.org" target="_blank">📚 Get to know SpringType 📚</a>
         <br/><br/>

@@ -1,7 +1,7 @@
 import {TypedMediaQueryStyleSheet} from "@springtype/core";
-import {TemplateNameApp} from "./templatename-app";
+import {TemplateNameMain} from "./templatename-main";
 
-export default (component: TemplateNameApp, theme: any): TypedMediaQueryStyleSheet => ({
+export default (component: TemplateNameMain, theme: any): TypedMediaQueryStyleSheet => ({
     "body, html": {
         "padding": "0",
         "margin": "0",

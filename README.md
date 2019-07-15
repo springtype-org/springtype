@@ -15,8 +15,6 @@ Pre-beta-release TODO list:
 Conventional Commits
 
 - Modules:
-  - core
-    - decouple test submodule dependency
   - cd
     - Impl. @FieldMirror, a @Field that can link the state between web components
   - devtools
