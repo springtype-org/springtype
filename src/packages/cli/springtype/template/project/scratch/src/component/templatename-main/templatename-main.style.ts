@@ -20,7 +20,7 @@ export default (component: TemplateNameMain, theme: any): TypedMediaQueryStyleSh
         "border-radius": "4px",
         "padding": "2px 5px"
     },
-    "templatename-app": {
+    "templatename-main": {
         "display": "flex",
         "flex-direction": "column",
         "font-family": "sans-serif",
