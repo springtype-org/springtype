@@ -1,9 +1,10 @@
-import {getParamNames} from "@springtype/core";
 import {IValidator, VALIDATOR_DEFAULT} from "./Validator";
 import {validate} from "./validators/Required";
+import {getParamNames} from "../method/getParamNames";
 
 const VALIDATION_METHOD_PARAMNAMES_METADATA = Symbol("ParamNames");
-const VALIDATION_DECORATOR_METADATA_KEY = Symbol("Validation");
+const VALIDATION_DECORATOR_METADATA_KEY = Symbol("Validation")
+
 
 export interface IValidationRegistration {
     parameterIndex: number;

@@ -8,6 +8,7 @@
   "dependencies": {
     "@springtype/core": "../core",
     "@types/node": "^11.10.5",
+    "domino": "^2.1.3",
     "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
   },

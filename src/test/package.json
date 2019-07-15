@@ -6,18 +6,18 @@
   },
   "description": "It just works.",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.0",
-    "@springtype/validate": "^1.0.0-alpha.1.0",
+    "@springtype/core": "^1.0.0-alpha.1.27",
+    "@springtype/validate": "file:../packages/validate",
     "@types/node": "^10.12.30",
-    "reflect-metadata": "^0.1.12",
     "tslib": "^1.9.3"
   },
   "scripts": {
+    "clean:all": "npx st-rm-rf dist node_modules package-lock.json",
     "clean": "npx st-rm-rf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "test": "mocha -r ts-node/register ./**/*.spec.ts"
+    "test": "mocha /media/mansi/data-hd/mansi/projects/own/npm/springtype/src/test/dist/validate/decorator.spec.js"
   },
   "repository": {
     "type": "git",
@@ -35,8 +35,8 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "nyc": "^14.0.0",
+    "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.11",
-    "ts-node": "^7.0.1",
     "typescript": "^3.3.4000"
   }
 }

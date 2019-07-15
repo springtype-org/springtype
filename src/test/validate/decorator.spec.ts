@@ -24,6 +24,7 @@ import {
     validateRequired
 } from "@springtype/validate";
 import 'mocha';
+import 'reflect-metadata'
 import {futureDate, now, nowDate, pastDate, ValidateOnClass, ValidateOnMethod} from "./helper/ValidateMe";
 
 describe('validate', () => {
