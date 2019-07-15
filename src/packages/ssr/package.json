@@ -1,6 +1,6 @@
 {
   "name": "@springtype/ssr",
-  "version": "1.0.0-alpha.1.27",
+  "version": "1.0.0-alpha.1.28",
   "publishConfig": {
     "access": "public"
   },
