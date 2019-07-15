@@ -14,6 +14,7 @@
     "publish": "lerna publish",
     "build": "lerna run build",
     "bootstrap": "lerna exec npm install",
+    "packages": "lerna ls --sort",
     "new-version": "lerna version --conventional-commits --yes",
     "diff": "lerna diff"
   },
