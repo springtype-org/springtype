@@ -1,6 +1,6 @@
 {
   "name": "@springtype/material-ui",
-  "version": "1.0.0-alpha.1.18",
+  "version": "1.0.0-alpha.1.19",
   "publishConfig": {
     "access": "public"
   },
