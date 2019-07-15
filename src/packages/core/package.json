@@ -17,8 +17,8 @@
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "main": "dist/core/index.js",
-  "types": "dist/core/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {
