@@ -1,18 +1,21 @@
 import {concatErrors} from "../../../function/concatErrors";
+import {filePathExist} from "st-rm-rf/dist/st-fs";
 
 const validateProjectName = require('validate-npm-package-name');
 const chalk = require('chalk');
 const path = require('path');
 
-export const validateProjectDirectoryInput = (projectDirectory: string): boolean|string => {
-    if(projectDirectory.startsWith('/')){
+export const validateProjectDirectoryInput = async (projectDirectory: string): Promise<boolean | string> => {
+    if (projectDirectory.startsWith('/')) {
         return `Could not create a project called ${chalk.red(`"${projectDirectory}"`)}:`
             + concatErrors(['use relative path'])
     }
-
     const root = path.resolve(projectDirectory);
     const appName = path.basename(root);
-
+    const folderAlreadyExist = await filePathExist(root);
+    if (folderAlreadyExist) {
+        return `Could not create a project called ${chalk.red(`"${appName}"`)} because project already exist`;
+    }
     const validationResult = validateProjectName(appName);
 
     if (!validationResult.validForNewPackages) {
