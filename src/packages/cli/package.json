@@ -39,8 +39,8 @@
   "bin": {
     "springtype": "./dist/index.js"
   },
-  "main": "dist/st/src/index.js",
-  "types": "dist/st/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Aron Homberg Michael Mannseicher",
   "license": "MIT",
   "bugs": {
