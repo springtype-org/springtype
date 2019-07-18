@@ -1,10 +1,8 @@
 import chalk from "chalk";
 import {kebabToCamelCase} from "./kebabToCamelCase";
 import {isProgramCodeFile} from "./humanReadableFiles";
-
-const path = require('path');
-const fs = require('fs');
-const fsx = require('fs-extra');
+import {join, relative, resolve} from "path"
+import {mkdirSync, readFileSync, writeFileSync, copyFileSync} from "fs"
 
 const TEMPLATE_LOWER_REGEX = /templatename/g;
 const TEMPLATE_UPPER_REGEX = /TemplateName/g;
@@ -18,22 +16,22 @@ export interface CopyRenameReplaceFileOptions {
 
 export const copyAndConcreteFile = (options: CopyRenameReplaceFileOptions) => {
 
-    const fileName = path.relative(options.templateFolderPath, options.filePath)
+    const fileName = relative(options.templateFolderPath, options.filePath)
         .replace(TEMPLATE_LOWER_REGEX, options.concreteName.toLocaleLowerCase())
         .replace(TEMPLATE_UPPER_REGEX, kebabToCamelCase(options.concreteName));
 
-    const newFilePath = path.join(options.projectPath, fileName);
-    fs.mkdirSync(path.resolve(newFilePath, '..'), {recursive: true});
+    const newFilePath = join(options.projectPath, fileName);
+    mkdirSync(resolve(newFilePath, '..'), {recursive: true});
 
     // whitelist
     if (isProgramCodeFile(options.filePath)) {
-        const programCode = fs.readFileSync(options.filePath, {encoding: 'utf8'})
+        const programCode = readFileSync(options.filePath, {encoding: 'utf8'})
             .replace(TEMPLATE_LOWER_REGEX, options.concreteName.toLocaleLowerCase())
             .replace(TEMPLATE_UPPER_REGEX, kebabToCamelCase(options.concreteName));
 
-        fs.writeFileSync(newFilePath, programCode);
+        writeFileSync(newFilePath, programCode);
     } else {
-        fsx.copySync(options.filePath, newFilePath);
+        copyFileSync(options.filePath, newFilePath);
     }
 
     console.log(`- ${chalk.cyan(fileName)}`);

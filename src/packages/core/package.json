@@ -1,6 +1,6 @@
 {
   "name": "@springtype/core",
-  "version": "1.0.0-alpha.1.20",
+  "version": "1.0.0-alpha.1.28",
   "publishConfig": {
     "access": "public"
   },
@@ -10,15 +10,15 @@
     "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
-    "prune": "npx rimraf dist node_modules package-lock.json",
-    "clean": "npx rimraf dist",
+    "prune": "npx st-rm-rf dist node_modules package-lock.json",
+    "clean": "npx st-rm-rf dist",
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "main": "dist/core/index.js",
-  "types": "dist/core/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {

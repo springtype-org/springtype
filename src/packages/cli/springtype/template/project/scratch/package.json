@@ -12,7 +12,7 @@
     "tslib": "^1.9.3"
   },
   "scripts": {
-    "clean": "npx rimraf dist .cache",
+    "clean": "npx st-rm-rf dist .cache",
     "start": "npx parcel src/index.html",
     "serve": "npx parcel serve src/index.html --public-url .",
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
