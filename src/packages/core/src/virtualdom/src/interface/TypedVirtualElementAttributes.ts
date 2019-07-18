@@ -4,7 +4,7 @@ export interface VirtualElementAttributes {
     // otherwise the algorithm cannot see the difference of whether elements changed or just the sorting
     key: string|number|boolean;
 
-    inject: {
+    'st-inject': {
 
         // tells the renderer: inject this element (state: rendered and attached to DOM)
         // with name $injectionArgumentName in constructor of the assigned class instance referenced (typed as any)
