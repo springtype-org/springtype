@@ -28,7 +28,7 @@ export default (view: MWCButton) => {
             <st-slot />
         </st-fragment>;
 
-    const button: VirtualElement = <button inject={{button: view}} class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
+    const button: VirtualElement = <button st-inject={{button: view}} class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
 
     if (view.disabled) {
         //debugger;

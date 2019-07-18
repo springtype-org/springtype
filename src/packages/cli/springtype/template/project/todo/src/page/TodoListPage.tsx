@@ -58,7 +58,7 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
 
                     <app-list-inner-partial />
 
-                    <input inject={{textInputEl: this}}
+                    <input st-inject={{textInputEl: this}}
                            type="text"
                            id={e2e.page.TodoListPage.newTodoItemText}
                            placeholder={t("what_todo_next")}

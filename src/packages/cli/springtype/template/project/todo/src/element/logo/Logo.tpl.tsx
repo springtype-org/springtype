@@ -8,7 +8,7 @@ export default (component: AppLayout) =>
          version="1.1"
          viewBox="0 0 225 52.5"
          height="70"
-         inject={{
+         st-inject={{
              svg: component
          }}
          width="300">

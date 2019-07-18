@@ -12,12 +12,12 @@ export interface VirtualElementAttributes {
         // somewhere in the elements TSX (template):
 
         // (view: MyElementClass) => {
-        //    return <...>...<button inject={{ myButton: view }} ... />...</...>
+        //    return <...>...<button st-inject={{ myButton: view }} ... />...</...>
         // }
         //
         // ...or in a render method:
         // render() {
-        //     return <...>...<button inject={{ myButton: this }} ... />...</...>
+        //     return <...>...<button st-inject={{ myButton: this }} ... />...</...>
         // }
         //
         // ---

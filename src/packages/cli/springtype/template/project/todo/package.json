@@ -4,7 +4,7 @@
   "version": "1.0.0-alpha.1.13",
   "description": "templatename is a SpringType project based on template: todo.",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.20",
+    "@springtype/core": "^1.0.0-alpha.1.31",
     "@springtype/i18n": "^1.0.0-alpha.1.20",
     "@springtype/router": "^1.0.0-alpha.1.20",
     "@springtype/state": "^1.0.0-alpha.1.20",
