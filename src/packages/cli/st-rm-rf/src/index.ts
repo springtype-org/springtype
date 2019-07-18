@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 
-import {filePathExist, removePathOrFile} from "./st-fs";
+import {filePathExist, removePathOrFile} from "./st-rm-rf";
 
 const path = require('path');
 const chalk = require('chalk');

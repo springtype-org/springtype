@@ -4,8 +4,8 @@
   "version": "1.0.0-alpha.1.13",
   "description": "templatename is a SpringType project based on template: scratch.",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.13",
-    "@springtype/router": "^1.0.0-alpha.1.13",
+    "@springtype/core": "^1.0.0-alpha.1.20",
+    "@springtype/router": "^1.0.0-alpha.1.20",
     "@types/node": "^11.10.5",
     "cross-env": "^5.2.0",
     "parcel-bundler": "^1.10.1",

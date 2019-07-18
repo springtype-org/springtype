@@ -1,19 +1,19 @@
 const path = require('path');
 const fs = require('fs');
-const fss = fs.promises;
+const fsp = fs.promises;
 
 export const removePathOrFile = async (deletePath: string, printError: boolean = false): Promise<boolean> => {
-    const stat = await fss.lstat(deletePath);
+    const stat = await fsp.lstat(deletePath);
     if (stat.isDirectory()) {
-        const deletePaths = await fss.readdir(deletePath);
+        const deletePaths = await fsp.readdir(deletePath);
         for (let i = 0; i < deletePaths.length; i++) {
             const _deletePath = deletePaths[i];
             await removePathOrFile(path.join(deletePath, _deletePath));
         }
-        await fss.rmdir(deletePath);
+        await fsp.rmdir(deletePath);
     } else if (stat.isFile() || stat.isSymbolicLink()) {
         try {
-            await fss.unlink(deletePath)
+            await fsp.unlink(deletePath)
             //file removed
         } catch (err) {
             if (printError) {
@@ -30,7 +30,7 @@ export const removePathOrFile = async (deletePath: string, printError: boolean =
 
 export const filePathExist = async (existFilePath: string, printError: boolean = false): Promise<boolean> => {
     try {
-        await fss.access(existFilePath);
+        await fsp.access(existFilePath);
         return true;
     } catch (err) {
         if (printError) {

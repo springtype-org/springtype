@@ -1,0 +1,36 @@
+{
+  "name": "templatename-from-ionic-app",
+  "description": "templatename is a SpringType project based on template: ionic-app.",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "clean": "npx st-rm-rf dist .cache",
+    "build:stencil": "stencil build",
+    "start": "npx parcel src/index.html --open",
+    "prebuild": "stencil build",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
+  },
+  "staticFiles": {
+    "staticPath": "node_modules/@ionic/core/dist",
+    "watcherGlob": "**"
+  },
+  "dependencies": {
+    "@springtype/core": "^1.0.0-alpha.1.29",
+    "@capacitor/android": "^1.0.0",
+    "@capacitor/cli": "^1.0.0",
+    "@capacitor/core": "^1.0.0",
+    "@ionic/core": "^4.4.2",
+    "@stencil/core": "^1.0.2",
+    "canvas": "^2.5.0",
+    "components": "^0.1.0",
+    "parcel-plugin-static-files-copy": "^2.1.2"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.5.1"
+  },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
+}

@@ -42,7 +42,7 @@
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Aron Homberg Michael Mannseicher",
+  "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/springtype-org/springtype/issues"
