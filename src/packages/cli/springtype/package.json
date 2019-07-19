@@ -1,6 +1,6 @@
 {
   "name": "springtype",
-  "version": "1.0.0-alpha.1.32",
+  "version": "1.0.0-alpha.1.33",
   "publishConfig": {
     "access": "public"
   },
@@ -49,14 +49,14 @@
   },
   "homepage": "https://springtype.org",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.31",
+    "@springtype/core": "^1.0.0-alpha.1.33",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "cross-spawn": "^6.0.5",
     "envinfo": "^7.2.0",
     "inquirer": "^6.4.1",
     "reflect-metadata": "^0.1.13",
-    "st-rm-rf": "^1.0.0-alpha.1.32",
+    "st-rm-rf": "^1.0.0-alpha.1.33",
     "tslib": "^1.9.3",
     "validate-npm-package-name": "^3.0.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "st-create",
-  "version": "1.0.0-alpha.1.32",
+  "version": "1.0.0-alpha.1.33",
   "publishConfig": {
     "access": "public"
   },
@@ -44,7 +44,7 @@
   },
   "homepage": "https://springtype.org",
   "dependencies": {
-    "springtype": "^1.0.0-alpha.1.32"
+    "springtype": "^1.0.0-alpha.1.33"
   },
   "devDependencies": {
     "@types/node": "^11.13.7",
