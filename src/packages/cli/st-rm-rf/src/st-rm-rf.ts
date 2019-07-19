@@ -1,4 +1,3 @@
-const path = require('path');
 const fs = require('fs');
 const promisify = require('util').promisify;
 const process = require("child_process");
