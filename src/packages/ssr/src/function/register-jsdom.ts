@@ -4,6 +4,11 @@ const defaultHtml = '<!doctype html><html><head><meta charset="utf-8"></head><bo
 
 export const registerJSDOM = (html: any = null, options: any = {}) => {
 
+    // @ts-ignore
+    if (typeof window !== 'undefined') return;
+
+    console.log('Browser window object not found, continuing with JSDOM implementation.');
+
     const _global =  (<any>global);
 
     if (html === null) {
