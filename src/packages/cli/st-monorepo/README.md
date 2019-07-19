@@ -140,6 +140,7 @@ To have command chains run after package chains have been run we suggest
 to configure npm scripts in the main `package.json` file (next to `st-monorepo.json`) like that:
 
 
+
     {
         ...
         "scripts": {
@@ -151,6 +152,7 @@ to configure npm scripts in the main `package.json` file (next to `st-monorepo.j
     
 Whereas command chains would be configured to only run "clean", "build" etc. in "build:all",
 "git-commit", "git-push", "npm-publish" in "publish:all" and "git-create-tag", "github-create-release" in "tag-and-release".
+
 Like with the "." name shown in the previous example `st-monorepo` executes the command only for the local package in case of "tag-and-release". 
 
 #### Supported commands
