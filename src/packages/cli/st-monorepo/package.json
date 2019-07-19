@@ -1,0 +1,53 @@
+{
+  "name": "st-monorepo",
+  "version": "1.0.0-alpha.1.32",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "st-monorepo",
+    "source code management"
+  ],
+  "files": [
+    "dist/*"
+  ],
+  "description": "SpringType monorepo management tool",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtype-org/springtype.git"
+  },
+  "scripts": {
+    "prune": "npx st-rm-rf dist node_modules package-lock.json",
+    "clean": "npx st-rm-rf dist",
+    "watch": "tsc -w",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "run": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "bundledDependencies": [
+    "springtype"
+  ],
+  "bin": {
+    "st-monorepo": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Aron Homberg, Michael Mannseicher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/springtype-org/springtype/issues"
+  },
+  "homepage": "https://springtype.org",
+  "dependencies": {
+    "springtype": "^1.0.0-alpha.1.31"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7",
+    "node": "^12.6.0",
+    "typescript": "^3.3.4000"
+  }
+}

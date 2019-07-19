@@ -1,4 +1,4 @@
-import {copyAndConcreteFile} from "../../function/copyAndConcreteFile";
+import {copyAndConcreteFile} from "../../../function/copyAndConcreteFile";
 
 const fs = require('fs');
 

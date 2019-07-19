@@ -1,4 +1,4 @@
-import {concatErrors} from "../../../function/concatErrors";
+import {concatErrors} from "../../../../../function/concatErrors";
 import {filePathExist} from "st-rm-rf/dist/st-fs";
 
 const validateProjectName = require('validate-npm-package-name');

@@ -1,10 +1,10 @@
 import {validateProjectDirectoryInput} from "./validateProjectDirectoryInput";
 import {createProjectFolder} from "./createProjectFolder";
-import {copyTemplate} from "../../action/copyTemplate";
+import {copyTemplate} from "../../../action/copyTemplate";
 import {installModules} from "../action/installModules";
-import {donationUrl} from "../../../definition/donationUrl";
+import {donationUrl} from "../../../../../definition/donationUrl";
 import {startApp} from "../action/startApp";
-import {getTemplatesFromFolder} from "../../../function/getTemplates";
+import {getTemplatesFromFolder} from "../../../../../function/getTemplates";
 import {printFooter} from "./printFooter";
 
 const inquirer = require('inquirer');

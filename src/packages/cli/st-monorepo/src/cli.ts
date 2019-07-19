@@ -1,13 +1,7 @@
-import {printHeader} from "./function/printHeader";
-import registerCreateCommand from "./command/create/function/registerCreateCommand";
-
 const commander = require('commander');
 const envinfo = require('envinfo');
 const chalk = require('chalk');
 const packageJson = require('../package.json');
-
-// always print the header first
-printHeader();
 
 if (process.argv.length < 3) {
     process.argv.push('--help')
@@ -41,8 +35,7 @@ const program = new commander.Command(packageJson.name)
                 System: ['OS', 'CPU'],
                 Binaries: ['Node', 'npm', 'Yarn'],
                 Browsers: ['Chrome', 'Edge', 'Internet Explorer', 'Firefox', 'Safari'],
-                npmPackages: ['@springtype/core'],
-                npmGlobalPackages: ['st-create'],
+                npmGlobalPackages: ['st-monorepo'],
             },
             {
                 duplicates: true,
@@ -52,6 +45,5 @@ const program = new commander.Command(packageJson.name)
         .then(console.log);
     }
 
-    await registerCreateCommand(program);
 
 })();

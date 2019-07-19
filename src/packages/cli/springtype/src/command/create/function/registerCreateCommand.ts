@@ -1,8 +1,8 @@
 import {Command} from "commander";
 import {enumToArray} from "./enumToArray";
 import {Category} from "../definition/category";
-import {createProject} from "../project/function/createProject";
-import {createWebComponent} from "../web-component/function/createWebComponent";
+import {createProject} from "../subcommand/project/function/createProject";
+import {createWebComponent} from "../subcommand/web-component/function/createWebComponent";
 
 const inquirer = require('inquirer');
 

@@ -1,4 +1,4 @@
-import {concatErrors} from "../../../function/concatErrors";
+import {concatErrors} from "../../../../../function/concatErrors";
 
 const spawn = require('cross-spawn');
 
