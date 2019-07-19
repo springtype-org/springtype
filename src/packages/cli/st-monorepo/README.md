@@ -29,16 +29,16 @@ The basic idea is, to structure your monorepo like this:
     src/
         packages/
             A/
-- some-subfolder/
--     A1/
--         ...
--         package.json
-- ...
-- package.json
+                some-subfolder/
+                    A1/
+                        ...
+                        package.json
+                ...
+                package.json
             B/
-- ...
-- package.json
-- 
+                ...
+                package.json
+
         st-monorepo.json
         package.json
         
@@ -57,23 +57,23 @@ project layout:
         ],
         "script-chains": {
             "all": [
-- "git-diff-stop-on-uncommitted-changes",
-- "remove-node-modules", 
-- "install-package-dependencies", 
-- "npm-run-clean", 
-- "npm-run-build", 
-- "npm-run-test", 
-- "git-log-only-continue-if-changed",
-- "increase-package-semver-version",
-- "update-semver-version-in-dependent-packages",
-- "git-commit",
-- "git-push",
-- "npm-publish",
-- "git-create-tag",
-- "github-create-release"
+                "git-diff-stop-on-uncommitted-changes",
+                "remove-node-modules", 
+                "install-package-dependencies", 
+                "npm-run-clean", 
+                "npm-run-build", 
+                "npm-run-test", 
+                "git-log-only-continue-if-changed",
+                "increase-package-semver-version",
+                "update-semver-version-in-dependent-packages",
+                "git-commit",
+                "git-push",
+                "npm-publish",
+                "git-create-tag",
+                "github-create-release"
             ],
             "publish-only": [
-- "npm-publish"
+                "npm-publish"
             ]
         }
     }
