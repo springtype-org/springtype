@@ -1,5 +1,5 @@
 import {concatErrors} from "../../../../../function/concatErrors";
-import {filePathExist} from "st-rm-rf/dist/st-fs";
+import {filePathExist} from "st-rm-rf/dist/st-rm-rf";
 
 const validateProjectName = require('validate-npm-package-name');
 const chalk = require('chalk');

@@ -31,6 +31,8 @@
   "dependencies": {
     "node-gyp": "^3.8.0",
     "npm": "^6.9.0",
-    "semver": "^6.1.1"
+    "semver": "^6.1.1",
+    "springtype": "^1.0.0-alpha.1.33",
+    "st-create": "^1.0.0-alpha.1.33"
   }
 }

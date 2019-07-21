@@ -30,6 +30,8 @@ const program = new commander.Command(packageJson.name)
 
 (async() => {
 
+    await registerCreateCommand(program);
+
     program.parse(process.argv);
 
     if (program.info) {
@@ -52,6 +54,5 @@ const program = new commander.Command(packageJson.name)
         .then(console.log);
     }
 
-    await registerCreateCommand(program);
 
 })();

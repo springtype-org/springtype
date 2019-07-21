@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 import {filePathExist, removePathOrFile} from "./st-rm-rf";
 
 const path = require('path');
