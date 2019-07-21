@@ -11,7 +11,7 @@
     "test": "lerna run test",
     "prune": "lerna run prune",
     "clean": "lerna run clean",
-    "publish": "npm login && lerna build && lerna publish",
+    "publish": "npm login && lerna run build && lerna publish",
     "build": "lerna run build",
     "bootstrap": "lerna exec npm install",
     "packages": "lerna ls --sort",
