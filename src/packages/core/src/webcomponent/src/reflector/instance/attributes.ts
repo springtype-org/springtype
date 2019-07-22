@@ -2,7 +2,7 @@ import {getAttributeChangeCallbacks} from "../protoype/attributeChangeCallbacks"
 import {AttributeChangeCallbackRegistration} from "../../interface/AttributeChangeCallbackRegistration";
 import {isAttributeObserved, ObservedAttribute} from "../protoype/observedAttributes";
 
-const ATTRIBUTE_DEFAULT_INITIALIZED = 'ATTRIBUTE_DEFAULT_INITIALIZED';
+const ATTRIBUTE_DEFAULT_INITIALIZED = 'ATTRIBUTE_DEFAULT_INITIALIZED_';
 const ATTRIBUTE_VALUE = "ATTRIBUTE_VALUE_";
 const ATTRIBUTE_HOOK_REGISTERED = 'TRANSPARENT_ATTRIBUTE_HOOK_REGISTERED';
 
@@ -26,8 +26,7 @@ export const initializeAttributes = (instance: any, prototype: any, observedAttr
         if (!Reflect.get(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName))) {
             setAttribute(instance, attributeName, instance[attributeName]);
             executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
-
-            Reflect.set(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName) as string, true);
+            Reflect.set(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName) as string, instance[attributeName] || true);
         }
     });
 };
