@@ -1,24 +1,21 @@
 import {executeOnAttributeChangeCallbacks, getAttribute, setAttribute} from "../reflector/instance/attributes";
-import {ATTRIBUTE_TRANSFORM_FN_NAME} from "../..";
+import {ObservedAttribute} from "../reflector/protoype/observedAttributes";
 
 const ATTRIBUTE_REGISTERED = "ATTRIBUTE_REGISTERED_";
 
-export const decorateTransparentAttributeGetterAndSetter = (instance: any, prototype: any, observedAttributes: Array<string>) => {
-    observedAttributes.forEach((attributeName: string) => {
+export const decorateTransparentAttributeGetterAndSetter = (instance: any, prototype: any, observedAttributes: ObservedAttribute[]) => {
+    observedAttributes.forEach((observedAttribute: ObservedAttribute) => {
+        const attributeName = observedAttribute.name.toString();
 
         if (!Reflect.get(instance, (ATTRIBUTE_REGISTERED + attributeName))) {
-
-            const transformFn = Reflect.get(instance, ATTRIBUTE_TRANSFORM_FN_NAME + attributeName.toString());
 
             Object.defineProperty(instance, attributeName, {
                 // call: $webComponent.$attribute = x
                 set: (newValue: any) => {
-
-                    newValue = transformFn ? transformFn(newValue) : newValue;
-
+                    //TODO: save type somewhere maybe here
                     const oldValue = instance[attributeName];
                     let changeCancelled = false;
-
+                    //TODO: ensure set with type
                     if (instance.onBeforeAttributeChange) {
                         changeCancelled = instance.onBeforeAttributeChange(attributeName, oldValue, newValue);
                     }

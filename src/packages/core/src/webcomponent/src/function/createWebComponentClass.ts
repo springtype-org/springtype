@@ -1,7 +1,11 @@
-import {transformToFlatElementList, VirtualDOMTransformer, VirtualElement} from "../../../virtualdom";
+import {
+    transformToFlatElementList,
+    VirtualDOMMutator,
+    VirtualDOMTransformer,
+    VirtualElement
+} from "../../../virtualdom";
 import {CSSDeclarationBlockGenerator, CSSInlineStyleGenerator, getTheme} from "../../../tss";
-import {ComponentReflector} from "../../../di";
-import {ComponentImpl} from "../../../di/src/interface/ComponentImpl";
+import {ComponentImpl, ComponentReflector} from "../../../di";
 import {getAttributeReferencedValue} from "./getAttributeReferencedValue";
 import {getAttributeEventListenerValue} from "./getAttributeEventListenerValue";
 import {getObservedAttributes} from "../reflector/protoype/observedAttributes";
@@ -9,7 +13,6 @@ import {getShadowForComponent} from "../reflector/protoype/shadow";
 import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
-import {VirtualDOMMutator} from "../../../virtualdom/src/mutation/VirtualDOMMutator";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 

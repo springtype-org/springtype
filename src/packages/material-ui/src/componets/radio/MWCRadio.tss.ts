@@ -1,8 +1,7 @@
 import {HOST_SELECTOR, TypedStyleSheet} from "@springtype/core";
-import {MWCCheckbox} from "./MWCCheckbox";
+import {MWCRadio} from "./MWCRadio";
 
-export default (view: MWCCheckbox): TypedStyleSheet => ({
-
+export default (view: MWCRadio): TypedStyleSheet => ({
     [HOST_SELECTOR]: {
         outline: 'none'
     }

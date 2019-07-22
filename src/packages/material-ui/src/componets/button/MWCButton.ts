@@ -1,11 +1,4 @@
-import {
-    Attribute, AttributeType,
-    WebComponent,
-    Lifecycle,
-    Style,
-    Template,
-    Partial
-} from "@springtype/core";
+import {Attribute, Lifecycle, Partial, Style, Template, WebComponent} from "@springtype/core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
 import {MDCRipple} from '@material/ripple';
@@ -15,25 +8,25 @@ import {MDCRipple} from '@material/ripple';
 @Style(style)
 export class MWCButton extends HTMLElement implements Lifecycle {
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     raised = false;
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     unelevated = false;
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     outlined = false;
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     dense = false;
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     disabled = false;
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     ripple = true;
 
-    @Attribute(AttributeType.BOOLEAN)
+    @Attribute
     'trailing-icon' = false;
 
     @Attribute
@@ -52,7 +45,7 @@ export class MWCButton extends HTMLElement implements Lifecycle {
     onFlow(initial: boolean) {
 
         if (initial && this.ripple) {
-            MDCRipple.attachTo(this.button);
+          MDCRipple.attachTo(this.button);
         }
     }
 }

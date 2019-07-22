@@ -1,11 +1,13 @@
 import {Attribute, EventAttribute, Lifecycle, Partial, Style, Template, WebComponent} from "@springtype/core";
-import template from "./MWCCheckbox.tpl";
-import style from "./MWCCheckbox.tss";
+import template from "./MWCRadio.tpl";
+import style from "./MWCRadio.tss";
+import {MDCRipple} from "@material/ripple/component";
 
-@WebComponent('mwc-checkbox')
+
+@WebComponent("mwc-radio")
 @Template(template)
 @Style(style)
-export class MWCCheckbox extends HTMLElement implements Lifecycle {
+export class MWCRadio extends HTMLElement implements Lifecycle {
 
     @Attribute
     checked = false;
@@ -15,6 +17,9 @@ export class MWCCheckbox extends HTMLElement implements Lifecycle {
 
     @Attribute
     disabled = false;
+
+    @Attribute
+    ripple = true;
 
     @Attribute
     value = '';
@@ -29,23 +34,21 @@ export class MWCCheckbox extends HTMLElement implements Lifecycle {
     onchange = (evt: Event) => {
     };
 
-    constructor(protected checkbox: HTMLInputElement) {
+    constructor(protected radio: HTMLButtonElement) {
         super();
-
     }
 
     onFlow(initial: boolean) {
-        if (initial && this.indeterminate) {
-            this.checkbox.indeterminate = true;
+        if (initial && this.ripple) {
+            MDCRipple.attachTo(this.radio);
         }
     }
-
 }
 
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'mwc-checkbox': Partial<MWCCheckbox>;
+            "mwc-radio": Partial<MWCRadio>;
         }
     }
 }

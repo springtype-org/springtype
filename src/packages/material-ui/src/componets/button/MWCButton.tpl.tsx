@@ -1,7 +1,7 @@
 import {MWCButton} from "./MWCButton";
 import classNames from "classnames";
-import {VirtualElement} from "@springtype/core";
-import {ActiveRenderer} from "@springtype/core";
+import {ActiveRenderer, VirtualElement} from "@springtype/core";
+import "@material/button/dist/mdc.button.min.css"
 
 export default (view: MWCButton) => {
 

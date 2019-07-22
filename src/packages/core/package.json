@@ -1,40 +1,40 @@
 {
-    "name": "@springtype/core",
-    "version": "1.0.0-alpha.1.38",
-    "publishConfig": {
-        "access": "public"
-    },
-    "description": "SpringType core implementation with DI, web components, typed stylesheets and virtual DOM rendering.",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/springtype-org/springtype.git"
-    },
-    "scripts": {
-        "bootstrap": "npm run bootstrap:core --prefix ../../",
-        "clean:all": "npm run clean:core --prefix ../../",
-        "clean": "npm run clean:core --prefix ../../",
-        "build": "npm run build:core --prefix ../../",
-        "watch": "npm run watch:core --prefix ../../",
-        "release": "npm run release:core --prefix ../../",
-        "test": "npm run test:core --prefix ../../"
-    },
-    "local:main": "src/index.ts",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "author": "Aron Homberg, Michael Mannseicher",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/springtype-org/springtype/issues"
-    },
-    "homepage": "https://springtype.org",
-    "dependencies": {
-        "@types/node": "^11.13.4",
-        "reflect-metadata": "^0.1.12",
-        "tslib": "^1.9.3"
-    },
-    "devDependencies": {
-        "source-map-support": "^0.5.11",
-        "ts-node": "^7.0.1",
-        "typescript": "^3.3.4000"
-    }
+  "name": "@springtype/core",
+  "version": "1.0.0-alpha.1.38",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "SpringType core implementation with DI, web components, typed stylesheets and virtual DOM rendering.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtype-org/springtype.git"
+  },
+  "scripts": {
+    "bootstrap": "npm run bootstrap:core --prefix ../../",
+    "clean:all": "npm run clean:core --prefix ../../",
+    "clean": "npm run clean:core --prefix ../../",
+    "build": "npm run build:core --prefix ../../",
+    "watch": "npm run watch:core --prefix ../../",
+    "release": "npm run release:core --prefix ../../",
+    "test": "npm run test:core --prefix ../../"
+  },
+  "local:main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Aron Homberg, Michael Mannseicher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/springtype-org/springtype/issues"
+  },
+  "homepage": "https://springtype.org",
+  "dependencies": {
+    "@types/node": "^11.13.4",
+    "reflect-metadata": "^0.1.12",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "source-map-support": "^0.5.11",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3.4000"
+  }
 }

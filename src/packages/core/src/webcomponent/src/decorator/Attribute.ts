@@ -3,18 +3,10 @@ import {decorateTransparentAttributeGetterAndSetter} from "../function/decorateT
 import {warn} from '../../../logger';
 import {getObservedAttributes, setObservedAttributes} from "../reflector/protoype/observedAttributes";
 import {initializeAttributes, registerAttributeHooks} from "../reflector/instance/attributes";
-import {AttributeType, transformBooleanDOMAttributeValue, transformFloatDOMAttributeValue, transformIntDOMAttributeValue} from "../..";
-import {DOMAttributeValueTransformer} from "../interface/DOMAttributeValueTransformer";
 
-export const ATTRIBUTE_TRANSFORM_FN_NAME = 'ATTR_TRANSFORM_FN';
+export function Attribute(webComponentInstance: any, attributeName?: string | symbol): any {
 
-export function Attribute(webComponentInstanceOrTransformFnOrAttributeType: AttributeType|DOMAttributeValueTransformer|any,
-                          attributeName?: string | symbol): any {
-
-    const setup = (webComponentInstance: any, attributeName?: string | symbol, webComponentInstanceOrTransformFnOrAttributeType?: any) => {
-
-        let transformFn;
-
+    const setup = (webComponentInstance: any, attributeName?: string | symbol) => {
         // test for uppercase characters
         if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
             warn(
@@ -22,42 +14,9 @@ export function Attribute(webComponentInstanceOrTransformFnOrAttributeType: Attr
                 ' has an @Attribute with camelCase naming: ', attributeName, '. Use kebab-case instead!');
         }
 
-        if (typeof webComponentInstanceOrTransformFnOrAttributeType === 'string') {
-
-            switch(webComponentInstanceOrTransformFnOrAttributeType) {
-
-                case AttributeType.BOOLEAN:
-                    transformFn = transformBooleanDOMAttributeValue;
-                    break;
-
-                case AttributeType.FLOAT:
-                    transformFn = transformFloatDOMAttributeValue;
-                    break;
-
-                case AttributeType.INT:
-                    transformFn = transformIntDOMAttributeValue;
-                    break;
-            }
-
-        } else if (typeof webComponentInstanceOrTransformFnOrAttributeType === 'function') {
-
-            transformFn = webComponentInstanceOrTransformFnOrAttributeType;
-
-        } else if (typeof webComponentInstanceOrTransformFnOrAttributeType !== 'undefined') {
-
-            warn(
-                'The @WebComponent', webComponentInstance.constructor,
-                ' has an @Attribute(attributeTypeOrTransformFn) with an invalid AttributeType / no transform function: ',
-                attributeName, ' value cannot be transformed by: ', webComponentInstanceOrTransformFnOrAttributeType
-            );
-        }
-
         const observedAttributes = getObservedAttributes(webComponentInstance.constructor);
-        observedAttributes.push(attributeName);
-
-        if (transformFn) {
-            Reflect.set(webComponentInstance, ATTRIBUTE_TRANSFORM_FN_NAME + attributeName!.toString(), transformFn);
-        }
+        const attributeType = Reflect.getMetadata("design:type", webComponentInstance, attributeName!.toString());
+        observedAttributes.push({name: attributeName!.toString(), type: attributeType.name});
 
         setObservedAttributes(webComponentInstance.constructor, observedAttributes);
 
@@ -69,16 +28,17 @@ export function Attribute(webComponentInstanceOrTransformFnOrAttributeType: Attr
 
             registerAttributeHooks(instance, observedAttributes);
         });
+
     };
 
-    if (webComponentInstanceOrTransformFnOrAttributeType instanceof HTMLElement) {
+    if (webComponentInstance instanceof HTMLElement) {
 
-        setup(webComponentInstanceOrTransformFnOrAttributeType, attributeName);
+        setup(webComponentInstance, attributeName);
 
     } else {
 
         return (webComponentInstance: any, attributeName?: string | symbol) => {
-            setup(webComponentInstance, attributeName, webComponentInstanceOrTransformFnOrAttributeType);
+            setup(webComponentInstance, attributeName);
         };
     }
 }
