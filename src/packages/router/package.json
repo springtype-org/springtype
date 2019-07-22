@@ -9,7 +9,6 @@
     "@springtype/core": "../core",
     "@types/node": "^11.10.5",
     "reflect-metadata": "^0.1.12",
-    "ts-polyfill": "^3.3.3",
     "tslib": "^1.9.3"
   },
   "main": "dist/index.js",
