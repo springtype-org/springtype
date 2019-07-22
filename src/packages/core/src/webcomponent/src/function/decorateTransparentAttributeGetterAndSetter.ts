@@ -12,20 +12,14 @@ export const decorateTransparentAttributeGetterAndSetter = (instance: any, proto
             Object.defineProperty(instance, attributeName, {
                 // call: $webComponent.$attribute = x
                 set: (newValue: any) => {
-                    //TODO: save type somewhere maybe here
                     const oldValue = instance[attributeName];
                     let changeCancelled = false;
-                    //TODO: ensure set with type
                     if (instance.onBeforeAttributeChange) {
                         changeCancelled = instance.onBeforeAttributeChange(attributeName, oldValue, newValue);
                     }
-
                     if (!changeCancelled) {
-
                         setAttribute(instance, attributeName, newValue);
-
                         executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
-
                         instance.flowOnAttributeChange(attributeName, oldValue, newValue);
                     }
                     return true;

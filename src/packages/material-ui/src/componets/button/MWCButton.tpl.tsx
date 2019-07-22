@@ -4,7 +4,6 @@ import {ActiveRenderer, VirtualElement} from "@springtype/core";
 import "@material/button/dist/mdc.button.min.css"
 
 export default (view: MWCButton) => {
-
     const classes = classNames({
         'mdc-button': true,
         'mdc-button--raised': view.raised,
@@ -30,8 +29,9 @@ export default (view: MWCButton) => {
 
     const button: VirtualElement = <button st-inject={{button: view}} class={classes} aria-label={ariaLabel}>{innerButtonElement}</button>;
 
+
+
     if (view.disabled) {
-        //debugger;
         button.attributes.disabled = true;
     }
     return button;

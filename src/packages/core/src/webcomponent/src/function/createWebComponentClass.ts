@@ -13,6 +13,8 @@ import {getShadowForComponent} from "../reflector/protoype/shadow";
 import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
+import {getAttribute} from "../reflector/instance/attributes";
+import {Lifecycle} from "../..";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 
@@ -20,7 +22,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
     // custom web component extends user implemented web component class
     // which extends HTMLElement
-    const CustomWebComponent = class extends injectableWebComponent {
+    const CustomWebComponent = class extends injectableWebComponent implements Lifecycle{
 
         constructor(...args: Array<any>) {
             super();
@@ -137,6 +139,18 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
         async flow(initial: boolean = false): Promise<void> {
 
+            if (initial) {
+                const observedAttributes = getObservedAttributes(injectableWebComponent);
+                for (let i = 0; i < observedAttributes.length; i++) {
+                    const observedAttribute = observedAttributes[i];
+                    const attributeName = observedAttribute.name.toString();
+                    if (attributeName.startsWith('on')) {
+                        continue;
+                    }
+                    const value = getAttribute(this, attributeName);
+                    this.setAttribute(observedAttribute.name, value);
+                }
+            }
             let cancelled = false;
 
             if (super.onBeforeFlow) {

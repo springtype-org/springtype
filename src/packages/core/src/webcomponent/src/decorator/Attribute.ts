@@ -16,9 +16,7 @@ export function Attribute(webComponentInstance: any, attributeName?: string | sy
 
         const observedAttributes = getObservedAttributes(webComponentInstance.constructor);
 
-        const attributeType = Reflect.getMetadata("design:type", webComponentInstance, attributeName!.toString());
-
-        observedAttributes.push({name: attributeName!.toString(), type: attributeType.name});
+        observedAttributes.push({name: attributeName!});
 
         setObservedAttributes(webComponentInstance.constructor, observedAttributes);
 

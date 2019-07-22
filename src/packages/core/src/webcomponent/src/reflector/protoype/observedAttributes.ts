@@ -1,8 +1,7 @@
 const OBSERVED_ATTRIBUTES = 'OBSERVED_ATTRIBUTES';
 
 export interface ObservedAttribute {
-    name: string | symbol,
-    type: string;
+    name: string | symbol
 }
 
 export const setObservedAttributes = (prototype: any, observedAttributes: ObservedAttribute[]) =>

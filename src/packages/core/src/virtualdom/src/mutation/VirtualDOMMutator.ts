@@ -19,9 +19,9 @@ export class VirtualDOMMutator {
         }
     };
 
-    static getSlotChildrenFromParentTree = (domElement: Element): Array<VirtualElement|string> => {
+    static getSlotChildrenFromParentTree = (domElement: Element): Array<VirtualElement | string> => {
 
-        let slotChildren: Array<VirtualElement|string> = SlotChildrenReflector.get(domElement);
+        let slotChildren: Array<VirtualElement | string> = SlotChildrenReflector.get(domElement);
 
         if (slotChildren && slotChildren.length) {
             return slotChildren;
@@ -38,16 +38,16 @@ export class VirtualDOMMutator {
 
         if (parent) {
 
-            const slotChildren: Array<VirtualElement|string> = VirtualDOMMutator.getSlotChildrenFromParentTree(parent);
+            const slotChildren: Array<VirtualElement | string> = VirtualDOMMutator.getSlotChildrenFromParentTree(parent);
 
             if (slotChildren) {
 
                 const filteredSlotChildren = [];
 
                 // iterate slot children
-                for (let s=0; s<slotChildren.length; s++) {
+                for (let s = 0; s < slotChildren.length; s++) {
 
-                    const slotChild: VirtualElement|string = slotChildren[s];
+                    const slotChild: VirtualElement | string = slotChildren[s];
                     const slotName = virtualElement.attributes ? virtualElement.attributes.name : undefined;
 
                     if (typeof slotChild !== 'string') {
@@ -93,7 +93,7 @@ export class VirtualDOMMutator {
 
     static mutateElementTree = memoize((
         domElements: NodeListOf<Element>,
-        virtualElements: Array<VirtualElement|string>,
+        virtualElements: Array<VirtualElement | string>,
         parent: Element,
         flowId: number
     ) => {
@@ -103,7 +103,7 @@ export class VirtualDOMMutator {
             domElements.length : virtualElements.length;
 
         // walk through max. possible  differences on this level of the subtree
-        for (let i=0; i<maxLength; i++) {
+        for (let i = 0; i < maxLength; i++) {
 
             // removeChild() called before and end of similarities is logically reached
             if (!virtualElements[i] && !domElements[i]) {
@@ -193,19 +193,17 @@ export class VirtualDOMMutator {
 
                 const attributes: Array<Attr> = Array.from(domElement.attributes);
 
-                for (let a=0; a<attributes.length; a++) {
+                for (let a = 0; a < attributes.length; a++) {
 
                     const attributeName = attributes[a].name;
 
                     if (!attributeName.startsWith('on')) {
-
                         if (!virtualElement.attributes || !virtualElement.attributes[attributeName]) {
 
                             // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
                             domElement.removeAttribute(attributeName);
 
                         } else if (domElement.getAttribute(attributeName) !== virtualElement.attributes[attributeName]) {
-
                             if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
 
                                 const domElementReplacement = getRenderer().createNativeElement(virtualElement, flowId);
@@ -225,7 +223,6 @@ export class VirtualDOMMutator {
                     }
                 }
             }
-
             // VirtualElement might have additional attributes, DOMElement doesn't have atm
             if (!replaced && virtualElement.attributes) {
 
@@ -246,8 +243,7 @@ export class VirtualDOMMutator {
 
         // optimization: If freshly created, all children are already perfectly rendered
         // so no need to walk through all child nodes
-        if ((!created && !replaced) || isWebComponent(virtualElement.name)) {
-
+        if ((!created && !replaced) && !isWebComponent(virtualElement.name)) {
             // parent elements must be both existing
             if (domElement && virtualElement &&
 
@@ -284,7 +280,7 @@ export class VirtualDOMMutator {
                 parent.appendChild(getRenderer().createNativeTextNode(virtualElementTextContent, flowId));
             }
 
-        } else if (virtualElementTextContent && domElement){
+        } else if (virtualElementTextContent && domElement) {
 
             // TextNode is present on both sides but content might differ
             // update innerText

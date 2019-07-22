@@ -75,6 +75,7 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Observ
             // $webComponent.getAttribute(...)
             if (isAttributeObserved(observedAttributes, attributeName)) {
                 setAttribute(instance, attributeName, value);
+                instance.changeAttribute(attributeName,value)
             }
 
             // else return transparent value

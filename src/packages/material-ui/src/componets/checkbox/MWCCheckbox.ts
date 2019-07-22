@@ -26,8 +26,7 @@ export class MWCCheckbox extends HTMLElement implements Lifecycle {
     label = '';
 
     @EventAttribute
-    onchange = (evt: Event) => {
-    };
+    onchange = (evt: Event) => {};
 
     constructor(protected checkbox: HTMLInputElement) {
         super();

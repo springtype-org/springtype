@@ -35,6 +35,8 @@ export class MWCButton extends HTMLElement implements Lifecycle {
     @Attribute
     label = '';
 
+    mdcRipple: MDCRipple;
+
     constructor(
         // forward-referenced binding and DI (@see template bind={{...}} on <button>)
         protected button: HTMLButtonElement
@@ -43,9 +45,18 @@ export class MWCButton extends HTMLElement implements Lifecycle {
     }
 
     onFlow(initial: boolean) {
+        if (initial) {
+            this.mdcRipple = MDCRipple.attachTo(this.button);
+        }
+    }
 
-        if (initial && this.ripple) {
-          MDCRipple.attachTo(this.button);
+    doFlow(){
+        if (this.ripple) {
+            this.mdcRipple.disabled = false;
+            console.log('active')
+        } else {
+            this.mdcRipple.disabled = true;
+            console.log('deactivaed')
         }
     }
 }
