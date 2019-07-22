@@ -23,7 +23,7 @@ const destinationPath = sourcePaths.pop() || '';
             const sourcePath = path.resolve(sourcePaths[i]);
             if (await filePathExist(sourcePath)) {
                 if (await copyPathOrFile(sourcePath, destinationPath, true)) {
-                    console.log(chalk.cyan(`+ copied ${sourcePath} to `))
+                    console.log(chalk.cyan(`+ copied ${sourcePath} to ${destinationPath}`))
                 } else {
                     console.log(chalk.red(`- error  ${sourcePath}`))
                 }
