@@ -19,19 +19,16 @@ const targetPath = copyPaths.pop() || '';
     } else {
         console.log(chalk.green('Start copying paths'));
 
-        if (await filePathExist(targetPath)) {
-
-            for (let i = 0; i < copyPaths.length; i++) {
-                const copyPath = path.resolve(copyPaths[i]);
-                if (await filePathExist(copyPath)) {
-                    if (await copyPathOrFile(copyPath, targetPath, true)) {
-                        console.log(chalk.cyan(`+ copied ${copyPath}`))
-                    } else {
-                        console.log(chalk.red(`- error  ${copyPath}`))
-                    }
+        for (let i = 0; i < copyPaths.length; i++) {
+            const copyPath = path.resolve(copyPaths[i]);
+            if (await filePathExist(copyPath)) {
+                if (await copyPathOrFile(copyPath, targetPath, true)) {
+                    console.log(chalk.cyan(`+ copied ${copyPath}`))
                 } else {
-                    console.log(`/ nothing ${copyPath}`)
+                    console.log(chalk.red(`- error  ${copyPath}`))
                 }
+            } else {
+                console.log(`/ nothing ${copyPath}`)
             }
         }
     }
