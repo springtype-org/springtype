@@ -6,10 +6,6 @@ export default function registerCreateConfigCommand(program: Command) {
         .alias('cc')
         .description('create an new config')
         .action(async () => {
-
-            const projectPath = process.cwd();
-            console.log('TODO: create a new st-monorepo.js config in ', projectPath);
-
             createConfig();
         });
 }

@@ -35,7 +35,6 @@ module.exports = {
         "git-commit": "git commit -m COMMIT_MESSAGE",
         "git-push": "git push",
         "increase-package-semver-version": "SEMVER_VERSION",
-        "create-config": "st-monorepo.json",
         "install-package-dependencies": "npm install",
         "npm-publish": "npm publish",
         "git-create-tag": "git tag -a SEMVER_VERSION -m TAG_MESSAGE",

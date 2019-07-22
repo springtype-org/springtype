@@ -39,14 +39,14 @@ The basic idea is, to structure your monorepo like this:
                 ...
                 package.json
 
-        st-monorepo.json
+        st-monorepo.config.js
         package.json
         
-As you can see, we have a file called `st-monorepo.json`.
+As you can see, we have a file called `st-monorepo.config.js`.
 Similar to `lerna` this file contains the configuration for the
 management tool, but it's structure differs completely.
 
-Here is an example of `st-monorepo.json` for the above monorepo 
+Here is an example of `st-monorepo.config.js` for the above monorepo 
 project layout:
 
     {
@@ -101,8 +101,8 @@ Main features are:
    When the directory name "." is given, `st-monorepo` assumes to execute the command in the 
    local directory only. Commands and command chains are only executed for the local package in this case.
    
-Note: If no `st-monorepo.json` can be found in the current directory, looks upward in the folder 
-structure until the first `st-monorepo.json` file is found.
+Note: If no `st-monorepo.config.js` can be found in the current directory, looks upward in the folder 
+structure until the first `st-monorepo.config.js` file is found.
 
 `st-monorepo` takes care of the developer experience and always makes sure to consistently
 fail in time whenever a command executed in a chain fails. 
@@ -123,10 +123,10 @@ right arguments which makes sure, that you don't need any special
 
 Basically, you just leave things as they are.
 
-To add support for `st-monorepo` and create a new `st-monorepo.json` config file, just run: `npx st-monorepo create-config` 
+To add support for `st-monorepo` and create a new `st-monorepo.config.js` config file, just run: `npx st-monorepo create-config` 
 in the folder where your package folders are located.
 
-To add/remove/move execution order of packages, you just edit `st-monorepo.json`'s `packages` section.
+To add/remove/move execution order of packages, you just edit `st-monorepo.config.js`'s `packages` section.
 
 #### Behaviour
 
@@ -137,7 +137,7 @@ when a package as changes committed, but not yet pushed.
 
 3. Given the nature of `st-monorepo` chains are run per package. 
 To have command chains run after package chains have been run we suggest 
-to configure npm scripts in the main `package.json` file (next to `st-monorepo.json`) like that:
+to configure npm scripts in the main `package.json` file (next to `st-monorepo.config.js`) like that:
 
 
 
@@ -197,7 +197,6 @@ Most commands can be configured, for example (showing the default values):
             "git-commit": "git commit -m COMMIT_MESSAGE",
             "git-push": "git push",
             "increase-package-semver-version": "SEMVER_VERSION",
-            "create-config": "st-monorepo.json",
             "install-package-dependencies": "npm install",
             "npm-publish": "npm publish",
             "git-create-tag": "git tag -a SEMVER_VERSION -m TAG_MESSAGE",
