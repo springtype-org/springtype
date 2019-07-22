@@ -11,7 +11,7 @@ export class TemplateName extends HTMLElement implements Lifecycle {
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            'template-name': Partial<TemplateName>;
+            'templatename': Partial<TemplateName>;
         }
     }
 }
