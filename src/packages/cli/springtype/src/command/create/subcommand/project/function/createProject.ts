@@ -27,7 +27,7 @@ const transformPackageDependenciesToStrings = (packageJson: any, key: string): A
 
 export async function createProject(cwd: string) {
 
-    const templateFolderPath = path.resolve(__dirname, '../../../template/project');
+    const templateFolderPath = path.resolve(__dirname, '../../../../../template/project');
     const templates = getTemplatesFromFolder(templateFolderPath);
 
     const templateFolderChoice: { templateFolder: string } = await inquirer['prompt']([
@@ -77,7 +77,7 @@ export async function createProject(cwd: string) {
     }
 
     const packageJson: { homepage: string; bugs: { url: string } } =
-        JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), {encoding: 'utf8'}));
+        JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../../../package.json'), {encoding: 'utf8'}));
 
     printFooter(packageJson.homepage, projectPath, packageJson.bugs.url, donationUrl);
 

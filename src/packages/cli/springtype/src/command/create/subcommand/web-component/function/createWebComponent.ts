@@ -12,7 +12,7 @@ const DEFAULT_COMPONENT_TEMPLATE_TYPE = 'scratch';
 
 export async function createWebComponent(cwd: string) {
 
-    const templateFolderPath = path.resolve(__dirname, '../../../template/web-component');
+    const templateFolderPath = path.resolve(__dirname, '../../../../../template/web-component');
     const templates = getTemplatesFromFolder(templateFolderPath);
 
     const templateFolderChoice: { templateFolder: string } = await inquirer.prompt([
@@ -47,7 +47,7 @@ export async function createWebComponent(cwd: string) {
     }
 
     const packageJson: { homepage: string; bugs: { url: string } } =
-        JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../package.json'), {encoding: 'utf8'}));
+        JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../../../package.json'), {encoding: 'utf8'}));
 
     printFooter(packageJson.homepage, cwd, packageJson.bugs.url, donationUrl);
 }
