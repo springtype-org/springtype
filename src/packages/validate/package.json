@@ -1,6 +1,6 @@
 {
   "name": "@springtype/validate",
-  "version": "1.0.0-alpha.1.35",
+  "version": "1.0.0-alpha.1.36",
   "publishConfig": {
     "access": "public"
   },
