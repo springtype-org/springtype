@@ -1,10 +1,17 @@
 {
-  "name": "@springtype/core",
+  "name": "st-cp",
   "version": "1.0.0-alpha.1.36",
   "publishConfig": {
     "access": "public"
   },
-  "description": "SpringType core implementation with DI, web components, typed stylesheets and virtual DOM rendering.",
+  "keywords": [
+    "springtype copy files and folders helper",
+    "st-cp"
+  ],
+  "files": [
+    "dist/*"
+  ],
+  "description": "CLI tool for platform independent copying of files and folders.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/springtype-org/springtype.git"
@@ -15,11 +22,20 @@
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "publish": "cp package.json LICENSE.md dist && cd dist && npm publish"
+    "run": "node dist/index.js",
+    "prepublishOnly": "npm run build"
   },
-  "main": "index.js",
-  "types": "index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
+  "bundledDependencies": [
+    "chalk"
+  ],
+  "bin": {
+    "st-cp": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
   "bugs": {
@@ -27,14 +43,12 @@
   },
   "homepage": "https://springtype.org",
   "dependencies": {
-    "@types/node": "^11.13.4",
-    "reflect-metadata": "^0.1.12",
-    "tslib": "^1.9.3"
+    "chalk": "^2.4.2"
   },
   "devDependencies": {
-    "source-map-support": "^0.5.11",
-    "ts-node": "^7.0.1",
+    "@types/node": "^11.13.7",
+    "node": "^12.6.0",
     "typescript": "^3.3.4000"
   },
-  "gitHead": "24e5788b13321e4b6a0ca3d92f31a1f96664f2fe"
+  "gitHead": "4a3ae736176f0a722ee74e0e1f7d7ee6f3aaa3ed"
 }

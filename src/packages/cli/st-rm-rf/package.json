@@ -5,9 +5,8 @@
     "access": "public"
   },
   "keywords": [
-    "springtype create",
-    "st-rm-rf",
-    "scaffold"
+    "springtype rm -rf",
+    "st-rm-rf"
   ],
   "files": [
     "dist/*"

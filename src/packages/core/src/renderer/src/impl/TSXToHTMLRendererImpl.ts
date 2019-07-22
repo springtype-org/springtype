@@ -4,7 +4,7 @@ import {
     Component,
     FRAGMENT_ELEMENT_TAG_NAME,
     VirtualElement,
-} from "../../../../index";
+} from "../../../index";
 import {parseAttributeNS} from "./tsx-to-html-renderer-impl/function/parseAttributeNS";
 import {NamespaceAttributesMap} from "./tsx-to-html-renderer-impl/interface/NamespaceAttributesMap";
 import {collectNamespaceAttributes} from "./tsx-to-html-renderer-impl/function/collectNamespaceAttributes";

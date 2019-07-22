@@ -4,7 +4,6 @@ const process = require("child_process");
 const os = require("os");
 
 const fsp = {
-    lstat: promisify(fs.lstat),
     access: promisify(fs.access),
 };
 
@@ -20,19 +19,14 @@ export const filePathExist = async (existFilePath: string, printError: boolean =
     return false;
 };
 
-export const removePathOrFile = async (deletePath: string, printError: boolean = false): Promise<boolean> => {
+export const copyPathOrFile = async (sourcePath: string, destinationPath: string, printError: boolean = false): Promise<boolean> => {
     try {
         const platform = os.platform();
         if (platform === "win32") {
-            const stat = await fsp.lstat(deletePath);
-            if (stat.isDirectory()) {
-                process.execSync(`rmdir /s /q "${deletePath}"`);
-            } else {
-                process.execSync(`del "${deletePath}"`);
-            }
+            process.execSync(`xcopy "${sourcePath}" "${destinationPath}" /O /X /E /H /K`);
             return true;
         } else {
-            process.execSync(`rm -rf "${deletePath}"`);
+            process.execSync(`cp -rp "${sourcePath}" "${destinationPath}"`);
             return true;
         }
     } catch (err) {
