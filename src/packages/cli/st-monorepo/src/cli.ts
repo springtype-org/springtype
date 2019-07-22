@@ -1,3 +1,5 @@
+import registerCreateConfigCommand from "./command/create-config/function/registerCreateConfigCommand";
+
 const commander = require('commander');
 const envinfo = require('envinfo');
 const chalk = require('chalk');
@@ -17,12 +19,14 @@ const program = new commander.Command(packageJson.name)
             `    If you have any problems, do not hesitate to file an issue:`
         );
         console.log(
-            `      ${chalk.cyan(packageJson.bugs.url)}`
+            `      ${(packageJson.bugs.url)}`
         );
         console.log();
     });
 
 (async() => {
+
+    await registerCreateConfigCommand(program);
 
     program.parse(process.argv);
 
