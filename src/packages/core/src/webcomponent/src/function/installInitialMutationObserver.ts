@@ -22,7 +22,7 @@ export const installInitialMutationObserver = (instance: any, tagName: string) =
 
             // prevent mutation from firing re-flows by self-change
             initialChildren = initialChildren.filter((child) =>
-                !FlowIdReflector.has(child) && !isWebComponent(child.tagName)
+                !FlowIdReflector.has(child) && child.tagName && !isWebComponent(child.tagName)
             );
         });
 

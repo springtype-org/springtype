@@ -30,6 +30,11 @@ export class BeanFactory {
             );
         }
 
+        // web component injected via "st-inject"
+        if (componentCtor.prototype instanceof HTMLElement) {
+            return componentCtor;
+        }
+
         const classSymbol = ComponentReflector.getSymbol(componentCtor);
         const beanConfig = ComponentReflector.getConfig(componentCtor);
 
@@ -123,17 +128,16 @@ export class BeanFactory {
             injectionProfile
         );
 
-        const constructorArgumentsParameterInjectionMetdata: ArgumentsInjectionMetadata =
+        const constructorArgumentsParameterInjectionMetadata: ArgumentsInjectionMetadata =
             ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
-
 
         // but if there are special @Inject decorations,
         // we head to resolve them and use these values instead
-        if (constructorArgumentsParameterInjectionMetdata &&
-            constructorArgumentsParameterInjectionMetdata.arguments &&
-            constructorArgumentsParameterInjectionMetdata.arguments.length) {
+        if (constructorArgumentsParameterInjectionMetadata &&
+            constructorArgumentsParameterInjectionMetadata.arguments &&
+            constructorArgumentsParameterInjectionMetadata.arguments.length) {
 
-            const overrideInjectParamValues = constructorArgumentsParameterInjectionMetdata.arguments;
+            const overrideInjectParamValues = constructorArgumentsParameterInjectionMetadata.arguments;
 
             for (let i = 0; i < overrideInjectParamValues.length; i++) {
 
@@ -142,7 +146,7 @@ export class BeanFactory {
                     constructorArguments[overrideInjectParamValues[i].index] =
 
                         resolveInjectionArgumentValue(
-                            constructorArgumentsParameterInjectionMetdata,
+                            constructorArgumentsParameterInjectionMetadata,
                             overrideInjectParamValues[i].index,
                             isTestComponent
                         );

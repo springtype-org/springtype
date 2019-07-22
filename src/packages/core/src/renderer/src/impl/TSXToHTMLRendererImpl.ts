@@ -1,5 +1,10 @@
 import {RendererImpl} from "../interface/RendererImpl";
-import {ActiveLogger, Component, FRAGMENT_ELEMENT_TAG_NAME, VirtualElement} from "../../../../index";
+import {
+    ActiveLogger,
+    Component,
+    FRAGMENT_ELEMENT_TAG_NAME,
+    VirtualElement,
+} from "../../../../index";
 import {parseAttributeNS} from "./tsx-to-html-renderer-impl/function/parseAttributeNS";
 import {NamespaceAttributesMap} from "./tsx-to-html-renderer-impl/interface/NamespaceAttributesMap";
 import {collectNamespaceAttributes} from "./tsx-to-html-renderer-impl/function/collectNamespaceAttributes";
@@ -177,7 +182,29 @@ export class TSXToHTMLRendererImpl implements RendererImpl {
 
             for (let injectionFieldName in scope) {
                 if (scope.hasOwnProperty(injectionFieldName)) {
+
                     const view = scope[injectionFieldName];
+
+                    // setting the value of the st-inject
+                    // (element instance) on the web component
+                    // (injection target) with the name provided
+                    // as object key name in st-inject
+                    //
+                    // for example: <p st-inject={{ paragraph1: view }}></p>
+                    //
+                    // view is an instance of SomeWebComponentInstance:
+                    //
+                    // class SomeWebComponentInstance {
+                    //     constructor(protected paragraph1: HTMLParagraphElement) {
+                    //         super();
+                    //     }
+                    //
+                    //     onFlow(initial: boolean) {
+                    //         console.log('');
+                    //     }
+                    // }
+                    //
+                    // We're setting view['paragraph1'] as the <p>-element instance reference here.
                     view[injectionFieldName] = element;
                 }
             }

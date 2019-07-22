@@ -1,4 +1,3 @@
 import {WebComponentReflector} from "../WebComponentReflector";
 
-export const isWebComponent = (tagName: string) =>
-    WebComponentReflector.getAll().indexOf((tagName || '').toUpperCase()) !== -1;
+export const isWebComponent = (tagName: string) => typeof WebComponentReflector.getByTagName(tagName) != undefined;

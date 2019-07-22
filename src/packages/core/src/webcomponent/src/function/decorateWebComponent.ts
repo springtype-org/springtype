@@ -18,11 +18,10 @@ export const decorateWebComponent = (tagName: string, webComponent: ComponentImp
 
         WebComponentReflector.setTagName(<any>CustomWebComponent, tagName);
 
-        WebComponentReflector.registerByTagName(tagName);
+        WebComponentReflector.registerByTagName(tagName, CustomWebComponent);
     }
 
     ComponentReflector.addInitializer(CustomWebComponent, (instance: any) => {
-
         installInitialMutationObserver(instance, tagName);
     });
 
