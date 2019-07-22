@@ -5,30 +5,30 @@ import {filePathExist, copyPathOrFile} from "./st-cp";
 const path = require('path');
 const chalk = require('chalk');
 
-const copyPaths = process.argv.slice(2);
+const sourcePaths = process.argv.slice(2);
 
 // removes the target path from the copyPaths and stores it in targetPath
-const targetPath = copyPaths.pop() || '';
+const destinationPath = sourcePaths.pop() || '';
 
 (async () => {
 
-    if (copyPaths.length == 0) {
+    if (sourcePaths.length == 0) {
         console.log(chalk.red('Nothing to copy.'));
         console.log(' - add paths as arguments');
 
     } else {
         console.log(chalk.green('Start copying paths'));
 
-        for (let i = 0; i < copyPaths.length; i++) {
-            const copyPath = path.resolve(copyPaths[i]);
-            if (await filePathExist(copyPath)) {
-                if (await copyPathOrFile(copyPath, targetPath, true)) {
-                    console.log(chalk.cyan(`+ copied ${copyPath}`))
+        for (let i = 0; i < sourcePaths.length; i++) {
+            const sourcePath = path.resolve(sourcePaths[i]);
+            if (await filePathExist(sourcePath)) {
+                if (await copyPathOrFile(sourcePath, destinationPath, true)) {
+                    console.log(chalk.cyan(`+ copied ${sourcePath} to `))
                 } else {
-                    console.log(chalk.red(`- error  ${copyPath}`))
+                    console.log(chalk.red(`- error  ${sourcePath}`))
                 }
             } else {
-                console.log(`/ nothing ${copyPath}`)
+                console.log(`/ nothing ${sourcePath}`)
             }
         }
     }
