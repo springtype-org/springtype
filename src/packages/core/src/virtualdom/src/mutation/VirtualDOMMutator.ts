@@ -204,7 +204,7 @@ export class VirtualDOMMutator {
                             // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
                             domElement.removeAttribute(attributeName);
 
-                        } else if (domElement.getAttribute(attributeName) !== virtualElement.attributes[attributeName].toString()) {
+                        } else if (domElement.getAttribute(attributeName) !== virtualElement.attributes[attributeName]) {
 
                             if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
 

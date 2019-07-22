@@ -26,7 +26,7 @@ export const initializeAttributes = (instance: any, prototype: any, observedAttr
         if (!Reflect.get(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName))) {
             setAttribute(instance, attributeName, instance[attributeName]);
             executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
-            Reflect.set(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName) as string, instance[attributeName] || true);
+            Reflect.set(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName) as string, instance[attributeName]);
         }
     });
 };
