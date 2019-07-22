@@ -51,7 +51,6 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Observ
 
         // $webComponent.getAttribute(...) [native]
         const originalGetAttribute = instance[GET_ATTRIBUTE_METHOD_NAME].bind(instance);
-        const originalSetAttribute = instance[SET_ATTRIBUTE_METHOD_NAME].bind(instance);
 
         // replace $webComponent.getAttribute(...)
         instance[GET_ATTRIBUTE_METHOD_NAME] = (attributeName: string) => {
@@ -66,17 +65,20 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Observ
             return getAttribute(instance, attributeName);
         };
 
+        // $webComponent.setAttribute(...) [native]
+        const originalSetAttribute = instance[SET_ATTRIBUTE_METHOD_NAME].bind(instance);
+
         // replace $webComponent.setAttribute(...)
         instance[SET_ATTRIBUTE_METHOD_NAME] = (attributeName: string, value: any) => {
 
             // if attribute is not @Attribute observed, call native
             // $webComponent.getAttribute(...)
-            if (!isAttributeObserved(observedAttributes, attributeName)) {
-                return originalSetAttribute(attributeName, value);
+            if (isAttributeObserved(observedAttributes, attributeName)) {
+                setAttribute(instance, attributeName, value);
             }
 
             // else return transparent value
-            return setAttribute(instance, attributeName, value);
+            return originalSetAttribute(attributeName, value);
         };
 
         // $webComponent.attributes [native]
@@ -85,17 +87,15 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Observ
         // replace $webComponent.attributes
         Object.defineProperty(instance, ATTRIBUTES_GETTER_NAME, {
             get: () => {
-
                 // get all native $webComponent.attributes
                 const attributes = originalAttributes;
-
                 // enrich them with @Attribute added attributes
                 observedAttributes.forEach((observedAttribute: ObservedAttribute) => {
-                    const observedAttributeName = observedAttribute.name;
-                    attributes[observedAttributeName] = instance[observedAttributeName];
+                    attributes[observedAttribute.name] = instance[observedAttribute.name];
                 });
                 return attributes;
             }
+
         });
 
         Reflect.set(instance, (ATTRIBUTE_HOOK_REGISTERED) as string, true);

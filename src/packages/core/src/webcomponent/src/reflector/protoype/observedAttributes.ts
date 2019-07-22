@@ -11,7 +11,5 @@ export const setObservedAttributes = (prototype: any, observedAttributes: Observ
 export const getObservedAttributes = (prototype: any): ObservedAttribute[] => Reflect.get(prototype, OBSERVED_ATTRIBUTES) || [];
 
 export const isAttributeObserved = (observedAttributes: ObservedAttribute[], attributeName: string | symbol): boolean => {
-    const found = observedAttributes.find((observedAttribute: ObservedAttribute) => observedAttribute.name == attributeName);
-    console.log('isAttributeObserved',observedAttributes, attributeName, !!found);
-    return !!found;
+    return !!observedAttributes.find((observedAttribute: ObservedAttribute) => observedAttribute.name == attributeName);
 };
