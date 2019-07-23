@@ -1,0 +1,51 @@
+{
+  "name": "st-flat-publish",
+  "version": "1.0.0-alpha.1.39",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "springtype npm publish",
+    "st-flat-publish"
+  ],
+  "description": "CLI tool for flat npm package publishing.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtype-org/springtype.git"
+  },
+  "scripts": {
+    "clean:all": "npx st-rm-rf dist node_modules package-lock.json",
+    "clean": "npx st-rm-rf dist",
+    "watch": "tsc -w",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "run": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "bundledDependencies": [
+    "chalk"
+  ],
+  "bin": {
+    "st-cp": "./dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "author": "Aron Homberg, Michael Mannseicher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/springtype-org/springtype/issues"
+  },
+  "homepage": "https://springtype.org",
+  "dependencies": {
+    "chalk": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7",
+    "node": "^12.6.0",
+    "typescript": "^3.3.4000"
+  },
+  "gitHead": "4a3ae736176f0a722ee74e0e1f7d7ee6f3aaa3ed"
+}
