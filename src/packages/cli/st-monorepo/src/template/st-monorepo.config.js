@@ -3,25 +3,43 @@ module.exports = {
     "packages": [
     ],
 
-    "command-chains": {
+    "global-command-chains": {
+
+        "all": [
+            "npm-login",
+            "all",
+            "git-create-tag",
+            "github-create-release"
+        ],
+
+        "publish-only": [
+            "npm-login",
+            "publish-only",
+            "git-create-tag",
+            "github-create-release"
+        ]
+    },
+
+    "package-command-chains": {
+
         "all": [
             "git-diff-stop-on-uncommitted-changes",
+            "git-log-only-continue-if-changed",
             "remove-node-modules",
             "install-package-dependencies",
             "npm-run-clean",
             "npm-run-build",
             "npm-run-test",
-            "git-log-only-continue-if-changed",
             "increase-package-semver-version",
             "update-semver-version-in-dependent-packages",
             "git-commit",
+            "update-git-head-version-in-package-json",
             "git-push",
-            "npm-publish",
-            "git-create-tag",
-            "github-create-release"
+            "st-flat-publish"
         ],
+
         "publish-only": [
-            "npm-publish"
+            "st-flat-publish"
         ]
     },
 
@@ -36,7 +54,7 @@ module.exports = {
         "git-push": "git push",
         "increase-package-semver-version": "SEMVER_VERSION",
         "install-package-dependencies": "npm install",
-        "npm-publish": "npm publish",
+        "st-flat-publish": "npx st-flat-publish dist package.json LICENSE.md",
         "git-create-tag": "git tag -a SEMVER_VERSION -m TAG_MESSAGE",
         "github-create-release": "hub release create -m RELEASE_MESSAGE TAG"
     }

@@ -164,6 +164,7 @@ The commands supported are:
 - git-diff-stop-on-uncommitted-changes
 - remove-node-modules 
 - install-package-dependencies 
+- npm-login
 - npm-run-clean 
 - npm-run-build 
 - npm-run-test 
@@ -175,6 +176,7 @@ The commands supported are:
 - npm-publish
 - git-create-tag
 - github-create-release
+- update-git-head-version-in-package-json
 
 All commands should be pretty self-explanatory.
 
@@ -192,6 +194,7 @@ Most commands can be configured, for example (showing the default values):
             "npm-run-build": "npm run build",
             "npm-run-clean": "npm run clean",
             "npm-run-test": "npm run test",
+            "npm-login": "npm login",
             "remove-node-modules": "npx st-rm-rf node_modules",
             "git-log-only-continue-if-changed": "git log origin..HEAD",
             "git-commit": "git commit -m COMMIT_MESSAGE",
