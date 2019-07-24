@@ -6,6 +6,7 @@ import {donationUrl} from "../../../../../definition/donationUrl";
 import {startApp} from "../action/startApp";
 import {getTemplatesFromFolder} from "../../../../../function/getTemplates";
 import {printFooter} from "./printFooter";
+import {filePathExist} from "st-rm-rf/dist/st-rm-rf";
 
 const inquirer = require('inquirer');
 const chalk = require('chalk');
@@ -55,10 +56,29 @@ export async function createProject(cwd: string) {
         }
     ]);
 
+    const root = path.resolve(choiceProjectName.name);
+    const folderAlreadyExist = await filePathExist(root);
+
+    if (folderAlreadyExist) {
+
+        const shouldOverride = await inquirer.prompt([
+            {
+                type: 'confirm',
+                default: false,
+                name: 'answer',
+                message: `The chosen directory already exists. Are you sure that you want to override it?`
+            }
+        ]);
+
+        if (!shouldOverride.answer) {
+            return false;
+        }
+    }
+
     const appName = choiceProjectName.name;
     const projectPath = path.join(cwd, appName);
 
-    if (!createProjectFolder(projectPath, appName)) {
+    if (!createProjectFolder(projectPath, appName, folderAlreadyExist)) {
         return false;
     }
     const packageJSON: { dependencies: any, devDependencies: any } = JSON.parse(

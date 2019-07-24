@@ -2,9 +2,11 @@ import {isSafeToCreateAppIn} from "./isSafeToCreateAppIn";
 import {mkdirSync} from "fs"
 import chalk from "chalk";
 
-export const createProjectFolder = (projectPath: string, projectName: string): boolean => {
+export const createProjectFolder = (projectPath: string, projectName: string, folderAlreadyExist: boolean = false): boolean => {
 
-    mkdirSync(projectPath);
+    if (!folderAlreadyExist) {
+        mkdirSync(projectPath);
+    }
 
     if (!isSafeToCreateAppIn(projectPath, projectName)) {
         return false;
