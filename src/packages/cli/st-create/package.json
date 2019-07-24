@@ -44,7 +44,7 @@
   },
   "homepage": "https://springtype.org",
   "dependencies": {
-    "springtype": "1.0.0-alpha.1.38"
+    "springtype": "1.0.0-alpha.1.39"
   },
   "devDependencies": {
     "@types/node": "^11.13.7",
