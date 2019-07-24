@@ -1,3 +1,4 @@
 src
 tsconfig.json
 template
+node_modules
