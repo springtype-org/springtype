@@ -20,6 +20,11 @@ export const validateProjectDirectoryInput = async (projectDirectory: string): P
     const appName = path.basename(root);
     const validationResult = validateProjectName(appName);
 
+    // TODO: Probably write own impl. instead of combining two algorithms
+    if (appName.indexOf('.') > -1) {
+        validationResult.validForNewPackages = false;
+    }
+
     if (!validationResult.validForNewPackages) {
         return `Could not create a project called ${chalk.red(`"${appName}"`)} because of npm naming restrictions:`
             + concatErrors(validationResult.errors)
