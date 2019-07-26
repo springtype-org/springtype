@@ -21,16 +21,15 @@ export class CSSDeclarationBlockGenerator {
 
                     if (selector.indexOf('@') === 0) {
 
-                        console.log('TSS @');
                         styles = `${styles}\n\n${selector} {${generateDeclaration(declaration[selector], true)}    \n}\n\n`;
 
                     } else {
 
                         let styleMapping = '';
 
-                        for (let identifier in declaration[selector]!) {
+                        for (let property in declaration[selector]!) {
 
-                            if (declaration[selector]!.hasOwnProperty(identifier)) {
+                            if (declaration[selector]!.hasOwnProperty(property)) {
 
                                 if (typeof declaration[selector] === 'string') {
 
@@ -39,10 +38,19 @@ export class CSSDeclarationBlockGenerator {
 
                                 } else {
 
-                                    styleMapping = `${styleMapping}\n    ${mediaQuery ? '    ': ''}${
-                                        CaseTransformer.camelToKebabCase(identifier)
-                                        }: ${(declaration[selector] as any)[identifier]};`;
+                                    let styleValue = (declaration[selector] as any)[property];
 
+                                    // uniform to array (multiple values for one CSS property)
+                                    if (!Array.isArray(styleValue)) {
+                                        styleValue = [styleValue];
+                                    }
+
+                                    for (let i=0; i<styleValue.length; i++) {
+
+                                        styleMapping = `${styleMapping}\n    ${mediaQuery ? '    ': ''}${
+                                            CaseTransformer.camelToKebabCase(property) // selector
+                                            }: ${styleValue[i]};`;
+                                    }
                                 }
                             }
                         }
