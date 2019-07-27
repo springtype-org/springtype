@@ -3,31 +3,31 @@
     "target": "es5",
     "moduleResolution": "node",
     "module": "commonjs",
-    "outDir": "dist",
+    "importHelpers": true,
     "strict": true,
     "declaration": true,
     "noEmit": false,
-    "rootDirs": [
-      "src"
-    ],
+    "rootDir": "./src",
     "jsx": "react",
+    "outDir": "dist",
     "jsxFactory": "ActiveRenderer.createElement",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
-    "downlevelIteration":true,
     "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "lib": [
       "dom",
       "es2017"
-    ],
-    "types": ["reflect-metadata", "node"]
+    ]
   },
-  "include": [
-    "src", "test"
-  ],
   "exclude": [
+    "node_modules",
     "dist",
-    "node_modules"
+    ".cache"
+  ],
+  "include": [
+    "src"
   ]
 }
