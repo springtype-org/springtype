@@ -1,6 +1,6 @@
 {
     "name": "st-tss",
-    "version": "1.0.0-alpha.1.38",
+    "version": "1.0.0-alpha.1.39",
     "publishConfig": {
         "access": "public"
     },
