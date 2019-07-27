@@ -46,6 +46,20 @@ import {rewriteDistSubFolderReferences} from "./function/package/rewriteDistSubF
         // write-out ./dist/package.json with re-written fields "main", "bin", "types"
         writeDistPackageJson(packageJson);
 
+        // if bundled dependencies are found, copy them over to ./dist so they can be bundled
+        if (packageJson['bundledDependencies']) {
+            await spawnCmd('npx', ['st-cp', 'node_modules', 'dist']);
+        }
+
+        // bundle custom folders
+        if (packageJson['stBundleFiles'] &&
+            Array.isArray(packageJson['stBundleFiles'])) {
+
+            for (let i=0; i<packageJson['stBundleFiles'].length; i++) {
+                await spawnCmd('npx', ['st-cp', packageJson['stBundleFiles'][i], 'dist']);
+            }
+        }
+
         // cd ../../
         chdirToBaseDir(packageName);
 

@@ -8,9 +8,6 @@
         "springtype rm -rf",
         "st-rm-rf"
     ],
-    "files": [
-        "dist/*"
-    ],
     "description": "CLI tool for platform independent removing of files and folders.",
     "repository": {
         "type": "git",
@@ -23,7 +20,7 @@
         "watch": "npm run watch:cli/st-rm-rf --prefix ../../../",
         "build": "npm run build:cli/st-rm-rf --prefix ../../../",
         "release": "npm run release:cli/st-rm-rf --prefix ../../../",
-        "start": "node dist/index.js"
+        "start": "npm run start:cli/st-rm-rf --prefix ../../../"
     },
     "engines": {
         "node": ">=10"

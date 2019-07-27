@@ -8,9 +8,6 @@
         "springtype copy files and folders helper",
         "st-cp"
     ],
-    "files": [
-        "dist/*"
-    ],
     "description": "CLI tool for platform independent copying of files and folders.",
     "repository": {
         "type": "git",
@@ -23,7 +20,7 @@
         "watch": "npm run watch:cli/st-cp --prefix ../../../",
         "build": "npm run build:cli/st-cp --prefix ../../../",
         "release": "npm run release:cli/st-cp --prefix ../../../",
-        "start": "node dist/index.js"
+        "start": "npm run start:cli/st-cp --prefix ../../../"
     },
     "engines": {
         "node": ">=10"

@@ -1,6 +1,6 @@
 {
     "name": "st-create",
-    "version": "1.0.0-alpha.1.42",
+    "version": "1.0.0-alpha.1.46",
     "publishConfig": {
         "access": "public"
     },
@@ -8,9 +8,6 @@
         "springtype create",
         "st-create",
         "scaffold"
-    ],
-    "files": [
-        "dist/*"
     ],
     "description": "Shortcut for the CLI command: springtype create",
     "repository": {
@@ -24,7 +21,7 @@
         "watch": "npm run watch:cli/st-create --prefix ../../../",
         "build": "npm run build:cli/st-create --prefix ../../../",
         "release": "npm run release:cli/st-create --prefix ../../../",
-        "start": "node dist/index.js"
+        "start": "npm run start:cli/st-create --prefix ../../../"
     },
     "engines": {
         "node": ">=10"
@@ -44,7 +41,7 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "springtype": "../springtype"
+        "springtype": "^1.0.0-alpha.1.46"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",

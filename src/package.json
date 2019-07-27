@@ -8,6 +8,20 @@
     "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
+    "prebootstrap:all": "ts-node scripts/clean-all.ts all",
+    "prebootstrap:core": "ts-node scripts/clean-all.ts core",
+    "prebootstrap:i18n": "ts-node scripts/clean-all.ts i18n",
+    "prebootstrap:router": "ts-node scripts/clean-all.ts router",
+    "prebootstrap:ssr": "ts-node scripts/clean-all.ts ssr",
+    "prebootstrap:state": "ts-node scripts/clean-all.ts state",
+    "prebootstrap:test": "ts-node scripts/clean-all.ts test",
+    "prebootstrap:validate": "ts-node scripts/clean-all.ts validate",
+    "prebootstrap:material-ui": "ts-node scripts/clean-all.ts material-ui",
+    "prebootstrap:cli/st-rm-rf": "ts-node scripts/clean-all.ts cli/st-rm-rf",
+    "prebootstrap:cli/st-cp": "ts-node scripts/clean-all.ts cli/st-cp",
+    "prebootstrap:cli/springtype": "ts-node scripts/clean-all.ts cli/springtype",
+    "prebootstrap:cli/st-create": "ts-node scripts/clean-all.ts cli/st-create",
+    "prebootstrap:cli/st-tss": "ts-node scripts/clean-all.ts cli/st-tss",
     "bootstrap:all": "ts-node scripts/bootstrap.ts all",
     "bootstrap:core": "ts-node scripts/bootstrap.ts core",
     "bootstrap:i18n": "ts-node scripts/bootstrap.ts i18n",
@@ -105,7 +119,12 @@
     "release:cli/st-cp": "ts-node scripts/release.ts cli/st-cp",
     "release:cli/springtype": "ts-node scripts/release.ts cli/springtype",
     "release:cli/st-create": "ts-node scripts/release.ts cli/st-create",
-    "release:cli/st-tss": "ts-node scripts/release.ts cli/st-tss"
+    "release:cli/st-tss": "ts-node scripts/release.ts cli/st-tss",
+    "start:cli/st-rm-rf": "ts-node scripts/start.ts cli/st-rm-rf",
+    "start:cli/st-cp": "ts-node scripts/start.ts cli/st-cp",
+    "start:cli/springtype": "ts-node scripts/start.ts cli/springtype",
+    "start:cli/st-create": "ts-node scripts/start.ts cli/st-create",
+    "start:cli/st-tss": "ts-node scripts/start.ts cli/st-tss"
   },
   "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
@@ -123,6 +142,7 @@
     "@types/node": "^12.6.8",
     "enquirer": "^2.3.1",
     "node-gyp": "^3.8.0",
-    "npm": "^6.9.0"
+    "npm": "^6.9.0",
+    "st-create": "^1.0.0-alpha.1.44"
   }
 }

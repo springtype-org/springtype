@@ -97,7 +97,7 @@ export async function createProject(cwd: string) {
     }
 
     const packageJson: { homepage: string; bugs: { url: string } } =
-        JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../../../package.json'), {encoding: 'utf8'}));
+        JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../../../package.json'), {encoding: 'utf8'}));
 
     printFooter(packageJson.homepage, projectPath, packageJson.bugs.url, donationUrl);
 

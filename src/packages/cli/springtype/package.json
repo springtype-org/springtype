@@ -1,6 +1,6 @@
 {
     "name": "springtype",
-    "version": "1.0.0-alpha.1.41",
+    "version": "1.0.0-alpha.1.46",
     "publishConfig": {
         "access": "public"
     },
@@ -8,8 +8,8 @@
         "springtype",
         "scaffold"
     ],
-    "files": [
-        "dist/*"
+    "stBundleFiles": [
+        "template"
     ],
     "description": "Scaffolding for SpringType.",
     "repository": {
@@ -23,7 +23,7 @@
         "watch": "npm run watch:cli/springtype --prefix ../../../",
         "build": "npm run build:cli/springtype --prefix ../../../",
         "release": "npm run release:cli/springtype --prefix ../../../",
-        "start": "node dist/index.js"
+        "start": "npm run start:cli/springtype --prefix ../../../"
     },
     "engines": {
         "node": ">=10"
