@@ -14,7 +14,7 @@ const port = parseInt(args[0], 10) || 8080;
 
 (async () => {
 
-    let configToUse = getDefaultConfig(port);
+    let configToUse = getDefaultConfig('http://localhost', port);
 
     // check for ./webpack.config.js -- if it's there, use it,
     // else use the default configuration

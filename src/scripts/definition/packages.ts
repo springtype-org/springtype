@@ -12,5 +12,6 @@ export const packages = [
     'cli/st-cp',
     'cli/st-create',
     'cli/st-tss',
-    'cli/st-start'
+    'cli/st-start',
+    'cli/st-build'
 ];

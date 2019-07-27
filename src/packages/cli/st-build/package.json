@@ -1,26 +1,26 @@
 {
-    "name": "st-start",
+    "name": "st-build",
     "version": "1.0.0-alpha.1.47",
     "publishConfig": {
         "access": "public"
     },
     "keywords": [
-        "springtype dev-server",
-        "st-start"
+        "springtype build",
+        "st-build"
     ],
-    "description": "CLI tool for running your SpringType projects (development server).",
+    "description": "CLI tool for building your SpringType projects (production output).",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/springtype-org/springtype.git"
     },
     "scripts": {
-        "bootstrap": "npm run bootstrap:cli/st-start --prefix ../../../",
-        "clean:all": "npm run clean:all:cli/st-start --prefix ../../../",
-        "clean": "npm run clean:cli/st-start --prefix ../../../",
-        "watch": "npm run watch:cli/st-start --prefix ../../../",
-        "build": "npm run build:cli/st-start --prefix ../../../",
-        "release": "npm run release:cli/st-start --prefix ../../../",
-        "start": "npm run start:cli/st-start --prefix ../../../"
+        "bootstrap": "npm run bootstrap:cli/st-build --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-build --prefix ../../../",
+        "clean": "npm run clean:cli/st-build --prefix ../../../",
+        "watch": "npm run watch:cli/st-build --prefix ../../../",
+        "build": "npm run build:cli/st-build --prefix ../../../",
+        "release": "npm run release:cli/st-build --prefix ../../../",
+        "start": "npm run start:cli/st-build --prefix ../../../"
     },
     "engines": {
         "node": ">=10"
@@ -31,10 +31,10 @@
         "html-webpack-plugin",
         "ts-loader",
         "webpack",
-        "webpack-dev-server"
+        "st-start"
     ],
     "bin": {
-        "st-start": "./dist/index.js"
+        "st-build": "./dist/index.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -48,9 +48,9 @@
         "chalk": "^2.4.2",
         "clean-webpack-plugin": "^3.0.0",
         "html-webpack-plugin": "^3.2.0",
+        "st-start": "^1.0.0-alpha.1.47",
         "ts-loader": "^6.0.4",
-        "webpack": "^4.38.0",
-        "webpack-dev-server": "^3.7.2"
+        "webpack": "^4.38.0"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",

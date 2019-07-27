@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isDevelopment = process.env.NODE_ENV === 'development';
 const webpack = require('webpack');
 
-export const getDefaultConfig = (port: number) => ({
+export const getDefaultConfig = (host: string, port: number) => ({
     devtool: 'eval',
     mode: isDevelopment ? 'development' : 'production',
     entry: './src/index.tsx',
@@ -17,7 +17,7 @@ export const getDefaultConfig = (port: number) => ({
         new webpack.HotModuleReplacementPlugin()
     ],
     output: {
-        publicPath: `http://localhost:${port}/`,
+        publicPath: `${host}:${port}/`,
         path: __dirname + '/dist',
         filename: '[name].[hash].js'
     },
