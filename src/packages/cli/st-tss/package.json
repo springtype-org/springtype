@@ -1,58 +1,56 @@
 {
-  "name": "st-tss",
-  "version": "1.0.0-alpha.1.38",
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "springtype CSS/SCSS/Sass/Less to TSS transformer",
-    "st-tss"
-  ],
-  "description": "CLI tool for bulk-transforming CSS, SCSS, Sass and Less into TSS.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/springtype-org/springtype.git"
-  },
-  "scripts": {
-    "bootstrap": "npm run bootstrap:cli/st-tss --prefix ../../../",
-    "clean:all": "npm run clean:all:cli/st-tss --prefix ../../../",
-    "clean": "npm run clean:cli/st-tss --prefix ../../../",
-    "watch": "npm run watch:cli/st-tss --prefix ../../../",
-    "build": "npm run build:cli/st-tss --prefix ../../../",
-    "release": "npm run release:cli/st-tss --prefix ../../../",
-    "start": "node dist/index.js"
-  },
-  "engines": {
-    "node": ">=10"
-  },
-  "bundledDependencies": [
-    "chalk"
-  ],
-  "bin": {
-    "st-tss": "./dist/index.js"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "Aron Homberg, Michael Mannseicher",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/springtype-org/springtype/issues"
-  },
-  "homepage": "https://springtype.org",
-  "dependencies": {
-    "@csstools/postcss-sass": "^4.0.0",
-    "@springtype/core": "../../core",
-    "chalk": "^2.4.2",
-    "glob": "^7.1.4",
-    "postcss": "^7.0.17",
-    "postcss-less": "^3.1.4",
-    "postcss-scss": "^2.0.0",
-    "source-map": "^0.7.3"
-  },
-  "devDependencies": {
-    "@types/node": "^11.13.7",
-    "node": "^12.6.0",
-    "typescript": "^3.3.4000"
-  },
-  "gitHead": "4a3ae736176f0a722ee74e0e1f7d7ee6f3aaa3ed"
+    "name": "st-tss",
+    "version": "1.0.0-alpha.1.38",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "springtype CSS/SCSS/Sass/Less to TSS transformer",
+        "st-tss"
+    ],
+    "description": "CLI tool for bulk-transforming CSS, SCSS, Sass and Less into TSS.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:cli/st-tss --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-tss --prefix ../../../",
+        "clean": "npm run clean:cli/st-tss --prefix ../../../",
+        "watch": "npm run watch:cli/st-tss --prefix ../../../",
+        "build": "npm run build:cli/st-tss --prefix ../../../",
+        "release": "npm run release:cli/st-tss --prefix ../../../",
+        "start": "node dist/index.js"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "bundledDependencies": [
+        "chalk"
+    ],
+    "bin": {
+        "st-tss": "./dist/index.js"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Aron Homberg, Michael Mannseicher",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/springtype-org/springtype/issues"
+    },
+    "homepage": "https://springtype.org",
+    "dependencies": {
+        "@csstools/postcss-sass": "^4.0.0",
+        "chalk": "^2.4.2",
+        "glob": "^7.1.4",
+        "postcss": "^7.0.17",
+        "postcss-less": "^3.1.4",
+        "postcss-scss": "^2.0.0",
+        "source-map": "^0.7.3"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.7",
+        "node": "^12.6.0",
+        "typescript": "^3.3.4000"
+    }
 }
