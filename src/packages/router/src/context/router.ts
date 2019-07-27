@@ -1,4 +1,4 @@
-import {RouterImpl} from "../../index";
+import {RouterImpl} from "../index";
 import {ApplicationContext} from "@springtype/core";
 import {defaultRouterConfig} from "../defaultRouterConfig";
 import {RouterConfig} from "../interface/RouterConfig";

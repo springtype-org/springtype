@@ -1,39 +1,38 @@
 {
-  "name": "@springtype/state",
-  "version": "1.0.0-alpha.1.36",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Redux/Rematch based state management for SpringType.",
-  "dependencies": {
-    "@rematch/core": "1.1.0",
-    "@rematch/immer": "1.0.2",
-    "@springtype/core": "../core",
-    "@types/node": "^11.10.5",
-    "reflect-metadata": "^0.1.12",
-    "tslib": "^1.9.3"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/springtype-org/springtype.git"
-  },
-  "scripts": {
-    "prune": "npx st-rm-rf dist node_modules package-lock.json",
-    "clean": "npx st-rm-rf dist",
-    "watch": "tsc -w",
-    "prebuild": "npm run clean",
-    "build": "tsc",
-    "prepublishOnly": "npm run build"
-  },
-  "author": "Aron Homberg",
-  "license": "MIT",
-  "browserslist": [
-    "last 1 Chrome version"
-  ],
-  "devDependencies": {
-    "typescript": "^3.3.4000"
-  },
-  "gitHead": "24e5788b13321e4b6a0ca3d92f31a1f96664f2fe"
+    "name": "@springtype/state",
+    "version": "1.0.0-alpha.1.37",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "Redux/Rematch based state management for SpringType.",
+    "dependencies": {
+        "@rematch/core": "1.1.0",
+        "@rematch/immer": "1.0.2",
+        "@springtype/core": "../core",
+        "@types/node": "^11.10.5",
+        "reflect-metadata": "^0.1.12",
+        "tslib": "^1.9.3"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:state --prefix ../../",
+        "clean:all": "npm run clean:state --prefix ../../",
+        "clean": "npm run clean:state --prefix ../../",
+        "build": "npm run build:state --prefix ../../",
+        "watch": "npm run watch:state --prefix ../../",
+        "release": "npm run release:state --prefix ../../"
+    },
+    "author": "Aron Homberg",
+    "license": "MIT",
+    "browserslist": [
+        "last 1 Chrome version"
+    ],
+    "devDependencies": {
+        "typescript": "^3.3.4000"
+    }
 }

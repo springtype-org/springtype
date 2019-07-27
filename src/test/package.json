@@ -6,7 +6,7 @@
   },
   "description": "It just works.",
   "dependencies": {
-    "@springtype/core": "^1.0.0-alpha.1.27",
+    "@springtype/core": "../core/dist",
     "@springtype/validate": "file:../packages/validate",
     "@types/node": "^10.12.30",
     "tslib": "^1.9.3"

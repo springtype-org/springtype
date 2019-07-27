@@ -1,6 +1,6 @@
 import {RouterConfig} from "../interface/RouterConfig";
 import {RouterImplType} from "../enum/RouterImplType";
-import {RouterImpl} from "../../index";
+import {RouterImpl} from "../index";
 import {HistoryRouterImpl} from "../impl/HistoryRouterImpl";
 
 export const getRouterImplInstance = (routerConfig: RouterConfig): RouterImpl => {
