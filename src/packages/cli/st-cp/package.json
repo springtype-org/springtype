@@ -1,6 +1,6 @@
 {
     "name": "st-cp",
-    "version": "1.0.0-alpha.1.39",
+    "version": "1.0.0-alpha.1.40",
     "publishConfig": {
         "access": "public"
     },

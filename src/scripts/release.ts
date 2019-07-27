@@ -54,6 +54,11 @@ const { Input } = require('enquirer');
 
         distPackageJson = rewriteDistLocalRelativeDependenciesByLastestNpmVersions(distPackageJson);
 
+        // if bundled dependencies are found, copy them over to ./dist so they can be bundled
+        if (distPackageJson['bundledDependencies']) {
+            await spawnCmd('npx', ['st-cp', 'node_modules', 'dist']);
+        }
+
         // write ./dist/package.json
         writeDistPackageJson(distPackageJson);
 

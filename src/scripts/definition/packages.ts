@@ -7,9 +7,9 @@ export const packages = [
     'test',
     'validate',
     'material-ui',
+    'cli/springtype',
     'cli/st-rm-rf',
     'cli/st-cp',
-    'cli/springtype',
     'cli/st-create',
     'cli/st-tss'
 ];
