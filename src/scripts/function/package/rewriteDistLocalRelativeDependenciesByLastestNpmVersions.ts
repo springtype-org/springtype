@@ -16,7 +16,7 @@ export function rewriteDistLocalRelativeDependenciesByLastestNpmVersions(distPac
 
                     const latestNpmVersion = JSON.parse(fs.readFileSync(path.resolve(packageVersion, 'package.json'), 'utf8')).version;
 
-                    distPackageJson.dependencies[packageName] = latestNpmVersion;
+                    distPackageJson.dependencies[packageName] = `^${latestNpmVersion}`;
                 }
 
             }
