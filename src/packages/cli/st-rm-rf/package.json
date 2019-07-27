@@ -1,54 +1,53 @@
 {
-  "name": "st-rm-rf",
-  "version": "1.0.0-alpha.1.36",
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "springtype rm -rf",
-    "st-rm-rf"
-  ],
-  "files": [
-    "dist/*"
-  ],
-  "description": "CLI tool for platform independent removing of files and folders.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/springtype-org/springtype.git"
-  },
-  "scripts": {
-    "prune": "npx st-rm-rf dist node_modules package-lock.json",
-    "clean": "npx st-rm-rf dist",
-    "watch": "tsc -w",
-    "prebuild": "npm run clean",
-    "build": "tsc",
-    "run": "node dist/index.js",
-    "prepublishOnly": "npm run build"
-  },
-  "engines": {
-    "node": ">=10"
-  },
-  "bundledDependencies": [
-    "chalk"
-  ],
-  "bin": {
-    "st-rm-rf": "./dist/index.js"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "Aron Homberg, Michael Mannseicher",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/springtype-org/springtype/issues"
-  },
-  "homepage": "https://springtype.org",
-  "dependencies": {
-    "chalk": "^2.4.2"
-  },
-  "devDependencies": {
-    "@types/node": "^11.13.7",
-    "node": "^12.6.0",
-    "typescript": "^3.3.4000"
-  },
-  "gitHead": "4a3ae736176f0a722ee74e0e1f7d7ee6f3aaa3ed"
+    "name": "st-rm-rf",
+    "version": "1.0.0-alpha.1.37",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "springtype rm -rf",
+        "st-rm-rf"
+    ],
+    "files": [
+        "dist/*"
+    ],
+    "description": "CLI tool for platform independent removing of files and folders.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:cli/st-rm-rf --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-rm-rf --prefix ../../../",
+        "clean": "npm run clean:cli/st-rm-rf --prefix ../../../",
+        "watch": "npm run watch:cli/st-rm-rf --prefix ../../../",
+        "build": "npm run build:cli/st-rm-rf --prefix ../../../",
+        "release": "npm run release:cli/st-rm-rf --prefix ../../../",
+        "start": "node dist/index.js"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "bundledDependencies": [
+        "chalk"
+    ],
+    "bin": {
+        "st-rm-rf": "./dist/index.js"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Aron Homberg, Michael Mannseicher",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/springtype-org/springtype/issues"
+    },
+    "homepage": "https://springtype.org",
+    "dependencies": {
+        "chalk": "^2.4.2"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.7",
+        "node": "^12.6.0",
+        "typescript": "^3.3.4000"
+    }
 }
