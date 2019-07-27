@@ -1,68 +1,67 @@
 {
-  "name": "springtype",
-  "version": "1.0.0-alpha.1.39",
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "springtype",
-    "scaffold"
-  ],
-  "files": [
-    "dist/*"
-  ],
-  "description": "Scaffolding for SpringType.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/springtype-org/springtype.git"
-  },
-  "scripts": {
-    "prune": "npx st-rm-rf dist node_modules package-lock.json",
-    "clean": "npx st-rm-rf dist",
-    "watch": "tsc -w",
-    "prebuild": "npm run clean",
-    "build": "tsc && npx ncp template dist/template",
-    "run": "node dist/index.js",
-    "prepublishOnly": "npm run build"
-  },
-  "engines": {
-    "node": ">=10"
-  },
-  "bundledDependencies": [
-    "envinfo",
-    "chalk",
-    "st-rm-rf",
-    "inquirer",
-    "commander",
-    "cross-spawn",
-    "validate-npm-package-name"
-  ],
-  "bin": {
-    "springtype": "./dist/index.js"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "author": "Aron Homberg, Michael Mannseicher",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/springtype-org/springtype/issues"
-  },
-  "homepage": "https://springtype.org",
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "commander": "^2.20.0",
-    "cross-spawn": "^6.0.5",
-    "envinfo": "^7.2.0",
-    "inquirer": "^6.4.1",
-    "reflect-metadata": "^0.1.13",
-    "st-rm-rf": "^1.0.0-alpha.1.36",
-    "tslib": "^1.9.3",
-    "validate-npm-package-name": "^3.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^11.13.7",
-    "node": "^12.6.0",
-    "typescript": "^3.3.4000"
-  },
-  "gitHead": "4a3ae736176f0a722ee74e0e1f7d7ee6f3aaa3ed"
+    "name": "springtype",
+    "version": "1.0.0-alpha.1.40",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "springtype",
+        "scaffold"
+    ],
+    "files": [
+        "dist/*"
+    ],
+    "description": "Scaffolding for SpringType.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:cli/springtype --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/springtype --prefix ../../../",
+        "clean": "npm run clean:cli/springtype --prefix ../../../",
+        "watch": "npm run watch:cli/springtype --prefix ../../../",
+        "build": "npm run build:cli/springtype --prefix ../../../",
+        "release": "npm run release:cli/springtype --prefix ../../../",
+        "start": "node dist/index.js"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "bundledDependencies": [
+        "envinfo",
+        "chalk",
+        "st-rm-rf",
+        "inquirer",
+        "commander",
+        "cross-spawn",
+        "validate-npm-package-name"
+    ],
+    "bin": {
+        "springtype": "./dist/index.js"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Aron Homberg, Michael Mannseicher",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/springtype-org/springtype/issues"
+    },
+    "homepage": "https://springtype.org",
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "commander": "^2.20.0",
+        "cross-spawn": "^6.0.5",
+        "envinfo": "^7.2.0",
+        "inquirer": "^6.4.1",
+        "reflect-metadata": "^0.1.13",
+        "st-rm-rf": "^1.0.0-alpha.1.36",
+        "tslib": "^1.9.3",
+        "validate-npm-package-name": "^3.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.7",
+        "node": "^12.6.0",
+        "typescript": "^3.3.4000"
+    }
 }
