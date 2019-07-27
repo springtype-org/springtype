@@ -6,8 +6,8 @@
   },
   "description": "It just works.",
   "dependencies": {
-    "@springtype/core": "../core/dist",
-    "@springtype/validate": "file:../packages/validate",
+    "@springtype/core": "../packages/core",
+    "@springtype/validate": "../packages/validate",
     "@types/node": "^10.12.30",
     "tslib": "^1.9.3"
   },
@@ -17,7 +17,7 @@
     "watch": "tsc -w",
     "prebuild": "npm run clean",
     "build": "tsc",
-    "test": "mocha /media/mansi/data-hd/mansi/projects/own/npm/springtype/src/test/dist/validate/decorator.spec.js"
+    "test": "mocha ./dist/validate/decorator.spec.js"
   },
   "repository": {
     "type": "git",

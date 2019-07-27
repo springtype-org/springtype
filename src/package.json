@@ -8,7 +8,6 @@
     "url": "git+https://github.com/springtype-org/springtype.git"
   },
   "scripts": {
-
     "bootstrap:all": "ts-node scripts/bootstrap.ts all",
     "bootstrap:core": "ts-node scripts/bootstrap.ts core",
     "bootstrap:i18n": "ts-node scripts/bootstrap.ts i18n",
@@ -23,7 +22,6 @@
     "bootstrap:cli/springtype": "ts-node scripts/bootstrap.ts cli/springtype",
     "bootstrap:cli/st-create": "ts-node scripts/bootstrap.ts cli/st-create",
     "bootstrap:cli/st-tss": "ts-node scripts/bootstrap.ts cli/st-tss",
-
     "build:all": "ts-node scripts/build.ts all",
     "build:core": "ts-node scripts/build.ts core",
     "build:i18n": "ts-node scripts/build.ts i18n",
@@ -38,7 +36,6 @@
     "build:cli/springtype": "ts-node scripts/build.ts cli/springtype",
     "build:cli/st-create": "ts-node scripts/build.ts cli/st-create",
     "build:cli/st-tss": "ts-node scripts/build.ts cli/st-tss",
-
     "clean:all": "ts-node scripts/clean.ts all",
     "clean:core": "ts-node scripts/clean.ts core",
     "clean:i18n": "ts-node scripts/clean.ts i18n",
@@ -53,7 +50,6 @@
     "clean:cli/springtype": "ts-node scripts/clean.ts cli/springtype",
     "clean:cli/st-create": "ts-node scripts/clean.ts cli/st-create",
     "clean:cli/st-tss": "ts-node scripts/clean.ts cli/st-tss",
-
     "clean:all:all": "ts-node scripts/clean-all.ts all",
     "clean:all:core": "ts-node scripts/clean-all.ts core",
     "clean:all:i18n": "ts-node scripts/clean-all.ts i18n",
@@ -68,7 +64,6 @@
     "clean:all:cli/springtype": "ts-node scripts/clean-all.ts cli/springtype",
     "clean:all:cli/st-create": "ts-node scripts/clean-all.ts cli/st-create",
     "clean:all:cli/st-tss": "ts-node scripts/clean-all.ts cli/st-tss",
-
     "watch:all": "ts-node scripts/watch.ts all",
     "watch:core": "ts-node scripts/watch.ts core",
     "watch:i18n": "ts-node scripts/watch.ts i18n",
@@ -83,7 +78,6 @@
     "watch:cli/springtype": "ts-node scripts/watch.ts cli/springtype",
     "watch:cli/st-create": "ts-node scripts/watch.ts cli/st-create",
     "watch:cli/st-tss": "ts-node scripts/watch.ts cli/st-tss",
-
     "prerelease:all": "ts-node scripts/build.ts all",
     "prerelease:core": "ts-node scripts/build.ts core",
     "prerelease:i18n": "ts-node scripts/build.ts i18n",
@@ -98,7 +92,6 @@
     "prerelease:cli/springtype": "ts-node scripts/build.ts cli/springtype",
     "prerelease:cli/st-create": "ts-node scripts/build.ts cli/st-create",
     "prerelease:cli/st-tss": "ts-node scripts/build.ts cli/st-tss",
-
     "release:all": "ts-node scripts/release.ts all",
     "release:core": "ts-node scripts/release.ts core",
     "release:i18n": "ts-node scripts/release.ts i18n",
