@@ -4,9 +4,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-
 module.exports = {
-    entry: './src/example-todo-mvc.tsx',
+    devtool: 'eval',
+    mode: isDevelopment ? 'development' : 'production',
+    entry: './src/index.tsx',
     plugins: [
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['dist']
@@ -20,8 +21,9 @@ module.exports = {
         })
     ],
     output: {
+        publicPath: 'http://localhost:8080/',
         path: __dirname + '/dist',
-        filename: '[name].[contenthash].js'
+        filename: '[name].[hash].js'
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.scss']
@@ -64,7 +66,6 @@ module.exports = {
                     }
                 ]
             }
-        ],
-
+        ]
     }
 };

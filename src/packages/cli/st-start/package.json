@@ -1,0 +1,60 @@
+{
+    "name": "st-start",
+    "version": "1.0.0-alpha.1.46",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "springtype dev-server",
+        "st-start"
+    ],
+    "description": "CLI tool for running your SpringType projects (development server).",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:cli/st-start --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-start --prefix ../../../",
+        "clean": "npm run clean:cli/st-start --prefix ../../../",
+        "watch": "npm run watch:cli/st-start --prefix ../../../",
+        "build": "npm run build:cli/st-start --prefix ../../../",
+        "release": "npm run release:cli/st-start --prefix ../../../",
+        "start": "npm run start:cli/st-start --prefix ../../../"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "bundledDependencies": [
+        "chalk",
+        "clean-webpack-plugin",
+        "html-webpack-plugin",
+        "ts-loader",
+        "webpack",
+        "webpack-dev-server"
+    ],
+    "bin": {
+        "st-start": "./dist/index.js"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Aron Homberg, Michael Mannseicher",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/springtype-org/springtype/issues"
+    },
+    "homepage": "https://springtype.org",
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "clean-webpack-plugin": "^3.0.0",
+        "html-webpack-plugin": "^3.2.0",
+        "ts-loader": "^6.0.4",
+        "webpack": "^4.38.0",
+        "webpack-dev-server": "^3.7.2"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.7",
+        "node": "^12.6.0",
+        "typescript": "^3.3.4000"
+    }
+}

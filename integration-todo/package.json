@@ -16,17 +16,15 @@
     "materialize-css": "^1.0.0",
     "ts-loader": "^6.0.4",
     "tslib": "^1.10.0",
-    "webpack": "^4.37.0",
-    "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "webpack": "^4.38.0"
   },
   "scripts": {
     "e2e": "testcafe chrome e2e",
     "bootstrap": "npm i",
     "clean:all": "npx st-rm-rf dist node_modules package-lock.json",
     "clean": "npx st-rm-rf dist",
-    "build": "webpack -p",
-    "start": "webpack-dev-server -d --content-base ./dist"
+    "build": "npx st-build",
+    "start": "npx st-start 8080"
   },
   "devDependencies": {
     "css-loader": "^3.1.0",

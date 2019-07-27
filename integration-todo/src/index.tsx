@@ -19,7 +19,7 @@ import {Logo} from "./element/logo/Logo";
 
 @WebComponent('example-todo-mvc')
 @Use(Logo)
-export class ExampleTodoMVC extends HTMLElement implements Lifecycle {
+export class Index extends HTMLElement implements Lifecycle {
 
     // inject AppTranslation to
     constructor(private appTranslation: AppTranslationConfig) {

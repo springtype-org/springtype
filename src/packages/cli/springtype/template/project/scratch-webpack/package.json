@@ -1,0 +1,26 @@
+{
+  "name": "templatename-from-scratch",
+  "private": true,
+  "version": "1.0.0-alpha.1.13",
+  "description": "templatename is a SpringType project based on template: scratch.",
+  "dependencies": {
+    "@springtype/core": "^1.0.0-alpha.1.38",
+    "@springtype/router": "^1.0.0-alpha.1.38",
+    "@types/node": "^11.10.5",
+    "ts-loader": "^6.0.4",
+    "tslib": "^1.9.3"
+  },
+  "scripts": {
+    "bootstrap": "npm i",
+    "clean:all": "npx st-rm-rf dist node_modules package-lock.json",
+    "clean": "npx st-rm-rf dist",
+    "build": "npx st-build",
+    "start": "npx st-start 8080"
+  },
+  "devDependencies": {
+    "typescript": "^3.1.1"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

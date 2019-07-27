@@ -11,5 +11,6 @@ export const packages = [
     'cli/st-rm-rf',
     'cli/st-cp',
     'cli/st-create',
-    'cli/st-tss'
+    'cli/st-tss',
+    'cli/st-start'
 ];

@@ -1,6 +1,6 @@
 {
     "name": "springtype",
-    "version": "1.0.0-alpha.1.46",
+    "version": "1.0.0-alpha.1.48",
     "publishConfig": {
         "access": "public"
     },
