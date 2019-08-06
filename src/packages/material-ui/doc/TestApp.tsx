@@ -1,6 +1,8 @@
-import {ButtonPage} from "./page/buttonPage";
-import {Route, ROUTE_BASE} from "@springtype/router";
+import {Route, ROUTE_BASE, ROUTE_NOT_FOUND} from "@springtype/router";
+import {ButtonPage} from "./page/button-page/button-page";
+import {TextfieldPage} from "./page/textfield-page/textfield-page";
 
-@Route(ROUTE_BASE, ButtonPage)
+@Route('mwc-button', ButtonPage)
+@Route('mwc-textfield', TextfieldPage)
 export class TestApp {
 }

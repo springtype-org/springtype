@@ -12,8 +12,8 @@ export default (view: MWCSelect) => {
     })
 
     const selectElement: VirtualElement =
-        <select inject={{select: view}} class="mdc-select__native-control">
-            <st-slot unwrap/>
+        <select st-inject={{select: view}} class="mdc-select__native-control">
+            <st-slot name="default"/>
         </select>;
 
     if (view.disabled) {

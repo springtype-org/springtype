@@ -15,8 +15,11 @@ export default (view: MWCCheckbox) => {
     const uniqueCheckboxId = uniqueId() + '_' + Date.now() + '_checkbox';
     const inputElement: VirtualElement = <input inject={{checkbox: view}} id={uniqueCheckboxId} type="checkbox"
                                                 class="mdc-checkbox__native-control"/>;
-    if (view.checked) {
+    if (view.checked === true) {
         inputElement.attributes.checked = true;
+    }
+    if (view.checked === 'indeterminate') {
+        inputElement.attributes.indeterminate = true
     }
     if (view.disabled) {
         inputElement.attributes.disabled = true;
@@ -37,7 +40,7 @@ export default (view: MWCCheckbox) => {
                           fill="none"
                           d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
                 </svg>
-                <div class="mdc-checkbox__mixedmark"></div>
+                <div class="mdc-checkbox__mixedmark"/>
             </div>
         </div>
         <label for={uniqueCheckboxId}>{view.label}</label>

@@ -16,6 +16,7 @@
     "@material/radio": "^2.3.0",
     "@material/ripple": "^2.3.0",
     "@material/select": "^2.3.0",
+    "@material/slider": "^3.1.0",
     "@material/switch": "^2.3.0",
     "@material/textfield": "^2.3.0",
     "@types/classnames": "^2.2.7",
@@ -41,7 +42,7 @@
   "author": "Michael Mannseicher, Aron Homberg",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^3.3.4000"
+    "typescript": "^3.5.3"
   },
   "browserslist": [
     "last 1 Chrome version"

@@ -1,23 +1,40 @@
-import {registerForChangeDetection} from "../function/registerForChangeDetection";
-import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackRegistration";
-import {getOnFieldChangeCallbacks} from "../reflector/fieldChangeCallbacks";
+import {ComponentReflector} from "../../../di";
+import {getObservedFields, setObservedFields} from "../reflector/prototype/observedField";
+import {initializeField} from "../reflector/instance/fields";
+import {decorateFieldChange} from "../function/decorateFieldChange";
 
 export function Field(
     webComponentInstance: any,
     fieldName: string | symbol
 ): any {
 
-    registerForChangeDetection(webComponentInstance.constructor, fieldName, false,
-        (props: any, propName: string|number|symbol, value: any, instance: any) => {
 
-        const onFieldChangeCallbacks: Array<FieldChangeCallbackRegistration> =
-            getOnFieldChangeCallbacks(webComponentInstance.constructor);
+    const setup = (webComponentInstance: any, fieldName?: string | symbol) => {
 
-        onFieldChangeCallbacks.forEach((onFieldChangeCallbackRegistration: FieldChangeCallbackRegistration) => {
+        const observedFields = getObservedFields(webComponentInstance.constructor);
 
-            if (fieldName === onFieldChangeCallbackRegistration.fieldName) {
-                instance[onFieldChangeCallbackRegistration.methodName](propName, value);
-            }
-        })
-    });
+        observedFields.push({name: fieldName!});
+
+        setObservedFields(webComponentInstance.constructor, observedFields);
+
+        ComponentReflector.addInitializer(webComponentInstance.constructor, (instance: any) => {
+
+            initializeField(instance, webComponentInstance.constructor, observedFields);
+
+            decorateFieldChange(instance, webComponentInstance.constructor, observedFields);
+
+        });
+
+    };
+
+    if (webComponentInstance instanceof HTMLElement) {
+
+        setup(webComponentInstance, fieldName);
+
+    } else {
+
+        return (webComponentInstance: any, fieldName?: string | symbol) => {
+            setup(webComponentInstance, fieldName);
+        };
+    }
 }

@@ -1,7 +1,14 @@
-import {Attribute, Lifecycle, Partial, Style, Template, WebComponent} from "@springtype/core";
+import {Attribute, EventAttribute, Lifecycle, Partial, Style, Template, WebComponent} from "@springtype/core";
 import template from "./MWCButton.tpl";
 import style from "./MWCButton.tss";
-import {MDCRipple} from '@material/ripple';
+import {MDCRipple} from "@material/ripple/component";
+
+export enum MWCBUTTON_VARIANT_TYPE {
+    TEXT = 'text',
+    RAISED = 'raised',
+    UNELEVATED = 'unelevated',
+    OUTLINED = 'outlined'
+}
 
 @WebComponent('mwc-button')
 @Template(template)
@@ -9,22 +16,16 @@ import {MDCRipple} from '@material/ripple';
 export class MWCButton extends HTMLElement implements Lifecycle {
 
     @Attribute
-    raised = false;
+    variant: MWCBUTTON_VARIANT_TYPE = MWCBUTTON_VARIANT_TYPE.TEXT;
 
     @Attribute
-    unelevated = false;
+    dense: boolean = false;
 
     @Attribute
-    outlined = false;
-
-    @Attribute
-    dense = false;
+    shaped = false;
 
     @Attribute
     disabled = false;
-
-    @Attribute
-    ripple = true;
 
     @Attribute
     'trailing-icon' = false;
@@ -35,30 +36,24 @@ export class MWCButton extends HTMLElement implements Lifecycle {
     @Attribute
     label = '';
 
-    mdcRipple: MDCRipple;
+    @EventAttribute
+    onclick = (evt: Event) => {
+    };
 
-    constructor(
-        // forward-referenced binding and DI (@see template bind={{...}} on <button>)
-        protected button: HTMLButtonElement
-    ) {
+    rippleInstance: MDCRipple;
+
+    constructor() {
         super();
     }
 
-    onFlow(initial: boolean) {
-        if (initial) {
-            this.mdcRipple = MDCRipple.attachTo(this.button);
+    onBeforeFlow(initial: boolean) {
+        const button = this.querySelector('.mdc-button');
+        if (button) {
+            this.rippleInstance = new MDCRipple(button);
+
         }
     }
 
-    doFlow(){
-        if (this.ripple) {
-            this.mdcRipple.disabled = false;
-            console.log('active')
-        } else {
-            this.mdcRipple.disabled = true;
-            console.log('deactivaed')
-        }
-    }
 }
 
 declare global {

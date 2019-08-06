@@ -2,8 +2,8 @@ import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackR
 
 const ON_FIELD_CHANGE_CALLBACKS = 'ON_FIELD_CHANGE_CALLBACKS';
 
-export const setOnFieldChangeCallbacks = (prototype: any, onFieldChangeCallbacks: Array<FieldChangeCallbackRegistration>) =>
+export const setFieldChangeCallbacks = (prototype: any, onFieldChangeCallbacks: Array<FieldChangeCallbackRegistration>) =>
     Reflect.set(prototype, ON_FIELD_CHANGE_CALLBACKS, onFieldChangeCallbacks);
 
-export const getOnFieldChangeCallbacks = (prototype: any) =>
+export const getFieldChangeCallbacks = (prototype: any) =>
     Reflect.get(prototype, ON_FIELD_CHANGE_CALLBACKS) || [];

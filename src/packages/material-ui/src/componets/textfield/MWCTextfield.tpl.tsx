@@ -1,4 +1,4 @@
-import {MWCTextfield} from "./MWCTextfield";
+import {MWCTextfield, MWCTEXTFIELD_VARIANT_TYPE} from "./MWCTextfield";
 import classNames from "classnames";
 import {ActiveRenderer, VirtualElement} from "@springtype/core";
 //css
@@ -10,29 +10,30 @@ const outlineLabel = (view: MWCTextfield) => {
     return <div class={classNames({
         'mdc-notched-outline': true,
         'mdc-notched-outline--upgraded': true,
-        'mdc-notched-outline--notched': view.isFocused || view.value
     })}>
-        <div class="mdc-notched-outline__leading"/>
+        <div class={classNames({
+            'mwc-text-field-outlined-leading-shaped': view.shaped,
+            'mdc-notched-outline__leading': true
+        })}/>
         <div class={classNames({
             'mdc-notched-outline__notch': true,
-            'mdc-help--float-above': view.isFocused || view.value,
-            'mdc-help--float-above-width': view.isFocused || view.value
         })}>
-            <label inject={{labelEL: view}} class={classNames({
+            <label st-inject={{labelEL: view}} class={classNames({
                 'mdc-floating-label': true,
-                'mdc-floating-label--float-above': view.isFocused || view.value
             })}>{view.label}</label>
         </div>
-        <div class="mdc-notched-outline__trailing"/>
+        <div class={classNames({
+            'mwc-text-field-outlined-trailing-shaped': view.shaped,
+            'mdc-notched-outline__trailing': true
+        })}/>
     </div>
 };
 
 const filledLabel = (view: MWCTextfield) => {
     return <st-fragment>
         <div class="mdc-line-ripple"/>
-        <label inject={{labelEL: view}} class={classNames({
+        <label st-inject={{labelEL: view}} class={classNames({
             'mdc-floating-label': true,
-            'mdc-floating-label--float-above': view.isFocused || view.value
         })}>{view.label}</label>
     </st-fragment>
 };
@@ -44,37 +45,24 @@ export default (view: MWCTextfield) => {
     const classes = classNames({
         'mdc-text-field': true,
         'mdc-text-field--disabled': view.disabled,
-        'mdc-text-field--outlined': view.variant === 'outlined',
-        'mdc-ripple-upgraded': view.variant === 'filled',
+        'mdc-text-field--outlined': view.variant == MWCTEXTFIELD_VARIANT_TYPE.OUTLINED,
+        'mdc-ripple-upgraded': view.variant === MWCTEXTFIELD_VARIANT_TYPE.FILLED,
+        'mwc-text-field-filled-shaped': view.variant === MWCTEXTFIELD_VARIANT_TYPE.FILLED && view.shaped,
         'mdc-text-field--with-leading-icon': view.icon && !view['trailing-icon'],
         'mdc-text-field--with-trailing-icon': view.icon && view['trailing-icon'],
-        'mdc-text-field--focused': view.isFocused
     });
 
     // @ts-ignore
-    const inputElement: VirtualElement = <input inject={{inputEL: view}}
-                                                onfocusin={view.onInputFocusin}
-                                                onfocusout={view.onInputFocusOut}
-                                                onchange={view.onInputChange}
-                                                class="mdc-text-field__input" value={view.value}/>;
+    const inputElement: VirtualElement = <input class="mdc-text-field__input" value={view.value}/>;
     if (view.disabled) {
         inputElement.attributes.disabled = true;
     }
-
-    const helper = view["helper-text"] ? <div class={classNames({
-        'mdc-text-field-helper-line': true,
-        'no-display': !view['helper-text']
-    })}>
-        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">{view['helper-text']}</div>
-    </div> : '';
     return <st-fragment>
         <div class={classes} aria-label={ariaLabel}>
-            {view.variant === 'outlined' ? outlineLabel(view) : filledLabel(view)}
+            {view.variant == MWCTEXTFIELD_VARIANT_TYPE.OUTLINED ? outlineLabel(view) : filledLabel(view)}
             {inputElement}
             {mdcIcon(view['icon'])}
         </div>
-        {helper}
-
-    </st-fragment>;
+    </st-fragment>
 }
 

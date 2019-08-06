@@ -10,7 +10,15 @@ export default (view: MWCButton): TypedStyleSheet => ({
 
     '.mdc-button': {
         flex: 1
+    },
+
+    '.mwc-button-shaped': {
+        'border-radius': '18px'
+    },
+    '.mwc-button-shaped.mdc-button--dense ': {
+        'border-radius': '16px'
     }
+
 
 });
 

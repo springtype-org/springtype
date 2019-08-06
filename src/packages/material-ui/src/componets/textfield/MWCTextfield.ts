@@ -1,6 +1,12 @@
 import {Attribute, EventAttribute, Lifecycle, Partial, Style, Template, WebComponent} from '@springtype/core';
+import {MDCTextField} from '@material/textfield';
 import template from './MWCTextfield.tpl';
 import style from './MWCTextfield.tss';
+
+export enum MWCTEXTFIELD_VARIANT_TYPE {
+    FILLED = 'filled',
+    OUTLINED = 'outlined'
+}
 
 @WebComponent('mwc-textfield')
 @Template(template)
@@ -8,7 +14,7 @@ import style from './MWCTextfield.tss';
 export class MWCTextfield extends HTMLElement implements Lifecycle {
 
     @Attribute
-    variant: 'outlined' | 'filled' = "outlined";
+    variant: MWCTEXTFIELD_VARIANT_TYPE = MWCTEXTFIELD_VARIANT_TYPE.FILLED;
 
     @Attribute
     disabled = false;
@@ -17,62 +23,51 @@ export class MWCTextfield extends HTMLElement implements Lifecycle {
     'trailing-icon' = false;
 
     @Attribute
-    'icon' = '';
+    icon = '';
+
+    @Attribute
+    shaped = false;
+
 
     @Attribute
     label = '';
 
     @Attribute
-    'helper-text' = '';
-
-    @EventAttribute
-    onchange = (evt: Event) => {
-    };
-
-
-    @Attribute
     value = '';
 
-    labelWidth: string = '100%';
+    @EventAttribute
+    onchange: () => void;
 
-    isFocused = false;
+    @EventAttribute
+    onfocus: () => void;
 
-    constructor(protected inputEL: HTMLInputElement,
-                protected labelEL: HTMLLabelElement,
+    @EventAttribute
+    onblur: () => void;
+
+    @EventAttribute
+    onkeypress: () => void;
+
+    @EventAttribute
+    onkeyup = (evt: KeyboardEvent) => {
+    };
+
+    textfieldInstance: MDCTextField;
+
+
+    constructor(public inputEL: HTMLInputElement,
+                public labelEL: HTMLLabelElement,
     ) {
         super();
     }
 
     onFlow(initial: boolean) {
-        if (initial && this.labelEL) {
-            if (this.value) {
-                this.labelWidth = `${this.labelEL.getBoundingClientRect().width + 8}px`;
-            } else {
-                this.labelWidth = `${this.labelEL.getBoundingClientRect().width * 0.75 + 8}px`;
-            }
-            if (this.variant == "outlined") {
-                // @ts-ignore
-                this.flow()
-            }
+        const textfield = this.querySelector('.mdc-text-field');
+        if (textfield) {
+            this.textfieldInstance = new MDCTextField(textfield);
         }
+
     }
 
-    onInputFocusin = () => {
-        this.isFocused = true;
-        // @ts-ignore
-        this.flow()
-
-    };
-
-    onInputFocusOut = () => {
-        this.isFocused = false;
-        // @ts-ignore
-        this.flow()
-    };
-
-    onInputChange = () => {
-        this.value = this.inputEL.value;
-    };
 
 }
 

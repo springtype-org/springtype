@@ -2,16 +2,16 @@ import {Attribute, EventAttribute, Lifecycle, Partial, Style, Template, WebCompo
 import template from "./MWCCheckbox.tpl";
 import style from "./MWCCheckbox.tss";
 
+export type MWCCHECKBOX_CHECKED_TYPE = true | false | 'indeterminate';
+
+
 @WebComponent('mwc-checkbox')
 @Template(template)
 @Style(style)
 export class MWCCheckbox extends HTMLElement implements Lifecycle {
 
     @Attribute
-    checked = false;
-
-    @Attribute
-    indeterminate = false;
+    checked: MWCCHECKBOX_CHECKED_TYPE= false;
 
     @Attribute
     disabled = false;

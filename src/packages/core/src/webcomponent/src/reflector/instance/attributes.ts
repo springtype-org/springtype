@@ -34,7 +34,6 @@ export const initializeAttributes = (instance: any, prototype: any, observedAttr
 export const executeOnAttributeChangeCallbacks = (prototype: any, instance: any, attributeName: string) => {
 
     const attributeChangeCallbacks: Array<AttributeChangeCallbackRegistration> = getAttributeChangeCallbacks(prototype);
-
     attributeChangeCallbacks.forEach(
         (attributeChangeCallbackRegistration: AttributeChangeCallbackRegistration) => {
 
@@ -70,7 +69,6 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Observ
 
         // replace $webComponent.setAttribute(...)
         instance[SET_ATTRIBUTE_METHOD_NAME] = (attributeName: string, value: any) => {
-
             // if attribute is not @Attribute observed, call native
             // $webComponent.getAttribute(...)
             if (isAttributeObserved(observedAttributes, attributeName)) {

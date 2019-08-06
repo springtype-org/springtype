@@ -20,8 +20,8 @@ export interface Lifecycle  {
     onRender?(elementsRendered: Array<VirtualElement>): void;
 
     onBeforeFlow?(initial?: boolean): boolean|void;
-    flow?(initial?: boolean, children?: Array<VirtualElement|string>): Promise<void>;
-    doFlow?(children?: Array<VirtualElement|string>): void;
+    flow?(initial?: boolean): Promise<void>;
+    doFlow(): void;
     onFlow?(initial?: boolean): void;
 
     // native web component callbacks

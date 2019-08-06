@@ -13,8 +13,8 @@ import {getShadowForComponent} from "../reflector/protoype/shadow";
 import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
-import {getAttribute} from "../reflector/instance/attributes";
 import {Lifecycle} from "../..";
+import {getAttribute} from "../reflector/instance/attributes";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 
@@ -22,7 +22,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
     // custom web component extends user implemented web component class
     // which extends HTMLElement
-    const CustomWebComponent = class extends injectableWebComponent implements Lifecycle{
+    const CustomWebComponent = class extends injectableWebComponent implements Lifecycle {
 
         constructor(...args: Array<any>) {
             super();
