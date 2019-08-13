@@ -1,0 +1,37 @@
+{
+  "name": "templatename-from-babylon-3d-template",
+  "private": true,
+  "version": "1.0.0-alpha.1.13",
+  "description": "templatename is a SpringType project based on template: babylon-3d.",
+  "dependencies": {
+    "@springtype/core": "^1.0.0-alpha.1.37",
+    "@springtype/router": "^1.0.0-alpha.1.37",
+    "@types/node": "^11.10.5",
+    "babylonjs": "^4.0.3",
+    "cross-env": "^5.2.0",
+    "parcel-bundler": "^1.10.1",
+    "parcel-plugin-shader-loader": "^1.0.0",
+    "parcel-plugin-static-files-copy": "^2.2.1",
+    "tslib": "^1.9.3"
+  },
+  "staticFiles": {
+    "staticPath": "src/assets",
+    "watcherGlob": "**"
+  },
+  "scripts": {
+    "clean": "npx st-rm-rf dist .cache",
+    "start": "npx parcel src/index.html",
+    "serve": "npx parcel serve src/index.html --public-url .",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url ."
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "parcel": "^1.11.0",
+    "sass": "^1.17.2",
+    "typescript": "^3.1.1"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}
