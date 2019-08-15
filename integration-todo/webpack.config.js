@@ -7,7 +7,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 module.exports = {
     devtool: 'eval',
     mode: isDevelopment ? 'development' : 'production',
-    entry: './src/index.tsx',
+    entry: './src/index.module.ts',
     plugins: [
         new CleanWebpackPlugin({
             cleanAfterEveryBuildPatterns: ['dist']

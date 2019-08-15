@@ -25,7 +25,7 @@ export const dateFormat = (date: any, dateFormat: string) => {
 @Component
 export class AppTranslationConfig {
 
-    constructor(private translator: Translator) {
+    constructor(public translator: Translator) {
 
         // this method is called 4 times by the framework internally.
         // this is because of language detection and expected behaviour,
@@ -36,6 +36,8 @@ export class AppTranslationConfig {
 
                 // keep translations in sync: when language changes, tell date-fns to change accordingly
                 localeId = language;
+
+                console.log('on lang change');
 
             }, 10 /* ms */
         );

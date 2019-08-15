@@ -1,8 +1,6 @@
-import {WebComponent, Lifecycle, Style, Use, ActiveRenderer} from "@springtype/core";
+import {WebComponent, Lifecycle, Style, ActiveRenderer, Provide, Field} from "@springtype/core";
 import {TodoModel} from "../model/TodoModel";
-import {ListInnerPartial} from "../element/list/ListInnerPartial";
-import {AppLayout} from "../element/layout/AppLayout";
-import {t, Translate} from "@springtype/i18n";
+import {t} from "@springtype/i18n";
 import {style} from "./TodoListPage.style";
 import {e2e} from '../e2e';
 
@@ -10,10 +8,17 @@ interface TodoListLocalState {
     newTodoItemText: string;
 }
 
+export interface ListPageLocalChanges {
+    newTodoItemText?: string;
+}
+
 @WebComponent('example-todo-list')
 @Style(style)
-@Use(AppLayout, ListInnerPartial, Translate)
 export class TodoListPage extends HTMLElement implements Lifecycle {
+
+    @Provide
+    @Field
+    localChanges: ListPageLocalChanges = {};
 
     constructor(
         public localState: TodoListLocalState,
@@ -27,7 +32,10 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
 
     onAddItem = () => {
 
-        console.log('onAddItem');
+        console.log('onAddItem', this.localState.newTodoItemText);
+
+        // change @Provide @Field (just an example for inter-WebComponent communication)
+        this.localChanges.newTodoItemText = this.localState.newTodoItemText;
 
         if (this.textInputEl.value !== '') {
 
@@ -51,8 +59,6 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
         }
         evt.preventDefault();
     };
-
-
 
     render() {
 

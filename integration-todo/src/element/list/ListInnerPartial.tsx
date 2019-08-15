@@ -1,13 +1,23 @@
 import {IRootState} from "../../state/IRootState";
-import {WebComponent, Lifecycle, Partial, Style, VirtualElement, ActiveRenderer} from "@springtype/core";
+import {
+    WebComponent,
+    Lifecycle,
+    Partial,
+    Style,
+    VirtualElement,
+    ActiveRenderer,
+    Field, OnFieldChange
+} from "@springtype/core";
 import {TodoModel} from "../../model/TodoModel";
 import {ITodoItem} from "../../state/ITodoState";
-import {ROUTE_TODO_DETIALS} from "../../routes";
 import {MapStateToField} from "@springtype/state";
 import {t} from "@springtype/i18n";
 import {style} from "./ListInnerPartial.style";
 import {ActiveRoute} from "@springtype/router";
 import {e2e} from "../../e2e";
+import {Consume} from "@springtype/core";
+import {ListPageLocalChanges, TodoListPage} from "../../page/TodoListPage";
+import {ROUTE_TODO_DETIALS} from "../../index.module";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;
@@ -26,6 +36,17 @@ export class ListInnerPartial extends HTMLElement implements Lifecycle {
         protected activeRoute: ActiveRoute
     ) {
         super();
+    }
+
+    @Field
+    @Consume(TodoListPage, 'localChanges')
+    listPageLocalChanges: ListPageLocalChanges;
+
+    @OnFieldChange('listPageLocalChanges')
+    onConsumerFieldChange() {
+
+        console.log('WebComponent ListInnerPartial received changes from WebComponent ListPage',
+            this.listPageLocalChanges.newTodoItemText);
     }
 
     onListItemClick = (id: number) => {
