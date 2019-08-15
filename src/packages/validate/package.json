@@ -22,7 +22,8 @@
         "clean": "npm run clean:validate --prefix ../../",
         "build": "npm run build:validate --prefix ../../",
         "watch": "npm run watch:validate --prefix ../../",
-        "release": "npm run release:validate --prefix ../../"
+        "release": "npm run release:validate --prefix ../../",
+        "test": "npm run test:validate --prefix ../../"
     },
     "author": "Michael Mannseicher",
     "license": "MIT",

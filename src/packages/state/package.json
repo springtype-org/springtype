@@ -25,7 +25,8 @@
         "clean": "npm run clean:state --prefix ../../",
         "build": "npm run build:state --prefix ../../",
         "watch": "npm run watch:state --prefix ../../",
-        "release": "npm run release:state --prefix ../../"
+        "release": "npm run release:state --prefix ../../",
+        "test": "npm run test:state --prefix ../../"
     },
     "author": "Aron Homberg",
     "license": "MIT",

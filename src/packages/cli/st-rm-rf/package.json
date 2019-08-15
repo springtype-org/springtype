@@ -20,7 +20,8 @@
         "watch": "npm run watch:cli/st-rm-rf --prefix ../../../",
         "build": "npm run build:cli/st-rm-rf --prefix ../../../",
         "release": "npm run release:cli/st-rm-rf --prefix ../../../",
-        "start": "npm run start:cli/st-rm-rf --prefix ../../../"
+        "start": "npm run start:cli/st-rm-rf --prefix ../../../",
+        "test": "npm run test:cli/st-rm-rf --prefix ../../../"
     },
     "engines": {
         "node": ">=10"

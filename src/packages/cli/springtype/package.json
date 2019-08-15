@@ -23,7 +23,8 @@
         "watch": "npm run watch:cli/springtype --prefix ../../../",
         "build": "npm run build:cli/springtype --prefix ../../../",
         "release": "npm run release:cli/springtype --prefix ../../../",
-        "start": "npm run start:cli/springtype --prefix ../../../"
+        "start": "npm run start:cli/springtype --prefix ../../../",
+        "test": "npm run test:cli/springtype --prefix ../../../"
     },
     "engines": {
         "node": ">=10"

@@ -4,7 +4,6 @@ export const packages = [
     'router',
     'state',
     'ssr',
-    'test',
     'validate',
     'material-ui',
     'cli/springtype',

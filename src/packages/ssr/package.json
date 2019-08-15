@@ -23,7 +23,8 @@
         "clean": "npm run clean:ssr --prefix ../../",
         "build": "npm run build:ssr --prefix ../../",
         "watch": "npm run watch:ssr --prefix ../../",
-        "release": "npm run release:ssr --prefix ../../"
+        "release": "npm run release:ssr --prefix ../../",
+        "test": "npm run test:ssr --prefix ../../"
     },
     "author": "Aron Homberg",
     "license": "MIT",

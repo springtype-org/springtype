@@ -15,7 +15,8 @@
         "clean": "npm run clean:core --prefix ../../",
         "build": "npm run build:core --prefix ../../",
         "watch": "npm run watch:core --prefix ../../",
-        "release": "npm run release:core --prefix ../../"
+        "release": "npm run release:core --prefix ../../",
+        "test": "npm run test:core --prefix ../../"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

@@ -26,7 +26,8 @@
         "clean": "npm run clean:material-ui --prefix ../../",
         "build": "npm run build:material-ui --prefix ../../",
         "watch": "npm run watch:material-ui --prefix ../../",
-        "release": "npm run release:material-ui --prefix ../../"
+        "release": "npm run release:material-ui --prefix ../../",
+        "test": "npm run test:material-ui --prefix ../../"
     },
     "author": "Michael Mannseicher, Aron Homberg",
     "license": "MIT",

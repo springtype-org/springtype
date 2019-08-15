@@ -21,7 +21,8 @@
         "watch": "npm run watch:cli/st-create --prefix ../../../",
         "build": "npm run build:cli/st-create --prefix ../../../",
         "release": "npm run release:cli/st-create --prefix ../../../",
-        "start": "npm run start:cli/st-create --prefix ../../../"
+        "start": "npm run start:cli/st-create --prefix ../../../",
+        "test": "npm run test:cli/st-create --prefix ../../../"
     },
     "engines": {
         "node": ">=10"

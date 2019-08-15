@@ -25,7 +25,8 @@
         "clean": "npm run clean:i18n --prefix ../../",
         "build": "npm run build:i18n --prefix ../../",
         "watch": "npm run watch:i18n --prefix ../../",
-        "release": "npm run release:i18n --prefix ../../"
+        "release": "npm run release:i18n --prefix ../../",
+        "test": "npm run test:i18n --prefix ../../"
     },
     "author": "Aron Homberg",
     "license": "MIT",

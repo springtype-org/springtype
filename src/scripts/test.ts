@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import {forEachPackage} from "./function/package/forEachPackage";
-import {chdirToPackage} from "./function/package/chdirToPackage";
-import {chdirToBaseDir} from "./function/system/chdirToBaseDir";
-import {spawnCmd} from "./function/system/spawnCmd";
 import {getAbsoluteCwd} from "./function/system/getAbsoluteCwd";
 import {getProgramArguments} from "./function/system/getProgramArguments";
+import {forEachPackage} from "./function/package/forEachPackage";
+import {chdirToPackage} from "./function/package/chdirToPackage";
+import {spawnCmd} from "./function/system/spawnCmd";
+import {chdirToBaseDir} from "./function/system/chdirToBaseDir";
 import {getFilteredPackages} from "./function/package/getFilteredPackages";
 
 (async() => {
@@ -15,19 +15,19 @@ import {getFilteredPackages} from "./function/package/getFilteredPackages";
     const packageFilter = getProgramArguments()[0] || 'all';
 
     console.log();
-    console.log(chalk.magenta(`=== START: ${packageFilter} ===`));
+    console.log(chalk.magenta(`=== TEST: ${packageFilter} ===`));
 
     await forEachPackage(async (packageName: string) => {
 
         console.log();
-        console.log(chalk.gray(`=== Starting package: ${packageName} ===`));
+        console.log(chalk.gray(`=== Testing package: ${packageName} ===`));
         console.log();
 
         // cd packages/$packageName
         chdirToPackage(packageName);
 
         // remove ./dist (clean)
-        await spawnCmd('node', ['dist/index.js']);
+        await spawnCmd('testcafe', ['chrome:headless', 'test/**/*.test.ts']);
 
         // cd ../../
         chdirToBaseDir(packageName);
@@ -35,6 +35,6 @@ import {getFilteredPackages} from "./function/package/getFilteredPackages";
     }, packageFilter);
 
     console.log();
-    console.log(chalk.gray('=== Done starting: '), getFilteredPackages(packageFilter));
+    console.log(chalk.gray('=== Done testing: '), getFilteredPackages(packageFilter));
 
 })();

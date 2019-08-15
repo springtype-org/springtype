@@ -19,7 +19,7 @@
     "webpack": "^4.38.0"
   },
   "scripts": {
-    "e2e": "testcafe chrome e2e",
+    "test": "testcafe chrome:headless test",
     "bootstrap": "npm i",
     "clean:all": "npx st-rm-rf dist node_modules package-lock.json",
     "clean": "npx st-rm-rf dist",

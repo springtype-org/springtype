@@ -1,27 +1,27 @@
 {
-    "name": "st-cp",
+    "name": "st-ssr",
     "version": "1.0.0-alpha.1.40",
     "publishConfig": {
         "access": "public"
     },
     "keywords": [
-        "springtype copy files and folders helper",
-        "st-cp"
+        "springtype server-side-rendering (SSR) library and CLI",
+        "st-ssr"
     ],
-    "description": "CLI tool for platform independent copying of files and folders.",
+    "description": "CLI tool and library for high-performance headless chrome based server-side-rendering.",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/springtype-org/springtype.git"
     },
     "scripts": {
-        "bootstrap": "npm run bootstrap:cli/st-cp --prefix ../../../",
-        "clean:all": "npm run clean:all:cli/st-cp --prefix ../../../",
-        "clean": "npm run clean:cli/st-cp --prefix ../../../",
-        "watch": "npm run watch:cli/st-cp --prefix ../../../",
-        "build": "npm run build:cli/st-cp --prefix ../../../",
-        "release": "npm run release:cli/st-cp --prefix ../../../",
-        "start": "npm run start:cli/st-cp --prefix ../../../",
-        "test": "npm run test:cli/st-cp --prefix ../../../"
+        "bootstrap": "npm run bootstrap:cli/st-ssr --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-ssr --prefix ../../../",
+        "clean": "npm run clean:cli/st-ssr --prefix ../../../",
+        "watch": "npm run watch:cli/st-ssr --prefix ../../../",
+        "build": "npm run build:cli/st-ssr --prefix ../../../",
+        "release": "npm run release:cli/st-ssr --prefix ../../../",
+        "start": "npm run start:cli/st-ssr --prefix ../../../",
+        "test": "npm run test:cli/st-ssr --prefix ../../../"
     },
     "engines": {
         "node": ">=10"
@@ -30,7 +30,7 @@
         "chalk"
     ],
     "bin": {
-        "st-cp": "./dist/index.js"
+        "st-tss": "./dist/index.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

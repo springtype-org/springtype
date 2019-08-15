@@ -14,7 +14,7 @@ import {MapStateToField} from "@springtype/state";
 import {t} from "@springtype/i18n";
 import {style} from "./ListInnerPartial.style";
 import {ActiveRoute} from "@springtype/router";
-import {e2e} from "../../e2e";
+import {testSelectors} from "../../test-selectors";
 import {Consume} from "@springtype/core";
 import {ListPageLocalChanges, TodoListPage} from "../../page/TodoListPage";
 import {ROUTE_TODO_DETIALS} from "../../index.module";
@@ -24,7 +24,7 @@ interface LocalTodoListState {
 }
 
 @Style(style)
-@WebComponent(e2e.element["app-list-inner-partial"])
+@WebComponent(testSelectors.element["app-list-inner-partial"])
 export class ListInnerPartial extends HTMLElement implements Lifecycle {
 
     constructor(

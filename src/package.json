@@ -142,7 +142,23 @@
     "start:cli/st-create": "ts-node scripts/start.ts cli/st-create",
     "start:cli/st-tss": "ts-node scripts/start.ts cli/st-tss",
     "start:cli/st-start": "ts-node scripts/start.ts cli/st-start",
-    "start:cli/st-build": "ts-node scripts/start.ts cli/st-build"
+    "start:cli/st-build": "ts-node scripts/start.ts cli/st-build",
+    "test:all": "ts-node scripts/test.ts all",
+    "test:core": "ts-node scripts/test.ts core",
+    "test:i18n": "ts-node scripts/test.ts i18n",
+    "test:router": "ts-node scripts/test.ts router",
+    "test:ssr": "ts-node scripts/test.ts ssr",
+    "test:state": "ts-node scripts/test.ts state",
+    "test:test": "ts-node scripts/test.ts test",
+    "test:validate": "ts-node scripts/test.ts validate",
+    "test:material-ui": "ts-node scripts/test.ts material-ui",
+    "test:cli/st-rm-rf": "ts-node scripts/test.ts cli/st-rm-rf",
+    "test:cli/st-cp": "ts-node scripts/test.ts cli/st-cp",
+    "test:cli/springtype": "ts-node scripts/test.ts cli/springtype",
+    "test:cli/st-create": "ts-node scripts/test.ts cli/st-create",
+    "test:cli/st-tss": "ts-node scripts/test.ts cli/st-tss",
+    "test:cli/st-start": "ts-node scripts/test.ts cli/st-start",
+    "test:cli/st-build": "ts-node scripts/test.ts cli/st-build"
   },
   "author": "Aron Homberg, Michael Mannseicher",
   "license": "MIT",
@@ -161,6 +177,7 @@
     "enquirer": "^2.3.1",
     "node-gyp": "^3.8.0",
     "npm": "^6.9.0",
-    "st-create": "^1.0.0-alpha.1.44"
+    "st-create": "^1.0.0-alpha.1.44",
+    "testcafe": "^1.4.1"
   }
 }

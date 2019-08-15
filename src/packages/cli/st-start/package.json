@@ -20,7 +20,8 @@
         "watch": "npm run watch:cli/st-start --prefix ../../../",
         "build": "npm run build:cli/st-start --prefix ../../../",
         "release": "npm run release:cli/st-start --prefix ../../../",
-        "start": "npm run start:cli/st-start --prefix ../../../"
+        "start": "npm run start:cli/st-start --prefix ../../../",
+        "test": "npm run test:cli/st-start --prefix ../../../"
     },
     "engines": {
         "node": ">=10"

@@ -2,7 +2,7 @@ import {WebComponent, Lifecycle, Style, ActiveRenderer, Provide, Field} from "@s
 import {TodoModel} from "../model/TodoModel";
 import {t} from "@springtype/i18n";
 import {style} from "./TodoListPage.style";
-import {e2e} from '../e2e';
+import {testSelectors} from '../test-selectors';
 
 interface TodoListLocalState {
     newTodoItemText: string;
@@ -70,11 +70,11 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
 
                     <input st-inject={{textInputEl: this}}
                            type="text"
-                           id={e2e.page.TodoListPage.newTodoItemText}
+                           id={testSelectors.page.TodoListPage.newTodoItemText}
                            placeholder={t("what_todo_next")}
                            onkeyup={this.onNewTodoTextChange}/>
 
-                    <a className="waves-effect waves-light btn" id={e2e.page.TodoListPage.addButton} onclick={this.onAddItem}>
+                    <a className="waves-effect waves-light btn" id={testSelectors.page.TodoListPage.addButton} onclick={this.onAddItem}>
                         {t('add')}
                     </a>
                 </div>

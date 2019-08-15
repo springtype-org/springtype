@@ -23,7 +23,8 @@
         "clean": "npm run clean:router --prefix ../../",
         "build": "npm run build:router --prefix ../../",
         "watch": "npm run watch:router --prefix ../../",
-        "release": "npm run release:router --prefix ../../"
+        "release": "npm run release:router --prefix ../../",
+        "test": "npm run test:router --prefix ../../"
     },
     "author": "Aron Homberg",
     "license": "MIT",
