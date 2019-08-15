@@ -15,10 +15,10 @@ import {
 } from 'babylonjs'
 
 // @ts-ignore
-import fragmentShader from "../../shaders/warp.fs";
+import fragmentShader from "../../shaders/warp.frag";
 
 // @ts-ignore
-import vertexShader from "../../shaders/warp.vs";
+import vertexShader from "../../shaders/warp.vert";
 
 @WebComponent('first-scene')
 @Template(tpl)

@@ -1,8 +1,6 @@
 import {TypedMediaQueryStyleSheet} from "@springtype/core";
 import {FirstScene} from "./first-scene";
 
-// TODO: How to import via @import?
-
 export default (component: FirstScene, theme: any): TypedMediaQueryStyleSheet => ({
     "first-scene": {
         "display": "block",
@@ -19,7 +17,7 @@ export default (component: FirstScene, theme: any): TypedMediaQueryStyleSheet =>
 
     "iframe": {
         position: 'absolute',
-        zIndex: 1,
+        zIndex: 2,
         opacity: 0.9,
         boxShadow: '0 8px 6px -6px #fff',
         background: '#000'
@@ -43,7 +41,7 @@ export default (component: FirstScene, theme: any): TypedMediaQueryStyleSheet =>
 
     "section": {
         position: 'absolute',
-        zIndex: 2,
+        zIndex: 1,
         display: 'block',
         width: '100%',
         height: '100%'

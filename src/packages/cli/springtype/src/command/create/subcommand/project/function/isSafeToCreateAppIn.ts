@@ -1,11 +1,9 @@
 import chalk from "chalk";
 import {join} from "path";
 import {readdirSync} from "fs";
-
-
 import {logFiles} from "../definition/logFiles";
 import {filesAllowedToResistInAppDir} from "../definition/filesAllowedToResistInAppDir";
-import {removePathOrFile} from "st-rm-rf/dist/st-rm-rf";
+import {removePathOrFile} from "st-rm-rf/st-rm-rf";
 
 export const isSafeToCreateAppIn = async (rootPath: string, name: string) => {
     console.log();
