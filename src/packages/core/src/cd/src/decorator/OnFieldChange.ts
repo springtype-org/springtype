@@ -1,18 +1,10 @@
-import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackRegistration";
-import {getOnFieldChangeCallbacks, setOnFieldChangeCallbacks} from "../reflector/fieldChangeCallbacks";
+import {addFieldChangeCallback} from "../function/addFieldChangeCallback";
 
 export function OnFieldChange(fieldName: string): any {
 
     return (prototype: any, methodName: any) => {
 
-        const onFieldChangeCallbacks: Array<FieldChangeCallbackRegistration> = getOnFieldChangeCallbacks(prototype.constructor);
-
-        onFieldChangeCallbacks.push({
-            fieldName,
-            methodName
-        });
-
-        setOnFieldChangeCallbacks(prototype.constructor, onFieldChangeCallbacks);
+        addFieldChangeCallback(prototype, methodName, fieldName);
 
         return prototype;
     };
