@@ -1,6 +1,6 @@
 {
     "name": "st-create",
-    "version": "1.0.0-alpha.1.48",
+    "version": "1.0.0-alpha.1.49",
     "publishConfig": {
         "access": "public"
     },

@@ -7,6 +7,7 @@ const fsp = {
     access: promisify(fs.access),
 };
 
+// TODO: Fixme: Duplicate code: st-rm-rf
 export const filePathExist = async (existFilePath: string, printError: boolean = false): Promise<boolean> => {
     try {
         await fsp.access(existFilePath);
