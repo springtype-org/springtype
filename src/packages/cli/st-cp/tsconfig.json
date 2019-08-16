@@ -24,7 +24,7 @@
     "types": ["node"]
   },
   "include": [
-    "src", "test"
+    "src"
   ],
   "exclude": [
     "dist",
