@@ -1,8 +1,8 @@
 {
-  "name": "templatename-from-scratch",
+  "name": "templatename-from-scratch-webpack",
   "private": true,
   "version": "1.0.0-alpha.1.13",
-  "description": "templatename is a SpringType project based on template: scratch.",
+  "description": "templatename is a SpringType project based on template: scratch-webpack.",
   "dependencies": {
     "@springtype/core": "^1.0.0-alpha.1.38",
     "@springtype/router": "^1.0.0-alpha.1.38",

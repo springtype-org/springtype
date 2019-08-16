@@ -122,11 +122,11 @@ For the stable version release, 95% test coverage should be the minimum.
 - [ ] Stabilization, performance improvements (algorithms)
 - [ ] Implement `st-transform` as a library for compiling SpringType projects (get rid of webpack and parcel)
 - [ ] Update `st-start` to be a live reloading web server (using `st-transform`)
-- [ ] Update `st-build` to be a static compiler CLI (using `st-transform`) including SSR support (using headless Chrome)
+- [x] SSR implemented using `st-ssr` ~~Update `st-build` to be a static compiler CLI (using `st-transform`) including SSR support (using headless Chrome)~~~
 - [ ] Implement SCSS transformation for `st-tss` 
 - [ ] Enhance `@springtype/material-ui` to include all components necessary and include icon typing such as https://github.com/mui-org/material-ui/pull/7820/files, allow for theming
 - [ ] Implement `docuducks` - a spiritual successor of `docusaurus` and release https://www.springtype.org as a SpringType PWA including a nice to read developer guide, interactive code examples and API docs.
-- [ ] Implement `st-test` as a unit testing executor (https://github.com/GoogleChrome/puppeteer, mocha and chai)
+- [x] Implemented unit/integration/e2e testing using TestCafe ~~Implement `st-test` as a unit testing executor (https://github.com/GoogleChrome/puppeteer, mocha and chai)~~
 - [ ] Improvements for `@springtype/state`, such as `.state` proxied property, configurable StoreConfig, rematch/plugin/select, rematch/plugin/loading, rematch/plugin/persist
 - [ ] Update and enhance the dev tools for Chrome and Firefox (new UI based on `@springtype/material-ui`, improved component inspector)
 - [ ] Implement `st-native` to support the seamless creation of native apps using Capacitor https://capacitor.ionicframework.com/docs/
