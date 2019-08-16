@@ -9,6 +9,18 @@ CLI example:
 
 `npx st-ssr http://127.0.0.1:8080/#/someSubPage someSubPage.html`
 
+If you plan to execute this CLI more often, please install the package locally:
+
+    npm i st-ssr
+    
+And run it like that:
+     
+    $(npm bin)/st-ssr
+
+Or:
+  
+    ./node_modules/.bin/st-ssr
+
 Programmatic API example:
 
     import { ssr, saveDOMSnapshot } from "st-ssr";
@@ -16,14 +28,14 @@ Programmatic API example:
     const dom = await ssr('http://127.0.0.1:8080/#/someSubPage');
     await saveDOMSnapshot(dom, 'someSubPage.html');
    
-Can you imagine this task to be any simpler? :)
+Can you imagine SSR to be any simpler? :)
 
 _Have a lot of fun!_
 
 ### Limitations & Performance
 
-- No limitations are known, as this solution uses a headless chrome (Google Chrome) under it's hood.
-- As fast and memory efficient as Google Chrome.
+- Limitations of Chromium vs. Google Chrome apply (e.g. media codecs)
+- As fast and memory efficient as Chromium
 
 ### Congratulations
 

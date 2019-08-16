@@ -1,6 +1,6 @@
 {
     "name": "st-ssr",
-    "version": "1.0.0-alpha.1.41",
+    "version": "1.0.0-alpha.1.42",
     "publishConfig": {
         "access": "public"
     },
