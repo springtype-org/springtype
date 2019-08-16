@@ -27,10 +27,11 @@
         "node": ">=10"
     },
     "bundledDependencies": [
-        "chalk"
+        "chalk",
+        "puppeteer"
     ],
     "bin": {
-        "st-tss": "./dist/index.js"
+        "st-ssr": "./dist/cli.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -41,7 +42,8 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "chalk": "^2.4.2"
+        "chalk": "^2.4.2",
+        "puppeteer": "^1.19.0"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",
