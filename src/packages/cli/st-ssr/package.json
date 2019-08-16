@@ -21,14 +21,14 @@
         "build": "npm run build:cli/st-ssr --prefix ../../../",
         "release": "npm run release:cli/st-ssr --prefix ../../../",
         "start": "npm run start:cli/st-ssr --prefix ../../../",
-        "test": "npm run test:cli/st-ssr --prefix ../../../"
+        "test": "npm run test:cli/st-ssr --prefix ../../../",
+        "postinstall": "npm install puppeteer"
     },
     "engines": {
         "node": ">=10"
     },
     "bundledDependencies": [
-        "chalk",
-        "puppeteer"
+        "chalk"
     ],
     "bin": {
         "st-ssr": "./dist/cli.js"
