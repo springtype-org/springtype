@@ -1,87 +1,56 @@
 #!/usr/bin/env node
 
-import {isTypeScriptFile} from "./function/isTypeScriptFile";
-import {transpileTypeScriptModule} from "./function/task/transpileTypeScriptModule";
 import {processEntryHTMLFile} from "./function/task/processEntryHTMLFile";
-import {bundleJSModules} from "./function/task/bundleJSModules";
-import {getEntryJSModuleFiles} from "./function/bundle-js/getEntryJSModuleFiles";
 import {AnalyzeEntryHTML} from "./function/entry-html/analyzeEntryHTML";
+import {serveLive} from "./function/task/serveLive";
+import {transpileAndWatch} from "./function/task/transpileAndWatch";
 
-const chokidar = require('chokidar');
+const commander = require('commander');
 const path = require('path');
+const chalk = require('chalk');
+const packageJson = require('./package.json');
+const fs = require('fs');
 
+const program = new commander.Command(packageJson.name)
+    .version(packageJson.version)
+    .option('-p, --port <port>', 'set the HTTP port to listen on')
+    .option('-o, --optimize', 'enable production optimizations')
+    .allowUnknownOption()
+    .on('--help', () => {
+        console.log();
+        console.log(
+            `    If you have any problems, do not hesitate to file an issue:`
+        );
+        console.log(
+            `      ${chalk.cyan(packageJson.bugs.url)}`
+        );
+        console.log();
+    });
+
+program.parse(process.argv);
+
+const opts = program.opts();
 const args: Array<string> = process.argv.slice(2);
 const entryHTMLFilePath = args[0];
+
+if (!entryHTMLFilePath || !fs.existsSync(entryHTMLFilePath)) {
+    console.error(chalk.red('Entry HTML file'), chalk.white(entryHTMLFilePath), chalk.red('does NOT exist. Exiting.'));
+    process.exit(1);
+}
+
 const baseSourceFilesPath = path.dirname(entryHTMLFilePath);
+const port = parseInt(opts.port, 10) || 8080;
 
 (async() => {
 
-    let entryHTMLProcessState = false;
-    const requestEntryHTMLProcessing = async() => {
+    const analyzedEntryHTML: AnalyzeEntryHTML = await processEntryHTMLFile(entryHTMLFilePath);
 
-        if (!entryHTMLProcessState) {
+    console.log(chalk.green('Starting server on port:'), chalk.magenta(port));
 
-            entryHTMLProcessState = true;
+    const io = await serveLive(entryHTMLFilePath, port);
 
-            analyzedEntryHTML = await processEntryHTMLFile(entryHTMLFilePath);
+    console.log(chalk.green('Transpiling, entering *watch* mode...'));
 
-            entryHTMLProcessState = false;
-        }
-    };
-
-    let bundleState = false;
-    const requestBundleGeneratorRun = async() => {
-
-        if (!bundleState) {
-
-            bundleState = true;
-
-            await bundleJSModules(
-                getEntryJSModuleFiles(analyzedEntryHTML.entryTypeScriptFiles, baseSourceFilesPath),
-                false
-            );
-
-            bundleState = false;
-        }
-    };
-
-    console.log('Analyzing: ', entryHTMLFilePath);
-
-    // 0. Initial Entry HTML file processing
-    let analyzedEntryHTML: AnalyzeEntryHTML = await processEntryHTMLFile(entryHTMLFilePath);
-
-    console.log('Watching for file changes in: ', baseSourceFilesPath);
-
-    // 0. ongoing watch for changes
-    chokidar.watch([
-        `${baseSourceFilesPath}/**/*.ts`,
-        `${baseSourceFilesPath}/**/*.tsx`
-    ], {
-
-        // ignore . files
-        ignored: /(^|[\/\\])\../
-    }).on('all', async(event, moduleFilePath) => {
-
-        console.log('File', event, ':', moduleFilePath);
-
-        if (!isTypeScriptFile(moduleFilePath)) {
-
-            // on-going HTML file processing
-            await requestEntryHTMLProcessing();
-
-        } else {
-
-            // on-going TypeScript files compilation
-            //if (event !== 'add') {
-
-                // 1. compile source
-                await transpileTypeScriptModule(moduleFilePath, baseSourceFilesPath);
-
-                // 2. optimize and bundle compiled sources using rollup
-                await requestBundleGeneratorRun();
-
-            //}
-        }
-    });
+    await transpileAndWatch(analyzedEntryHTML, baseSourceFilesPath, io, opts);
 
 })();

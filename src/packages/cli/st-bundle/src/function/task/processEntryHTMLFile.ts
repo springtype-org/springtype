@@ -2,13 +2,15 @@ import {saveEntryHTMLToDist} from "../entry-html/saveEntryHTMLToDist";
 import {transformEntryHTML} from "../entry-html/transformEntryHTML";
 import {analyzeEntryHTML, AnalyzeEntryHTML} from "../entry-html/analyzeEntryHTML";
 
+const chalk = require('chalk');
+
 export const processEntryHTMLFile = async(entryHTMLFilePath: string): Promise<AnalyzeEntryHTML> => {
 
-    console.log('Processing Entry HTML file...');
+    console.log(chalk.green('Statically analyzing entry HTML file:'), chalk.white(entryHTMLFilePath));
 
     const analyzedEntryHTML = await analyzeEntryHTML(entryHTMLFilePath);
 
-    console.log('Found entry TypeScript files (bundle modules): ', analyzedEntryHTML.entryTypeScriptFiles);
+    console.log(chalk.green('Found entry TypeScript file(s):'), analyzedEntryHTML.entryTypeScriptFiles);
 
     const transformedEntryHTML = transformEntryHTML(
         analyzedEntryHTML.htmlSource,

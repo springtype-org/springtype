@@ -14,7 +14,6 @@ export const copyAsset = async(sourcePath: string, destPath: string) => {
         // copy file over if it doesn't already exist
         fs.copyFile(sourcePath, destPath, (err) => {
             if (err) throw err;
-            //console.log('source.txt was copied to destination.txt');
         });
     }
 };

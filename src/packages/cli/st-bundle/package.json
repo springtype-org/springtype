@@ -31,7 +31,15 @@
         "chalk",
         "htmlparser2",
         "rollup",
-        "rollup-plugin-node-resolve"
+        "@wessberg/rollup-plugin-ts",
+        "rollup-plugin-node-resolve",
+        "express",
+        "socket.io",
+        "socket.io-client",
+        "chokidar",
+        "rollup-plugin-terser",
+        "compression",
+        "commander"
     ],
     "bin": {
         "st-bundle": "./dist/cli.js"
@@ -45,17 +53,18 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "@springtype/core": "file:../../core/dist",
         "@wessberg/rollup-plugin-ts": "^1.1.63",
         "chalk": "^2.4.2",
         "chokidar": "^3.0.2",
+        "commander": "^3.0.0",
+        "compression": "^1.7.4",
+        "express": "^4.17.1",
         "htmlparser2": "^4.0.0",
         "rollup": "^1.19.4",
-        "rollup-plugin-async": "^1.2.0",
-        "rollup-plugin-commonjs": "^10.0.2",
         "rollup-plugin-node-resolve": "^5.2.0",
-        "rollup-plugin-sourcemaps": "^0.4.2",
         "rollup-plugin-terser": "^5.1.1",
+        "socket.io": "^2.2.0",
+        "socket.io-client": "^2.2.0",
         "tslib": "^1.10.0"
     },
     "devDependencies": {

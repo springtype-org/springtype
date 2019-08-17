@@ -16,7 +16,7 @@ export function importTransformer<T extends ts.Node>(sourceFilePath: string, bas
                     // @ts-ignore
                     const resourcePath: string = node.arguments[0].text;
                     const basePathDepth = baseSourceFilesPath.split('/').length;
-                    const sourceFileRelativeResourcePath = path.resolve(sourceFilePath, resourcePath);
+                    const sourceFileRelativeResourcePath = path.resolve(baseSourceFilesPath, resourcePath);
 
                     if (!fs.existsSync(sourceFileRelativeResourcePath)) {
 
@@ -35,7 +35,6 @@ export function importTransformer<T extends ts.Node>(sourceFilePath: string, bas
             }
             return ts.visitEachChild(node, (child) => visit(child), context);
         };
-
         return (node) => ts.visitNode(node, visit);
     };
 }

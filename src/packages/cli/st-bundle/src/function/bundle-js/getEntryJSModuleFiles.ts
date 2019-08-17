@@ -1,6 +1,3 @@
-import {getCacheFilePath} from "../getCacheFilePath";
-import {renameTypeScriptFilesToJS} from "../renameTypeScriptFilesToJS";
-
 export const getEntryJSModuleFiles = (
     entryTypeScriptFiles: Array<string>,
     baseSourceFilesPath: string
@@ -9,10 +6,7 @@ export const getEntryJSModuleFiles = (
     const jsModuleFiles = [];
 
     entryTypeScriptFiles.forEach((typeScriptFile: string) => {
-
-        jsModuleFiles.push(getCacheFilePath(
-`${baseSourceFilesPath}/${renameTypeScriptFilesToJS(typeScriptFile)}`
-        ));
+        jsModuleFiles.push(`${baseSourceFilesPath}/${typeScriptFile}`);
     });
 
     return jsModuleFiles;
