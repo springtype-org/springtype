@@ -1,26 +1,31 @@
 import {ObservedField} from "../reflector/prototype/observedField";
-import {executeOnFieldChangeCallbacks, getField, setField} from "../reflector/instance/fields";
+import {
+    executeOnFieldChangeCallbacks,
+    getFieldValue,
+    getStFieldModel,
+    setFieldValue,
+    setFieldChangeDetection
+} from "../reflector/instance/fields";
 
-const FIELD_REGISTERED = "FIELD_REGISTERED_";
 
 export const decorateFieldChange = (instance: any, prototype: any, observedFields: ObservedField[]) => {
     observedFields.forEach((observedField: ObservedField) => {
-        const FieldName = observedField.name.toString();
+        const fieldName = observedField.name.toString();
 
-        if (!Reflect.get(instance, (FIELD_REGISTERED + FieldName))) {
+        if (!getStFieldModel(instance,fieldName).cd) {
 
-            Object.defineProperty(instance, FieldName, {
+            Object.defineProperty(instance, fieldName, {
                 // call: $webComponent.$Field = x
                 set: (newValue: any) => {
-                    setField(instance, FieldName, newValue);
-                    executeOnFieldChangeCallbacks(prototype, instance, FieldName);
+                    setFieldValue(instance, fieldName, newValue);
+                    executeOnFieldChangeCallbacks(prototype, instance, fieldName);
                     instance.flow();
                     return true;
                 },
-                get: (): any => getField(instance, FieldName),
+                get: (): any => getFieldValue(instance, fieldName),
             });
 
-            Reflect.set(instance, (FIELD_REGISTERED + FieldName) as string, true);
+            setFieldChangeDetection(instance,fieldName)
         }
     });
 };

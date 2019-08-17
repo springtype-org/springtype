@@ -8,9 +8,7 @@ export function Field(
     fieldName: string | symbol
 ): any {
 
-
-    const setup = (webComponentInstance: any, fieldName?: string | symbol) => {
-
+    const setup = (webComponentInstance: any, fieldName: string | symbol) => {
         const observedFields = getObservedFields(webComponentInstance.constructor);
 
         observedFields.push({name: fieldName!});
@@ -22,18 +20,15 @@ export function Field(
             initializeField(instance, webComponentInstance.constructor, observedFields);
 
             decorateFieldChange(instance, webComponentInstance.constructor, observedFields);
-
         });
 
     };
 
     if (webComponentInstance instanceof HTMLElement) {
-
         setup(webComponentInstance, fieldName);
-
     } else {
 
-        return (webComponentInstance: any, fieldName?: string | symbol) => {
+        return (webComponentInstance: any, fieldName: string | symbol) => {
             setup(webComponentInstance, fieldName);
         };
     }

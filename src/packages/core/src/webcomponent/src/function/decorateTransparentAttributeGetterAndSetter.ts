@@ -1,14 +1,16 @@
-import {executeOnAttributeChangeCallbacks, getAttribute, setAttribute} from "../reflector/instance/attributes";
+import {
+    executeOnAttributeChangeCallbacks,
+    getAttributeValue, getStAttributeModel,
+    setAttributeChangeDetection, setAttributeValue
+} from "../reflector/instance/attributes";
 import {ObservedAttribute} from "../reflector/protoype/observedAttributes";
 
-const ATTRIBUTE_REGISTERED = "ATTRIBUTE_REGISTERED_";
 
 export const decorateTransparentAttributeGetterAndSetter = (instance: any, prototype: any, observedAttributes: ObservedAttribute[]) => {
     observedAttributes.forEach((observedAttribute: ObservedAttribute) => {
         const attributeName = observedAttribute.name.toString();
 
-        if (!Reflect.get(instance, (ATTRIBUTE_REGISTERED + attributeName))) {
-
+        if (!getStAttributeModel(instance, attributeName).cd) {
             Object.defineProperty(instance, attributeName, {
                 // call: $webComponent.$attribute = x
                 set: (newValue: any) => {
@@ -18,17 +20,17 @@ export const decorateTransparentAttributeGetterAndSetter = (instance: any, proto
                         changeCancelled = instance.onBeforeAttributeChange(attributeName, oldValue, newValue);
                     }
                     if (!changeCancelled) {
-                        setAttribute(instance, attributeName, newValue);
+                        setAttributeValue(instance, attributeName, newValue);
                         executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
                         instance.flowOnAttributeChange(attributeName, oldValue, newValue);
                     }
                     return true;
                 },
                 // call: let y = $webComponent.$attribute
-                get: (): any => getAttribute(instance, attributeName),
+                get: (): any => getAttributeValue(instance, attributeName),
             });
 
-            Reflect.set(instance, (ATTRIBUTE_REGISTERED + attributeName) as string, true);
+            setAttributeChangeDetection(instance, attributeName);
         }
     });
 };

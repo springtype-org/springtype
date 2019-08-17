@@ -2,25 +2,48 @@ import {ObservedField} from "../prototype/observedField";
 import {getFieldChangeCallbacks} from "../fieldChangeCallbacks";
 import {FieldChangeCallbackRegistration} from "../../interface/FieldChangeCallbackRegistration";
 
-const FIELD_DEFAULT_INITIALIZED = 'FIELD_DEFAULT_INITIALIZED_';
-const FIELD_VALUE = "FIELD_VALUE_";
+const ST_FIELD = "ST_FIELD";
 
+interface StFieldModel {
+    initValue?: any;
+    value?: any;
+    cd?: boolean;
+}
 
-export const getField = (instance: any, attributeName: string) =>
-    Reflect.get(instance, (FIELD_VALUE + attributeName) as string);
+const getStFields = (instance: any): { [key: string]: StFieldModel; } =>
+    Reflect.get(instance, ST_FIELD) || {};
 
-export const setField = (instance: any, attributeName: string, value: any) => {
-    Reflect.set(instance, (FIELD_VALUE + attributeName) as string, value);
+export const getFieldValue = (instance: any, attributeName: string) =>
+    getStFields(instance)[attributeName].value;
+
+export const getStFieldModel = (instance: any, attributeName: string) =>
+    getStFields(instance)[attributeName];
+
+export const setFieldValue = (instance: any, attributeName: string, value: any) => {
+    let fields: { [key: string]: StFieldModel; } = getStFields(instance);
+    fields[attributeName].value = value;
+    Reflect.set(instance, ST_FIELD, fields);
+};
+export const setFieldChangeDetection = (instance: any, attributeName: string) => {
+    let fields: { [key: string]: StFieldModel; } = getStFields(instance);
+    fields[attributeName].cd = true;
+    Reflect.set(instance, ST_FIELD, fields);
+};
+
+export const setFieldInit = (instance: any, attributeName: string, initValue: any) => {
+    let fields: { [key: string]: StFieldModel; } = getStFields(instance);
+    fields[attributeName] = {initValue: initValue, value: initValue};
+    Reflect.set(instance, ST_FIELD, fields);
 };
 
 export const initializeField = (instance: any, prototype: any, observedField: ObservedField[]) => {
     // set default field values (initial)
     observedField.forEach((observedField: ObservedField) => {
         const fieldName = observedField.name.toString();
-        if (!Reflect.get(instance, (FIELD_DEFAULT_INITIALIZED + fieldName))) {
-            setField(instance, fieldName, instance[fieldName]);
+
+        if (!getStFields(instance)[fieldName]) {
+            setFieldInit(instance, fieldName, instance[fieldName]);
             executeOnFieldChangeCallbacks(prototype, instance, fieldName);
-            Reflect.set(instance, (FIELD_DEFAULT_INITIALIZED + fieldName) as string, instance[fieldName]);
         }
     });
 };

@@ -14,7 +14,7 @@ import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
 import {Lifecycle} from "../..";
-import {getAttribute} from "../reflector/instance/attributes";
+import {getAttributeValue} from "../reflector/instance/attributes";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 
@@ -147,7 +147,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     if (attributeName.startsWith('on')) {
                         continue;
                     }
-                    const value = getAttribute(this, attributeName);
+                    const value = getAttributeValue(this, attributeName);
                     this.setAttribute(observedAttribute.name, value);
                 }
             }
