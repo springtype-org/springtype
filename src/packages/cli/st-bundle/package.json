@@ -1,0 +1,66 @@
+{
+    "name": "st-bundle",
+    "version": "1.0.0-alpha.1.42",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "springtype",
+        "bundler",
+        "st-bundle"
+    ],
+    "description": "CLI for watching and bundling SpringType projects.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:cli/st-bundle --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-bundle --prefix ../../../",
+        "clean": "npm run clean:cli/st-bundle --prefix ../../../",
+        "watch": "npm run watch:cli/st-bundle --prefix ../../../",
+        "build": "npm run build:cli/st-bundle --prefix ../../../",
+        "release": "npm run release:cli/st-bundle --prefix ../../../",
+        "start": "npm run start:cli/st-bundle --prefix ../../../",
+        "test": "npm run test:cli/st-bundle --prefix ../../../"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "bundledDependencies": [
+        "chalk",
+        "htmlparser2",
+        "rollup",
+        "rollup-plugin-node-resolve"
+    ],
+    "bin": {
+        "st-bundle": "./dist/cli.js"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Aron Homberg, Michael Mannseicher",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/springtype-org/springtype/issues"
+    },
+    "homepage": "https://springtype.org",
+    "dependencies": {
+        "@springtype/core": "file:../../core/dist",
+        "@wessberg/rollup-plugin-ts": "^1.1.63",
+        "chalk": "^2.4.2",
+        "chokidar": "^3.0.2",
+        "htmlparser2": "^4.0.0",
+        "rollup": "^1.19.4",
+        "rollup-plugin-async": "^1.2.0",
+        "rollup-plugin-commonjs": "^10.0.2",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-sourcemaps": "^0.4.2",
+        "rollup-plugin-terser": "^5.1.1",
+        "tslib": "^1.10.0"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.7",
+        "node": "^12.6.0",
+        "typescript": "^3.5.3"
+    }
+}
