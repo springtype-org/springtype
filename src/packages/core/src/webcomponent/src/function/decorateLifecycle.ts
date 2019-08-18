@@ -1,6 +1,3 @@
-import {ObservedAttribute} from "../reflector/protoype/observedAttributes";
-import {on} from "cluster";
-
 const ST_LIFECYCLE = 'LIFECYCLE';
 
 export interface StLifecycleModel {
