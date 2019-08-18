@@ -157,6 +157,7 @@
     "release:cli/st-start": "ts-node scripts/release.ts cli/st-start",
     "release:cli/st-build": "ts-node scripts/release.ts cli/st-build",
     "release:cli/st-bundle": "ts-node scripts/release.ts cli/st-bundle",
+    "release:cli/st-link-local": "ts-node scripts/release.ts cli/st-link-local",
     "start:cli/st-rm-rf": "ts-node scripts/start.ts cli/st-rm-rf",
     "start:cli/st-cp": "ts-node scripts/start.ts cli/st-cp",
     "start:cli/springtype": "ts-node scripts/start.ts cli/springtype",
