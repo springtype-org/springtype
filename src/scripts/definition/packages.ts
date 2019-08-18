@@ -14,5 +14,6 @@ export const packages = [
     'cli/st-ssr',
     'cli/st-start',
     'cli/st-build',
-    'cli/st-bundle'
+    'cli/st-bundle',
+    'cli/st-link-local',
 ];

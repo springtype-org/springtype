@@ -1,0 +1,56 @@
+{
+    "name": "st-link-local",
+    "version": "1.0.0-alpha.1.42",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "yarn",
+        "npm",
+        "node",
+        "link",
+        "sync",
+        "local",
+        "dependency"
+    ],
+    "description": "Watches locally file:-referenced dependencies and syncs them into ./node_modules using yarn",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "scripts": {
+        "bootstrap": "npm run bootstrap:cli/st-link-local --prefix ../../../",
+        "clean:all": "npm run clean:all:cli/st-link-local --prefix ../../../",
+        "clean": "npm run clean:cli/st-link-local --prefix ../../../",
+        "watch": "npm run watch:cli/st-link-local--prefix ../../../",
+        "build": "npm run build:cli/st-link-local --prefix ../../../",
+        "release": "npm run release:cli/st-link-local --prefix ../../../",
+        "start": "npm run start:cli/st-link-local --prefix ../../../",
+        "test": "npm run test:cli/st-link-local --prefix ../../../"
+    },
+    "engines": {
+        "node": ">=10"
+    },
+    "bundledDependencies": [
+        "chalk"
+    ],
+    "bin": {
+        "st-link-local": "./dist/cli.js"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "author": "Aron Homberg, Michael Mannseicher",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/springtype-org/springtype/issues"
+    },
+    "homepage": "https://springtype.org",
+    "dependencies": {
+        "chalk": "^2.4.2"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.7",
+        "node": "^12.6.0",
+        "typescript": "^3.3.4000"
+    }
+}

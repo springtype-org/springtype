@@ -6,11 +6,7 @@ import {spawnCmd} from "./function/system/spawnCmd";
 import {getAbsoluteCwd} from "./function/system/getAbsoluteCwd";
 import {getProgramArguments} from "./function/system/getProgramArguments";
 import {getFilteredPackages} from "./function/package/getFilteredPackages";
-import {filesToCopyToDistDir} from "./definition/build/filesToCopyToDistDir";
-import {distDirectory} from "./definition/distDirectory";
-import {getDistPackageJson} from "./function/package/getDistPackageJson";
-import {writeDistPackageJson} from "./function/package/writeDistPackageJson";
-import {rewriteDistSubFolderReferences} from "./function/package/rewriteDistSubFolderReferences";
+import {finalizeDistFolder} from "./function/package/finalizeDistFolder";
 
 (async() => {
 
@@ -37,28 +33,8 @@ import {rewriteDistSubFolderReferences} from "./function/package/rewriteDistSubF
         // build using typescript compiler
         await spawnCmd('tsc', []);
 
-        // copy files like LICENSE.md and package.json to ./dist
-        await spawnCmd('npx', ['st-cp', ...filesToCopyToDistDir, distDirectory]);
-
-        // re-write fields "main", "bin", "types" so that they point to the right files (./ not ./dist)
-        let packageJson = rewriteDistSubFolderReferences(getDistPackageJson());
-
-        // write-out ./dist/package.json with re-written fields "main", "bin", "types"
-        writeDistPackageJson(packageJson);
-
-        // if bundled dependencies are found, copy them over to ./dist so they can be bundled
-        if (packageJson['bundledDependencies']) {
-            await spawnCmd('npx', ['st-cp', 'node_modules', 'dist']);
-        }
-
-        // bundle custom folders
-        if (packageJson['stBundleFiles'] &&
-            Array.isArray(packageJson['stBundleFiles'])) {
-
-            for (let i=0; i<packageJson['stBundleFiles'].length; i++) {
-                await spawnCmd('npx', ['st-cp', packageJson['stBundleFiles'][i], 'dist']);
-            }
-        }
+        // finalize the ./dist folder
+        await finalizeDistFolder();
 
         // cd ../../
         chdirToBaseDir(packageName);
