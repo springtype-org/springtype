@@ -1,5 +1,6 @@
 import {TypedMediaQueryStyleSheet} from "@springtype/core";
 import {TextfieldPage} from "./textfield-page";
+import "@material/textfield/dist/mdc.textfield.min.css"
 
 export default (component: TextfieldPage, theme: any): TypedMediaQueryStyleSheet => ({
     "textfield-page": {

@@ -1,9 +1,9 @@
 import {TextfieldPage} from "./textfield-page";
 import {enumToArray} from "@springtype/core";
-import {MWCTEXTFIELD_VARIANT_TYPE} from "../../..";
+import {MWC_TEXTFIELD_VARIANT_TYPE} from "../../..";
 
 export default (component: TextfieldPage) => {
-    const variantValues = enumToArray(MWCTEXTFIELD_VARIANT_TYPE);
+    const variantValues = enumToArray(MWC_TEXTFIELD_VARIANT_TYPE);
     const tableRows = [];
     for (let i = 0; i < variantValues.length; i++) {
         const currentVariant = variantValues[i];

@@ -1,33 +1,32 @@
 import {ButtonPage} from "./button-page";
+import {MWC_BUTTON_VARIANT_TYPE} from "../../..";
 import {enumToArray} from "@springtype/core";
-import {MWCBUTTON_VARIANT_TYPE} from "../../..";
 
 export default (component: ButtonPage) => {
 
 
-    const variantValues = enumToArray(MWCBUTTON_VARIANT_TYPE);
+    const variantValues = enumToArray(MWC_BUTTON_VARIANT_TYPE);
     const tableRows = [];
     for (let i = 0; i < variantValues.length; i++) {
         const currentVariant = variantValues[i];
         tableRows.push(<tr>
             <td>
-                <mwc-button onclick={(evt: Event)=> {console.log('fuck')}} label={currentVariant} variant={currentVariant}></mwc-button>
+                <mwc-button label={currentVariant} variant={currentVariant}/>
             </td>
             <td>
-                <mwc-button label={currentVariant} variant={currentVariant} dense={true}></mwc-button>
+                <mwc-button label={currentVariant} variant={currentVariant} dense={true}/>
             </td>
             <td>
-                <mwc-button label={currentVariant} variant={currentVariant} shaped={true}></mwc-button>
+                <mwc-button label={currentVariant} variant={currentVariant} shaped={true}/>
             </td>
             <td>
-                <mwc-button label={currentVariant} variant={currentVariant} disabled={true}></mwc-button>
+                <mwc-button label={currentVariant} variant={currentVariant} disabled={true}/>
             </td>
             <td>
-                <mwc-button label={currentVariant} variant={currentVariant} icon={'favorite'}></mwc-button>
+                <mwc-button label={currentVariant} variant={currentVariant} icon={'favorite'}/>
             </td>
             <td>
-                <mwc-button label={currentVariant} variant={currentVariant} trailing-icon={true}
-                            icon={'favorite'}></mwc-button>
+                <mwc-button label={currentVariant} variant={currentVariant} trailing-icon={true} icon={'favorite'}/>
             </td>
         </tr>)
     }
