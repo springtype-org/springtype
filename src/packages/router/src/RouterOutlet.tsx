@@ -27,8 +27,6 @@ export class RouterOutlet extends HTMLElement {
 
         this.activeRoute.routerImpl.registerRouterOutlet(this);
         this.activeRoute.routerImpl.enable();
-
-        console.log('router', this)
     }
 
     refresh() {
