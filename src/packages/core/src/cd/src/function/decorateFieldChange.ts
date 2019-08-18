@@ -12,7 +12,7 @@ export const decorateFieldChange = (instance: any, prototype: any, observedField
     observedFields.forEach((observedField: ObservedField) => {
         const fieldName = observedField.name.toString();
 
-        if (!getStFieldModel(instance,fieldName).cd) {
+        if (!getStFieldModel(instance,fieldName).changeDetection) {
 
             Object.defineProperty(instance, fieldName, {
                 // call: $webComponent.$Field = x

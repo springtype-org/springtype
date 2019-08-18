@@ -14,7 +14,7 @@ const ST_ATTRIBUTE = 'ST_ATTRIBUTE';
 interface StAttributeModel {
     initValue?: any;
     value?: any;
-    cd?: boolean;
+    changeDetection?: boolean;
 }
 const getStAttributes = (instance: any): { [key: string]: StAttributeModel; } =>
     Reflect.get(instance, ST_ATTRIBUTE) || {};
@@ -32,7 +32,7 @@ export const setAttributeValue = (instance: any, attributeName: string, value: a
 };
 export const setAttributeChangeDetection = (instance: any, attributeName: string) => {
     let fields: { [key: string]: StAttributeModel; } = getStAttributes(instance);
-    fields[attributeName].cd = true;
+    fields[attributeName].changeDetection = true;
     Reflect.set(instance, ST_ATTRIBUTE, fields);
 };
 

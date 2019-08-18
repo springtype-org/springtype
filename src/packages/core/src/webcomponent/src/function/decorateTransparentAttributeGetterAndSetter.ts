@@ -10,7 +10,7 @@ export const decorateTransparentAttributeGetterAndSetter = (instance: any, proto
     observedAttributes.forEach((observedAttribute: ObservedAttribute) => {
         const attributeName = observedAttribute.name.toString();
 
-        if (!getStAttributeModel(instance, attributeName).cd) {
+        if (!getStAttributeModel(instance, attributeName).changeDetection) {
             Object.defineProperty(instance, attributeName, {
                 // call: $webComponent.$attribute = x
                 set: (newValue: any) => {

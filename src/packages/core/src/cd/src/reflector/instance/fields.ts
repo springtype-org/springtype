@@ -7,7 +7,7 @@ const ST_FIELD = "ST_FIELD";
 interface StFieldModel {
     initValue?: any;
     value?: any;
-    cd?: boolean;
+    changeDetection?: boolean;
 }
 
 const getStFields = (instance: any): { [key: string]: StFieldModel; } =>
@@ -26,7 +26,7 @@ export const setFieldValue = (instance: any, attributeName: string, value: any) 
 };
 export const setFieldChangeDetection = (instance: any, attributeName: string) => {
     let fields: { [key: string]: StFieldModel; } = getStFields(instance);
-    fields[attributeName].cd = true;
+    fields[attributeName].changeDetection = true;
     Reflect.set(instance, ST_FIELD, fields);
 };
 
