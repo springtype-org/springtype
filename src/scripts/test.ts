@@ -3,9 +3,9 @@ import {getAbsoluteCwd} from "./function/system/getAbsoluteCwd";
 import {getProgramArguments} from "./function/system/getProgramArguments";
 import {forEachPackage} from "./function/package/forEachPackage";
 import {chdirToPackage} from "./function/package/chdirToPackage";
-import {spawnCmd} from "./function/system/spawnCmd";
 import {chdirToBaseDir} from "./function/system/chdirToBaseDir";
 import {getFilteredPackages} from "./function/package/getFilteredPackages";
+import { test} from "./function/package/task/test";
 
 (async() => {
 
@@ -26,8 +26,7 @@ import {getFilteredPackages} from "./function/package/getFilteredPackages";
         // cd packages/$packageName
         chdirToPackage(packageName);
 
-        // remove ./dist (clean)
-        await spawnCmd('testcafe', ['chrome:headless', 'test/**/*.test.ts']);
+        await test();
 
         // cd ../../
         chdirToBaseDir(packageName);

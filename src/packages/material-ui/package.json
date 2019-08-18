@@ -7,7 +7,7 @@
     "description": "Material UI for SpringType.",
     "dependencies": {
         "@material/ripple": "^1.1.0",
-        "@springtype/core": "../core",
+        "@springtype/core": "file:../core/dist",
         "@types/classnames": "^2.2.7",
         "@types/node": "^11.10.5",
         "classnames": "^2.2.6",

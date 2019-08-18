@@ -2,11 +2,10 @@ import chalk from "chalk";
 import {forEachPackage} from "./function/package/forEachPackage";
 import {chdirToPackage} from "./function/package/chdirToPackage";
 import {chdirToBaseDir} from "./function/system/chdirToBaseDir";
-import {spawnCmd} from "./function/system/spawnCmd";
 import {getAbsoluteCwd} from "./function/system/getAbsoluteCwd";
 import {getProgramArguments} from "./function/system/getProgramArguments";
 import {getFilteredPackages} from "./function/package/getFilteredPackages";
-import {getPackageJson} from "./function/package/getPackageJson";
+import {start} from "./function/package/task/start";
 
 (async() => {
 
@@ -27,19 +26,8 @@ import {getPackageJson} from "./function/package/getPackageJson";
         // cd packages/$packageName
         chdirToPackage(packageName);
 
-        const packageJson = getPackageJson();
+        await start();
 
-        if (!packageJson.bin) {
-            throw new Error('There is no "bin" entry in package.json');
-        }
-
-        for (let binName in packageJson.bin) {
-
-            if (packageJson.bin.hasOwnProperty(binName)) {
-
-                await spawnCmd('node', [packageJson.bin[binName], ...process.argv.slice(3)]);
-            }
-        }
         // cd ../../
         chdirToBaseDir(packageName);
 

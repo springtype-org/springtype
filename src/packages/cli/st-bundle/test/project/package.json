@@ -1,0 +1,25 @@
+{
+  "name": "st-bundle-test-project",
+  "version": "1.0.0-alpha.1.44",
+  "keywords": [
+    "springtype",
+    "bundler",
+    "st-bundle"
+  ],
+  "description": "test project",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtype-org/springtype.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/springtype-org/springtype/issues"
+  },
+  "dependencies": {
+    "@springtype/core": "file:../../../../core/dist"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7",
+    "node": "^12.6.0"
+  }
+}

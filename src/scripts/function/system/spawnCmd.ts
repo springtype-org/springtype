@@ -1,7 +1,7 @@
 import chalk from "chalk";
 const { spawn } = require('child_process');
 
-export function spawnCmd(cmd, args: Array<string>): Promise<void> {
+export function spawnCmd(cmd, args: Array<string> = []): Promise<void> {
 
     return new Promise<void>((resolve, reject) => {
 

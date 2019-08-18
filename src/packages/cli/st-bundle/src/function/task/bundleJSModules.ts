@@ -5,7 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const nodeResolvePlugin = require('rollup-plugin-node-resolve');
 //import { terser } from "rollup-plugin-terser";
-const ts = require("@wessberg/rollup-plugin-ts");
+const ts = require("@springtype-org/rollup-plugin-ts");
 
 import {envTransformer} from "../typescript/envTransformer";
 import {importTransformer} from "../typescript/importTransformer";

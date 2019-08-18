@@ -3,7 +3,6 @@ export const packages = [
     'i18n',
     'router',
     'state',
-    'ssr',
     'validate',
     'material-ui',
     'cli/springtype',

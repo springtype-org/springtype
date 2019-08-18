@@ -2,10 +2,10 @@ import chalk from "chalk";
 import {forEachPackage} from "./function/package/forEachPackage";
 import {chdirToPackage} from "./function/package/chdirToPackage";
 import {chdirToBaseDir} from "./function/system/chdirToBaseDir";
-import {spawnCmd} from "./function/system/spawnCmd";
 import {getAbsoluteCwd} from "./function/system/getAbsoluteCwd";
 import {getProgramArguments} from "./function/system/getProgramArguments";
 import {getFilteredPackages} from "./function/package/getFilteredPackages";
+import {clean} from "./function/package/task/clean";
 
 (async() => {
 
@@ -26,8 +26,7 @@ import {getFilteredPackages} from "./function/package/getFilteredPackages";
         // cd packages/$packageName
         chdirToPackage(packageName);
 
-        // remove ./dist
-        await spawnCmd('npx', ['st-rm-rf', 'dist']);
+        await clean();
 
         // cd ../../
         chdirToBaseDir(packageName);

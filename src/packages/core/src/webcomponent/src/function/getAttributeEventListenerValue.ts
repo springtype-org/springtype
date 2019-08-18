@@ -14,7 +14,7 @@ export const getAttributeEventListenerValue = (prototype: any, attributeName: st
         } else if (typeof attributeValueIdOrValue == 'string') {
 
             return function() {
-                return eval(attributeValueIdOrValue);
+                return attributeValueIdOrValue;
             }.bind(scope);
 
         } else {

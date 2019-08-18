@@ -1,6 +1,6 @@
 {
     "name": "st-bundle",
-    "version": "1.0.0-alpha.1.42",
+    "version": "1.0.0-alpha.1.47",
     "publishConfig": {
         "access": "public"
     },
@@ -31,10 +31,11 @@
         "chalk",
         "htmlparser2",
         "rollup",
-        "@wessberg/rollup-plugin-ts",
+        "@springtype-org/rollup-plugin-ts",
         "rollup-plugin-node-resolve",
         "express",
         "socket.io",
+        "typescript",
         "socket.io-client",
         "chokidar",
         "rollup-plugin-terser",
@@ -53,7 +54,7 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "@wessberg/rollup-plugin-ts": "^1.1.63",
+        "@springtype-org/rollup-plugin-ts": "^1.2.3",
         "chalk": "^2.4.2",
         "chokidar": "^3.0.2",
         "commander": "^3.0.0",
@@ -65,11 +66,11 @@
         "rollup-plugin-terser": "^5.1.1",
         "socket.io": "^2.2.0",
         "socket.io-client": "^2.2.0",
-        "tslib": "^1.10.0"
+        "tslib": "^1.10.0",
+        "typescript": "^3.5.3"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",
-        "node": "^12.6.0",
-        "typescript": "^3.5.3"
+        "node": "^12.6.0"
     }
 }

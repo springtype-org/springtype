@@ -1,1 +1,0 @@
-export * from "./function/register-jsdom";

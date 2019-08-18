@@ -6,7 +6,7 @@
     },
     "description": "DOM router for SpringType.",
     "dependencies": {
-        "@springtype/core": "../core",
+        "@springtype/core": "file:../core/dist",
         "@types/node": "^11.10.5",
         "reflect-metadata": "^0.1.12",
         "tslib": "^1.9.3"

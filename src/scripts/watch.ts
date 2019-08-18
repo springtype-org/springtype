@@ -1,12 +1,12 @@
 import chalk from "chalk";
 import {forEachPackage} from "./function/package/forEachPackage";
 import {chdirToPackage} from "./function/package/chdirToPackage";
-import {spawnCmd} from "./function/system/spawnCmd";
 import {getAbsoluteCwd} from "./function/system/getAbsoluteCwd";
 import {getProgramArguments} from "./function/system/getProgramArguments";
-import {finalizeDistFolder} from "./function/package/finalizeDistFolder";
 import {chdirToBaseDir} from "./function/system/chdirToBaseDir";
 import {getFilteredPackages} from "./function/package/getFilteredPackages";
+import {watch} from "./function/package/task/watch";
+import {build} from "./function/package/task/build";
 
 (async() => {
 
@@ -27,17 +27,9 @@ import {getFilteredPackages} from "./function/package/getFilteredPackages";
         // cd packages/$packageName
         chdirToPackage(packageName);
 
-        // remove ./dist
-        await spawnCmd('npx', ['st-rm-rf', 'dist']);
+        await build();
 
-        // first-time-build
-        await spawnCmd('tsc', []);
-
-        // finalize ./dist
-        await finalizeDistFolder();
-
-        // watch
-        await spawnCmd('tsc', ['-w']);
+        await watch();
 
         // cd ../../
         chdirToBaseDir(packageName);

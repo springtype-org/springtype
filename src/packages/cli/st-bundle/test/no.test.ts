@@ -1,10 +1,11 @@
 import 'testcafe';
+const fs = require('fs');
 
-fixture `no tests`;
+fixture `integration tests`;
 
-test('TODO: Write tests', async t => {
+test('./dist exists', async t => {
 
     await t
-        .expect(true)
+        .expect(fs.existsSync('./dist'))
         .eql(true);
 });

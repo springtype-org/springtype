@@ -143,6 +143,8 @@ export class VirtualDOMMutator {
             VirtualDOMMutator.mutateSlotElement(parent, virtualElement);
         }
 
+        // TODO: Inform web component and hook lifecycle like @OnSlotChildrenPrepared
+
         // mutation options per child element on each level:
 
         if (!virtualElement && domElement) {

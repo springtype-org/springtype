@@ -10,7 +10,7 @@ const chalk = require('chalk');
 const path = require('path');
 const zlib = require('zlib');
 const fs = require('fs');
-const ts = require("@wessberg/rollup-plugin-ts");
+const ts = require("@springtype-org/rollup-plugin-ts");
 const stripAnsi = require('strip-ansi');
 const nodeResolvePlugin = require('rollup-plugin-node-resolve');
 import { terser } from "rollup-plugin-terser";
@@ -35,6 +35,7 @@ export const transpileAndWatch = async(
             tsconfig: {
                 experimentalDecorators: true,
                 emitDecoratorMetadata: true,
+                resolveJsonModule: true,
                 jsx: 'react',
                 jsxFactory: "ActiveRenderer.createElement"
             }
@@ -109,7 +110,9 @@ export const transpileAndWatch = async(
 
         if (event.code === 'ERROR' || event.code === 'FATAL') {
 
-            event.error.loc.relativeFile = path.relative(process.cwd(), event.error.loc.file);
+            if (event.error.loc) {
+                event.error.loc.relativeFile = path.relative(process.cwd(), event.error.loc.file);
+            }
             event.error.plainFrame = stripAnsi(event.error.frame);
 
             io.emit('bundle-error', event);
