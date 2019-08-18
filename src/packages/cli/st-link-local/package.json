@@ -1,6 +1,6 @@
 {
     "name": "st-link-local",
-    "version": "1.0.0-alpha.1.43",
+    "version": "1.0.0-alpha.1.46",
     "publishConfig": {
         "access": "public"
     },
@@ -32,21 +32,27 @@
         "node": ">=10"
     },
     "bundledDependencies": [
-        "chalk"
+        "chalk",
+        "chokidar",
+        "st-cp",
+        "st-rm-rf"
     ],
     "bin": {
         "st-link-local": "./dist/cli.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
-    "author": "Aron Homberg, Michael Mannseicher",
+    "author": "Aron Homberg",
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/springtype-org/springtype/issues"
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "chalk": "^2.4.2"
+        "chalk": "^2.4.2",
+        "chokidar": "^3.0.2",
+        "st-cp": "^1.0.0-alpha.1.41",
+        "st-rm-rf": "^1.0.0-alpha.1.39"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",
