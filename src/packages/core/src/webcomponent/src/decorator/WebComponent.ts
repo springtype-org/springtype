@@ -1,6 +1,6 @@
 // import es5 adapter for backward-compatibility
 import {polyfillCustomElementsAPI} from "../polyfill/polyfillCustomElementsAPI";
-import {WebComponentImpl} from "./../interface/WebComponentImpl";
+import {WebComponentImpl} from "../interface/WebComponentImpl";
 import {decorateWebComponent} from "../function/decorateWebComponent";
 import {error} from '../../../logger';
 

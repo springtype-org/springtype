@@ -2,10 +2,7 @@ import {VirtualElement} from "../../../virtualdom";
 
 export interface Lifecycle  {
 
-    onBeforeConnect?(): boolean|void;
-    connect?(): void;
     doConnect?(): void;
-    onConnect?(): void;
 
     onBeforeDisconnect?(): boolean|void;
     disconnect?(): void;
@@ -15,11 +12,7 @@ export interface Lifecycle  {
     mount?(): void;
     onMount?(): void;
 
-    onBeforeRender?(): boolean|void;
     render?(): VirtualElement|Array<VirtualElement>|string;
-    onRender?(elementsRendered: Array<VirtualElement>): void;
-
-    onBeforeFlow?(initial?: boolean): boolean|void;
     flow?(initial?: boolean): Promise<void>;
     doFlow(): void;
     onFlow?(initial?: boolean): void;

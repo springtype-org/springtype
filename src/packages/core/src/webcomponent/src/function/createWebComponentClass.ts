@@ -13,8 +13,13 @@ import {getShadowForComponent} from "../reflector/protoype/shadow";
 import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
-import {Lifecycle} from "../..";
 import {getAttributeValue} from "../reflector/instance/attributes";
+import {
+    LifecycleAfterType,
+    LifecycleBeforeType,
+    onAfterLifecycle,
+    onBeforeLifecycle,
+} from "./decorateLifecycle";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 
@@ -22,7 +27,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
     // custom web component extends user implemented web component class
     // which extends HTMLElement
-    const CustomWebComponent = class extends injectableWebComponent implements Lifecycle {
+    const CustomWebComponent = class extends injectableWebComponent {
 
         constructor(...args: Array<any>) {
             super();
@@ -46,12 +51,12 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
         render(): Array<VirtualElement> {
 
-            let cancelled = false;
             const elements: Array<VirtualElement> = [];
-
-            if (super.onBeforeRender) {
-                cancelled = super.onBeforeRender();
-            }
+            let cancelled = onBeforeLifecycle(injectableWebComponent, {
+                    context: this,
+                    type: LifecycleBeforeType.ON_BEFORE_RENDER
+                }
+            );
 
             if (!cancelled) {
 
@@ -103,9 +108,11 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     }
                 }
 
-                if (super.onAfterRender) {
-                    super.onAfterRender(elements);
-                }
+                onAfterLifecycle(injectableWebComponent, {
+                    context: this,
+                    type: LifecycleAfterType.ON_AFTER_RENDER,
+                    arguments: elements
+                });
             }
             return elements;
         }
@@ -151,19 +158,22 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     this.setAttribute(observedAttribute.name, value);
                 }
             }
-            let cancelled = false;
-
-            if (super.onBeforeFlow) {
-                cancelled = super.onBeforeFlow(initial);
-            }
+            let cancelled = onBeforeLifecycle(injectableWebComponent, {
+                context: this,
+                type: LifecycleBeforeType.ON_BEFORE_FLOW,
+                arguments: [initial],
+                guard: lifecycle => lifecycle.value === undefined || lifecycle.value === initial
+            });
 
             if (!cancelled && this.isConnected) {
 
                 this.doFlow();
-
-                if (super.onFlow) {
-                    super.onFlow(initial);
-                }
+                onAfterLifecycle(injectableWebComponent, {
+                    context: this,
+                    type: LifecycleAfterType.ON_AFTER_FLOW,
+                    arguments: [initial],
+                    guard: lifecycle => lifecycle.value === undefined || lifecycle.value === initial
+                });
             }
         }
 
@@ -180,21 +190,23 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
 
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
-            let cancelled = false;
-
             const attributeValue = getAttributeEventListenerValue(CustomWebComponent, name, newValue, this) ||
                 getAttributeReferencedValue(newValue);
 
-            if (super.onBeforeAttributeChange) {
-                cancelled = super.onBeforeAttributeChange(name, oldValue, attributeValue);
-            }
+            let cancelled = onBeforeLifecycle(injectableWebComponent, {
+                context: this,
+                type: LifecycleBeforeType.ON_BEFORE_ATTRIBUTE_CHANGE,
+                arguments: [name, oldValue, attributeValue]
+            });
 
             if (!cancelled && this.shouldAttributeChange(name, oldValue, newValue)) {
                 this.changeAttribute(name, attributeValue);
 
-                if (super.onAttributeChanged) {
-                    return super.onAttributeChanged(name, oldValue, attributeValue);
-                }
+                onAfterLifecycle(injectableWebComponent, {
+                    context: this,
+                    type: LifecycleAfterType.ON_AFTER_ATTRIBUTE_CHANGE,
+                    arguments: [name, oldValue, attributeValue]
+                });
             }
         }
 
@@ -208,20 +220,17 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
         }
 
         connectedCallback() {
-
-            let cancelled = false;
-
-            if (super.onBeforeConnect) {
-                cancelled = super.onBeforeConnect();
-            }
+            let cancelled = onBeforeLifecycle(injectableWebComponent, {
+                context: this,
+                type: LifecycleBeforeType.ON_BEFORE_CONNECT,
+            });
 
             if (!cancelled) {
-
                 this.doConnect();
-
-                if (super.onConnect) {
-                    super.onConnect();
-                }
+                onAfterLifecycle(injectableWebComponent, {
+                    context: this,
+                    type: LifecycleAfterType.ON_AFTER_CONNECT,
+                });
             }
         }
     };

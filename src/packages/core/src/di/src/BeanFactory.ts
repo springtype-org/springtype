@@ -18,6 +18,13 @@ export class BeanFactory {
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
         injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON): any {
 
+        // when @DefaultInjectionStrategy was in use on the component class at design time
+        const defaultInjectionStrategy = ComponentReflector.getDefaultInjectionStrategy(componentCtor);
+
+        if (defaultInjectionStrategy) {
+            injectionStrategy = defaultInjectionStrategy.injectionStrategy;
+        }
+
         const originalCtor = componentCtor;
 
         // validate component reference
@@ -59,11 +66,20 @@ export class BeanFactory {
             }
         }
 
+        let beanInstance;
+        if (defaultInjectionStrategy && defaultInjectionStrategy.injectionReference && typeof defaultInjectionStrategy.injectionReference === 'function') {
+
+            beanInstance = defaultInjectionStrategy.injectionReference();
+
+        } else {
+
+            beanInstance = new componentCtor(
+                ...this.resolveConstructorArguments(componentCtor, injectionProfile)
+            );
+        }
+
         // injectionStrategy === InjectionStrategy.FACTORY || singleton instance not found
 
-        const beanInstance = new componentCtor(
-            ...this.resolveConstructorArguments(componentCtor, injectionProfile)
-        );
 
         this.initializeBeanInstance(beanInstance, ComponentReflector.getInitializers(componentCtor));
 

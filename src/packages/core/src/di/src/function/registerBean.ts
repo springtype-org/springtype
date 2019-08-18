@@ -5,6 +5,7 @@ import {ComponentImpl} from "../interface/ComponentImpl";
 import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
 
 export const INJECT_DECORATOR_METADATA_KEY = "@Inject";
+export const INJECTION_STRATEGY_DECORATOR_METADATA_KEY = "@DefaultInjectionStrategy";
 
 export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, beanConfig?: BeanConfig<T>) {
 
@@ -25,7 +26,16 @@ export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, bea
     // and is capable of even handling @Inject decorators in it constructor arguments (wohoo)
     const InjectionClassProxy = class extends componentCtor {
         constructor(...args: Array<any>) {
-            super(...ApplicationContext.getInstance().resolveConstructorArguments(componentCtor));
+            const resolveConstructorArguments = ApplicationContext.getInstance().resolveConstructorArguments(componentCtor);
+
+            super(...resolveConstructorArguments);
+
+            resolveConstructorArguments.forEach((injectedValue) => {
+
+                if (injectedValue && injectedValue.onInject && typeof injectedValue.onInject === 'function') {
+                    injectedValue.onInject(this);
+                }
+            });
         }
     };
 

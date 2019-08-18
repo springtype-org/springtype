@@ -8,8 +8,17 @@ export * from "./src/decorator/Attribute";
 export * from "./src/decorator/OnAttributeChange";
 export * from "./src/decorator/Style";
 export * from "./src/decorator/Template";
+export * from "./src/decorator/lifecyle/OnAfterAttributeChange";
+export * from "./src/decorator/lifecyle/OnAfterConnect";
+export * from "./src/decorator/lifecyle/OnAfterFlow";
+export * from "./src/decorator/lifecyle/OnAfterRender";
+export * from "./src/decorator/lifecyle/OnBeforeAttributeChange";
+export * from "./src/decorator/lifecyle/OnBeforeConnect";
+export * from "./src/decorator/lifecyle/OnBeforeFlow";
+export * from "./src/decorator/lifecyle/OnBeforeRender";
 export * from "./src/interface/TemplateFunction";
 export * from "./src/decorator/ShadowDOM";
 export * from "./src/decorator/EventAttribute";
 export * from "./src/function/DOMAttributeValueTransformers";
 export * from "./src/enum/AttributeType";
+export * from "./src/ActiveLifecycle"

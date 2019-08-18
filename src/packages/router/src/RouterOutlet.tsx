@@ -1,26 +1,25 @@
 import {ActiveRoute} from "./ActiveRoute";
 import {
-    Attribute,
+    OnBeforeFlow,
     WebComponent,
     ErrorMessage,
     getRenderer,
-    Lifecycle,
+    Partial,
     Use,
     VirtualElement,
-    ActiveRenderer,
+    ActiveRenderer, Field,
 } from "@springtype/core";
 
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
-import {Partial} from "@springtype/core";
 
-@WebComponent('st-router-outlet')
 @Use(ErrorMessage)
-export class RouterOutlet extends HTMLElement implements Lifecycle {
+@WebComponent('st-router-outlet')
+export class RouterOutlet extends HTMLElement {
 
     locationChangeDecision: LocationChangeDecision;
 
-    @Attribute
-    element: VirtualElement|null;
+    @Field
+    element: VirtualElement | null;
 
     constructor(protected activeRoute: ActiveRoute) {
 
@@ -28,6 +27,8 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
 
         this.activeRoute.routerImpl.registerRouterOutlet(this);
         this.activeRoute.routerImpl.enable();
+
+        console.log('router', this)
     }
 
     refresh() {
@@ -47,11 +48,9 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
         }
     }
 
-    onFlow(initial: boolean) {
-
-        if (initial) {
-            this.element = this.locationChangeDecision.element;
-        }
+    @OnBeforeFlow(true)
+    onFlow() {
+        this.element = this.locationChangeDecision.element;
     }
 
     render() {
@@ -59,7 +58,7 @@ export class RouterOutlet extends HTMLElement implements Lifecycle {
         if (this.element) {
             return this.element;
         }
-        return <st-error-message message={"ERROR (RouterOutlet): No component found for route!"} /> as VirtualElement;
+        return <st-error-message message={"ERROR (RouterOutlet): No component found for route!"}/> as VirtualElement;
     }
 }
 

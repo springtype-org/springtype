@@ -7,7 +7,8 @@ import {InjectionReference} from "./type/InjectionReference";
 import {BeanInitializer} from "./interface/BeanInitializer";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 import {ConstructorArgumentInitializerFunction} from "./interface/ConstructorArgumentInitializerFunction";
-import {INJECT_DECORATOR_METADATA_KEY} from "./function/registerBean";
+import {INJECT_DECORATOR_METADATA_KEY, INJECTION_STRATEGY_DECORATOR_METADATA_KEY} from "./function/registerBean";
+import {DefaultInjectionStrategyMetadata} from "./interface/DefaultInjectionStrategyMetadata";
 
 const COMPONENT = 'COMPONENT';
 const COMPONENT_CONFIG = 'COMPONENT_CONFIG';
@@ -71,6 +72,28 @@ export class ComponentReflector {
         componentCtor: ComponentImpl<any>
     ): ArgumentsInjectionMetadata {
         return Reflect.get(componentCtor, COMPONENT_CONSTRUCTOR_PARAMETER_METADATA);
+    }
+
+    static setDefaultInjectionStrategy(targetClassInstanceOrCtor: Function,
+                                       injectionReference: InjectionReference,
+                                       injectionStrategy: InjectionStrategy) {
+
+        const defaultInjectionStrategyMetadata: DefaultInjectionStrategyMetadata = {
+            injectionReference: injectionStrategy,
+            injectionStrategy: injectionStrategy
+        };
+
+        Reflect.defineMetadata(
+            INJECTION_STRATEGY_DECORATOR_METADATA_KEY,
+            defaultInjectionStrategyMetadata,
+            targetClassInstanceOrCtor,
+            targetClassInstanceOrCtor.name);
+    }
+
+    static getDefaultInjectionStrategy(targetClassInstanceOrCtor: Function): DefaultInjectionStrategyMetadata {
+        return Reflect.getOwnMetadata(
+            INJECTION_STRATEGY_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, targetClassInstanceOrCtor.name
+        );
     }
 
     static setConstructorArgumentsInjectionMetadata(
