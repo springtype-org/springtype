@@ -1,6 +1,6 @@
 {
     "name": "st-link-local",
-    "version": "1.0.0-alpha.1.47",
+    "version": "1.0.0-alpha.1.49",
     "publishConfig": {
         "access": "public"
     },
@@ -35,7 +35,8 @@
         "chalk",
         "chokidar",
         "st-cp",
-        "st-rm-rf"
+        "st-rm-rf",
+        "glob"
     ],
     "bin": {
         "st-link-local": "./dist/cli.js"
@@ -48,9 +49,13 @@
         "url": "https://github.com/springtype-org/springtype/issues"
     },
     "homepage": "https://springtype.org",
+    "stLinkLocalDependencies": {
+        "@springtype/core": "file:../../core/dist"
+    },
     "dependencies": {
         "chalk": "^2.4.2",
         "chokidar": "^3.0.2",
+        "glob": "^7.1.4",
         "st-cp": "^1.0.0-alpha.1.41",
         "st-rm-rf": "^1.0.0-alpha.1.39"
     },
