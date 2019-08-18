@@ -1,6 +1,6 @@
 {
     "name": "st-create",
-    "version": "1.0.0-alpha.1.49",
+    "version": "1.0.0-alpha.1.50",
     "publishConfig": {
         "access": "public"
     },
@@ -31,7 +31,7 @@
         "springtype"
     ],
     "bin": {
-        "st-create": "./dist/index.js"
+        "st-create": "./dist/cli.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -42,7 +42,7 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "springtype": "^1.0.0-alpha.1.49"
+        "springtype": "^1.0.0-alpha.1.51"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",

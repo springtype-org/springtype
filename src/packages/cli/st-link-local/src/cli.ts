@@ -9,6 +9,10 @@ const packagesToInstall: Array<string> = process.argv.slice(2);
 
 (async() => {
 
+    console.log('CWD', process.cwd());
+
+    process.chdir(process.cwd());
+
     if (packagesToInstall.length) {
 
         console.log();

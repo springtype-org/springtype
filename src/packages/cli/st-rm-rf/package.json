@@ -1,6 +1,6 @@
 {
     "name": "st-rm-rf",
-    "version": "1.0.0-alpha.1.38",
+    "version": "1.0.0-alpha.1.39",
     "publishConfig": {
         "access": "public"
     },
@@ -30,7 +30,7 @@
         "chalk"
     ],
     "bin": {
-        "st-rm-rf": "./dist/index.js"
+        "st-rm-rf": "./dist/cli.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

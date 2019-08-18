@@ -1,6 +1,6 @@
 {
     "name": "springtype",
-    "version": "1.0.0-alpha.1.49",
+    "version": "1.0.0-alpha.1.51",
     "publishConfig": {
         "access": "public"
     },
@@ -39,7 +39,7 @@
         "validate-npm-package-name"
     ],
     "bin": {
-        "springtype": "./dist/index.js"
+        "springtype": "./dist/cli.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -56,7 +56,7 @@
         "envinfo": "^7.2.0",
         "inquirer": "^6.4.1",
         "reflect-metadata": "^0.1.13",
-        "st-rm-rf": "^1.0.0-alpha.1.38",
+        "st-rm-rf": "^1.0.0-alpha.1.39",
         "tslib": "^1.9.3",
         "validate-npm-package-name": "^3.0.0"
     },

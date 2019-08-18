@@ -1,14 +1,16 @@
 {
     "name": "st-cp",
-    "version": "1.0.0-alpha.1.40",
+    "version": "1.0.0-alpha.1.41",
     "publishConfig": {
         "access": "public"
     },
     "keywords": [
-        "springtype copy files and folders helper",
+        "copy",
+        "files",
+        "recursive",
         "st-cp"
     ],
-    "description": "CLI tool for platform independent copying of files and folders.",
+    "description": "CLI tool for platform independent, recursive copying of files and folders.",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/springtype-org/springtype.git"
@@ -30,7 +32,7 @@
         "chalk"
     ],
     "bin": {
-        "st-cp": "./dist/index.js"
+        "st-cp": "./dist/cli.js"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

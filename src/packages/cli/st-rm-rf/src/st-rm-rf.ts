@@ -4,20 +4,7 @@ const process = require("child_process");
 const os = require("os");
 
 const fsp = {
-    lstat: promisify(fs.lstat),
-    access: promisify(fs.access),
-};
-
-export const filePathExist = async (existFilePath: string, printError: boolean = false): Promise<boolean> => {
-    try {
-        await fsp.access(existFilePath);
-        return true;
-    } catch (err) {
-        if (printError) {
-            console.log(`- error ${err}`);
-        }
-    }
-    return false;
+    lstat: promisify(fs.lstat)
 };
 
 export const removePathOrFile = async (deletePath: string, printError: boolean = false): Promise<boolean> => {
@@ -37,7 +24,7 @@ export const removePathOrFile = async (deletePath: string, printError: boolean =
         }
     } catch (err) {
         if (printError) {
-            console.log(`- error ${err}`);
+            console.log(`Error removing: ${err}`);
         }
         return false;
     }

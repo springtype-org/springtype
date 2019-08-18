@@ -6,7 +6,6 @@ import {donationUrl} from "../../../../../definition/donationUrl";
 import {startApp} from "../action/startApp";
 import {getTemplatesFromFolder} from "../../../../../function/getTemplates";
 import {printFooter} from "./printFooter";
-import {filePathExist} from "st-rm-rf/st-rm-rf";
 
 const inquirer = require('inquirer');
 const chalk = require('chalk');
@@ -57,9 +56,7 @@ export async function createProject(cwd: string) {
     ]);
 
     const root = path.resolve(choiceProjectName.name);
-
-    // TODO: Fixme: don't import from st-rm-rf, should be in a common lib
-    const folderAlreadyExist = await filePathExist(root);
+    const folderAlreadyExist = fs.existsSync(root);
 
     if (folderAlreadyExist) {
 

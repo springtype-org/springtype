@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import {printHeader} from "./function/printHeader";
 import registerCreateCommand from "./command/create/function/registerCreateCommand";
 
