@@ -18,7 +18,7 @@ import {
     LifecycleAfterType,
     LifecycleBeforeType,
     onAfterLifecycle,
-    onBeforeLifecycle,
+    onBeforeLifecycle, OnLifecycleModel,
 } from "./decorateLifecycle";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
@@ -162,7 +162,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                 context: this,
                 type: LifecycleBeforeType.ON_BEFORE_FLOW,
                 arguments: [initial],
-                guard: lifecycle => lifecycle.value === undefined || lifecycle.value === initial
+                guard: (lifecycle: OnLifecycleModel) => lifecycle.value === undefined || lifecycle.value === initial
             });
 
             if (!cancelled && this.isConnected) {
@@ -172,7 +172,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     context: this,
                     type: LifecycleAfterType.ON_AFTER_FLOW,
                     arguments: [initial],
-                    guard: lifecycle => lifecycle.value === undefined || lifecycle.value === initial
+                    guard:  (lifecycle: OnLifecycleModel) => lifecycle.value === undefined || lifecycle.value === initial
                 });
             }
         }
