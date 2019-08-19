@@ -19,7 +19,7 @@ export class RouterOutlet extends HTMLElement {
     locationChangeDecision: LocationChangeDecision;
 
     @Field
-    element: VirtualElement | null;
+    element: VirtualElement|null;
 
     constructor(protected activeRoute: ActiveRoute) {
 

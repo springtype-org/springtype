@@ -1,14 +1,14 @@
-import {Component, InjectionStrategy,DefaultInjectionStrategy} from "../../di";
+import {Component, InjectionStrategy} from "../../di";
 import {Lifecycle} from "./interface/Lifecycle";
 
-@Component
-@DefaultInjectionStrategy(InjectionStrategy.FACTORY)
+@Component({injectionStrategy: InjectionStrategy.FACTORY})
 export class ActiveLifecycle implements Lifecycle {
-    context!: Lifecycle;
+    public context: Lifecycle;
 
     doFlow(): void {
         this.context.doFlow();
     }
+
 
 
     onInject(context: Lifecycle) {

@@ -33,7 +33,7 @@ export function Attribute(webComponentInstance: any, attributeName?: string | sy
 
     if (webComponentInstance instanceof HTMLElement) {
 
-        setup(webComponentInstance, attributeName);
+       return  setup(webComponentInstance, attributeName);
 
     } else {
 

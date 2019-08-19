@@ -5,7 +5,6 @@ import {ComponentImpl} from "../interface/ComponentImpl";
 import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
 
 export const INJECT_DECORATOR_METADATA_KEY = "@Inject";
-export const INJECTION_STRATEGY_DECORATOR_METADATA_KEY = "@DefaultInjectionStrategy";
 
 export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, beanConfig?: BeanConfig<T>) {
 
@@ -16,7 +15,6 @@ export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, bea
     const parameterInjectionMetaData: ArgumentsInjectionMetadata = Reflect.getOwnMetadata(
         INJECT_DECORATOR_METADATA_KEY, componentCtor, componentCtor.name
     );
-
     ComponentReflector.register(componentCtor, parameterInjectionMetaData, beanConfig);
 
     // a generic intermediate class is conjured, inheriting the class
@@ -31,7 +29,6 @@ export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, bea
             super(...resolveConstructorArguments);
 
             resolveConstructorArguments.forEach((injectedValue) => {
-
                 if (injectedValue && injectedValue.onInject && typeof injectedValue.onInject === 'function') {
                     injectedValue.onInject(this);
                 }

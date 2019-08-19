@@ -91,7 +91,7 @@ export class VirtualDOMMutator {
         });
     };
 
-    static mutateElementTree = memoize((
+    static mutateElementTree = (
         domElements: NodeListOf<Element>,
         virtualElements: Array<VirtualElement | string>,
         parent: Element,
@@ -121,7 +121,7 @@ export class VirtualDOMMutator {
                 VirtualDOMMutator.mutateTextNode(parent, domElement, virtualElements[i] as string, flowId);
             }
         }
-    }, [3 /* ignore flowId in memorization check */]);
+    };
 
     static mutateElement = (parent: Element, domElement: Element, virtualElement: VirtualElement, flowId: number) => {
 

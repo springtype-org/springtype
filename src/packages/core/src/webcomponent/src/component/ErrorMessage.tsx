@@ -1,9 +1,9 @@
 import {WebComponent} from "../decorator/WebComponent";
+import {Attribute} from "../decorator/Attribute";
 import {Style} from "../decorator/Style";
 import {VirtualElement} from "../../../virtualdom";
 import {Partial} from "../../../lang";
 import {ActiveRenderer} from "../../../renderer";
-import {Field} from "../../../cd";
 
 @WebComponent('st-error-message')
 @Style((view) => ({
@@ -13,12 +13,15 @@ import {Field} from "../../../cd";
 }))
 export class ErrorMessage extends HTMLElement {
 
-    @Field
+    @Attribute
     message: string = "Unknown error.";
 
+
     render() {
-        return <p>{this.message}</p> as VirtualElement;
+        return <p>{ this.message }</p> as VirtualElement;
     }
+
+
 }
 
 declare global {
