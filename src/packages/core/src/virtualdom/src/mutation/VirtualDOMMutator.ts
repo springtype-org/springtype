@@ -1,7 +1,6 @@
 import {LIST_KEY_ATTRIBUTE_NAME, SLOT_ELEMENT_TAG_NAME, VirtualElement} from "../../index";
 import {getRenderer} from "../../../renderer";
 import {isWebComponent} from "../../../webcomponent/src/function/isWebComponent";
-import {memoize} from "../../../lang";
 import {FlowIdReflector} from "../../../webcomponent/src/reflector/cross-instance/FlowIdReflector";
 import {SlotChildrenReflector} from "../../../webcomponent/src/reflector/cross-instance/SlotChildrenReflector";
 

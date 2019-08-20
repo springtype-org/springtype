@@ -37,17 +37,9 @@ export class MwcButton extends HTMLElement {
     icon = '';
 
     @Attribute
-    label = '';
-
-    @Field
-    time = Date.now();
-
+    label = 'test';
 
     _onclick = (evt: Event) => {
-        evt.preventDefault();
-        console.log('onClick', this, this.lifecycle)
-        this.label = Date.now().toString();
-        this.lifecycle.doFlow();
     };
 
     rippleInstance: MDCRipple;

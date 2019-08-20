@@ -13,21 +13,25 @@ import {getShadowForComponent} from "../reflector/protoype/shadow";
 import {getShadowRootForComponent} from "../reflector/instance/shadowRoot";
 import {getStyleForComponent} from "../reflector/protoype/style";
 import {getTemplateForComponent} from "../reflector/protoype/template";
-import {getAttributeValue} from "../reflector/instance/attributes";
+
 import {
     LifecycleAfterType,
     LifecycleBeforeType,
     onAfterLifecycle,
-    onBeforeLifecycle, OnLifecycleModel,
+    onBeforeLifecycle, OnLifecycleModel, StLifecycleModel,
 } from "./decorateLifecycle";
+import {GUARD_ATTRIBUTE_CHANGE, GUARD_FLOW} from "./guardLifecycle";
+import {MwcButton} from "../../../../../material-ui/src/component/mwc-button";
+import {Lifecycle} from "../..";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';
 
 export const createWebComponentClass = (tagName: string, injectableWebComponent: ComponentImpl<any>) => {
 
+
     // custom web component extends user implemented web component class
     // which extends HTMLElement
-    const CustomWebComponent = class extends injectableWebComponent {
+    const CustomWebComponent = class extends injectableWebComponent implements Lifecycle {
 
         constructor(...args: Array<any>) {
             super();
@@ -138,6 +142,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     root.childNodes as NodeListOf<Element>,
                     virtualElementRoot && typeof virtualElementRoot === 'object' ?
                         virtualElementRoot.children : [],
+                    // @ts-ignore
                     root,
                     performance.now()
                 );
@@ -145,35 +150,25 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
         }
 
         async flow(initial: boolean = false): Promise<void> {
-
-            if (initial) {
-                const observedAttributes = getObservedAttributes(injectableWebComponent);
-                for (let i = 0; i < observedAttributes.length; i++) {
-                    const observedAttribute = observedAttributes[i];
-                    const attributeName = observedAttribute.name.toString();
-                    if (attributeName.startsWith('on')) {
-                        continue;
-                    }
-                    const value = getAttributeValue(this, attributeName);
-                    this.setAttribute(observedAttribute.name, value);
-                }
-            }
-            let cancelled = onBeforeLifecycle(injectableWebComponent, {
-                context: this,
-                type: LifecycleBeforeType.ON_BEFORE_FLOW,
-                arguments: [initial],
-                guard: (lifecycle: OnLifecycleModel) => lifecycle.value === undefined || lifecycle.value === initial
-            });
-
-            if (!cancelled && this.isConnected) {
-
-                this.doFlow();
-                onAfterLifecycle(injectableWebComponent, {
+            if (super.flow) {
+                return super.flow(initial)
+            } else {
+                let cancelled = onBeforeLifecycle(injectableWebComponent, {
                     context: this,
-                    type: LifecycleAfterType.ON_AFTER_FLOW,
+                    type: LifecycleBeforeType.ON_BEFORE_FLOW,
                     arguments: [initial],
-                    guard:  (lifecycle: OnLifecycleModel) => lifecycle.value === undefined || lifecycle.value === initial
+                    guard: GUARD_FLOW(initial)
                 });
+
+                if (!cancelled && this.isConnected) {
+                    this.doFlow();
+                    onAfterLifecycle(injectableWebComponent, {
+                        context: this,
+                        type: LifecycleAfterType.ON_AFTER_FLOW,
+                        arguments: [initial],
+                        guard: GUARD_FLOW(initial)
+                    });
+                }
             }
         }
 
@@ -188,6 +183,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             }
         }
 
+        //https://developer.mozilla.org/de/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks
         attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 
             const attributeValue = getAttributeEventListenerValue(CustomWebComponent, name, newValue, this) ||
@@ -196,7 +192,8 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             let cancelled = onBeforeLifecycle(injectableWebComponent, {
                 context: this,
                 type: LifecycleBeforeType.ON_BEFORE_ATTRIBUTE_CHANGE,
-                arguments: [name, oldValue, attributeValue]
+                arguments: [name, oldValue, attributeValue],
+                guard: GUARD_ATTRIBUTE_CHANGE(name, oldValue, newValue)
             });
 
             if (!cancelled && this.shouldAttributeChange(name, oldValue, newValue)) {
@@ -205,13 +202,14 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                 onAfterLifecycle(injectableWebComponent, {
                     context: this,
                     type: LifecycleAfterType.ON_AFTER_ATTRIBUTE_CHANGE,
-                    arguments: [name, oldValue, attributeValue]
+                    arguments: [name, oldValue, attributeValue],
+                    guard: GUARD_ATTRIBUTE_CHANGE(name, oldValue, newValue)
                 });
             }
         }
 
-        doConnect() {
 
+        doConnect() {
             // delay initial flow so that MutationObserver for initial
             // DOM changes is called first (it's a DOM impl. timing/lifecycle glitch)
             setTimeout(() => {
@@ -219,6 +217,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
             }, 1 /* ms delay */);
         }
 
+        //https://developer.mozilla.org/de/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks
         connectedCallback() {
             let cancelled = onBeforeLifecycle(injectableWebComponent, {
                 context: this,
@@ -232,6 +231,22 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
                     type: LifecycleAfterType.ON_AFTER_CONNECT,
                 });
             }
+        }
+
+        //https://developer.mozilla.org/de/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks
+        disconnectedCallback() {
+            onAfterLifecycle(injectableWebComponent, {
+                context: this,
+                type: LifecycleAfterType.ON_AFTER_DISCONNECT,
+            });
+        }
+
+        //https://developer.mozilla.org/de/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks
+        adoptedCallback() {
+            onAfterLifecycle(injectableWebComponent, {
+                context: this,
+                type: LifecycleAfterType.ON_AFTER_ADOPT,
+            });
         }
     };
     return CustomWebComponent;
