@@ -1,4 +1,4 @@
-import {WebComponent, Style, Template, Attribute, EventAttribute, OnBeforeFlow} from "@springtype/core";
+import {WebComponent, Style, Template, Attribute, EventAttribute, OnAfterFlow} from "@springtype/core";
 import tpl from "./mwc-switch.tpl";
 import style from "./mwc-switch.style";
 import {MDCSwitch} from '@material/switch';
@@ -35,7 +35,7 @@ export class MwcSwitch extends HTMLElement {
         super();
     }
 
-    @OnBeforeFlow(true)
+    @OnAfterFlow(true)
     onBeforeFlow() {
         const switchElement = this.querySelector('.mdc-switch');
         if (switchElement) {

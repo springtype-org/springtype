@@ -1,7 +1,7 @@
-import {WebComponent, OnBeforeFlow, Style, Template, Attribute, EventAttribute} from "@springtype/core";
+import {WebComponent, Style, Template, Attribute, EventAttribute, OnAfterFlow} from "@springtype/core";
 import tpl from "./mwc-textfield.tpl";
 import style from "./mwc-textfield.style";
-import {MDCTextField} from "@material/textfield/component";
+import {MDCTextField} from "@material/textfield";
 import {DEFAULT_MWC_TEXTFIELD_VARIANT_TYPE, MWC_TEXTFIELD_VARIANT_TYPE} from "./mwc-textfield-variant-type";
 
 @WebComponent('mwc-textfield')
@@ -53,11 +53,15 @@ export class MwcTextfield extends HTMLElement {
         super();
     }
 
-    @OnBeforeFlow(true)
+    @OnAfterFlow(true)
     onBeforeFlow() {
         const textField = this.querySelector('.mdc-text-field');
+        debugger;
+            console.log('in',this.mwcInstance)
         if (textField) {
+
             this.mwcInstance = new MDCTextField(textField);
+            console.log('in',this.mwcInstance)
         }
     }
 }

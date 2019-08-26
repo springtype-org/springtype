@@ -1,7 +1,7 @@
 import {WebComponent, Style, Template, Attribute, EventAttribute,OnBeforeFlow} from "@springtype/core";
 import tpl from "./mwc-radio.tpl";
 import style from "./mwc-radio.style";
-import {MDCRipple} from "@material/ripple/component";
+import {MDCRipple} from "@material/ripple";
 
 @WebComponent('mwc-radio')
 @Template(tpl)

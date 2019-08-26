@@ -1,4 +1,4 @@
-import {WebComponent, Style, Template,OnBeforeFlow} from "@springtype/core";
+import {WebComponent, Style, Template, OnBeforeFlow, OnAfterFlow} from "@springtype/core";
 import tpl from "./mwc-snackbar.tpl";
 import style from "./mwc-snackbar.style";
 import {MDCSnackbar} from '@material/snackbar';
@@ -8,15 +8,17 @@ import {MDCSnackbar} from '@material/snackbar';
 @Style(style)
 export class MwcSnackbar extends HTMLElement {
 
+    snackbarInstance: MDCSnackbar;
+
     constructor(protected switchElement: HTMLInputElement) {
         super();
     }
 
-    @OnBeforeFlow(true)
+    @OnAfterFlow(true)
     onBeforeFlow() {
         const snackbarElement = this.querySelector('.mdc-snackbar');
         if (snackbarElement) {
-            const snackbar = new MDCSnackbar(snackbarElement);
+            this.snackbarInstance = new MDCSnackbar(snackbarElement);
 
         }
     }
