@@ -1,8 +1,8 @@
-![SpringType Logo](https://www.springtype.org/img/logo.svg)
+<img src="https://www.springtype.org/img/logo.svg" alt="SpringType Logo"/>
 
 # SpringType
 
-##### Develop amazing Websites, PWA's and Apps with ease and fun.
+> Develop amazing Websites, PWA's and Apps with ease and fun.
 
 ## Quick Start
 

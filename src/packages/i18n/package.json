@@ -15,6 +15,10 @@
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "bundledDependencies": [
+        "i18next",
+        "i18next-browser-languagedetector"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/springtype-org/springtype.git"

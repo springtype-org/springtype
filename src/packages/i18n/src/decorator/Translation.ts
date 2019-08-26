@@ -1,5 +1,5 @@
 import i18next, {InitOptions} from "i18next";
-import LngDetector from "i18next-browser-languagedetector";
+import I18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 import {LanguageDetectorOptions} from "../interface/LanguageDetectorOptions";
 import {DEFAULT_FALLBACK_LANGUAGES, DEFAULT_NAMESPACE} from "../defaults";
 import {format} from "../function/format";
@@ -7,7 +7,7 @@ import {format} from "../function/format";
 // see https://www.i18next.com/overview/configuration-options
 export function Translation(translationConfig?: InitOptions, languageDetectorConfig?: LanguageDetectorOptions, onInit?: () => void): any {
 
-    const lngDetector = new LngDetector();
+    const lngDetector = new I18nextBrowserLanguageDetector();
 
     if (languageDetectorConfig) {
         lngDetector.init(languageDetectorConfig);

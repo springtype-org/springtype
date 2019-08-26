@@ -5,6 +5,7 @@ import {rewriteDistSubFolderReferences} from "./rewriteDistSubFolderReferences";
 import {getDistPackageJson} from "./getDistPackageJson";
 import {writeDistPackageJson} from "./writeDistPackageJson";
 import {copyPathOrFile} from "st-cp";
+const fs = require('fs');
 
 export const finalizeDistFolder = async() => {
 
@@ -28,13 +29,40 @@ export const finalizeDistFolder = async() => {
     // if bundled dependencies are found, copy them over to ./dist so they can be bundled
     if (packageJson['bundledDependencies']) {
 
-        console.log(chalk.cyan(`Copying ${chalk.white('./node_modules')} to ${chalk.white('./dist')}`));
-        await copyPathOrFile('node_modules', 'dist');
+        console.log();
+        console.log(chalk.gray('=== Preparing bundled dependencies (bundledDependencies) ==='));
+        console.log();
+
+        for (let i=0; i<packageJson['bundledDependencies'].length; i++) {
+
+            const targetDirectory = 'dist/node_modules/' + packageJson['bundledDependencies'][i];
+
+            if (!fs.existsSync(targetDirectory)) {
+                fs.mkdirSync(targetDirectory, {
+                    recursive: true
+                });
+            }
+
+            let targetDirectoryParentParts = targetDirectory.split('/');
+            targetDirectoryParentParts.pop();
+            const targetDirectoryParent = targetDirectoryParentParts.join('/');
+
+            const bundledDependencyPath = './node_modules/' + packageJson['bundledDependencies'][i];
+
+            console.log(chalk.cyan(`Copying ${chalk.white(bundledDependencyPath)} to ${chalk.white(targetDirectoryParent)}`));
+
+            await copyPathOrFile(bundledDependencyPath, targetDirectoryParent);
+        }
     }
 
     // bundle custom folders
     if (packageJson['stBundleFiles'] &&
         Array.isArray(packageJson['stBundleFiles'])) {
+
+
+        console.log();
+        console.log(chalk.gray('=== Preparing bundled files (stBundleFiles) ==='));
+        console.log();
 
         for (let i=0; i<packageJson['stBundleFiles'].length; i++) {
 
