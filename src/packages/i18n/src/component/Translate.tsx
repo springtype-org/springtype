@@ -1,9 +1,9 @@
-import {Attribute, WebComponent, Lifecycle, Partial} from "@springtype/core";
+import {Attribute, WebComponent, OnBeforeFlow, Partial} from "@springtype/core";
 import {t} from "../i18nextAdaper";
 import {TOptions} from "i18next";
 
 @WebComponent('st-t')
-export class Translate extends HTMLElement implements Lifecycle {
+export class Translate extends HTMLElement {
 
     @Attribute
     key: string;
@@ -16,6 +16,7 @@ export class Translate extends HTMLElement implements Lifecycle {
 
     cachedTranslation: string;
 
+    @OnBeforeFlow()
     onBeforeRender() {
 
         if (!this.cachedTranslation) {

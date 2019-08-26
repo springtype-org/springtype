@@ -424,12 +424,27 @@
   dependencies:
     "@material/feature-targeting" "^3.1.0"
 
+"@springtype/core@../core/dist":
+  version "1.0.0-alpha.1.38"
+  dependencies:
+    "@types/node" "^11.13.4"
+    reflect-metadata "^0.1.12"
+    tslib "^1.9.3"
+
+"@springtype/router@../router/dist":
+  version "1.0.0-alpha.1.38"
+  dependencies:
+    "@springtype/core" "../core/dist"
+    "@types/node" "^11.10.5"
+    reflect-metadata "^0.1.12"
+    tslib "^1.9.3"
+
 "@types/classnames@^2.2.7":
   version "2.2.9"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.9.tgz#d868b6febb02666330410fe7f58f3c4b8258be7b"
   integrity sha512-MNl+rT5UmZeilaPxAVs6YaPC2m6aA8rofviZbhbxpPpl61uKodfdQVsBtgJGTqGizEf02oW3tsVe7FYB8kK14A==
 
-"@types/node@^11.10.5":
+"@types/node@^11.10.5", "@types/node@^11.13.4":
   version "11.13.19"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.19.tgz#c7bd7009aa850464775d8a814e18138d633cd676"
   integrity sha512-tLRDU1hmcWamtgRT2iVRdraAQVGFQGgtcqracSo9XyMN1VeZLSVGb8RJJxVqab7UGbijoUijGPVFMjmqzyZIUw==

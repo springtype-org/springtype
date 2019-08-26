@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@springtype/core@file:../core/dist":
+"@springtype/core@../core/dist":
   version "1.0.0-alpha.1.38"
   dependencies:
     "@types/node" "^11.13.4"
