@@ -10,11 +10,14 @@ const chalk = require('chalk');
 const path = require('path');
 const zlib = require('zlib');
 const fs = require('fs');
-const ts = require("@springtype-org/rollup-plugin-ts");
-const stripAnsi = require('strip-ansi');
+const jsonImportPlugin = require('rollup-plugin-json');
+const ts = require("@wessberg/rollup-plugin-ts");
 const nodeResolvePlugin = require('rollup-plugin-node-resolve');
+const commonJSToES2015TransformerPlugin = require('rollup-plugin-commonjs');
 import { terser } from "rollup-plugin-terser";
 import {reportTranspilationError} from "../reportTranspilationError";
+import {reportTranspilationWarning} from "../reportTranspilationWarning";
+import {ScriptTarget} from "typescript";
 
 export const transpileAndWatch = async(
     analyzedEntryHTML: AnalyzeEntryHTML,
@@ -24,20 +27,45 @@ export const transpileAndWatch = async(
 ) => {
 
     const plugins = [
-        nodeResolvePlugin(),
+        jsonImportPlugin(),
+        nodeResolvePlugin({
+            browser: true,
+            dedupe: [ '@springtype/core' ]
+        }),
+        commonJSToES2015TransformerPlugin({
+            include: 'node_modules/**',
+        }),
         ts({
+            transpiler: "babel",
+            tsconfig: {
+                target: ScriptTarget.ES2016,
+                allowSyntheticDefaultImports: true,
+                experimentalDecorators: true,
+                emitDecoratorMetadata: true,
+                jsx: 'react',
+                jsxFactory: "ActiveRenderer.createElement",
+                allowJs: true
+            },
+            browserslist: ["last 1 version", "> 1%"],
+            babelConfig: {
+                presets: ["@babel/preset-env"],
+                plugins: [
+                    "@babel/plugin-transform-runtime",
+                    "@babel/plugin-proposal-object-rest-spread",
+                    "@babel/plugin-proposal-async-generator-functions",
+                    ["@babel/plugin-proposal-decorators", { legacy: true }],
+                    ["@babel/plugin-syntax-decorators", { decoratorsBeforeExport: false }],
+                    "@babel/plugin-proposal-json-strings",
+                    ["transform-react-jsx", {
+                        "pragma": "ActiveRenderer.createElement"
+                    }]
+                ]
+            },
             transformers: {
                 before: [
                     envTransformer(),
                     importTransformer(path.dirname(analyzedEntryHTML.entryTypeScriptFiles[0]), baseSourceFilesPath)
                 ]
-            },
-            tsconfig: {
-                experimentalDecorators: true,
-                emitDecoratorMetadata: true,
-                resolveJsonModule: true,
-                jsx: 'react',
-                jsxFactory: "ActiveRenderer.createElement"
             }
         })
     ];
@@ -48,16 +76,20 @@ export const transpileAndWatch = async(
 
     const entrySourceFile = getEntryJSModuleFiles(analyzedEntryHTML.entryTypeScriptFiles, baseSourceFilesPath)[0];
     const entryDistFile = getDestFilePath(renameTypeScriptFilesToJS(entrySourceFile));
+    const packageJson = JSON.parse(fs.readFileSync('package.json', {
+        encoding: 'utf8'
+    }));
 
     const inputOptions = {
         input: entrySourceFile,
         plugins: plugins,
-        onwarn: (warning) => {
+        //external: Object.keys(packageJson.dependencies),
+        onwarn: (event) => {
 
-            if (warning.code === 'THIS_IS_UNDEFINED') {
+            if (event.code === 'THIS_IS_UNDEFINED') {
                 return;
             }
-            console.log(chalk.yellow(warning.message));
+            reportTranspilationWarning(event, io);
         }
     };
 
@@ -65,7 +97,11 @@ export const transpileAndWatch = async(
         format: 'iife',
         sourcemap: true,
         name: path.basename(entrySourceFile),
-        file: entryDistFile
+        file: entryDistFile,
+        /*
+        globals: {
+            tslib: 'tslib'
+        }*/
     };
 
     const watchOptions = {
@@ -73,6 +109,7 @@ export const transpileAndWatch = async(
         output: outputOptions,
         watch: {
             chokidar: {
+                paths: ['src/**'],
                 ignored: /(^|[\/\\])\../
             }
         }
@@ -109,15 +146,7 @@ export const transpileAndWatch = async(
         }
 
         if (event.code === 'ERROR' || event.code === 'FATAL') {
-
-            if (event.error.loc) {
-                event.error.loc.relativeFile = path.relative(process.cwd(), event.error.loc.file);
-            }
-            event.error.plainFrame = stripAnsi(event.error.frame);
-
-            io.emit('bundle-error', event);
-
-            reportTranspilationError(event);
+            reportTranspilationError(event, io);
         }
     });
 };

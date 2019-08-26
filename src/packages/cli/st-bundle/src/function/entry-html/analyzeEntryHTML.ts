@@ -13,7 +13,10 @@ export const analyzeEntryHTML = async(entryHTMLPath: string): Promise<AnalyzeEnt
     // TODO: static file resources
     const parser = new htmlparser2.Parser({
         onopentag(name, attribs) {
-            if (name === "script") {
+            if (name === "script" && (
+                attribs.src.endsWith('.ts') ||
+                attribs.src.endsWith('.tsx')
+            )) {
                 entryTypeScriptFiles.push(attribs.src);
             }
         }

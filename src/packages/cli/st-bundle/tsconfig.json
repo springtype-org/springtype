@@ -17,6 +17,7 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "downlevelIteration":true,
+    "resolveJsonModule": true,
     "sourceMap": true,
     "lib": [
       "dom",

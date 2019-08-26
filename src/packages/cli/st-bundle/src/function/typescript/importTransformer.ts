@@ -7,6 +7,8 @@ export function importTransformer<T extends ts.Node>(sourceFilePath: string, bas
 
     return (context) => {
 
+        console.log('import transformer?!');
+
         const visit: ts.Visitor = (node) => {
 
             if (ts.isCallExpression(node)) {
