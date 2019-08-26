@@ -1,9 +1,9 @@
 import {WebComponent, Lifecycle, Style, Template,Use} from "../../../../core";
 import tpl from "./switch-page.tpl";
 import style from "./switch-page.style";
-import {MwcSwitch} from "../../..";
+import {MwcSwitch} from "../../../src";
 
-@Use(MwcSwitch)
+@Use(MwcSwitch )
 @WebComponent('switch-page')
 @Template(tpl)
 @Style(style)

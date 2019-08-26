@@ -1,7 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template,Use} from "../../../../core";
+import {WebComponent, Style, Template,Use} from "@springtype/core";
 import tpl from "./checkbox-page.tpl";
 import style from "./checkbox-page.style";
-import {MwcCheckbox} from "../../../src/component/mwc-checkbox";
+import {MwcCheckbox} from "../../../src";
 
 @Use(MwcCheckbox)
 @WebComponent('checkbox-page')

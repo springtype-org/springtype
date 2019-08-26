@@ -5,3 +5,5 @@ export * from "./component/mwc-icon/mwc-icon";
 export * from "./component/mwc-icon-button/mwc-icon-button";
 export * from "./component/mwc-radio/mwc-radio";
 export * from "./component/mwc-switch/mwc-switch";
+export * from "./component/mwc-top-bar/mwc-top-bar";
+export * from "./component/mwc-snackbar/mwc-snackbar";

@@ -1,5 +1,4 @@
 import {SwitchPage} from "./switch-page";
-import {ActiveRenderer} from '@springtype/core';
 
 export default (component: SwitchPage) =>{
     return <st-fragment>

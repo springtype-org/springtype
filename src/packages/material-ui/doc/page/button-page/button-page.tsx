@@ -1,7 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template, Use} from "@springtype/core";
+import {WebComponent, Style, Template, Use} from "@springtype/core";
 import tpl from "./button-page.tpl";
 import style from "./button-page.style";
-import {MwcButton} from "../../..";
+import {MwcButton} from "../../../src";
 
 
 @Use(MwcButton)

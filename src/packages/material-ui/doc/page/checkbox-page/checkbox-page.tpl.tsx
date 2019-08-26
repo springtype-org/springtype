@@ -1,6 +1,4 @@
 import {CheckboxPage} from "./checkbox-page";
-import {ActiveRenderer} from '@springtype/core';
-import {MWC_CHECKBOX_CHECKED_TYPE} from "../../../src/component/mwc-checkbox/mwc-ceckbox-checked-type";
 
 export default (component: CheckboxPage) =>{
     return <st-fragment>

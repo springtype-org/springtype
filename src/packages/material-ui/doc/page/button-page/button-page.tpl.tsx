@@ -1,6 +1,6 @@
 import {ButtonPage} from "./button-page";
-import {MWC_BUTTON_VARIANT_TYPE} from "../../..";
 import {enumToArray} from "@springtype/core";
+import {MWC_BUTTON_VARIANT_TYPE} from "../../../src/component/mwc-button";
 
 export default (component: ButtonPage) => {
 

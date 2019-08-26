@@ -1,6 +1,6 @@
 import {TextfieldPage} from "./textfield-page";
 import {enumToArray} from "@springtype/core";
-import {MWC_TEXTFIELD_VARIANT_TYPE} from "../../..";
+import {MWC_TEXTFIELD_VARIANT_TYPE} from "../../../src/component/mwc-textfield";
 
 export default (component: TextfieldPage) => {
     const variantValues = enumToArray(MWC_TEXTFIELD_VARIANT_TYPE);
