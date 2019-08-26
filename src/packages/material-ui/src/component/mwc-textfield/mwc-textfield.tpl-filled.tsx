@@ -1,5 +1,5 @@
 import {MwcTextfield} from "./mwc-textfield";
-import {ActiveRenderer} from '../../../../core';
+import {ActiveRenderer} from '@springtype/core';
 import classNames from "classnames";
 
 

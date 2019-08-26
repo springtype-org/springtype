@@ -3,19 +3,19 @@ import {ApplicationContext} from "../ApplicationContext";
 import {InjectionProfile} from "../enum/InjectionProfile";
 import {InjectionReference} from "../type/InjectionReference";
 import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
+import {ArgumentInjectionMetadata} from "../interface/ArgumentInjectionMetadata";
 
 export function resolveInjectionArgumentValue(
-    argumentsInjectionMetaData: ArgumentsInjectionMetadata,
-    index: number,
+    argumentInjectionMetaData: ArgumentInjectionMetadata | undefined,
     isTestComponent: boolean
 ) {
 
     let injectionValue: any;
 
-    if (!argumentsInjectionMetaData.arguments[index]) return;
+    if (!argumentInjectionMetaData) return;
 
     const injectionReference: InjectionReference =
-        argumentsInjectionMetaData.arguments[index].injectionReference;
+        argumentInjectionMetaData.injectionReference;
 
     if (typeof injectionReference !== 'undefined') {
 
@@ -26,8 +26,8 @@ export function resolveInjectionArgumentValue(
                 // it is not a InjectBeanFactory, just use the instance
                 injectionValue = ApplicationContext.getInstance().getBean(
                     injectionReference,
+                    argumentInjectionMetaData,
                     isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
-                    argumentsInjectionMetaData.arguments[index].injectionStrategy,
                 );
 
             } else {

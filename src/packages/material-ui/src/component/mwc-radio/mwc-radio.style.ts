@@ -1,4 +1,4 @@
-import {TypedMediaQueryStyleSheet} from "../../../../core";
+import {TypedMediaQueryStyleSheet} from "@springtype/core";
 import {MwcRadio} from "./mwc-radio";
 
 import '@material/radio/dist/mdc.radio.min.css';

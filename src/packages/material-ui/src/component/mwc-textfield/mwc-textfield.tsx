@@ -1,4 +1,4 @@
-import {WebComponent, OnBeforeFlow, Style, Template, Attribute, EventAttribute} from "../../../../core";
+import {WebComponent, OnBeforeFlow, Style, Template, Attribute, EventAttribute} from "@springtype/core";
 import tpl from "./mwc-textfield.tpl";
 import style from "./mwc-textfield.style";
 import {MDCTextField} from "@material/textfield/component";

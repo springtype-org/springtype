@@ -8,6 +8,7 @@ import {BeanInitializer} from "./interface/BeanInitializer";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 import {ConstructorArgumentInitializerFunction} from "./interface/ConstructorArgumentInitializerFunction";
 import {INJECT_DECORATOR_METADATA_KEY} from "./function/registerBean";
+import {ArgumentInjectionMetadata} from "./interface/ArgumentInjectionMetadata";
 
 const COMPONENT = 'COMPONENT';
 const COMPONENT_CONFIG = 'COMPONENT_CONFIG';
@@ -72,6 +73,17 @@ export class ComponentReflector {
         return Reflect.get(componentCtor, COMPONENT_CONSTRUCTOR_PARAMETER_METADATA);
     }
 
+    static getConstructorArgumentInjectionMetadata(
+        componentCtor: ComponentImpl<any>, index: number
+    ): ArgumentInjectionMetadata | undefined {
+        const constructorArgumentsParameterInjectionMetdata = ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
+        if (constructorArgumentsParameterInjectionMetdata &&
+            constructorArgumentsParameterInjectionMetdata.arguments &&
+            constructorArgumentsParameterInjectionMetdata.arguments[index]) {
+            return constructorArgumentsParameterInjectionMetdata.arguments[index];
+        }
+    }
+
     static setConstructorArgumentsInjectionMetadata(
         targetClassInstanceOrCtor: Function,
         parameterIndex: number,
@@ -80,7 +92,7 @@ export class ComponentReflector {
 
 
         // fetch (probably existing) meta data
-       const parameterInjectionMetaData: ArgumentsInjectionMetadata = Reflect.getOwnMetadata(
+        const parameterInjectionMetaData: ArgumentsInjectionMetadata = Reflect.getOwnMetadata(
             INJECT_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, targetClassInstanceOrCtor.name
         ) || createDefaultArgumentsInjectionMetadata();
 
@@ -110,7 +122,7 @@ export class ComponentReflector {
         // fetch (probably existing) meta data
         const parameterInjectionMetaData: ArgumentsInjectionMetadata = ComponentReflector.getMethodArgumentsInjectionMetadata(
             targetClassInstanceOrCtor, propertyKey
-        ) || createDefaultArgumentsInjectionMetadata();
+        );
 
         // enhance meta data for parameter
         parameterInjectionMetaData.arguments[parameterIndex] = {
@@ -129,7 +141,20 @@ export class ComponentReflector {
     ): ArgumentsInjectionMetadata {
         return Reflect.getOwnMetadata(
             INJECT_DECORATOR_METADATA_KEY, targetClassInstanceOrCtor, propertyKey
-        );
+        ) || createDefaultArgumentsInjectionMetadata();
+    }
+
+    static getMethodArgumentInjectionMetadata(
+        targetClassInstanceOrCtor: Object,
+        propertyKey: string | symbol,
+        index: number
+    ): ArgumentInjectionMetadata | undefined {
+        const methodArgumentInjectionMetadata = ComponentReflector.getMethodArgumentsInjectionMetadata(targetClassInstanceOrCtor,propertyKey);
+        if (methodArgumentInjectionMetadata &&
+            methodArgumentInjectionMetadata.arguments &&
+            methodArgumentInjectionMetadata.arguments[index]) {
+            return methodArgumentInjectionMetadata.arguments[index];
+        }
     }
 
     static getSymbol(targetCtor: ComponentImpl<any>): any {

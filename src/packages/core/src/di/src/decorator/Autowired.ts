@@ -9,10 +9,10 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
     const methodArgumentTypes = ComponentReflector.getMethodArgumentTypes(target, propertyName);
 
     // backup original method
-    const method: Function = <Function> descriptor.value;
+    const method: Function = <Function>descriptor.value;
 
     // we replace the method again, the call the original impl. with injected arguments
-    descriptor.value = function() {
+    descriptor.value = function () {
 
         const cmp = ApplicationContext.getInstance().getComponent(target.constructor);
 
@@ -30,48 +30,40 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
                 target, propertyName
             );
 
-        const newArgs: Array<any> = [];
-
         // 1. Copy initial argument values (non-optionals, default values)
-        for (let i=0; i<arguments.length; i++) {
-            newArgs[i] = arguments[i];
-        }
+        const newArgs: Array<any> = [...argumentsInjectionMetaData.arguments];
 
         // 2. There might be @Inject(...) decorations, process them and inject
-        if (argumentsInjectionMetaData &&
-            argumentsInjectionMetaData.arguments &&
-            argumentsInjectionMetaData.arguments.length) {
 
-            // copy arguments over into new arguments array (because arguments are immutable in modern times ;)
-            for (let i=0; i<argumentsInjectionMetaData.arguments.length; i++) {
+        // copy arguments over into new arguments array (because arguments are immutable in modern times ;)
+        // some index are maybe empty / undefined.
+        for (let i = 0; i < argumentsInjectionMetaData.arguments.length; i++) {
+            // resolve override injection argument
+            const injectionValue = resolveInjectionArgumentValue(argumentsInjectionMetaData.arguments[i], isTestComponent);
 
-                // resolve override injection argument
-                const injectionValue = resolveInjectionArgumentValue(argumentsInjectionMetaData, i, isTestComponent);
+            // conditionally overwrite original call argument for sub-call
+            if (typeof injectionValue !== 'undefined') {
 
-                // conditionally overwrite original call argument for sub-call
-                if (typeof injectionValue !== 'undefined') {
+                newArgs[i] = injectionValue;
 
-                    newArgs[i] = injectionValue;
+            } else if (argumentsInjectionMetaData.arguments[i]) {
 
-                } else if (argumentsInjectionMetaData.arguments[i]) {
+                // parameter has @Inject() decorator, but no explicit value; fallback to default strategy
+                if (methodArgumentTypes[i]) {
 
-                    // parameter has @Inject() decorator, but no explicit value; fallback to default strategy
-                    if (methodArgumentTypes[i]) {
-
-                        // fetch singleton from cache by reflected type
-                        newArgs[i] = ApplicationContext.getInstance().getBean(
-                            methodArgumentTypes[i],
-                            isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
-                            argumentsInjectionMetaData.arguments[i].injectionStrategy
-                        );
-                    }
+                    // fetch singleton from cache by reflected type
+                    newArgs[i] = ApplicationContext.getInstance().getBean(
+                        methodArgumentTypes[i],
+                        argumentsInjectionMetaData.arguments[i],
+                        isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
+                    );
                 }
             }
         }
 
         // 3. For all arguments that are appended optional and are not passed and not injects by @Inject(...)
         //    try to inject them using their type reference
-        for (let i=arguments.length; i<methodArgumentTypes.length; i++) {
+        for (let i = arguments.length; i < methodArgumentTypes.length; i++) {
 
             if (typeof newArgs[i] === 'undefined' &&
                 ComponentReflector.isComponent(methodArgumentTypes[i])) {
@@ -79,6 +71,7 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
 
                 newArgs[i] = ApplicationContext.getInstance().getBean(
                     methodArgumentTypes[i],
+                    undefined,
                     isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT
                 );
             }

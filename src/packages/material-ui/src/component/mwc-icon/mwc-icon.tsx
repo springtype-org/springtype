@@ -1,4 +1,4 @@
-import {WebComponent, Lifecycle, Style, Template, Attribute} from "./../../../../core";
+import {WebComponent, Style, Template, Attribute} from "@springtype/core";
 import tpl from "./mwc-icon.tpl";
 import style from "./mwc-icon.style";
 

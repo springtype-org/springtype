@@ -18,10 +18,9 @@ import {
     LifecycleAfterType,
     LifecycleBeforeType,
     onAfterLifecycle,
-    onBeforeLifecycle, OnLifecycleModel, StLifecycleModel,
+    onBeforeLifecycle,
 } from "./decorateLifecycle";
 import {GUARD_ATTRIBUTE_CHANGE, GUARD_FLOW} from "./guardLifecycle";
-import {MwcButton} from "../../../../../material-ui/src/component/mwc-button";
 import {Lifecycle} from "../..";
 
 const VIRTUAL_DOM = 'VIRTUAL_DOM';

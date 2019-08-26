@@ -1,4 +1,4 @@
-import {TypedMediaQueryStyleSheet} from "../../../../core";
+import {TypedMediaQueryStyleSheet} from "@springtype/core";
 import {MwcTextfield} from "./mwc-textfield";
 
 import '@material/textfield/dist/mdc.textfield.min.css'

@@ -1,9 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template, Attribute, EventAttribute} from "../../../../core";
+import {WebComponent, Style, Template, Attribute, EventAttribute,OnBeforeFlow} from "@springtype/core";
 import tpl from "./mwc-checkbox.tpl";
 import style from "./mwc-checkbox.style";
 import {DEFAULT_MWC_CHECKBOX_CHECKED_TYPE, MWC_CHECKBOX_CHECKED_TYPE} from "./mwc-ceckbox-checked-type";
-import {OnBeforeFlow} from "../../../../core/src/webcomponent/src/decorator/lifecyle/OnBeforeFlow";
-
 
 @WebComponent('mwc-checkbox')
 @Template(tpl)

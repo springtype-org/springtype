@@ -1,5 +1,5 @@
 import {MwcIconButton} from "./mwc-icon-button";
-import {ActiveRenderer} from '../../../../core';
+import {ActiveRenderer} from '@springtype/core';
 import classNames from "classnames";
 
 export default (component: MwcIconButton) => {

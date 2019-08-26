@@ -1,5 +1,5 @@
 import {MwcSnackbar} from "./mwc-snackbar";
-import {ActiveRenderer} from '../../../../core';
+import {ActiveRenderer} from '@springtype/core';
 
 import "@material/snackbar/dist/mdc.snackbar.css";
 

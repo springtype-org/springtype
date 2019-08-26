@@ -1,7 +1,7 @@
 import {MwcCheckbox} from "./mwc-checkbox";
-import {ActiveRenderer, VirtualElement} from '../../../../core';
+import {ActiveRenderer, VirtualElement} from '@springtype/core';
 import classNames from "classnames";
-import {uniqueId} from "../../uniqueId";
+import {uniqueId} from "../uniqueId";
 import {MWC_CHECKBOX_CHECKED_TYPE} from "./mwc-ceckbox-checked-type";
 
 export default (component: MwcCheckbox) => {

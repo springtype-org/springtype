@@ -1,11 +1,11 @@
 import {MwcSwitch} from "./mwc-switch";
-import {ActiveRenderer} from '../../../../core';
+import {ActiveRenderer} from '@springtype/core';
 import classNames from "classnames";
 
 export default (component: MwcSwitch) => {
 
     const inputElement = <input st-inject={{switchElement: MwcSwitch}} type="checkbox" id="basic-switch"
-                                class="mdc-switch__native-control" role="switch"/>;
+                                class="mdc-switch__native-control"/>;
 
     if (component.checked) {
         inputElement.attributes.checked = true;

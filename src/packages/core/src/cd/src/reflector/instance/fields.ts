@@ -1,5 +1,5 @@
 import {ObservedField} from "../prototype/observedField";
-import {getFieldChangeCallbacks} from "../fieldChangeCallbacks";
+import {getOnFieldChangeCallbacks} from "../fieldChangeCallbacks";
 import {FieldChangeCallbackRegistration} from "../../interface/FieldChangeCallbackRegistration";
 
 const ST_FIELD = "ST_FIELD";
@@ -50,7 +50,7 @@ export const initializeField = (instance: any, prototype: any, observedField: Ob
 
 export const executeOnFieldChangeCallbacks = (prototype: any, instance: any, fieldName: string) => {
 
-    const fieldChangeCallbacks: Array<FieldChangeCallbackRegistration> = getFieldChangeCallbacks(prototype);
+    const fieldChangeCallbacks: Array<FieldChangeCallbackRegistration> = getOnFieldChangeCallbacks(prototype);
 
     fieldChangeCallbacks.forEach(
         (fieldChangeCallbackRegistration: FieldChangeCallbackRegistration) => {

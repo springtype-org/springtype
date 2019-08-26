@@ -1,4 +1,4 @@
-import {TypedMediaQueryStyleSheet} from "../../../../core";
+import {TypedMediaQueryStyleSheet} from "@springtype/core";
 import {MwcIcon} from "./mwc-icon";
 
 export default (component: MwcIcon, theme: any): TypedMediaQueryStyleSheet => ({

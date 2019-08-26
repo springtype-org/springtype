@@ -2,8 +2,6 @@ import {ComponentReflector} from "./ComponentReflector";
 import {InjectionProfile} from './enum/InjectionProfile';
 import {InjectionStrategy} from "./enum/InjectionStrategy";
 import {ComponentImpl} from "./interface/ComponentImpl";
-import {resolveInjectionArgumentValue} from "./function/resolveInjectionArgumentValue";
-import {ArgumentsInjectionMetadata} from "./interface/ArgumentsInjectionMetadata";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
 import {ArgumentInjectionMetadata} from "./interface/ArgumentInjectionMetadata";
 import {BeanConfig} from "./interface/BeanConfig";
@@ -117,17 +115,9 @@ export class BeanFactory {
             componentCtor
         );
 
-        const constructorArgumentsParameterInjectionMetdata: ArgumentsInjectionMetadata =
-            ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
-
         // and do the default round-trip to get all instances by type
         const constructorArguments = constructorParameterTypes.map((type, index) => {
-                let injectionMetadata: ArgumentInjectionMetadata | undefined;
-                if (constructorArgumentsParameterInjectionMetdata &&
-                    constructorArgumentsParameterInjectionMetdata.arguments &&
-                    constructorArgumentsParameterInjectionMetdata.arguments[index]) {
-                    injectionMetadata = constructorArgumentsParameterInjectionMetdata.arguments[index];
-                }
+                let injectionMetadata = ComponentReflector.getConstructorArgumentInjectionMetadata(componentCtor,index);
                 return this.getSingleBeanInstance(
                     type,
                     index,

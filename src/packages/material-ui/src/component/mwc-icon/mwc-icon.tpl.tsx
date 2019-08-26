@@ -1,5 +1,5 @@
 import {MwcIcon} from "./mwc-icon";
-import {ActiveRenderer} from '../../../../core';
+import {ActiveRenderer} from '@springtype/core';
 
 export default (component: MwcIcon) =>
     <i class="material-icons">

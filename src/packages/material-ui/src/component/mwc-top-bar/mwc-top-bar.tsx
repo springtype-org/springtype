@@ -1,8 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template, Field} from "../../../../core";
+import {WebComponent, OnBeforeFlow, Style, Template, Field} from "@springtype/core";
 import tpl from "./mwc-top-bar.tpl";
 import style from "./mwc-top-bar.style";
 import {MDCTopAppBar} from '@material/top-app-bar';
-import {OnBeforeFlow} from "../../../../core/src/webcomponent/src/decorator/lifecyle/OnBeforeFlow";
 
 @WebComponent('mwc-top-bar')
 @Template(tpl)

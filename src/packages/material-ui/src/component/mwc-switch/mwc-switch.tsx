@@ -1,8 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template, Attribute, EventAttribute, Field} from "../../../../core";
+import {WebComponent, Style, Template, Attribute, EventAttribute, OnBeforeFlow} from "@springtype/core";
 import tpl from "./mwc-switch.tpl";
 import style from "./mwc-switch.style";
 import {MDCSwitch} from '@material/switch';
-import {OnBeforeFlow} from "../../../../core/src/webcomponent/src/decorator/lifecyle/OnBeforeFlow";
 
 @WebComponent('mwc-switch')
 @Template(tpl)

@@ -1,8 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template} from "../../../../core";
+import {WebComponent, Style, Template,OnBeforeFlow} from "@springtype/core";
 import tpl from "./mwc-snackbar.tpl";
 import style from "./mwc-snackbar.style";
 import {MDCSnackbar} from '@material/snackbar';
-import {OnBeforeFlow} from "../../../../core/src/webcomponent/src/decorator/lifecyle/OnBeforeFlow";
 
 @WebComponent('mwc-snackbar')
 @Template(tpl)

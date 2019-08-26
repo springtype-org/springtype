@@ -1,5 +1,5 @@
 import {MwcRadio} from "./mwc-radio";
-import {ActiveRenderer, VirtualElement} from '../../../../core';
+import {ActiveRenderer, VirtualElement} from '@springtype/core';
 import classNames from "classnames";
 
 export default (component: MwcRadio) => {
