@@ -204,7 +204,7 @@
     "core-js": "3",
     "cross-spawn": "^6.0.5",
     "enquirer": "^2.3.1",
-    "st-cp": "^1.0.0-alpha.1.41",
+    "st-cp": "^1.0.0-alpha.1.45",
     "st-rm-rf": "^1.0.0-alpha.1.39",
     "testcafe": "^1.4.1",
     "tslib": "^1.10.0"
