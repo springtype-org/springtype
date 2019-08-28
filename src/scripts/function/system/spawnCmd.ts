@@ -1,5 +1,5 @@
 import chalk from "chalk";
-const { spawn } = require('child_process');
+const { spawn } = require('cross-spawn');
 
 export function spawnCmd(cmd, args: Array<string> = []): Promise<void> {
 
