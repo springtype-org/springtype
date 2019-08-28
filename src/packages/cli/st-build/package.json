@@ -37,6 +37,7 @@
     "bin": {
         "st-build": "./dist/index.js"
     },
+    "local:main": "src/index.ts",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "author": "Aron Homberg, Michael Mannseicher",
