@@ -1,6 +1,6 @@
 const fs = require('fs');
 const promisify = require('util').promisify;
-const process = require("cross-spawn");
+const spawn = require("cross-spawn");
 const os = require("os");
 
 const fsp = {
@@ -13,13 +13,13 @@ export const removePathOrFile = async (deletePath: string, printError: boolean =
         if (platform === "win32") {
             const stat = await fsp.lstat(deletePath);
             if (stat.isDirectory()) {
-                process.execSync(`rmdir /s /q "${deletePath}"`);
+                spawn.sync(process.env.comspec, ['/c','rmdir','/s', '/q', deletePath], {stdio: 'inherit'});
             } else {
-                process.execSync(`del "${deletePath}"`);
+                spawn.sync(process.env.comspec, ['/c', 'del', deletePath], {stdio: 'inherit'});
             }
             return true;
         } else {
-            process.execSync(`rm -rf "${deletePath}"`);
+            spawn.sync('rm', ['-rf', deletePath], {stdio: 'inherit'});
             return true;
         }
     } catch (err) {
