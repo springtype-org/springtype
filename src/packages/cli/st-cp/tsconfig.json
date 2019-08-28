@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": "../../",
+    "paths": {
+      "@springtype/*": ["./*"]
+    },
     "target": "es5",
     "moduleResolution": "node",
     "module": "commonjs",
