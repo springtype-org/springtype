@@ -27,7 +27,8 @@
         "node": ">=10"
     },
     "bundledDependencies": [
-        "chalk"
+        "chalk",
+        "cross-spawn"
     ],
     "bin": {
         "st-rm-rf": "./dist/cli.js"
@@ -41,7 +42,8 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "chalk": "^2.4.2"
+        "chalk": "^2.4.2",
+        "cross-spawn": "^6.0.5"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",

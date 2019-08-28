@@ -1,6 +1,6 @@
 const fs = require('fs');
 const promisify = require('util').promisify;
-const process = require("child_process");
+const process = require("cross-spawn");
 const os = require("os");
 
 const fsp = {
