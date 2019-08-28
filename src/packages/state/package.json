@@ -17,6 +17,7 @@
         "@rematch/core",
         "@rematch/immer"
     ],
+    "local:main": "src/index.ts",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "repository": {

@@ -41,6 +41,7 @@
     "bin": {
         "st-link-local": "./dist/cli.js"
     },
+    "local:main": "src/index.ts",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "author": "Aron Homberg",

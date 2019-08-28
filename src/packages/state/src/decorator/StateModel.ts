@@ -22,10 +22,13 @@ export function StateModel(modelName: string): any {
         };
 
         const memberMethods = injectableModel.__proto__.prototype;
+        const memberMethodNames = Object.getOwnPropertyNames(memberMethods);
         let effectCount = 0;
         let reducerCount = 0;
 
-        for (const methodName in memberMethods) {
+        for (let i=0; i<memberMethodNames.length; i++) {
+
+            const methodName = memberMethodNames[i];
 
             if (memberMethods.hasOwnProperty(methodName) &&
                 typeof memberMethods[methodName] === 'function') {

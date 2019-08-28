@@ -10,6 +10,7 @@
         "reflect-metadata": "^0.1.12",
         "tslib": "^1.9.3"
     },
+    "local:main": "src/index.ts",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "repository": {

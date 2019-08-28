@@ -13,4 +13,4 @@ export class Index extends HTMLElement implements Lifecycle {
         // use the router for this app
         return <st-router-outlet />;
     }
-}
+} 

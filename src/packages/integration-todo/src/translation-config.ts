@@ -37,7 +37,7 @@ export class AppTranslationConfig {
                 // keep translations in sync: when language changes, tell date-fns to change accordingly
                 localeId = language;
 
-                console.log('on lang change');
+                console.log('Language changed to: ', localeId);
 
             }, 10 /* ms */
         );
