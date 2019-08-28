@@ -1,4 +1,4 @@
-const process = require("cross-spawn");
+const spawn = require("cross-spawn");
 const os = require("os");
 const fs = require('fs');
 const promisify = require('util').promisify;
@@ -13,14 +13,13 @@ export const copyPathOrFile = async (sourcePath: string, destinationPath: string
         if (platform === "win32") {
             const stat = await fsp.lstat(sourcePath);
             if (stat.isDirectory()) {
-                process.execSync(`xcopy "${sourcePath}" "${destinationPath}" /O /X /E /H /K`);
+                spawn.sync('xcopy', [sourcePath, destinationPath, '/O', '/X', '/E', '/H', '/K'], { stdio: 'inherit' });
             } else {
-                process.execSync(`xcopy "${sourcePath}" "${destinationPath}"`);
+                spawn.sync('xcopy', [sourcePath, destinationPath], { stdio: 'inherit' });
             }
-
             return true;
         } else {
-            process.execSync(`cp -rp "${sourcePath}" "${destinationPath}"`);
+            spawn.sync('cp', ['-rp', sourcePath, destinationPath], { stdio: 'inherit' });
             return true;
         }
     } catch (err) {
