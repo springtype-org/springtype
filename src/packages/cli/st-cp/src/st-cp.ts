@@ -1,4 +1,4 @@
-const spawn = require("cross-spawn");
+const childProcess = require("child_process");
 const os = require("os");
 const fs = require('fs');
 const promisify = require('util').promisify;
@@ -12,17 +12,46 @@ export const copyPathOrFile = async (sourcePath: string, destinationPath: string
     try {
         const platform = os.platform();
         if (platform === "win32") {
-            //fix destination path for windows
             destinationPath = path.resolve(process.cwd(), destinationPath);
-            const stat = await fsp.lstat(sourcePath);
-            if (stat.isDirectory()) {
-                spawn.sync(process.env.comspec, ['/c','xcopy', sourcePath, destinationPath, '/I', '/Y', '/E', '/H', '/K'], {stdio: 'inherit'});
+            const statOfSourcePath = await fsp.lstat(sourcePath);
+
+            if (statOfSourcePath.isDirectory()) {
+
+                if (fs.existsSync(destinationPath)) {
+
+                    const statOfDestPath = await fsp.lstat(destinationPath);
+                    if (statOfDestPath.isDirectory()) {
+                        destinationPath += path.sep + path.basename(sourcePath);
+                    }
+                }
+                childProcess.execSync(`(robocopy "${sourcePath}" "${destinationPath}" /MIR /NFL /NDL /NJH /NJS /nc /ns /np) ^& IF %ERRORLEVEL% LEQ 1 exit 0`, {stdio: 'inherit'});
+
             } else {
-                spawn.sync(process.env.comspec, ['/c','xcopy', sourcePath, destinationPath + '*', '/Y'], {stdio: 'inherit'});
+
+                if (!fs.existsSync(path.dirname(destinationPath))) {
+                    fs.mkdirSync(path.dirname(destinationPath), {
+                        recursive: true
+                    });
+                }
+
+                if (fs.existsSync(destinationPath)) {
+
+                    const statOfDestPath = await fsp.lstat(destinationPath);
+
+                    if (statOfDestPath.isDirectory()) {
+                        destinationPath += path.sep + path.basename(sourcePath);
+                        fs.copyFileSync(sourcePath, destinationPath);
+                    } else {
+                        console.error('Destination file already exists (skipping): ', destinationPath);
+                    }
+
+                } else {
+                    fs.copyFileSync(sourcePath, destinationPath);
+                }
             }
             return true;
         } else {
-            spawn.sync('cp', ['-rp', sourcePath, destinationPath], {stdio: 'inherit'});
+            childProcess.execSync('cp', ['-rp', `"${sourcePath}"`, `"${destinationPath}"`], {stdio: 'inherit'});
             return true;
         }
     } catch (err) {
