@@ -1,5 +1,7 @@
 const { fusebox, sparky } = require('fuse-box');
 const { pluginTypeChecker } = require('fuse-box-typechecker');
+const fastify = require('fastify')();
+const path = require('path');
 
 class Context {
 
@@ -48,7 +50,7 @@ class Context {
             devServer: true,
             plugins: [
                 pluginTypeChecker({
-                    basePath: '.',
+                    basePath: './',
                     tsConfig: './tsconfig.json'
                 })
             ]
@@ -56,6 +58,18 @@ class Context {
     }
 }
 const { task } = sparky(Context);
+
+task('serve', async ctx => {
+
+    fastify.register(require('fastify-static'), {
+        root: path.join(__dirname, 'dist')
+    })
+    
+    fastify.listen(3000, (err, address) => {
+        if (err) throw err
+        console.log(`Server listening on ${address}, serving ./dist`);
+    })
+});
 
 task('dist', async ctx => {
     const fuse = ctx.getDistConfig();
