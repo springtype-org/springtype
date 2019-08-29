@@ -10,7 +10,7 @@ export const style = (): TemplateStringStyleSheet => ({
           padding-left: 20px;
           padding-right: 20px;
     `,
-
+ 
     '.todo-item:hover': {
         'background-color': '#ccc'
     },

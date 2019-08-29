@@ -1,4 +1,3 @@
-
 import {WebComponent, Lifecycle, ActiveRenderer} from "@springtype/core";
 import {AppTranslationConfig} from "./translation-config";
 

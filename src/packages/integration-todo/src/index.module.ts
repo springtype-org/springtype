@@ -4,6 +4,7 @@ import "materialize-css";
 // CSS import
 import "./index.scss";
 
+/*
 // HACK to reload the page on HMR entry reload without plugins ;)
 const originalInfo = console.info;
 console.info = (...args: Array<any>) => {
@@ -13,6 +14,7 @@ console.info = (...args: Array<any>) => {
     }
     originalInfo(...args);
 };
+*/
 
 import {Module} from "@springtype/core";
 import {AppLayout} from "./element/layout/AppLayout";
