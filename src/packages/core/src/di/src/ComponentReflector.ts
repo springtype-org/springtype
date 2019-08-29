@@ -76,11 +76,11 @@ export class ComponentReflector {
     static getConstructorArgumentInjectionMetadata(
         componentCtor: ComponentImpl<any>, index: number
     ): ArgumentInjectionMetadata | undefined {
-        const constructorArgumentsParameterInjectionMetdata = ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
-        if (constructorArgumentsParameterInjectionMetdata &&
-            constructorArgumentsParameterInjectionMetdata.arguments &&
-            constructorArgumentsParameterInjectionMetdata.arguments[index]) {
-            return constructorArgumentsParameterInjectionMetdata.arguments[index];
+        const constructorArgumentsParameterInjectionMetadata = ComponentReflector.getConstructorArgumentsInjectionMetadata(componentCtor);
+        if (constructorArgumentsParameterInjectionMetadata &&
+            constructorArgumentsParameterInjectionMetadata.arguments &&
+            constructorArgumentsParameterInjectionMetadata.arguments[index]) {
+            return constructorArgumentsParameterInjectionMetadata.arguments[index];
         }
     }
 
@@ -196,6 +196,7 @@ export class ComponentReflector {
         initializer: ConstructorArgumentInitializerFunction,
         argumentIndex: number
     ): void {
+
         const initializers = ComponentReflector.getConstructorArgumentInitializers(targetCtor);
         initializers.push({
             initializer,

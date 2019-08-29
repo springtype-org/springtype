@@ -56,8 +56,7 @@ export class MwcTextfield extends HTMLElement {
     @OnAfterFlow(true)
     onBeforeFlow() {
         const textField = this.querySelector('.mdc-text-field');
-        debugger;
-            console.log('in',this.mwcInstance)
+            console.log('i222n',this.mwcInstance)
         if (textField) {
 
             this.mwcInstance = new MDCTextField(textField);

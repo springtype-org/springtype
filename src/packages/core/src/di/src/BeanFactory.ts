@@ -149,12 +149,9 @@ export class BeanFactory {
         forComponentCtor: T,
         injectionMetaData?: ArgumentInjectionMetadata,
         injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
-    ): ComponentImpl<any> | undefined {
+    ): ComponentImpl<any> {
 
         const componentCtor = this.getComponent(type);
-        if (!componentCtor) {
-            return;
-        }
 
         // the component to inject (componentCtor) matches the component to inject in (forComponentCtor)
         let resultingBean;
@@ -162,6 +159,7 @@ export class BeanFactory {
 
             resultingBean = BeanFactory.solveCyclicDependency(componentCtor)
         } else if (!componentCtor) {
+
             // bean unresolvable -> inject undefined
             resultingBean = BeanFactory.solveUnresolvableBean(type)
         } else {
@@ -169,7 +167,6 @@ export class BeanFactory {
             const singletonBeanInstanceFromRegistry = this.getSingletonBeanInstance(
                 ComponentReflector.getSymbol(componentCtor)
             );
-
 
             if (singletonBeanInstanceFromRegistry) {
                 resultingBean = singletonBeanInstanceFromRegistry
