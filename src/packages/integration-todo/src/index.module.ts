@@ -4,18 +4,6 @@ import "materialize-css";
 // CSS import
 import "./index.scss";
 
-/*
-// HACK to reload the page on HMR entry reload without plugins ;)
-const originalInfo = console.info;
-console.info = (...args: Array<any>) => {
-
-    if (args[0].indexOf('entry reload of') > -1) {
-        document.location.reload();
-    }
-    originalInfo(...args);
-};
-*/
-
 import {Module} from "@springtype/core";
 import {AppLayout} from "./element/layout/AppLayout";
 import {ListInnerPartial} from "./element/list/ListInnerPartial";
