@@ -43,7 +43,7 @@
     },
     "homepage": "https://springtype.org",
     "dependencies": {
-        "@springtype/core": "../core/dist"
+        "@springtype/core": "../../core/dist"
     },
     "devDependencies": {
         "@types/node": "^11.13.7",

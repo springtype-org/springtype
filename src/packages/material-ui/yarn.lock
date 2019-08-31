@@ -424,17 +424,21 @@
   dependencies:
     "@material/feature-targeting" "^3.1.0"
 
-"@springtype/core@../core/dist":
+"@springtype/core@^1.0.0-alpha.1.38", "@springtype/core@latest":
   version "1.0.0-alpha.1.38"
+  resolved "https://registry.yarnpkg.com/@springtype/core/-/core-1.0.0-alpha.1.38.tgz#87b4bac172278500872e01ba913167bc20f6db33"
+  integrity sha512-iHN0sO3d2uem2oXpvrzCNZW6PuBtpP3IsMRe4ERrio9W63XlpTGHLQt9wqaNcEnc6DBdj0Okiv8QEfNYcccdWw==
   dependencies:
     "@types/node" "^11.13.4"
     reflect-metadata "^0.1.12"
     tslib "^1.9.3"
 
-"@springtype/router@../router/dist":
+"@springtype/router@latest":
   version "1.0.0-alpha.1.38"
+  resolved "https://registry.yarnpkg.com/@springtype/router/-/router-1.0.0-alpha.1.38.tgz#24a5d6ce0aca9c10bae7efbb89c855c679936807"
+  integrity sha512-UHBzh6ryN1seugYSOlu+0Oxg+OUQuaEaicaotIgdYGp6eqq747wEN9ynSp0ZYOk0xZ6DjHYBeGudroaUtxAzog==
   dependencies:
-    "@springtype/core" "../core/dist"
+    "@springtype/core" "^1.0.0-alpha.1.38"
     "@types/node" "^11.10.5"
     reflect-metadata "^0.1.12"
     tslib "^1.9.3"
@@ -464,7 +468,7 @@ tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
-typescript@^3.3.4000:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
-  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
+typescript@^3.5.3:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.2.tgz#105b0f1934119dde543ac8eb71af3a91009efe54"
+  integrity sha512-lmQ4L+J6mnu3xweP8+rOrUwzmN+MRAj7TgtJtDaXE5PMyX2kCrklhg3rvOsOIfNeAWMQWO2F1GPc1kMD2vLAfw==
