@@ -9,3 +9,4 @@ export * from "./src/AbstractWeakMapReflector";
 export * from "./src/enum/InjectionProfile";
 export * from "./src/enum/InjectionStrategy";
 export * from "./src/decorator/Module";
+export * from "./src/interface/Injectable";

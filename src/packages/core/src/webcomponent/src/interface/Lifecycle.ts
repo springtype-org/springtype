@@ -3,16 +3,16 @@ import {VirtualElement} from "../../../virtualdom";
 export interface Lifecycle  {
 
     //https://developer.mozilla.org/de/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks
-    doConnect(): void;
+    doConnect?(): void;
 
     onBeforeDisconnect?(): boolean|void;
     disconnect?(): void;
     onDisconnect?(): void;
 
-    render(): VirtualElement|Array<VirtualElement>|string;
+    render?(): VirtualElement|Array<VirtualElement>|string;
 
     flow?(initial?: boolean): Promise<void>;
-    doFlow(): void;
+    doFlow?(): void;
     onFlow?(initial?: boolean): void;
 
     // native web component callbacks

@@ -4,6 +4,10 @@ import "materialize-css";
 // CSS import
 import "./index.scss";
 
+import { applyPolyfill } from "custom-elements-hmr-polyfill";
+
+applyPolyfill();
+
 // HACK to reload the page on HMR entry reload without plugins ;)
 const originalInfo = console.info;
 console.info = (...args: Array<any>) => {

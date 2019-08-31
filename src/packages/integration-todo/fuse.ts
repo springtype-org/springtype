@@ -41,6 +41,7 @@ class Context {
             },
             cache: {
                 root: '.cache',
+                FTL: true,
                 enabled: true
             },
             watch: { ignored: ['dist', 'dev'] },
