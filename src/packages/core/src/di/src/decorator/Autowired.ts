@@ -1,6 +1,5 @@
 import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";
-import {InjectionProfile} from "../enum/InjectionProfile";
 import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
 import {resolveInjectionArgumentValue} from "../function/resolveInjectionArgumentValue";
 
@@ -39,7 +38,7 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
         // some index are maybe empty / undefined.
         for (let i = 0; i < argumentsInjectionMetaData.arguments.length; i++) {
             // resolve override injection argument
-            const injectionValue = resolveInjectionArgumentValue(argumentsInjectionMetaData.arguments[i], isTestComponent);
+            const injectionValue = resolveInjectionArgumentValue(argumentsInjectionMetaData.arguments[i]);
 
             // conditionally overwrite original call argument for sub-call
             if (typeof injectionValue !== 'undefined') {
@@ -54,8 +53,7 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
                     // fetch singleton from cache by reflected type
                     newArgs[i] = ApplicationContext.getInstance().getBean(
                         methodArgumentTypes[i],
-                        argumentsInjectionMetaData.arguments[i],
-                        isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
+                        argumentsInjectionMetaData.arguments[i]
                     );
                 }
             }
@@ -70,10 +68,7 @@ export function Autowired(target: any, propertyName: string, descriptor: TypedPr
 
 
                 newArgs[i] = ApplicationContext.getInstance().getBean(
-                    methodArgumentTypes[i],
-                    undefined,
-                    isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT
-                );
+                    methodArgumentTypes[i]);
             }
         }
         return method.apply(this, newArgs);

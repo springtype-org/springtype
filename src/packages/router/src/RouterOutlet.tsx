@@ -1,13 +1,14 @@
 import {ActiveRoute} from "./ActiveRoute";
 import {
-    OnBeforeFlow,
     WebComponent,
     ErrorMessage,
     getRenderer,
     Partial,
     Use,
     VirtualElement,
-    ActiveRenderer, Field,
+    ActiveRenderer,
+    Attribute,
+    OnBeforeFlow
 } from "@springtype/core";
 
 import {LocationChangeDecision} from "./interface/LocationChangeDecision";
@@ -18,8 +19,8 @@ export class RouterOutlet extends HTMLElement {
 
     locationChangeDecision: LocationChangeDecision;
 
-    @Field
-    element: VirtualElement|null;
+    @Attribute
+    element: VirtualElement | null;
 
     constructor(protected activeRoute: ActiveRoute) {
 

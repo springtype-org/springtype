@@ -1,35 +1,23 @@
-import {ComponentReflector} from "../../../di";
-import {getObservedFields, setObservedFields} from "../reflector/prototype/observedField";
-import {initializeField} from "../reflector/instance/fields";
-import {decorateFieldChange} from "../function/decorateFieldChange";
+import {registerForChangeDetection} from "../function/registerForChangeDetection";
+import {FieldChangeCallbackRegistration} from "../interface/FieldChangeCallbackRegistration";
+import {getOnFieldChangeCallbacks} from "../reflector/fieldChangeCallbacks";
 
 export function Field(
     webComponentInstance: any,
     fieldName: string | symbol
 ): any {
 
-    const setup = (webComponentInstance: any, fieldName: string | symbol) => {
-        const observedFields = getObservedFields(webComponentInstance.constructor);
+    registerForChangeDetection(webComponentInstance.constructor, fieldName, false,
+        (props: any, propName: string|number|symbol, value: any, instance: any) => {
 
-        observedFields.push({name: fieldName!});
+        const onFieldChangeCallbacks: Array<FieldChangeCallbackRegistration> =
+            getOnFieldChangeCallbacks(webComponentInstance.constructor);
 
-        setObservedFields(webComponentInstance.constructor, observedFields);
+        onFieldChangeCallbacks.forEach((onFieldChangeCallbackRegistration: FieldChangeCallbackRegistration) => {
 
-        ComponentReflector.addInitializer(webComponentInstance.constructor, (instance: any) => {
-
-            initializeField(instance, webComponentInstance.constructor, observedFields);
-
-            decorateFieldChange(instance, webComponentInstance.constructor, observedFields);
-        });
-
-    };
-
-    if (webComponentInstance instanceof HTMLElement) {
-        setup(webComponentInstance, fieldName);
-    } else {
-
-        return (webComponentInstance: any, fieldName: string | symbol) => {
-            setup(webComponentInstance, fieldName);
-        };
+            if (fieldName === onFieldChangeCallbackRegistration.fieldName) {
+                instance[onFieldChangeCallbackRegistration.methodName](propName, value);
     }
+        })
+    });
 }

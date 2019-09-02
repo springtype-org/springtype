@@ -121,9 +121,7 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
         }
 
         doFlow() {
-
             const virtualElements: Array<VirtualElement> = this.render();
-
             if (virtualElements) {
 
                 const root = getShadowForComponent(CustomWebComponent) ?
@@ -176,7 +174,6 @@ export const createWebComponentClass = (tagName: string, injectableWebComponent:
         }
 
         flowOnAttributeChange(attributeName: string, oldValue: any, newValue: any) {
-
             if (this.shouldFlowOnAttributeChange(attributeName, oldValue, newValue)) {
                 this.flow();
             }

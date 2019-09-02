@@ -1,13 +1,10 @@
 import {ComponentReflector} from "../ComponentReflector";
 import {ApplicationContext} from "../ApplicationContext";
-import {InjectionProfile} from "../enum/InjectionProfile";
 import {InjectionReference} from "../type/InjectionReference";
-import {ArgumentsInjectionMetadata} from "../interface/ArgumentsInjectionMetadata";
 import {ArgumentInjectionMetadata} from "../interface/ArgumentInjectionMetadata";
 
 export function resolveInjectionArgumentValue(
-    argumentInjectionMetaData: ArgumentInjectionMetadata | undefined,
-    isTestComponent: boolean
+    argumentInjectionMetaData: ArgumentInjectionMetadata | undefined
 ) {
 
     let injectionValue: any;
@@ -26,8 +23,7 @@ export function resolveInjectionArgumentValue(
                 // it is not a InjectBeanFactory, just use the instance
                 injectionValue = ApplicationContext.getInstance().getBean(
                     injectionReference,
-                    argumentInjectionMetaData,
-                    isTestComponent ? InjectionProfile.TEST : InjectionProfile.DEFAULT,
+                    argumentInjectionMetaData
                 );
 
             } else {

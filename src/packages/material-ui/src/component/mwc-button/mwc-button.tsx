@@ -4,7 +4,7 @@ import {
     Template,
     Attribute,
     ActiveLifecycle,
-    OnBeforeFlow
+    OnAfterFlow
 } from "@springtype/core";
 import tpl from "./mwc-button.tpl";
 import style from "./mwc-button.style";
@@ -47,7 +47,7 @@ export class MwcButton extends HTMLElement {
         super();
     }
 
-    @OnBeforeFlow(true)
+    @OnAfterFlow(true)
     onBeforeFlow() {
         if (this.button) {
             this.rippleInstance = new MDCRipple(this.button);

@@ -242,7 +242,7 @@ export class VirtualDOMMutator {
 
         // optimization: If freshly created, all children are already perfectly rendered
         // so no need to walk through all child nodes
-        if ((!created && !replaced) && !isWebComponent(virtualElement.name)) {
+        if (!created && !replaced) {
             // parent elements must be both existing
             if (domElement && virtualElement &&
 

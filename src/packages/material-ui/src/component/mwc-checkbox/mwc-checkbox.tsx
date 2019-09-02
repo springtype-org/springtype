@@ -1,4 +1,4 @@
-import {WebComponent, Style, Template, Attribute, EventAttribute,OnBeforeFlow} from "@springtype/core";
+import {WebComponent, Style, Template, Attribute, EventAttribute, OnAfterFlow} from "@springtype/core";
 import tpl from "./mwc-checkbox.tpl";
 import style from "./mwc-checkbox.style";
 import {DEFAULT_MWC_CHECKBOX_CHECKED_TYPE, MWC_CHECKBOX_CHECKED_TYPE} from "./mwc-ceckbox-checked-type";
@@ -30,7 +30,7 @@ export class MwcCheckbox extends HTMLElement {
         super();
 
     }
-    @OnBeforeFlow(true)
+    @OnAfterFlow(true)
     onBeforeFlow() {
         if (this.checked === 'indeterminate') {
             this.checkbox.indeterminate = true;

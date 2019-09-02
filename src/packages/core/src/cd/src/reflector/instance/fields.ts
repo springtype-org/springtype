@@ -56,7 +56,7 @@ export const executeOnFieldChangeCallbacks = (prototype: any, instance: any, fie
         (fieldChangeCallbackRegistration: FieldChangeCallbackRegistration) => {
 
             if (fieldChangeCallbackRegistration.fieldName === fieldName) {
-                instance[fieldChangeCallbackRegistration.methodName]();
+                instance[fieldChangeCallbackRegistration.methodName](fieldName, instance[fieldName]);
             }
         });
 };

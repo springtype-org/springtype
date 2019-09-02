@@ -17,6 +17,7 @@ const COMPONENT_INITIALIZERS = 'COMPONENT_INITIALIZERS';
 const COMPONENT_IS_MOCK_FLAG = 'COMPONENT_IS_MOCK_FLAG';
 const COMPONENT_NAME = 'COMPONENT_NAME';
 const CONSTRUCTOR_ARGUMENT_INITIALIZERS = 'CONSTRUCTOR_ARGUMENT_INITIALIZERS';
+const RESOLVED_CONSTRUCTOR_ARGUMENTS = 'RESOLVED_CONSTRUCTOR_ARGUMENTS';
 
 /**
  * This class uses the Reflect.metadata standard API (polyfilled)
@@ -167,6 +168,15 @@ export class ComponentReflector {
 
     static getConfig(targetCtor: ComponentImpl<any>): BeanConfig<ComponentImpl<any>> {
         return Reflect.get(targetCtor, COMPONENT_CONFIG);
+    }
+
+    /* When constructor arguments (injections) are resolved, the result is cached for later use */
+    static setResolvedConstructorArguments(targetCtor: ComponentImpl<any>, constructorArguments: Array<ComponentImpl<any>>): void {
+        Reflect.set(targetCtor, RESOLVED_CONSTRUCTOR_ARGUMENTS, constructorArguments);
+    }
+
+    static getResolvedConstructorArguments(targetCtor: ComponentImpl<any>): Array<ComponentImpl<any>> {
+        return Reflect.get(targetCtor, RESOLVED_CONSTRUCTOR_ARGUMENTS);
     }
 
     static isComponent(componentCtor: ComponentImpl<any>): boolean {

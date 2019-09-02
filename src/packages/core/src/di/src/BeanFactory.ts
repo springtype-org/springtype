@@ -1,5 +1,4 @@
 import {ComponentReflector} from "./ComponentReflector";
-import {InjectionProfile} from './enum/InjectionProfile';
 import {InjectionStrategy} from "./enum/InjectionStrategy";
 import {ComponentImpl} from "./interface/ComponentImpl";
 import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
@@ -15,8 +14,7 @@ export class BeanFactory {
 
     getBean<T extends ComponentImpl<any>>(
         componentCtor: T,
-        injectionMetaData?: ArgumentInjectionMetadata,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT): any {
+        injectionMetaData?: ArgumentInjectionMetadata): any {
 
         const originalCtor = componentCtor;
 
@@ -38,17 +36,7 @@ export class BeanFactory {
         const classSymbol = ComponentReflector.getSymbol(componentCtor);
         const beanConfig = ComponentReflector.getConfig(componentCtor);
 
-       const injectionStrategy = BeanFactory.getInjectionStrategy(beanConfig, injectionMetaData);
-
-        if (injectionProfile === InjectionProfile.TEST &&
-            beanConfig &&
-            beanConfig.mockedBy &&
-            ComponentReflector.isComponent(beanConfig.mockedBy)) {
-
-            componentCtor = this.getComponent(beanConfig.mockedBy);
-
-            ComponentReflector.setIsMockComponent(componentCtor);
-        }
+        const injectionStrategy = BeanFactory.getInjectionStrategy(beanConfig, injectionMetaData);
 
         // only in case of singleton instance retrieval,
         // try to fetch from cache, otherwise directly head to new instance creation
@@ -62,11 +50,10 @@ export class BeanFactory {
         }
 
         let beanInstance = new componentCtor(
-            ...this.resolveConstructorArguments(componentCtor, injectionProfile)
+            ...this.resolveConstructorArguments(componentCtor)
         );
 
         // injectionStrategy === InjectionStrategy.FACTORY || singleton instance not found
-
         this.initializeBeanInstance(beanInstance, ComponentReflector.getInitializers(componentCtor));
 
         if (injectionStrategy === InjectionStrategy.SINGLETON) {
@@ -104,11 +91,15 @@ export class BeanFactory {
     }
 
     resolveConstructorArguments<T extends ComponentImpl<any>>(
-        componentCtor: T,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT,
+        componentCtor: T
     ): Array<any> {
-
         componentCtor = this.getComponent(componentCtor);
+
+        const cachedConstructorArguments = ComponentReflector.getResolvedConstructorArguments(componentCtor);
+
+        if (cachedConstructorArguments) {
+            return cachedConstructorArguments;
+        }
 
         // fetch constructor parameter types from reflection metadata
         const constructorParameterTypes: Array<ComponentImpl<any>> = ComponentReflector.getConstructorArgumentTypes(
@@ -117,14 +108,13 @@ export class BeanFactory {
 
         // and do the default round-trip to get all instances by type
         const constructorArguments = constructorParameterTypes.map((type, index) => {
-                let injectionMetadata = ComponentReflector.getConstructorArgumentInjectionMetadata(componentCtor,index);
-                return this.getSingleBeanInstance(
+                let injectionMetadata = ComponentReflector.getConstructorArgumentInjectionMetadata(componentCtor, index);
+                return  this.getSingleBeanInstance(
                     type,
                     index,
                     componentCtor,
-                    injectionMetadata,
-                    injectionProfile
-                )
+                    injectionMetadata
+                );
             }
         );
 
@@ -140,6 +130,9 @@ export class BeanFactory {
             });
         }
 
+        // cache
+        ComponentReflector.setResolvedConstructorArguments(componentCtor, constructorArguments);
+
         return constructorArguments;
     }
 
@@ -147,8 +140,7 @@ export class BeanFactory {
         type: ComponentImpl<any>,
         index: number,
         forComponentCtor: T,
-        injectionMetaData?: ArgumentInjectionMetadata,
-        injectionProfile: InjectionProfile = InjectionProfile.DEFAULT
+        injectionMetaData?: ArgumentInjectionMetadata
     ): ComponentImpl<any> {
 
         const componentCtor = this.getComponent(type);
@@ -172,7 +164,7 @@ export class BeanFactory {
                 resultingBean = singletonBeanInstanceFromRegistry
             } else {
                 // follow down the rabbit hole
-                resultingBean = this.getBean(componentCtor, injectionMetaData, injectionProfile)
+                resultingBean = this.getBean(componentCtor, injectionMetaData)
             }
 
         }
@@ -187,6 +179,7 @@ export class BeanFactory {
         if (beanConfig && beanConfig.injectionStrategy) {
             return beanConfig.injectionStrategy;
         }
+        return InjectionStrategy.SINGLETON;
     }
 
     static solveUnresolvableBean<T extends ComponentImpl<any>>(
