@@ -1,10 +1,6 @@
-// import es5 adapter for backward-compatibility
-import {polyfillCustomElementsAPI} from "../polyfill/polyfillCustomElementsAPI";
 import {WebComponentImpl} from "./../interface/WebComponentImpl";
 import {decorateWebComponent} from "../function/decorateWebComponent";
 import {error} from '../../../logger';
-
-polyfillCustomElementsAPI();
 
 export function WebComponent<WC extends WebComponentImpl<any>>(tagName: string): any {
     
