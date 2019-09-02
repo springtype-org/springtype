@@ -1,3 +1,10 @@
+import { applyPolyfill, ReflowStrategy, rerenderInnerHTML } from "custom-elements-hmr-polyfill";
+
+applyPolyfill(ReflowStrategy.RERENDER_INNER_HTML, 250, () => {
+
+    rerenderInnerHTML();  
+});
+ 
 // materialize JS import
 import "materialize-css";
 
