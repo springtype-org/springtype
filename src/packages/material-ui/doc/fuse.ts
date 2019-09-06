@@ -21,9 +21,7 @@ class Context {
                 include: ['tslib']
             },
             cache: {
-                root: '.cache',
-                FTL: true,
-                enabled: true
+                FTL: true
             },
             watch: { ignored: ['dist', 'dev'] },
             hmr: true,
