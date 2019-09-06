@@ -5,25 +5,28 @@ import {WebComponentReflector} from "../WebComponentReflector";
 import {installInitialMutationObserver} from "./installInitialMutationObserver";
 
 export const decorateWebComponent = (tagName: string, webComponent: ComponentImpl<any>) => {
-    
-    // @Component by default
-    const injectableWebComponent = Component(webComponent);
-    const CustomWebComponent = createWebComponentClass(tagName, injectableWebComponent);
+
+    let CustomWebComponent;
     const registeredCustomWebComponent = window.customElements.get(tagName);
 
     if (!registeredCustomWebComponent) {
 
+        // @Component by default
+        const injectableWebComponent = Component(webComponent);
+        CustomWebComponent = createWebComponentClass(tagName, injectableWebComponent);
         // register custom element
         window.customElements.define(tagName, CustomWebComponent);
 
         WebComponentReflector.setTagName(<any>CustomWebComponent, tagName);
 
         WebComponentReflector.registerByTagName(tagName, CustomWebComponent);
+
+        ComponentReflector.addInitializer(CustomWebComponent, (instance: any) => {
+            installInitialMutationObserver(instance, tagName);
+        });
+
+    } else {
+        CustomWebComponent = WebComponentReflector.getByTagName(tagName);
     }
-
-    ComponentReflector.addInitializer(CustomWebComponent, (instance: any) => {
-        installInitialMutationObserver(instance, tagName);
-    });
-
     return CustomWebComponent;
 };

@@ -25,8 +25,8 @@ export class TodoListPage extends HTMLElement implements Lifecycle {
         protected todoModel: TodoModel,
         public textInputEl: HTMLInputElement
     ) {
-        super();
-
+        super();   
+  
         console.log('textInputEl', this.textInputEl);
     }
 
