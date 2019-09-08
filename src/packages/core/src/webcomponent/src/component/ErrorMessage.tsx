@@ -1,6 +1,5 @@
 import {WebComponent} from "../decorator/WebComponent";
 import {Attribute} from "../decorator/Attribute";
-import {Lifecycle} from "../..";
 import {Style} from "../decorator/Style";
 import {VirtualElement} from "../../../virtualdom";
 import {Partial} from "../../../lang";
@@ -12,14 +11,17 @@ import {ActiveRenderer} from "../../../renderer";
         color: '#ff0000'
     }
 }))
-export class ErrorMessage extends HTMLElement implements Lifecycle {
+export class ErrorMessage extends HTMLElement {
 
     @Attribute
     message: string = "Unknown error.";
 
+
     render() {
         return <p>{ this.message }</p> as VirtualElement;
     }
+
+
 }
 
 declare global {

@@ -1,27 +1,18 @@
 import {VirtualElement} from "../../../virtualdom";
 
-export interface Lifecycle extends HTMLElement {
+export interface Lifecycle  {
 
-    onBeforeConnect?(): boolean|void;
-    connect?(): void;
+    //https://developer.mozilla.org/de/docs/Web/Web_Components/Using_custom_elements#Using_the_lifecycle_callbacks
     doConnect?(): void;
-    onConnect?(): void;
 
     onBeforeDisconnect?(): boolean|void;
     disconnect?(): void;
     onDisconnect?(): void;
 
-    onBeforeMount?(): boolean|void;
-    mount?(): void;
-    onMount?(): void;
-
-    onBeforeRender?(): boolean|void;
     render?(): VirtualElement|Array<VirtualElement>|string;
-    onRender?(elementsRendered: Array<VirtualElement>): void;
 
-    onBeforeFlow?(initial?: boolean): boolean|void;
-    flow?(initial?: boolean, children?: Array<VirtualElement|string>): Promise<void>;
-    doFlow?(children?: Array<VirtualElement|string>): void;
+    flow?(initial?: boolean): Promise<void>;
+    doFlow?(): void;
     onFlow?(initial?: boolean): void;
 
     // native web component callbacks

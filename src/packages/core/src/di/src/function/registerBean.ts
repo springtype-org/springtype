@@ -15,7 +15,6 @@ export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, bea
     const parameterInjectionMetaData: ArgumentsInjectionMetadata = Reflect.getOwnMetadata(
         INJECT_DECORATOR_METADATA_KEY, componentCtor, componentCtor.name
     );
-
     ComponentReflector.register(componentCtor, parameterInjectionMetaData, beanConfig);
 
     // a generic intermediate class is conjured, inheriting the class
@@ -25,7 +24,15 @@ export function registerBean<T extends ComponentImpl<any>>(componentCtor: T, bea
     // and is capable of even handling @Inject decorators in it constructor arguments (wohoo)
     const InjectionClassProxy = class extends componentCtor {
         constructor(...args: Array<any>) {
-            super(...ApplicationContext.getInstance().resolveConstructorArguments(componentCtor));
+            const resolveConstructorArguments = ApplicationContext.getInstance().resolveConstructorArguments(componentCtor);
+
+            super(...resolveConstructorArguments);
+
+            resolveConstructorArguments.forEach((injectedValue) => {
+                if (injectedValue && injectedValue.onInject && typeof injectedValue.onInject === 'function') {
+                    injectedValue.onInject(this);
+                }
+            });
         }
     };
 

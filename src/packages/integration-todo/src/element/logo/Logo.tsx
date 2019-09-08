@@ -23,7 +23,6 @@ import template from "./Logo.tpl";
     }
 }))
 export class Logo extends HTMLElement {
- 
     @EventAttribute
     onclick = (evt: Event) => {
     };

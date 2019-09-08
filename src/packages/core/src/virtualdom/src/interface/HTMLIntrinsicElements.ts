@@ -10,6 +10,9 @@ export interface HTMLVirtualElementAttributes<T> extends VirtualElementAttribute
     classList: Array<string>;
     children: Array<T>;
 
+    //unknown
+    role: string|number|boolean;
+
     height: string|number|boolean;
     files: Array<string|number|boolean>;
     checked: string|number|boolean;

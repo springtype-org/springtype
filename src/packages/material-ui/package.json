@@ -1,41 +1,52 @@
 {
-    "name": "@springtype/material-ui",
-    "version": "1.0.0-alpha.1.38",
-    "publishConfig": {
-        "access": "public"
-    },
-    "description": "Material UI for SpringType.",
-    "dependencies": {
-        "@material/ripple": "^1.1.0",
-        "@springtype/core": "file:../core/dist",
-        "@types/classnames": "^2.2.7",
-        "@types/node": "^11.10.5",
-        "classnames": "^2.2.6",
-        "reflect-metadata": "^0.1.12",
-        "tslib": "^1.9.3"
-    },
-    "local:main": "src/index.ts",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/springtype-org/springtype.git"
-    },
-    "scripts": {
-        "bootstrap": "npm run bootstrap:material-ui --prefix ../../",
-        "clean:all": "npm run clean:material-ui --prefix ../../",
-        "clean": "npm run clean:material-ui --prefix ../../",
-        "build": "npm run build:material-ui --prefix ../../",
-        "watch": "npm run watch:material-ui --prefix ../../",
-        "release": "npm run release:material-ui --prefix ../../",
-        "test": "npm run test:material-ui --prefix ../../"
-    },
-    "author": "Michael Mannseicher, Aron Homberg",
-    "license": "MIT",
-    "devDependencies": {
-        "typescript": "^3.3.4000"
-    },
-    "browserslist": [
-        "last 1 Chrome version"
-    ]
+  "name": "@springtype/material-ui",
+  "version": "1.0.0-alpha.1.38",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Material UI for SpringType.",
+  "dependencies": {
+    "@material/button": "^2.3.0",
+    "@material/card": "^2.3.0",
+    "@material/checkbox": "^2.3.0",
+    "@material/form-field": "^2.3.0",
+    "@material/icon-button": "^2.3.0",
+    "@material/radio": "^2.3.0",
+    "@material/ripple": "^2.3.0",
+    "@material/select": "^2.3.1",
+    "@material/slider": "^3.1.0",
+    "@material/snackbar": "^3.1.0",
+    "@material/switch": "^2.3.0",
+    "@material/textfield": "^2.3.1",
+    "@material/top-app-bar": "^3.1.0",
+    "@springtype/core": "latest",
+    "@springtype/router": "latest",
+    "@types/classnames": "^2.2.7",
+    "@types/node": "^11.10.5",
+    "classnames": "^2.2.6"
+  },
+  "local:main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtype-org/springtype.git"
+  },
+  "scripts": {
+    "bootstrap": "npm run bootstrap:material-ui --prefix ../../",
+    "clean:all": "npm run clean:material-ui --prefix ../../",
+    "clean": "npm run clean:material-ui --prefix ../../",
+    "build": "npm run build:material-ui --prefix ../../",
+    "watch": "npm run watch:material-ui --prefix ../../",
+    "release": "npm run release:material-ui --prefix ../../",
+    "test": "npm run test:material-ui --prefix ../../"
+  },
+  "author": "Michael Mannseicher, Aron Homberg",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.5.3"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
 }

@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import {testSelectors} from "../src/test-selectors";
 
 fixture `Todo MVC`
-    .page `http://localhost:8080`;
+    .page `http://localhost:4444`;
 
 
 test('add a todo', async t => {

@@ -1,4 +1,4 @@
-import {WebComponentImpl} from "./../interface/WebComponentImpl";
+import {WebComponentImpl} from "../interface/WebComponentImpl";
 import {decorateWebComponent} from "../function/decorateWebComponent";
 import {error} from '../../../logger';
 

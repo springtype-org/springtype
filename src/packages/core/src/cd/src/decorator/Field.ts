@@ -17,7 +17,7 @@ export function Field(
 
             if (fieldName === onFieldChangeCallbackRegistration.fieldName) {
                 instance[onFieldChangeCallbackRegistration.methodName](propName, value);
-            }
+    }
         })
     });
 }

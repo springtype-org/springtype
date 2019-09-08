@@ -12,3 +12,4 @@ export * from "./src/function/measureSpeed";
 export * from "./src/decorator/MeasureSpeed";
 export * from "./src/function/isMemorizedReturnValue";
 export * from "./src/function/delay";
+export * from "./src/enum/enumToArray"

@@ -6,7 +6,7 @@
     },
     "description": "Internationalization API for SpringType.",
     "dependencies": {
-        "@springtype/core": "file:../core/dist",
+        "@springtype/core": "../core/dist",
         "@types/node": "^11.13.4",
         "i18next": "17.0.11",
         "i18next-browser-languagedetector": "^3.0.3",
@@ -23,6 +23,9 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "stLinkLocalDependencies": {
+        "@springtype/core": "../core/dist"
     },
     "scripts": {
         "bootstrap": "npm run bootstrap:i18n --prefix ../../",
