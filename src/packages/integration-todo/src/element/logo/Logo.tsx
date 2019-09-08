@@ -22,7 +22,7 @@ import template from "./Logo.tpl";
         [HOST_SELECTOR]: 'margin: 15px;',
     }
 }))
-export class Logo extends HTMLElement implements Lifecycle {
+export class Logo extends HTMLElement {
 
     @EventAttribute
     onclick = (evt: Event) => {

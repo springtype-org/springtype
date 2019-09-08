@@ -14,7 +14,6 @@ export function Provide(webComponent: any,
     if (!webComponent[providedFieldChangeCallbackName]) {
 
         webComponent[providedFieldChangeCallbackName] = (propertyName: any, newValue: any) => {
-
             webComponent[providedFieldConsumerListName].forEach((notificationTarget: any) => {
                 notificationTarget.instance[notificationTarget.fieldName][propertyName] = newValue;
             });

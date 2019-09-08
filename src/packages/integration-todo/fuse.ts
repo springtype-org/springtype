@@ -42,9 +42,7 @@ class Context {
                 include: ['tslib']
             },
             cache: {
-                root: '.cache',
-                FTL: true,
-                enabled: true
+                FTL: true
             },
             watch: { ignored: ['dist', 'dev'] },
             hmr: true,
@@ -65,7 +63,7 @@ task('serve', async ctx => {
     fastify.register(require('fastify-static'), {
         root: path.join(__dirname, 'dist')
     })
-    
+
     fastify.listen(3000, (err, address) => {
         if (err) throw err
         console.log(`Server listening on ${address}, serving ./dist`);

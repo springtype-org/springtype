@@ -16,7 +16,7 @@
     "url": "https://github.com/springtype-org/springtype/issues"
   },
   "dependencies": {
-    "@springtype/core": "file:../../../../core/dist"
+    "@springtype/core": "../../../../core/dist"
   },
   "devDependencies": {
     "@types/node": "^11.13.7",

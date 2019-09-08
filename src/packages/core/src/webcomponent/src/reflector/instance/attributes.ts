@@ -1,34 +1,54 @@
 import {getAttributeChangeCallbacks} from "../protoype/attributeChangeCallbacks";
 import {AttributeChangeCallbackRegistration} from "../../interface/AttributeChangeCallbackRegistration";
-import {ATTRIBUTE_TRANSFORM_FN_NAME} from "../../..";
+import {isAttributeObserved, ObservedAttribute} from "../protoype/observedAttributes";
 
-const ATTRIBUTE_DEFAULT_INITIALIZED = 'ATTRIBUTE_DEFAULT_INITIALIZED';
-const ATTRIBUTE_VALUE = "ATTRIBUTE_VALUE_";
 const ATTRIBUTE_HOOK_REGISTERED = 'TRANSPARENT_ATTRIBUTE_HOOK_REGISTERED';
 
 // Web Standard API naming, do NOT change
 const GET_ATTRIBUTE_METHOD_NAME = 'getAttribute';
+const SET_ATTRIBUTE_METHOD_NAME = 'setAttribute';
 const ATTRIBUTES_GETTER_NAME = 'attributes';
 
-export const getAttribute = (instance: any, attributeName: string) =>
-    Reflect.get(instance, (ATTRIBUTE_VALUE + attributeName) as string);
+const ST_ATTRIBUTE = 'ST_ATTRIBUTE';
 
-export const setAttribute = (instance: any, attributeName: string, value: any) => {
-    Reflect.set(instance, (ATTRIBUTE_VALUE + attributeName) as string,value);
+interface StAttributeModel {
+    initValue?: any;
+    value?: any;
+    changeDetection?: boolean;
+}
+const getStAttributes = (instance: any): { [key: string]: StAttributeModel; } =>
+    Reflect.get(instance, ST_ATTRIBUTE) || {};
+
+export const getAttributeValue = (instance: any, attributeName: string) =>
+    getStAttributes(instance)[attributeName].value;
+
+export const getStAttributeModel = (instance: any, attributeName: string) =>
+    getStAttributes(instance)[attributeName];
+
+export const setAttributeValue = (instance: any, attributeName: string, value: any) => {
+    let fields: { [key: string]: StAttributeModel; } = getStAttributes(instance);
+    fields[attributeName].value = value;
+    Reflect.set(instance, ST_ATTRIBUTE, fields);
+};
+export const setAttributeChangeDetection = (instance: any, attributeName: string) => {
+    let fields: { [key: string]: StAttributeModel; } = getStAttributes(instance);
+    fields[attributeName].changeDetection = true;
+    Reflect.set(instance, ST_ATTRIBUTE, fields);
 };
 
-export const initializeAttributes = (instance: any, prototype: any, observedAttributes: Array<string>) => {
+export const setAttributeInit = (instance: any, attributeName: string, initValue: any) => {
+    let fields: { [key: string]: StAttributeModel; } = getStAttributes(instance);
+    fields[attributeName] = {initValue: initValue, value: initValue};
+    Reflect.set(instance, ST_ATTRIBUTE, fields);
+};
+
+export const initializeAttributes = (instance: any, prototype: any, observedAttributes: ObservedAttribute[]) => {
     // set default attribute values (initial)
-    observedAttributes.forEach((attributeName: string) => {
-
-        if (!Reflect.get(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName))) {
-
-            const transformFn = Reflect.get(instance, ATTRIBUTE_TRANSFORM_FN_NAME + attributeName.toString());
-
-            setAttribute(instance, attributeName, transformFn ? transformFn(instance[attributeName]) : instance[attributeName]);
+    observedAttributes.forEach((observedAttribute: ObservedAttribute) => {
+        const attributeName = observedAttribute.name.toString();
+        if (!getStAttributes(instance)[attributeName]) {
+            setAttributeInit(instance, attributeName, instance[attributeName]);
             executeOnAttributeChangeCallbacks(prototype, instance, attributeName);
-
-            Reflect.set(instance, (ATTRIBUTE_DEFAULT_INITIALIZED + attributeName) as string, true);
         }
     });
 };
@@ -36,7 +56,6 @@ export const initializeAttributes = (instance: any, prototype: any, observedAttr
 export const executeOnAttributeChangeCallbacks = (prototype: any, instance: any, attributeName: string) => {
 
     const attributeChangeCallbacks: Array<AttributeChangeCallbackRegistration> = getAttributeChangeCallbacks(prototype);
-
     attributeChangeCallbacks.forEach(
         (attributeChangeCallbackRegistration: AttributeChangeCallbackRegistration) => {
 
@@ -46,7 +65,7 @@ export const executeOnAttributeChangeCallbacks = (prototype: any, instance: any,
         });
 };
 
-export const registerAttributeHooks = (instance: any, observedAttributes: Array<string>) => {
+export const registerAttributeHooks = (instance: any, observedAttributes: ObservedAttribute[]) => {
 
     // if transparent hooks are not yet registered for this @Attribute...
     if (!Reflect.get(instance, (ATTRIBUTE_HOOK_REGISTERED))) {
@@ -59,12 +78,28 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Array<
 
             // if attribute is not @Attribute observed, call native
             // $webComponent.getAttribute(...)
-            if (observedAttributes.indexOf(attributeName) === -1) {
+            if (!isAttributeObserved(observedAttributes, attributeName)) {
                 return originalGetAttribute(attributeName);
             }
 
             // else return transparent value
-            return getAttribute(instance, attributeName);
+            return getAttributeValue(instance, attributeName);
+        };
+
+        // $webComponent.setAttribute(...) [native]
+        const originalSetAttribute = instance[SET_ATTRIBUTE_METHOD_NAME].bind(instance);
+
+        // replace $webComponent.setAttribute(...)
+        instance[SET_ATTRIBUTE_METHOD_NAME] = (attributeName: string, value: any) => {
+            // if attribute is not @Attribute observed, call native
+            // $webComponent.getAttribute(...)
+            if (isAttributeObserved(observedAttributes, attributeName)) {
+                setAttributeValue(instance, attributeName, value);
+                instance.changeAttribute(attributeName, value)
+            }
+
+            // else return transparent value
+            return originalSetAttribute(attributeName, value);
         };
 
         // $webComponent.attributes [native]
@@ -73,16 +108,15 @@ export const registerAttributeHooks = (instance: any, observedAttributes: Array<
         // replace $webComponent.attributes
         Object.defineProperty(instance, ATTRIBUTES_GETTER_NAME, {
             get: () => {
-
                 // get all native $webComponent.attributes
                 const attributes = originalAttributes;
-
                 // enrich them with @Attribute added attributes
-                observedAttributes.forEach((observedAttributeName: string) => {
-                    attributes[observedAttributeName] = instance[observedAttributeName];
+                observedAttributes.forEach((observedAttribute: ObservedAttribute) => {
+                    attributes[observedAttribute.name] = instance[observedAttribute.name];
                 });
                 return attributes;
             }
+
         });
 
         Reflect.set(instance, (ATTRIBUTE_HOOK_REGISTERED) as string, true);

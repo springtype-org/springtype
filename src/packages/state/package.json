@@ -6,9 +6,9 @@
     },
     "description": "Redux/Rematch based state management for SpringType.",
     "dependencies": {
+        "@springtype/core": "../core/dist",
         "@rematch/core": "1.1.0",
         "@rematch/immer": "1.0.2",
-        "@springtype/core": "file:../core/dist",
         "@types/node": "^11.10.5",
         "reflect-metadata": "^0.1.12",
         "tslib": "^1.9.3"

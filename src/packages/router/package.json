@@ -6,7 +6,7 @@
     },
     "description": "DOM router for SpringType.",
     "dependencies": {
-        "@springtype/core": "file:../core/dist",
+        "@springtype/core": "latest",
         "@types/node": "^11.10.5",
         "reflect-metadata": "^0.1.12",
         "tslib": "^1.9.3"
@@ -17,6 +17,9 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/springtype-org/springtype.git"
+    },
+    "stLinkLocalDependencies": {
+        "@springtype/core": "../core/dist"
     },
     "scripts": {
         "bootstrap": "npm run bootstrap:router --prefix ../../",

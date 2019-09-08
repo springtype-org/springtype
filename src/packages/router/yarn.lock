@@ -2,8 +2,10 @@
 # yarn lockfile v1
 
 
-"@springtype/core@file:../core/dist":
+"@springtype/core@latest":
   version "1.0.0-alpha.1.38"
+  resolved "https://registry.yarnpkg.com/@springtype/core/-/core-1.0.0-alpha.1.38.tgz#87b4bac172278500872e01ba913167bc20f6db33"
+  integrity sha512-iHN0sO3d2uem2oXpvrzCNZW6PuBtpP3IsMRe4ERrio9W63XlpTGHLQt9wqaNcEnc6DBdj0Okiv8QEfNYcccdWw==
   dependencies:
     "@types/node" "^11.13.4"
     reflect-metadata "^0.1.12"
