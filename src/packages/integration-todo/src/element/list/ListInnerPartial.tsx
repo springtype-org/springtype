@@ -1,23 +1,14 @@
-import {IRootState} from "../../state/IRootState";
-import {
-    WebComponent,
-    Lifecycle,
-    Partial,
-    Style,
-    VirtualElement,
-    ActiveRenderer,
-    Field, OnFieldChange
-} from "@springtype/core";
-import {TodoModel} from "../../model/TodoModel";
-import {ITodoItem} from "../../state/ITodoState";
-import {MapStateToField} from "@springtype/state";
-import {t} from "@springtype/i18n";
-import {style} from "./ListInnerPartial.style";
-import {ActiveRoute} from "@springtype/router";
-import {testSelectors} from "../../test-selectors";
-import {Consume} from "@springtype/core";
-import {ListPageLocalChanges, TodoListPage} from "../../page/TodoListPage";
-import {ROUTE_TODO_DETIALS} from "../../index.module";
+import { ActiveRenderer, Consume, Field, Lifecycle, OnFieldChange, Partial, Style, VirtualElement, WebComponent } from "@springtype/core";
+import { t } from "@springtype/i18n";
+import { ActiveRoute } from "@springtype/router";
+import { MapStateToField } from "@springtype/state";
+import { ROUTE_TODO_DETIALS } from "../../index.module";
+import { TodoModel } from "../../model/TodoModel";
+import { ListPageLocalChanges, TodoListPage } from "../../page/TodoListPage";
+import { IRootState } from "../../state/IRootState";
+import { ITodoItem } from "../../state/ITodoState";
+import { testSelectors } from "../../test-selectors";
+import { style } from "./ListInnerPartial.style";
 
 interface LocalTodoListState {
     todos: Array<ITodoItem>;

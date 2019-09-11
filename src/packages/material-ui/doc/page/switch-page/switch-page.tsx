@@ -1,7 +1,7 @@
 import {WebComponent, Lifecycle, Style, Template,Use} from "../../../../core";
 import tpl from "./switch-page.tpl";
 import style from "./switch-page.style";
-import {MwcSwitch} from "../../../src";
+import { MwcSwitch } from '@springtype/material-ui';
 
 @Use(MwcSwitch )
 @WebComponent('switch-page')

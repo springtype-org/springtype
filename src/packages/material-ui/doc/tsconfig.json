@@ -11,7 +11,7 @@
     "strict": true,
     "declaration": true,
     "noEmit": false,
-    "rootDir": "./src",
+    "rootDir": ".",
     "jsx": "react",
     "outDir": "dist",
     "jsxFactory": "ActiveRenderer.createElement",

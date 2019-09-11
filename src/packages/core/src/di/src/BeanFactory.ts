@@ -1,9 +1,9 @@
-import {ComponentReflector} from "./ComponentReflector";
-import {InjectionStrategy} from "./enum/InjectionStrategy";
-import {ComponentImpl} from "./interface/ComponentImpl";
-import {ConstructorArgumentInitializer} from "./interface/ConstructorArgumentInitializer";
-import {ArgumentInjectionMetadata} from "./interface/ArgumentInjectionMetadata";
-import {BeanConfig} from "./interface/BeanConfig";
+import { ComponentReflector } from "./ComponentReflector";
+import { InjectionStrategy } from "./enum/InjectionStrategy";
+import { ArgumentInjectionMetadata } from "./interface/ArgumentInjectionMetadata";
+import { BeanConfig } from "./interface/BeanConfig";
+import { ComponentImpl } from "./interface/ComponentImpl";
+import { ConstructorArgumentInitializer } from "./interface/ConstructorArgumentInitializer";
 
 const PRIMITIVE_TYPE_NAMES = ['Number', 'Array', 'String', 'Boolean', 'RegExp', 'Date'];
 
@@ -41,7 +41,6 @@ export class BeanFactory {
         // only in case of singleton instance retrieval,
         // try to fetch from cache, otherwise directly head to new instance creation
         if (injectionStrategy === InjectionStrategy.SINGLETON) {
-
             const singletonInstance = this.getSingletonBeanInstance(classSymbol);
 
             if (singletonInstance) {

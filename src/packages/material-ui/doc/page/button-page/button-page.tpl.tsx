@@ -1,9 +1,8 @@
 import {ButtonPage} from "./button-page";
-import {enumToArray} from "@springtype/core";
-import {MWC_BUTTON_VARIANT_TYPE} from "../../../src/component/mwc-button";
+import {enumToArray, ActiveRenderer} from "@springtype/core";
+import { MWC_BUTTON_VARIANT_TYPE } from '@springtype/material-ui';
 
 export default (component: ButtonPage) => {
-
 
     const variantValues = enumToArray(MWC_BUTTON_VARIANT_TYPE);
     const tableRows = [];

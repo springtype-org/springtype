@@ -2,6 +2,7 @@ import {WebComponent, Lifecycle, Style, Use, Partial, ActiveRenderer} from "@spr
 import {t, Translator} from "@springtype/i18n";
 import {Logo} from "../logo/Logo";
 import {ActiveRoute} from "@springtype/router";
+import {MwcButton} from "@springtype/material-ui";
 
 @WebComponent('app-layout')
 @Style((view: AppLayout) => ({
@@ -11,7 +12,7 @@ import {ActiveRoute} from "@springtype/router";
         flexDirection: 'column'
     }
 }))
-@Use(Logo)
+@Use(Logo, MwcButton)
 export class AppLayout extends HTMLElement implements Lifecycle {
 
     constructor(protected translator: Translator,
@@ -45,11 +46,8 @@ export class AppLayout extends HTMLElement implements Lifecycle {
             </st-slot>
  
             <div style="margin-top: 20px">
-                <a className="waves-effect waves-light btn"
-                   onclick={() => this.setLanguage('de')}>{t('german')}</a>
-
-                <a className="waves-effect waves-light btn"
-                   onclick={() => this.setLanguage('en')}>{t('english')}</a>
+                <mwc-button label={t('german')} onclick={() => this.setLanguage('de')}/>
+                <mwc-button label={t('english')} onclick={() => this.setLanguage('en')}/>
             </div>
 
             <st-slot class="copyright-footer" name="copyright">

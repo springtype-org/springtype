@@ -1,5 +1,5 @@
 import {TobBarPage} from "./tob-bar-page";
-import {ActiveRenderer} from '../../../../core';
+import {ActiveRenderer} from '@springtype/core';
 
 export default (component: TobBarPage) =>
     <st-fragment>

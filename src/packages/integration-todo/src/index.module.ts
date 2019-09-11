@@ -1,36 +1,20 @@
-import { applyPolyfill, ReflowStrategy, rerenderInnerHTML } from "custom-elements-hmr-polyfill";
 
-applyPolyfill();
- 
-// materialize JS import
-import "materialize-css";
+import { Module } from "@springtype/core";
+import { Route, ROUTE_NOT_FOUND } from "@springtype/router";
+import { applyPolyfill, ReflowStrategy } from "custom-elements-hmr-polyfill";
+import { AppLayout } from "./element/layout/AppLayout";
+import { ListInnerPartial } from "./element/list/ListInnerPartial";
+import { Logo } from "./element/logo/Logo";
+import { Index } from "./index";
+import { NotFoundPage } from "./page/NotFoundPage";
+import { TodoDetailsPage } from "./page/TodoDetailsPage";
+import { TodoListPage } from "./page/TodoListPage";
 
-// CSS import
-import "./index.scss";
-
-import { applyPolyfill } from "custom-elements-hmr-polyfill";
-
-applyPolyfill();
-
-// HACK to reload the page on HMR entry reload without plugins ;)
-const originalInfo = console.info;
-console.info = (...args: Array<any>) => {
-
-    if (args[0].indexOf('entry reload of') > -1) {
+if (process.env.NODE_ENV === 'development') {
+    applyPolyfill(ReflowStrategy.NONE, -1, () => {
         document.location.reload();
-    }
-    originalInfo(...args);
-};
-
-import {Module} from "@springtype/core";
-import {AppLayout} from "./element/layout/AppLayout";
-import {ListInnerPartial} from "./element/list/ListInnerPartial";
-import {Logo} from "./element/logo/Logo";
-import {NotFoundPage} from "./page/NotFoundPage";
-import {TodoDetailsPage} from "./page/TodoDetailsPage";
-import {TodoListPage} from "./page/TodoListPage";
-import {Index} from "./index";
-import {Route, ROUTE_NOT_FOUND} from "@springtype/router";
+    });
+}
 
 export const ROUTE_BASE = '';
 export const ROUTE_TODO_LIST = '/todos';

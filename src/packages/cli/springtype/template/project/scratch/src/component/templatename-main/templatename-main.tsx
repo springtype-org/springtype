@@ -6,8 +6,13 @@ import style from "./templatename-main.style";
 @Template(tpl)
 @Style(style)
 export class TemplateNameMain extends HTMLElement implements Lifecycle {
-}
 
+    constructor() {
+
+        super();
+    }
+}
+ 
 declare global {
     namespace JSX {
         interface IntrinsicElements {

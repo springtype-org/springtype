@@ -1,8 +1,7 @@
-import {WebComponent, Lifecycle, Style, Template, Use} from "../../../../core";
+import {WebComponent, Lifecycle, Style, Template, Use} from "@springtype/core";
 import tpl from "./tob-bar-page.tpl";
 import style from "./tob-bar-page.style";
-import {MwcTopBar} from "../../../src";
-import {MwcSnackbar} from "../../../src";
+import { MwcSnackbar, MwcTopBar } from '@springtype/material-ui';
 
 @Use(MwcTopBar,MwcSnackbar)
 @WebComponent('tob-bar-page')

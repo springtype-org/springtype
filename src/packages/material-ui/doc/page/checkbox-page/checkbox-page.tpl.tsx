@@ -1,4 +1,5 @@
 import {CheckboxPage} from "./checkbox-page";
+import { ActiveRenderer } from '@springtype/core';
 
 export default (component: CheckboxPage) =>{
     return <st-fragment>
