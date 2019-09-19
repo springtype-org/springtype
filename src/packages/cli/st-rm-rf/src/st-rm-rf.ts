@@ -1,6 +1,7 @@
 const fs = require('fs');
 const promisify = require('util').promisify;
 const spawn = require("cross-spawn");
+import * as path  from 'path';
 const os = require("os");
 
 const fsp = {
@@ -11,6 +12,8 @@ export const removePathOrFile = async (deletePath: string, printError: boolean =
     try {
         const platform = os.platform();
         if (platform === "win32") {
+            const pathWin = path.win32;
+            deletePath = pathWin.resolve(deletePath);
             const stat = await fsp.lstat(deletePath);
             if (stat.isDirectory()) {
                 spawn.sync(process.env.comspec, ['/c','rmdir','/s', '/q', deletePath], {stdio: 'inherit'});
