@@ -12,7 +12,9 @@ export const copyPathOrFile = async (sourcePath: string, destinationPath: string
     try {
         const platform = os.platform();
         if (platform === "win32") {
-            destinationPath = path.resolve(process.cwd(), destinationPath);
+            const pathWin = path.win32;
+            sourcePath = pathWin.resolve(sourcePath);
+            destinationPath = pathWin.resolve(process.cwd(), destinationPath);
             const statOfSourcePath = await fsp.lstat(sourcePath);
 
             if (statOfSourcePath.isDirectory()) {
@@ -21,15 +23,15 @@ export const copyPathOrFile = async (sourcePath: string, destinationPath: string
 
                     const statOfDestPath = await fsp.lstat(destinationPath);
                     if (statOfDestPath.isDirectory()) {
-                        destinationPath += path.sep + path.basename(sourcePath);
+                        destinationPath += pathWin.sep + pathWin.basename(sourcePath);
                     }
                 }
                 childProcess.execSync(`(robocopy "${sourcePath}" "${destinationPath}" /MIR /NFL /NDL /NJH /NJS /nc /ns /np) ^& IF %ERRORLEVEL% LEQ 1 exit 0`, {stdio: 'inherit'});
 
             } else {
 
-                if (!fs.existsSync(path.dirname(destinationPath))) {
-                    fs.mkdirSync(path.dirname(destinationPath), {
+                if (!fs.existsSync(pathWin.dirname(destinationPath))) {
+                    fs.mkdirSync(pathWin.dirname(destinationPath), {
                         recursive: true
                     });
                 }
@@ -39,7 +41,7 @@ export const copyPathOrFile = async (sourcePath: string, destinationPath: string
                     const statOfDestPath = await fsp.lstat(destinationPath);
 
                     if (statOfDestPath.isDirectory()) {
-                        destinationPath += path.sep + path.basename(sourcePath);
+                        destinationPath += pathWin.sep + pathWin.basename(sourcePath);
                         fs.copyFileSync(sourcePath, destinationPath);
                     } else {
                         console.error('Destination file already exists (skipping): ', destinationPath);
