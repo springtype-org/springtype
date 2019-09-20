@@ -78,14 +78,11 @@ export class PropChangeManager {
 			onDeepChange!
 		);
 
-		console.log("applyChangeDetection", value, instance, name);
-
 		Object.defineProperty(instance, name, {
 			get: () => value,
 			set: (newValue: any) => {
 				const prevValue = value;
 
-				console.log("reset!!", newValue);
 				value = PropChangeManager.conditionallyApplyDeepChangeDetection(
 					newValue,
 					onDeepChange!
