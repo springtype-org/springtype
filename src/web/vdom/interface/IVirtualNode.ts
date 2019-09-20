@@ -5,6 +5,8 @@ export interface IVirtualNodeAttributes {
 	[attributeName: string]: any;
 }
 
+export type getRef = (refName: string, customElementInstance: any) => Node;
+
 export interface IVirtualNode<A = IVirtualNodeAttributes> {
 	type: IVirtualNodeType;
 	attributes: A;

@@ -4,6 +4,7 @@ import {
 	OnPropChange,
 	PropChange,
 	removeSharedMemoryChangeHandlersOfInstance,
+	st,
 	warn
 } from "../../core";
 import { TSS } from "../tss/TSS";
@@ -73,6 +74,9 @@ export const createDerivedClass = (targetClass: any) => {
 
 			// remove @Shared handlers
 			removeSharedMemoryChangeHandlersOfInstance(this);
+
+			// clean refs
+			st.dom.cleanRefs(this);
 
 			if (typeof super.onDisconnect == "function") {
 				super.onDisconnect();
@@ -221,9 +225,14 @@ export const createDerivedClass = (targetClass: any) => {
 			// render virtual DOM of TSS
 			const tssVdom = TSS.render(this, options.tss, super.renderStyle);
 
+			let nodesToRender = [vdom!];
+			if (tssVdom) {
+				nodesToRender = [tssVdom, vdom!];
+			}
+
 			if (!this[NOT_INITIAL_RENDER]) {
 				// if there isn't a prev. VDOM state, render initially
-				Renderer.renderInitial([tssVdom, vdom!], (this[
+				Renderer.renderInitial(nodesToRender, (this[
 					ROOT
 				] as unknown) as IElement);
 
@@ -235,7 +244,7 @@ export const createDerivedClass = (targetClass: any) => {
 				}
 			} else {
 				// differential VDOM/DOM rendering algorithm
-				Renderer.patch(this[ROOT].childNodes, [tssVdom, vdom!], (this[
+				Renderer.patch(this[ROOT].childNodes, nodesToRender, (this[
 					ROOT
 				] as unknown) as IElement);
 			}
