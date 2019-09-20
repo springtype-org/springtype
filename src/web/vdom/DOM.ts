@@ -1,5 +1,6 @@
+import { isPrimitive, st } from "../../core";
+import "./DOMRef";
 import { IElement } from "./interface/IElement";
-import { IRenderer } from "./interface/IRenderer";
 import {
 	IVirtualChild,
 	IVirtualChildren,
@@ -7,8 +8,12 @@ import {
 } from "./interface/IVirtualNode";
 import { VirtualDOM } from "./VirtualDOM";
 
-export class DOM implements IRenderer {
+export class DOM {
 	static svgContext: boolean = false;
+
+	static init() {
+		st.dom = DOM; // FIXME: no statics, instance, interface
+	}
 
 	static hasSvgNamespace(type: string): boolean {
 		return DOM.svgContext && type !== "STYLE" && type !== "SCRIPT";
@@ -67,8 +72,8 @@ export class DOM implements IRenderer {
 		isSvg?: boolean
 	) {
 		for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
-			if (typeof virtualChild == "string") {
-				DOM.createTextNode(virtualChild, parentDomElement);
+			if (isPrimitive(virtualChild)) {
+				DOM.createTextNode((virtualChild || "").toString(), parentDomElement);
 			} else {
 				DOM.createElement(
 					virtualChild as IVirtualNode,
@@ -88,6 +93,14 @@ export class DOM implements IRenderer {
 		parentDomElement: Element,
 		isSvg?: boolean
 	) {
+		// stores referenced DOM nodes in a memory efficient WeakMap
+		// for access from CustomElements
+		if (name === "ref") {
+			const refName = Object.keys(value)[0];
+			st.domRef.set(refName, value[refName], parentDomElement);
+			return;
+		}
+
 		if (isSvg && name.startsWith("xlink")) {
 			parentDomElement.setAttributeNS(
 				"http://www.w3.org/1999/xlink",
@@ -111,3 +124,4 @@ export class DOM implements IRenderer {
 		}
 	}
 }
+DOM.init();

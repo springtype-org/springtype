@@ -46,7 +46,6 @@ export class CustomElementManager {
 	}
 
 	static observeAttribute(instance: any, name: string) {
-		// TODO: may use Reflect
 		let value = instance[name];
 
 		Object.defineProperty(instance, name, {
