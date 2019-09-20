@@ -33,3 +33,5 @@ Like with any architecture, there are pro's and con's. Here are the con's:
 - SpringType uses custom, alternative implementations for all modules excluding RxJS
 - SpringType works best when you transpile your CSS, SCSS, SASS, LESS, Stylus to TSS
 - SpringType is tiny and efficient because it lacks some bells and whistles
+
+https://www.conventionalcommits.org/en/v1.0.0-beta.3/
