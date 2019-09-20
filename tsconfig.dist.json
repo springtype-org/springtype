@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"module": "umd",
+		"target": "es2015",
+		"outDir": "dist",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noEmitHelpers": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"jsx": "react",
+		"skipLibCheck": true,
+		"jsxFactory": "tsx",
+		"declaration": true,
+		"sourceMap": true
+	},
+	"exclude": ["node_modules", "**/node_modules/*"],
+	"include": ["src/core", "src/web"]
+}

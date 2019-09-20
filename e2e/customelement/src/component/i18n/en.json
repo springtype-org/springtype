@@ -1,0 +1,7 @@
+{
+	"hello": "Hello",
+	"deep": {
+		"msg": "123en {{ someValue, uppercase }}",
+		"msg2": "123en {{ someValue2, uppercase1 }}"
+	}
+}
