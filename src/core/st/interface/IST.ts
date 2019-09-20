@@ -14,6 +14,22 @@ export interface IST {
 
 	tss: ITSS;
 
+	// TODO:
+	// dom
+	// renderer
+	// log
+	// warn
+	// error
+	// info
+	// onChange
+	// applyChangeDetection -> rename onPropChange
+	// initShare
+	// getShare
+	// removeChangeHandler -> rename: removeShareChangeHandler
+	// addShareChangeHandler
+	// vdom
+	// state
+
 	getRef: getRef;
 
 	domRef: IDOMRef;
