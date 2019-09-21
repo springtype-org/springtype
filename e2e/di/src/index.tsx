@@ -1,8 +1,7 @@
-import { Injectable, InjectionStrategy, st } from "../../../src/core";
-import { Inject } from "../../../src/core/di/decorator/Inject";
-import { CustomElement } from "../../../src/web/customelement";
-import { SpringElement } from "../../../src/web/customelement/SpringElement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill";
+import { st } from "../../../src/core";
+import { inject, injectable, InjectionStrategy } from "../../../src/core/di";
+import { customElement } from "../../../src/web/customelement";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
@@ -10,30 +9,30 @@ if (process.env.NODE_ENV === "development") {
 
 // test injectable classes
 
-@Injectable()
+@injectable()
 class FooSingleton {
 	isSingleton: boolean = true;
 }
 
-@Injectable(InjectionStrategy.FACTORY)
+@injectable(InjectionStrategy.FACTORY)
 class FooFactory {
 	constructor(public name: string) {}
 }
 
-@Injectable(InjectionStrategy.FACTORY, () => new FooFactoryFunction("factory"))
+@injectable(InjectionStrategy.FACTORY, () => new FooFactoryFunction("factory"))
 class FooFactoryFunction extends FooFactory {}
 
 // --- customElement test
 
-@CustomElement("di-e2e")
-export class DIE2E extends SpringElement {
-	@Inject(FooSingleton)
+@customElement("di-e2e")
+export class DIE2E extends st.customElement {
+	@inject(FooSingleton)
 	fooSingleton!: FooSingleton;
 
-	@Inject(FooFactory)
+	@inject(FooFactory)
 	fooFactory!: FooFactory;
 
-	@Inject(FooFactoryFunction)
+	@inject(FooFactoryFunction)
 	fooFactoryFunction!: FooFactoryFunction;
 
 	constructor() {

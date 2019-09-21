@@ -1,47 +1,39 @@
-import {
-	ChangeDetector,
-	Formatter,
-	getShare,
-	initShare,
-	log,
-	Prop,
-	PropChange,
-	Share,
-	t,
-	Translation
-} from "../../../../src/core";
-import { Attribute, CustomElement, tsx } from "../../../../src/web";
-import { SpringElement } from "../../../../src/web/customelement/SpringElement";
+import { st } from "../../../../src/core";
+import { ChangeDetector, IPropChange, prop } from "../../../../src/core/cd";
+import { formatter, translation } from "../../../../src/core/i18n";
+import { share } from "../../../../src/core/sharedmemory";
+import { attr, customElement } from "../../../../src/web/customelement";
+import { tsx } from "../../../../src/web/vdom";
 // @ts-ignore JSON module import activated in bundler config
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
 import * as en from "./i18n/en.json";
 
-@Formatter("uppercase", value => value.toUpperCase())
-@Translation("de", de)
-@Translation("en", en)
-@CustomElement("my-foo2")
-export class Foo2 extends SpringElement {
-	@Attribute()
+@formatter("uppercase", value => value.toUpperCase())
+@translation("de", de)
+@translation("en", en)
+@customElement("my-foo2")
+export class Foo2 extends st.customElement {
+	@attr()
 	foo: string = "Jesus!!!";
 
-	@Attribute()
+	@attr()
 	foo2: boolean = false;
 
-	@Attribute()
+	@attr()
 	foo3: any = {
 		huhu: {
 			haha: 345
 		}
 	};
 
-	@Share("foo")
-	foo4: any = initShare("foo", {});
+	@share("foo")
+	foo4: any = st.initShare("foo", {});
 
-	@Prop()
+	@prop()
 	lala: any = { a: "hase" };
 
-	onPropChange(change: PropChange) {
+	onPropChange(change: IPropChange) {
 		console.log("PROP change", change);
 	}
 
@@ -70,10 +62,10 @@ export class Foo2 extends SpringElement {
 		setTimeout(() => {
 			this.foo =
 				"GOOOOOOOD" +
-				t("deep222.msg", {
+				st.t("deep222.msg", {
 					someValue: "Yeah!"
 				}) +
-				t("deep.msg2", {
+				st.t("deep.msg2", {
 					someValue2: "Yeah!"
 				}) +
 				this.getAttribute("foo3");
@@ -87,11 +79,11 @@ export class Foo2 extends SpringElement {
 
 			console.log("foo3", this.getAttribute("foo3"));
 
-			log("foo2", typeof this.foo2, this.foo2);
+			st.log("foo2", typeof this.foo2, this.foo2);
 
 			console.log("reading shared memory", this.foo4);
 			this.foo4 = {};
-			const x: any = getShare("foo");
+			const x: any = st.getShare("foo");
 
 			x.asd = true;
 

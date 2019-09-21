@@ -1,4 +1,4 @@
-import { tsx } from "../../../src/web";
+import { tsx } from "../../../src/web/vdom";
 import "./component";
 import { Foo } from "./index";
 

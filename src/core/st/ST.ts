@@ -13,22 +13,17 @@ import { IST } from "./interface/IST";
  * - translate
  * - router
  */
-export class ST {
-	static readonly KEY = "$st";
 
-	// globalThis without polyfills, supports Node.js and browsers
-	static globalThis: any = typeof window === "undefined" ? global : window;
+const ST_KEY = "$st";
 
-	static init() {
-		// makes sure the global storage is not re-initialized
-		// and overwritten on subsequent calls / file imports
-		if (!ST.globalThis[ST.KEY]) {
-			// register scoped global as an instance of this class
-			ST.globalThis[ST.KEY] = new ST();
-		}
-	}
+// scoped local global storage reference
+const _globalThis: any = typeof window === "undefined" ? global : window;
+// makes sure the global storage is not re-initialized
+// and overwritten on subsequent calls / file imports
+if (!_globalThis[ST_KEY]) {
+	// register scoped global as an instance of this class
+	_globalThis[ST_KEY] = {};
 }
-ST.init();
 
-export const globalThis: any = ST.globalThis;
-export const st: IST = ST.globalThis[ST.KEY];
+export const globalThis: any = _globalThis;
+export const st: IST = _globalThis[ST_KEY];

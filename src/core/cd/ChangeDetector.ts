@@ -1,5 +1,5 @@
 import { isPrimitive } from "../lang/isPrimitive";
-import { warn } from "../log/log";
+import { st } from "../st/ST";
 
 const PATH_SEPARATOR = ".";
 const TARGET = Symbol("target");
@@ -319,7 +319,7 @@ export class ChangeDetector {
 		};
 
 		if (isPrimitive(object)) {
-			warn(
+			st.warn(
 				`🔥You're trying to apply deep change detection on a primitive value. Returning the primitive value instead of a Proxy(value). The onChange handler function will never be called.`
 			);
 			return object;

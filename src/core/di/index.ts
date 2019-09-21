@@ -1,5 +1,5 @@
 import "./DI";
 
-export { Inject } from "./decorator/Inject";
-export { Injectable } from "./decorator/Injectable";
+export { inject } from "./decorator/inject";
+export { injectable } from "./decorator/injectable";
 export { InjectionStrategy } from "./enum/InjectionStrategy";

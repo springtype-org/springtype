@@ -1,6 +1,6 @@
 import { st } from "../../st/ST";
 
-export function Inject(ctor: any): any {
+export function inject(ctor: any): any {
 	return (instance: any, propName: string) => {
 		instance[propName] = st.di.get(ctor);
 	};

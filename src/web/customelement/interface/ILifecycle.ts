@@ -1,4 +1,4 @@
-import { PropChangeType } from "../../../core";
+import { PropChangeType } from "../../../core/cd";
 import { ITypedStyleSheet } from "../../tss";
 import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
 

@@ -1,19 +1,18 @@
-import { warn } from "../log/log";
 import { st } from "../st/ST";
 import {
-	Formatters,
+	IFormatters,
 	Ii18n,
 	ITranslation,
-	ITranslationValues,
-	Translations
+	ITranslations,
+	ITranslationValues
 } from "./interface/Ii18n";
 
 export class I18n implements Ii18n {
 	static valueInterpolationRegexp = /{{(.+?)}}/g;
 
-	formatters: Formatters = {};
+	formatters: IFormatters = {};
 
-	translations: Translations = {};
+	translations: ITranslations = {};
 
 	currentLanguage: string = "en_US";
 
@@ -21,6 +20,7 @@ export class I18n implements Ii18n {
 		if (!st.i18n) {
 			// initialize sub-global
 			st.i18n = new I18n();
+			st.t = st.i18n.t;
 		}
 	}
 
@@ -40,7 +40,7 @@ export class I18n implements Ii18n {
 
 			if (translation && i == splits.length - 1) {
 				if (typeof translation != "string") {
-					warn(
+					st.warn(
 						`🔥The translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage} is an object not a string!`
 					);
 					return `🔥t(${st.i18n.currentLanguage}/${key}) object ❓`;
@@ -80,14 +80,13 @@ export class I18n implements Ii18n {
 						if (typeof st.i18n.formatters[formatterName] == "function") {
 							value = st.i18n.formatters[formatterName](value);
 						} else {
-							console.log("formatterName", formatterName, valueName);
-							warn(
+							st.warn(
 								`🔥The formatter ${formatterName} for translation value {{ ${valueName}, ${formatterName} }} wasn't found!`
 							);
 						}
 					}
 				} else {
-					warn(
+					st.warn(
 						`🔥The translation value {{ ${valueName} }} is not set in translation values!`
 					);
 					value = `🔥${valueName}❓`;
@@ -115,7 +114,7 @@ export class I18n implements Ii18n {
 		);
 
 		if (!translation) {
-			warn(
+			st.warn(
 				`🔥No translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage}!`
 			);
 			return `🔥t(${st.i18n.currentLanguage}/${key})❓`;
@@ -152,5 +151,3 @@ export class I18n implements Ii18n {
 	};
 }
 I18n.init();
-
-export const t = st.i18n.t;

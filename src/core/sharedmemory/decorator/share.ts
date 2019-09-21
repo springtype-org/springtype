@@ -1,7 +1,7 @@
-import { st } from "../../";
+import { st } from "../../st/ST";
 import { initSharedMemory, SHARED_MEMORY } from "../share";
 
-export function Share(shareName: string): any {
+export function share(shareName: string): any {
 	initSharedMemory();
 
 	return (instance: any, propName: string) => {

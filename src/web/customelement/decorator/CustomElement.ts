@@ -1,8 +1,8 @@
-import { error } from "../../../core";
+import { st } from "../../../core";
 import { CUSTOM_ELEMENT_OPTIONS, TAG_NAME } from "../CustomElementManager";
 import { ICustomElementOptions } from "../interface/ICustomElementOptions";
 
-export const CustomElement = (
+export const customElement = (
 	tagName: string,
 	options?: ICustomElementOptions
 ): any => {
@@ -15,15 +15,15 @@ export const CustomElement = (
 
 	return (targetClass: any) => {
 		if (!tagName) {
-			error(
-				`💣 The @CustomElement ${targetClass.name} has no tag name! It should look like: @CustomElement('my-element', { ... }?)`
+			st.error(
+				`💣 The @customElement ${targetClass.name} has no tag name! It should look like: @customElement('my-element', { ... }?)`
 			);
 		}
 
 		// must contain a kebab-dash
 		if (tagName.indexOf("-") === -1) {
-			error(
-				`💣 The @CustomElement ${targetClass.name}  tag name has no namespace. It should look like: my-element, but its: ${tagName}`
+			st.error(
+				`💣 The @customElement ${targetClass.name}  tag name has no namespace. It should look like: my-element, but its: ${tagName}`
 			);
 		}
 

@@ -1,5 +1,4 @@
 import { st } from "../../core";
-import { camelToKebabCase } from "../../core/lang/string/camelToKebabCase";
 import { CustomElementManager } from "../customelement/CustomElementManager";
 import { tsx } from "../vdom";
 import { IVirtualNode } from "../vdom/interface/IVirtualNode";
@@ -11,6 +10,10 @@ export class TSS implements ITSS {
 			st.tss = new TSS();
 		}
 	}
+
+	static camelToKebabCase = (name: string): string => {
+		return name.replace(/[A-Z]/g, g => "-" + g[0].toLowerCase());
+	};
 
 	static generateDeclaration(
 		declaration: any,
@@ -41,7 +44,7 @@ export class TSS implements ITSS {
 								styleMapping = `${styleMapping}\n    ${
 									mediaQuery ? "    " : ""
 								}${
-									camelToKebabCase(property) // selector
+									TSS.camelToKebabCase(property) // selector
 								}: ${styleValue[i]};`;
 							}
 						}

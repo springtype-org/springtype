@@ -1,19 +1,18 @@
 import { st } from "../../../src/core";
 import { tsx } from "../../../src/web";
-import { CustomElement } from "../../../src/web/customelement";
-import { SpringElement } from "../../../src/web/customelement/SpringElement";
+import { customElement } from "../../../src/web/customelement";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill";
-import { Ref } from "../../../src/web/vdom/decorator/Ref";
+import { ref } from "../../../src/web/vdom/decorator/ref";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
 }
 
-@CustomElement("ref-test")
-export class RefTest extends SpringElement {
+@customElement("ref-test")
+export class RefTest extends st.customElement {
 	time: number = 0;
 
-	@Ref("someDiv")
+	@ref("someDiv")
 	someDiv!: HTMLDivElement;
 
 	onGetDiv = () => {

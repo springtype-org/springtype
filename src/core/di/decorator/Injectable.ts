@@ -2,7 +2,7 @@ import { INJECTION_STRATEGY } from "../DI";
 import { InjectionStrategy } from "../enum/InjectionStrategy";
 import { IInjectionStrategyConfig } from "../interface/IInjectionStrategyConfig";
 
-export const Injectable = (
+export const injectable = (
 	injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON,
 	factoryFn?: Function
 ) => {

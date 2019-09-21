@@ -1,6 +1,6 @@
 import { PropChangeManager } from "../PropChangeManager";
 
-export function Prop(): any {
+export function prop(): any {
 	return (instance: any, name: string | symbol) => {
 		PropChangeManager.addProp(instance.constructor, name);
 	};

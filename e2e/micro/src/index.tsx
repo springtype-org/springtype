@@ -1,12 +1,9 @@
 import { st } from "../../../src/core";
-import { PropChange } from "../../../src/core/cd/interface/OnPropChange";
-import { log } from "../../../src/core/log/log";
-import { Share } from "../../../src/core/share/decorator/Share";
-import { getShare, initShare } from "../../../src/core/share/share";
-import { tsx } from "../../../src/web";
-import { Attribute, CustomElement } from "../../../src/web/customelement";
-import { SpringElement } from "../../../src/web/customelement/SpringElement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill";
+import { IPropChange } from "../../../src/core/cd";
+import { share } from "../../../src/core/sharedmemory";
+import { attr, customElement } from "../../../src/web/customelement";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
+import { tsx } from "../../../src/web/vdom";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
@@ -18,25 +15,25 @@ interface LolShared {
 	deep?: boolean;
 }
 
-@CustomElement("my-foo")
-export class Foo extends SpringElement {
-	@Attribute()
+@customElement("my-foo")
+export class Foo extends st.customElement {
+	@attr()
 	some: string = "test";
 
-	@Share("foo")
-	lolShared: LolShared = initShare<LolShared>(
+	@share("foo")
+	lolShared: LolShared = st.initShare<LolShared>(
 		"foo",
 		{ lala: 123 },
-		(change: PropChange) => {
+		(change: IPropChange) => {
 			console.log("initShare on prime", this, change);
 		},
 		this
 	);
 
-	@Share("foo")
-	lolSharedMirror: LolShared = getShare<LolShared>(
+	@share("foo")
+	lolSharedMirror: LolShared = st.getShare<LolShared>(
 		"foo",
-		(change: PropChange) => {
+		(change: IPropChange) => {
 			console.log("getShare on mirror", this, change);
 		},
 		this
@@ -46,7 +43,7 @@ export class Foo extends SpringElement {
 		super();
 
 		setTimeout(() => {
-			log("di", st.di, "i18n");
+			st.log("di", st.di, "i18n");
 
 			// external change (reset of reference)
 			this.lolShared = { lala: 456 };

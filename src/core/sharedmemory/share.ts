@@ -1,10 +1,10 @@
-import { st } from "../";
 import {
-	OnPropChangeHandler,
+	IOnPropChangeHandler,
 	PropChangeType
-} from "../cd/interface/OnPropChange";
+} from "../cd/interface/IOnPropChange";
 import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../cd/PropChangeManager";
 import { isPrimitive } from "../lang/isPrimitive";
+import { st } from "../st/ST";
 
 /* internal API */
 
@@ -21,7 +21,7 @@ export const initSharedMemory = () => {
 };
 
 const callChangeHandlers = (
-	onChangeHandlers: Array<OnPropChangeHandler>,
+	onChangeHandlers: Array<IOnPropChangeHandler>,
 	name: string,
 	type: PropChangeType,
 	value: any,
@@ -85,7 +85,7 @@ const initSharedMemoryEntry = (shareName: string, initialValue: any) => {
  */
 export const addChangeHandler = (
 	shareName: string,
-	onChange: OnPropChangeHandler,
+	onChange: IOnPropChangeHandler,
 	instance?: any
 ) => {
 	initSharedMemory();
@@ -104,10 +104,10 @@ export const addChangeHandler = (
  * @param onChange Handler function to be applied when the shared object gets changed by reference or deeply
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-export function initShare<S = {}>(
+function initShare<S = {}>(
 	shareName: string,
 	initialValue: S,
-	onChange?: OnPropChangeHandler,
+	onChange?: IOnPropChangeHandler,
 	instance?: any
 ) {
 	if (isPrimitive(initialValue)) {
@@ -121,6 +121,7 @@ export function initShare<S = {}>(
 
 	return st[SHARED_MEMORY][shareName].value;
 }
+st.initShare = initShare;
 
 /**
  * Removes single change handlers for cases where the functional API is used.
@@ -129,7 +130,7 @@ export function initShare<S = {}>(
  */
 export const removeChangeHandler = (
 	sharedName: string,
-	onChange?: OnPropChangeHandler
+	onChange?: IOnPropChangeHandler
 ) => {
 	let index = st[SHARED_MEMORY][sharedName].onChangeHandlers.indexOf(onChange);
 	if (index > -1) {
@@ -166,9 +167,9 @@ export const removeSharedMemoryChangeHandlersOfInstance = (instance: any) => {
  * @param onChange Handler function to be applied when the shared object gets changed by reference or deeply
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-export function getShare<S = {}>(
+function getShare<S = {}>(
 	shareName: string,
-	onChange?: OnPropChangeHandler,
+	onChange?: IOnPropChangeHandler,
 	instance?: any
 ): S {
 	initSharedMemory();
@@ -176,3 +177,4 @@ export function getShare<S = {}>(
 	addChangeHandler(shareName, onChange!, instance);
 	return st[SHARED_MEMORY][shareName].value;
 }
+st.getShare = getShare;

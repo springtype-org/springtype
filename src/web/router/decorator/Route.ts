@@ -1,7 +1,7 @@
 import { st } from "../../../core";
 import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
 
-export function Route(
+export function route(
 	route: string,
 	routeTargetWebComponent: IVirtualNode | any
 ): any {

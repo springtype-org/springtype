@@ -1,4 +1,4 @@
-import { ITypedStyleSheet } from "../../../../src/web";
+import { ITypedStyleSheet } from "../../../../src/web/tss";
 
 export const tss = (): ITypedStyleSheet => ({
 	body: {

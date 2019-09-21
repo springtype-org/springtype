@@ -2,7 +2,7 @@ import { st } from "../..";
 import "../I18n";
 import { ITranslation } from "../interface/Ii18n";
 
-export const Translation = (
+export const translation = (
 	language: string,
 	translation: ITranslation
 ): any => {

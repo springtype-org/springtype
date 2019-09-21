@@ -1,10 +1,7 @@
-import { getShare, log, Share, st } from "../../../src/core";
-import {
-	Attribute,
-	CustomElement,
-	customElementsHMRPolyfill
-} from "../../../src/web";
-import { SpringElement } from "../../../src/web/customelement/SpringElement";
+import { st } from "../../../src/core";
+import { share } from "../../../src/core/sharedmemory";
+import { attr, customElement } from "../../../src/web/customelement";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
 import { tpl } from "./index.tpl";
 import { tss } from "./index.tss";
 
@@ -12,17 +9,17 @@ if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
 }
 
-@CustomElement("my-foo", {
+@customElement("my-foo", {
 	tpl,
 	tss,
 	shadowMode: "none"
 })
-export class Foo extends SpringElement {
-	@Attribute()
+export class Foo extends st.customElement {
+	@attr()
 	some: string = "test";
 
-	@Share("foo")
-	lolShared: any = getShare("foo");
+	@share("foo")
+	lolShared: any = st.getShare("foo");
 
 	onButtonClick = () => {
 		this.reflow();
@@ -41,7 +38,7 @@ export class Foo extends SpringElement {
 		st.i18n.setLanguage("en");
 
 		setTimeout(() => {
-			log(
+			st.log(
 				"router",
 				st.router,
 				"di",
@@ -63,13 +60,13 @@ export class Foo extends SpringElement {
 	}
 
 	onConnect(): boolean {
-		log("to be executed on connect");
+		st.log("to be executed on connect");
 		//this.lifecycle.doRender();
 
 		setTimeout(() => {
 			this.some = "haha2";
 			//this.lifecycle.render();
-			log("re-render after attribute change");
+			st.log("re-render after attribute change");
 		}, 1000);
 
 		setTimeout(() => {

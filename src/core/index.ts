@@ -1,7 +1,4 @@
-export * from "./cd";
-export * from "./di";
-export * from "./i18n";
-export * from "./log";
-// //export * from "./rx";
-export * from "./share";
+// only absolute core dependencies
+export { isPrimitive } from "./lang/isPrimitive";
 export * from "./st";
+import "./log/log";

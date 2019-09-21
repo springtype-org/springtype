@@ -1,7 +1,7 @@
 import { st } from "../../core";
 import { DEFAULT_EMPTY_PATH } from "../../core/cd/PropChangeManager";
+import { CustomHTMLElement } from "./CustomHTMLElement";
 import { RenderReason } from "./interface/ILifecycle";
-import { SpringElement } from "./SpringElement";
 
 export const OBSERVED_ATTRIBUTES: any = Symbol("OBSERVED_ATTRIBUTES");
 export const CUSTOM_ELEMENT_OPTIONS: any = Symbol("CUSTOM_ELEMENT_OPTIONS");
@@ -47,7 +47,7 @@ export class CustomElementManager {
 		}
 	}
 
-	static observeAttribute(instance: SpringElement, attributeName: string) {
+	static observeAttribute(instance: CustomHTMLElement, attributeName: string) {
 		// TODO: Check for multi instance (functional scope?!)
 		// backing value (real value storage)
 		let value = (instance as any)[attributeName];

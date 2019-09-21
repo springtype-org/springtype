@@ -1,4 +1,4 @@
-import { error } from "../../core";
+import { st } from "../../core";
 import {
 	IVirtualChildren,
 	IVirtualNode,
@@ -18,7 +18,7 @@ export class VirtualDOM {
 
 		// it's a custom element, but it's not registered
 		if (type.indexOf("-") > -1 && !customElements.get(type)) {
-			error(
+			st.error(
 				new Error(
 					`💣 <${type} /> is used but not imported. Make sure to import the custom element class that defines ${type}. Look for a file containing: @customElement('${type}')!`
 				)

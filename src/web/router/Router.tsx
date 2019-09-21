@@ -3,11 +3,11 @@ import { TAG_NAME } from "../customelement/CustomElementManager";
 import { tsx } from "../vdom";
 import { IVirtualNode } from "../vdom/interface/IVirtualNode";
 import {
+	ILocationChangeDecision,
+	IRouteDefinition,
 	IRouter,
-	LocationChangeDecision,
-	RouteDefinition,
-	Routes,
-	TokenizedRoutes
+	IRoutes,
+	ITokenizedRoutes
 } from "./interface/IRouter";
 import { RouterOutlet } from "./RouterOutlet";
 
@@ -21,8 +21,8 @@ export class Router implements IRouter {
 		}
 	}
 
-	TOKENIZED_ROUTES: TokenizedRoutes = {};
-	ROUTE_MAP: Routes = {};
+	TOKENIZED_ROUTES: ITokenizedRoutes = {};
+	ROUTE_MAP: IRoutes = {};
 	CURRENT_PARAMS: any = {};
 	CURRENT_PATH: string = "";
 	CURRENT_DECISION: any;
@@ -50,7 +50,7 @@ export class Router implements IRouter {
 		st.router.ROUTER_OUTLET.refresh();
 	}
 
-	registerRoutes(routes: Routes): void {
+	registerRoutes(routes: IRoutes): void {
 		for (let route in routes) {
 			st.router.TOKENIZED_ROUTES[route] = st.router.tokenizeRoute(route, true);
 		}
@@ -73,7 +73,7 @@ export class Router implements IRouter {
 		return tokenizedRoute;
 	}
 
-	match(realRoute: string): LocationChangeDecision | null {
+	match(realRoute: string): ILocationChangeDecision | null {
 		const tokenizedRoute = st.router.tokenizeRoute(realRoute);
 
 		const params: {
@@ -110,7 +110,7 @@ export class Router implements IRouter {
 					},
 					element: resolvedComponentAndParams.element,
 					route
-				} as LocationChangeDecision;
+				} as ILocationChangeDecision;
 			}
 		}
 
@@ -123,7 +123,7 @@ export class Router implements IRouter {
 				route: ROUTE_NOT_FOUND,
 				element: resolvedComponentAndParams.element,
 				params: resolvedComponentAndParams.params
-			} as LocationChangeDecision;
+			} as ILocationChangeDecision;
 		} else {
 			return {
 				route: ROUTE_NOT_FOUND,
@@ -134,18 +134,18 @@ export class Router implements IRouter {
 					)} or: ${ROUTE_NOT_FOUND}`}</div>
 				),
 				params: {}
-			} as LocationChangeDecision;
+			} as ILocationChangeDecision;
 		}
 	}
 
 	getComponent(
-		cmpOrDef: RouteDefinition | IVirtualNode | any
+		cmpOrDef: IRouteDefinition | IVirtualNode | any
 	): {
 		params: any;
 		element: IVirtualNode;
 	} {
-		let element: any = (cmpOrDef as RouteDefinition).element
-			? (cmpOrDef as RouteDefinition).element
+		let element: any = (cmpOrDef as IRouteDefinition).element
+			? (cmpOrDef as IRouteDefinition).element
 			: (cmpOrDef as IVirtualNode);
 
 		if (element[TAG_NAME]) {
@@ -156,7 +156,7 @@ export class Router implements IRouter {
 			} as IVirtualNode;
 		}
 
-		const params = (cmpOrDef as RouteDefinition).params || {};
+		const params = (cmpOrDef as IRouteDefinition).params || {};
 
 		return {
 			element,

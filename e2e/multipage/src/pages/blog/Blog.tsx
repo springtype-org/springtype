@@ -1,11 +1,11 @@
 import { st } from "../../../../../src/core";
-import { CustomElement, tsx } from "../../../../../src/web";
-import { SpringElement } from "../../../../../src/web/customelement/SpringElement";
+import { customElement } from "../../../../../src/web/customelement";
+import { tsx } from "../../../../../src/web/vdom";
 import { HomePage } from "../home/Home";
 import { FirstPostPage } from "./posts/FirstPost";
 
-@CustomElement("blogpage-root")
-export class BlogPage extends SpringElement {
+@customElement("blogpage-root")
+export class BlogPage extends st.customElement {
 	static ROUTE = "/blog";
 
 	nagivateHome = () => {

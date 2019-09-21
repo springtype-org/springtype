@@ -1,6 +1,6 @@
 import { isPrimitive } from "../lang/isPrimitive";
 import { ChangeDetector } from "./ChangeDetector";
-import { OnPropChange, PropChangeType } from "./interface/OnPropChange";
+import { IOnPropChange, PropChangeType } from "./interface/IOnPropChange";
 
 export const PROPS: any = Symbol("PROPS");
 
@@ -27,7 +27,7 @@ export class PropChangeManager {
 		}
 	}
 
-	static initProp(instance: OnPropChange, name: string) {
+	static initProp(instance: IOnPropChange, name: string) {
 		PropChangeManager.applyChangeDetection(
 			instance,
 			name,

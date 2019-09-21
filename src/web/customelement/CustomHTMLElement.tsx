@@ -1,17 +1,13 @@
-import { ICustomElementOptions } from ".";
-import { ITypedStyleSheet, TSS, tsx } from "..";
-import {
-	error,
-	OnPropChange,
-	PropChange,
-	removeSharedMemoryChangeHandlersOfInstance,
-	warn
-} from "../../core";
+import { st } from "../../core";
+import { IOnPropChange, IPropChange } from "../../core/cd";
 import {
 	DEFAULT_EMPTY_PATH,
 	PropChangeManager,
 	PROPS
 } from "../../core/cd/PropChangeManager";
+import { removeSharedMemoryChangeHandlersOfInstance } from "../../core/sharedmemory/share";
+import { ITypedStyleSheet, TSS } from "../tss";
+import { tsx } from "../vdom";
 import { IElement } from "../vdom/interface/IElement";
 import { IVirtualNode } from "../vdom/interface/IVirtualNode";
 import { Renderer } from "../vdom/Renderer";
@@ -20,21 +16,22 @@ import {
 	CUSTOM_ELEMENT_OPTIONS,
 	OBSERVED_ATTRIBUTES
 } from "./CustomElementManager";
+import { ICustomElementOptions } from "./interface/ICustomElementOptions";
 import {
 	ILifecycle,
 	RenderReason,
 	RenderReasonMetaData
 } from "./interface/ILifecycle";
 
-export class SpringElement extends HTMLElement
-	implements ILifecycle, OnPropChange {
+export class CustomHTMLElement extends HTMLElement
+	implements ILifecycle, IOnPropChange {
 	constructor(
 		public _root: ShadowRoot | HTMLElement | undefined = undefined,
 		public _notInitialRender = false
 	) {
 		super();
 
-		// init @Prop support
+		// init @prop support
 		PropChangeManager.initProps(
 			this,
 			Object.getPrototypeOf(this).constructor[PROPS] || []
@@ -89,7 +86,7 @@ export class SpringElement extends HTMLElement
 		// (e.g. doesn't retrigger render on TSS theme change)
 		CustomElementManager.removeInstance(this);
 
-		// remove @Shared handlers
+		// remove @shared handlers
 		removeSharedMemoryChangeHandlersOfInstance(this);
 
 		if (typeof this.onDisconnect == "function") {
@@ -144,7 +141,7 @@ export class SpringElement extends HTMLElement
 		}
 	}
 
-	onPropChange(change: PropChange) {
+	onPropChange(change: IPropChange) {
 		if (
 			this.shouldRender(RenderReason.PROP_CHANGE, {
 				name: change.name,
@@ -181,7 +178,7 @@ export class SpringElement extends HTMLElement
 		const msg = `🔥Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
 
 		// TODO: Function to render error
-		warn(msg);
+		st.warn(msg);
 
 		return <pre>{msg}</pre>;
 	}
@@ -210,7 +207,7 @@ export class SpringElement extends HTMLElement
 			}
 		} catch (e) {
 			if (e.message.indexOf("tsx") > -1) {
-				error(
+				st.error(
 					`💣 The function tsx of package vdom must be imported for wherever you use <tsx></tsx> syntax!`
 				);
 			}
@@ -251,3 +248,4 @@ export class SpringElement extends HTMLElement
 	onAfterInitialRender() {}
 	onAfterRender() {}
 }
+st.customElement = CustomHTMLElement;
