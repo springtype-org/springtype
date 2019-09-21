@@ -16,6 +16,7 @@ export class VirtualDOM {
 		// attributes can be null or an object: clone
 		attributes = { ...attributes };
 
+		// TODO: mock
 		// it's a custom element, but it's not registered
 		if (type.indexOf("-") > -1 && !customElements.get(type)) {
 			st.error(

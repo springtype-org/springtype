@@ -3,7 +3,7 @@ import {
 	SET_REF_NAME,
 	SET_REF_PROP_NAME,
 	SET_REF_VALUE
-} from "./decorator/ref";
+} from "./decorator/domRef";
 import { IGetDomRef, ISetDomRef } from "./interface/IDOMRef";
 
 export const getDomRef: IGetDomRef = (
@@ -33,5 +33,5 @@ export const setDomRef: ISetDomRef = (
 	}
 };
 
-st.getRef = getDomRef;
-st.setRef = setDomRef;
+st.getDomRef = getDomRef;
+st.setDomRef = setDomRef;

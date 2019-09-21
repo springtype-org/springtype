@@ -1,8 +1,7 @@
 import { st } from "../../../src/core";
-import { tsx } from "../../../src/web";
 import { customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill";
-import { ref } from "../../../src/web/vdom/decorator/ref";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
+import { domRef, tsx } from "../../../src/web/vdom";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
@@ -12,11 +11,11 @@ if (process.env.NODE_ENV === "development") {
 export class RefTest extends st.customElement {
 	time: number = 0;
 
-	@ref("someDiv")
+	@domRef("someDiv")
 	someDiv!: HTMLDivElement;
 
 	onGetDiv = () => {
-		console.log("get div", st.getRef("someDiv", this), this.someDiv);
+		console.log("get div", st.getDomRef("someDiv", this), this.someDiv);
 
 		this.time = Date.now();
 

@@ -1,3 +1,6 @@
+import "./DOM";
+import "./DOMRef";
 import "./interface/JSX";
-export { ref } from "./decorator/ref";
+
+export { domRef } from "./decorator/domRef";
 export { tsx } from "./VirtualDOM";

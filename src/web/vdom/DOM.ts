@@ -1,6 +1,5 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/isPrimitive";
-import "./DOMRef";
 import { IElement } from "./interface/IElement";
 import {
 	IVirtualChild,
@@ -98,7 +97,7 @@ export class DOM {
 		// for access from CustomElements
 		if (name === "ref") {
 			const refName = Object.keys(value)[0];
-			st.setRef(refName, value[refName], parentDomElement);
+			st.setDomRef(refName, value[refName], parentDomElement);
 			return;
 		}
 

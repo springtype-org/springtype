@@ -1,7 +1,7 @@
-//export type IVirtualNodeType = ICustomElement | string | null;
 export type IVirtualNodeType = string;
 export interface IVirtualNodeAttributes {
-	key?: string; // TODO: Use the key! -- on lists, auto-generate
+	key?: string;
+	ref?: string;
 	[attributeName: string]: any;
 }
 
@@ -24,5 +24,5 @@ export type IVirtualChild =
 	| boolean
 	| null
 	| undefined;
-//export type IVirtualChildren = IVirtualChild[] | IVirtualChild;
+
 export type IVirtualChildren = IVirtualChild[];

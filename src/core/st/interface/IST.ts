@@ -33,8 +33,8 @@ export interface IST {
 	// state
 
 	// set and get DOM references from within @customElement classes using @ref
-	getRef: IGetDomRef;
-	setRef: ISetDomRef;
+	getDomRef: IGetDomRef;
+	setDomRef: ISetDomRef;
 
 	// custom element base class implemenetation to inherit from
 	customElement: any; // typeof CustomHTMLElement TODO: Interface otherwise it imports!
