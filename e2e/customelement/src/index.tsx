@@ -1,16 +1,10 @@
-import { DI, getShare, I18n, log, Share, st, Use } from "../../../src/core";
+import { getShare, log, Share, st } from "../../../src/core";
 import {
 	Attribute,
 	CustomElement,
-	customElementsHMRPolyfill,
-	ILifecycle,
-	Lifecycle,
-	Router,
-	State,
-	Store,
-	TSS
+	customElementsHMRPolyfill
 } from "../../../src/web";
-import { Foo2 } from "./component";
+import { SpringElement } from "../../../src/web/customelement/SpringElement";
 import { tpl } from "./index.tpl";
 import { tss } from "./index.tss";
 
@@ -23,8 +17,7 @@ if (process.env.NODE_ENV === "development") {
 	tss,
 	shadowMode: "none"
 })
-@Use(Foo2)
-export class Foo extends HTMLElement implements ILifecycle {
+export class Foo extends SpringElement {
 	@Attribute()
 	some: string = "test";
 
@@ -32,37 +25,35 @@ export class Foo extends HTMLElement implements ILifecycle {
 	lolShared: any = getShare("foo");
 
 	onButtonClick = () => {
-		this.lifecycle.render();
+		this.reflow();
 	};
-	constructor(
-		router: Router,
-		di: DI,
-		i18n: I18n,
-		store: Store,
-		state: State,
-		private lifecycle: Lifecycle,
-		protected tss: TSS
-	) {
+
+	render() {
+		console.log("render x");
+		return tpl(this);
+	}
+
+	constructor() {
 		super();
 
 		console.log("foo st", st);
 
-		i18n.setLanguage("en");
+		st.i18n.setLanguage("en");
 
 		setTimeout(() => {
 			log(
 				"router",
-				router,
+				st.router,
 				"di",
-				di,
+				st.di,
 				"i18n",
-				i18n,
+				st.i18n,
 				"store",
-				store,
+				st.store,
 				"state",
-				state,
+				st.state,
 				"tss",
-				tss
+				st.tss
 			);
 		}, 200);
 	}
@@ -71,8 +62,8 @@ export class Foo extends HTMLElement implements ILifecycle {
 		console.log("1PROP change", change);
 	}
 
-	onConnect() {
-		log("to be executed on connect", this.lifecycle);
+	onConnect(): boolean {
+		log("to be executed on connect");
 		//this.lifecycle.doRender();
 
 		setTimeout(() => {
@@ -87,6 +78,7 @@ export class Foo extends HTMLElement implements ILifecycle {
 
 			console.log("FINAL1", this.lolShared);
 		}, 5000);
+		return true;
 	}
 }
 

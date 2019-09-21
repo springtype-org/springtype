@@ -9,7 +9,7 @@ import { isPrimitive } from "../lang/isPrimitive";
 /* internal API */
 
 // used by @Share decorator internally
-export const SHARED_MEMORY: any = Symbol("SHARED_MEMORY");
+export const SHARED_MEMORY: any = "SHARED_MEMORY";
 const DEFAULT_SHARED_MEMORY_VALUE = {};
 const HANDLER_OWNING_INSTANCE: any = Symbol("HANDLER_OWNING_INSTANCE");
 

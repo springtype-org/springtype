@@ -1,4 +1,5 @@
-import { camelToKebabCase, InjectionStrategy, st } from "../../core";
+import { st } from "../../core";
+import { camelToKebabCase } from "../../core/lang/string/camelToKebabCase";
 import { CustomElementManager } from "../customelement/CustomElementManager";
 import { tsx } from "../vdom";
 import { IVirtualNode } from "../vdom/interface/IVirtualNode";
@@ -8,14 +9,6 @@ export class TSS implements ITSS {
 	static init() {
 		if (!st.tss) {
 			st.tss = new TSS();
-
-			// register with DI only if enabled
-			// allows to inject Router in constructors
-			if (st.di) {
-				st.di.setClassName(TSS, "TSS");
-				st.di.registerSingletonInstance(st.tss);
-				st.di.setInjectionStrategyConfig(TSS, InjectionStrategy.SINGLETON);
-			}
 		}
 	}
 

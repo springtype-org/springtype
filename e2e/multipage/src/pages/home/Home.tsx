@@ -1,7 +1,8 @@
-import { CustomElement, ILifecycle, tsx } from "../../../../../src/web";
+import { CustomElement, tsx } from "../../../../../src/web";
+import { SpringElement } from "../../../../../src/web/customelement/SpringElement";
 
 @CustomElement("homepage-root")
-export class HomePage extends HTMLElement implements ILifecycle {
+export class HomePage extends SpringElement {
 	static ROUTE = "";
 
 	render() {

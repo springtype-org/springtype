@@ -1,4 +1,3 @@
-import { InjectionStrategy } from "../di/enum/InjectionStrategy";
 import { warn } from "../log/log";
 import { st } from "../st/ST";
 import {
@@ -22,14 +21,6 @@ export class I18n implements Ii18n {
 		if (!st.i18n) {
 			// initialize sub-global
 			st.i18n = new I18n();
-
-			// register with DI only if enabled
-			// allows to inject I18n in constructors
-			if (st.di) {
-				st.di.setClassName(I18n, "I18n");
-				st.di.registerSingletonInstance(st.i18n);
-				st.di.setInjectionStrategyConfig(I18n, InjectionStrategy.SINGLETON);
-			}
 		}
 	}
 

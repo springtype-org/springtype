@@ -1,10 +1,11 @@
+import { st } from "../../../src/core";
 import { PropChange } from "../../../src/core/cd/interface/OnPropChange";
-import { DI } from "../../../src/core/di/DI";
 import { log } from "../../../src/core/log/log";
 import { Share } from "../../../src/core/share/decorator/Share";
 import { getShare, initShare } from "../../../src/core/share/share";
 import { tsx } from "../../../src/web";
 import { Attribute, CustomElement } from "../../../src/web/customelement";
+import { SpringElement } from "../../../src/web/customelement/SpringElement";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill";
 
 if (process.env.NODE_ENV === "development") {
@@ -18,7 +19,7 @@ interface LolShared {
 }
 
 @CustomElement("my-foo")
-export class Foo extends HTMLElement {
+export class Foo extends SpringElement {
 	@Attribute()
 	some: string = "test";
 
@@ -41,11 +42,11 @@ export class Foo extends HTMLElement {
 		this
 	);
 
-	constructor(di: DI) {
+	constructor() {
 		super();
 
 		setTimeout(() => {
-			log("di", di, "i18n");
+			log("di", st.di, "i18n");
 
 			// external change (reset of reference)
 			this.lolShared = { lala: 456 };

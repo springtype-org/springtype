@@ -1,4 +1,5 @@
-import { isPrimitive, st } from "../../core";
+import { st } from "../../core";
+import { isPrimitive } from "../../core/lang/isPrimitive";
 import "./DOMRef";
 import { IElement } from "./interface/IElement";
 import {
@@ -97,7 +98,12 @@ export class DOM {
 		// for access from CustomElements
 		if (name === "ref") {
 			const refName = Object.keys(value)[0];
-			st.domRef.set(refName, value[refName], parentDomElement);
+			st.setRef(refName, value[refName], parentDomElement);
+			return;
+		}
+
+		if (name.startsWith("on") && typeof value == "function") {
+			parentDomElement.addEventListener(name.substring(2).toLowerCase(), value);
 			return;
 		}
 
@@ -107,8 +113,6 @@ export class DOM {
 				VirtualDOM.tsxToStandardAttributeName(name),
 				value
 			);
-		} else if (name.startsWith("on") && typeof value == "function") {
-			parentDomElement.addEventListener(name.substring(2).toLowerCase(), value);
 		} else {
 			parentDomElement.setAttribute(name, value);
 		}

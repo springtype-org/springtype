@@ -1,27 +1,37 @@
 import { st } from "../../core";
-import { IDOMRef, INodeRef } from "./interface/IDOMRef";
+import {
+	SET_REF_NAME,
+	SET_REF_PROP_NAME,
+	SET_REF_VALUE
+} from "./decorator/Ref";
+import { IGetDomRef, ISetDomRef } from "./interface/IDOMRef";
 
-export class DOMRef implements IDOMRef {
-	map: WeakMap<any, INodeRef> = new WeakMap();
+export const getDomRef: IGetDomRef = (
+	refName: string,
+	customElementInstance: any
+): Node => {
+	const index = customElementInstance[SET_REF_NAME].indexOf(refName);
+	return customElementInstance[SET_REF_VALUE][index];
+};
 
-	static init() {
-		st.domRef = new DOMRef();
-		st.getRef = st.domRef.get;
+export const setDomRef: ISetDomRef = (
+	refName: string,
+	customElementInstance: any,
+	node: Node
+) => {
+	const index = customElementInstance[SET_REF_NAME].indexOf(refName);
+
+	// instance asks for @Ref
+	if (index > -1) {
+		const propName = customElementInstance[SET_REF_PROP_NAME][index];
+
+		// set property of instance's value
+		customElementInstance[propName] = node;
+
+		// set value at index for fast index lookup using st.getRef()
+		customElementInstance[SET_REF_VALUE][index] = node;
 	}
+};
 
-	get(refName: string, customElementInstance: any): Node {
-		const refs = st.domRef.map.get(customElementInstance) || {};
-		return refs[refName];
-	}
-
-	set(refName: string, customElementInstance: any, node: Node) {
-		const refs = st.domRef.map.get(customElementInstance) || {};
-		refs[refName] = node;
-		st.domRef.map.set(customElementInstance, refs);
-	}
-
-	delete(customElementInstance: any) {
-		st.domRef.map.delete(customElementInstance);
-	}
-}
-DOMRef.init();
+st.getRef = getDomRef;
+st.setRef = setDomRef;

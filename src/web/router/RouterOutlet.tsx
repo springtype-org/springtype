@@ -1,20 +1,21 @@
 import { tsx } from "..";
+import { st } from "../../core";
 import { Attribute, CustomElement } from "../customelement";
+import { SpringElement } from "../customelement/SpringElement";
 import { IVirtualNode } from "../vdom/interface/IVirtualNode";
 import { LocationChangeDecision } from "./interface/IRouter";
-import { Router } from "./Router";
 
 @CustomElement("router-outlet")
-export class RouterOutlet extends HTMLElement {
+export class RouterOutlet extends SpringElement {
 	locationChangeDecision: LocationChangeDecision | null = null;
 
 	@Attribute()
 	element: IVirtualNode | null = null;
 
-	constructor(protected router: Router) {
+	constructor() {
 		super();
-		this.router.registerRouterOutlet(this);
-		this.router.enable();
+		st.router.registerRouterOutlet(this);
+		st.router.enable();
 	}
 
 	refresh() {
@@ -27,11 +28,16 @@ export class RouterOutlet extends HTMLElement {
 		this.element = this.locationChangeDecision.element;
 	}
 
+	/*
 	onBeforeRender() {
+		console.log("onBeforeRender");
 		this.element = this.locationChangeDecision!.element;
 	}
+	*/
 
 	render() {
+		console.log("render");
+
 		if (this.element) {
 			return this.element;
 		}

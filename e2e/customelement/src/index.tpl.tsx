@@ -1,4 +1,5 @@
 import { tsx } from "../../../src/web";
+import "./component";
 import { Foo } from "./index";
 
 export const tpl = (customElement: Foo) => {

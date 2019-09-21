@@ -1,22 +1,27 @@
 import { st } from "../../../src/core";
 import { tsx } from "../../../src/web";
-import { CustomElement, ILifecycle } from "../../../src/web/customelement";
+import { CustomElement } from "../../../src/web/customelement";
+import { SpringElement } from "../../../src/web/customelement/SpringElement";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill";
+import { Ref } from "../../../src/web/vdom/decorator/Ref";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
 }
 
 @CustomElement("ref-test")
-export class RefTest extends HTMLElement implements ILifecycle {
+export class RefTest extends SpringElement {
 	time: number = 0;
 
+	@Ref("someDiv")
+	someDiv!: HTMLDivElement;
+
 	onGetDiv = () => {
-		console.log("get div", st.getRef("someDiv", this));
+		console.log("get div", st.getRef("someDiv", this), this.someDiv);
 
 		this.time = Date.now();
 
-		this.render();
+		this.reflow();
 	};
 
 	render() {

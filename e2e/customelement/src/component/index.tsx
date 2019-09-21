@@ -4,13 +4,14 @@ import {
 	getShare,
 	initShare,
 	log,
-	OnPropChange,
+	Prop,
 	PropChange,
 	Share,
 	t,
 	Translation
 } from "../../../../src/core";
-import { Attribute, CustomElement, ILifecycle, tsx } from "../../../../src/web";
+import { Attribute, CustomElement, tsx } from "../../../../src/web";
+import { SpringElement } from "../../../../src/web/customelement/SpringElement";
 // @ts-ignore JSON module import activated in bundler config
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
@@ -20,7 +21,7 @@ import * as en from "./i18n/en.json";
 @Translation("de", de)
 @Translation("en", en)
 @CustomElement("my-foo2")
-export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
+export class Foo2 extends SpringElement {
 	@Attribute()
 	foo: string = "Jesus!!!";
 
@@ -37,9 +38,8 @@ export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
 	@Share("foo")
 	foo4: any = initShare("foo", {});
 
-	constructor() {
-		super();
-	}
+	@Prop()
+	lala: any = { a: "hase" };
 
 	onPropChange(change: PropChange) {
 		console.log("PROP change", change);
@@ -77,6 +77,9 @@ export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
 					someValue2: "Yeah!"
 				}) +
 				this.getAttribute("foo3");
+
+			this.lala.a = "hase!";
+			this.lala = "kabel";
 
 			this.foo2 = true;
 

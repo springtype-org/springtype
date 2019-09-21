@@ -20,7 +20,7 @@ export class VirtualDOM {
 		if (type.indexOf("-") > -1 && !customElements.get(type)) {
 			error(
 				new Error(
-					`@CustomElement('${type}', { ... }) is used but not imported. Make sure to @Use(...) the class name where you use the tag name!`
+					`💣 <${type} /> is used but not imported. Make sure to import the custom element class that defines ${type}. Look for a file containing: @customElement('${type}')!`
 				)
 			);
 		}

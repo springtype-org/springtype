@@ -1,4 +1,4 @@
-import { InjectionStrategy, st } from "../../core";
+import { st } from "../../core";
 import { TAG_NAME } from "../customelement/CustomElementManager";
 import { tsx } from "../vdom";
 import { IVirtualNode } from "../vdom/interface/IVirtualNode";
@@ -18,14 +18,6 @@ export class Router implements IRouter {
 	static init() {
 		if (!st.router) {
 			st.router = new Router();
-
-			// register with DI only if enabled
-			// allows to inject Router in constructors
-			if (st.di) {
-				st.di.setClassName(Router, "Router");
-				st.di.registerSingletonInstance(st.router);
-				st.di.setInjectionStrategyConfig(Router, InjectionStrategy.SINGLETON);
-			}
 		}
 	}
 

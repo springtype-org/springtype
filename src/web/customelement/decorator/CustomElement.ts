@@ -1,5 +1,4 @@
-import { createDerivedChangeDetectingClass, DI, error } from "../../../core";
-import { createDerivedClass as createDerivedCustomElementClass } from "../createDerivedCustomElementClass";
+import { error } from "../../../core";
 import { CUSTOM_ELEMENT_OPTIONS, TAG_NAME } from "../CustomElementManager";
 import { ICustomElementOptions } from "../interface/ICustomElementOptions";
 
@@ -28,22 +27,13 @@ export const CustomElement = (
 			);
 		}
 
-		// enable rendering lifecycle and @Attribute
-		const customElementClass = createDerivedCustomElementClass(
-			// enable change detection for @Prop
-			createDerivedChangeDetectingClass(
-				// enable dependency injection for constructor arguments
-				DI.createDerivedInjectableClass(targetClass)
-			)
-		);
-
 		// register with DOM API
-		customElements.define(tagName, customElementClass);
+		customElements.define(tagName, targetClass);
 
 		// assign options to be used in CustomElement derived class constructor
-		customElementClass[TAG_NAME] = tagName;
-		customElementClass[CUSTOM_ELEMENT_OPTIONS] = options;
+		targetClass[TAG_NAME] = tagName;
+		targetClass[CUSTOM_ELEMENT_OPTIONS] = options;
 
-		return customElementClass;
+		return targetClass;
 	};
 };

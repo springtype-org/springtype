@@ -1,7 +1,6 @@
 import { IRouter } from "../../../web/router/interface/IRouter";
 import { ITSS } from "../../../web/tss/interface/ITSS";
-import { IDOMRef } from "../../../web/vdom/interface/IDOMRef";
-import { getRef } from "../../../web/vdom/interface/IVirtualNode";
+import { IGetDomRef, ISetDomRef } from "../../../web/vdom/interface/IDOMRef";
 import { IDI } from "../../di/interface/IDI";
 import { Ii18n } from "../../i18n/interface/Ii18n";
 
@@ -30,9 +29,8 @@ export interface IST {
 	// vdom
 	// state
 
-	getRef: getRef;
-
-	domRef: IDOMRef;
+	getRef: IGetDomRef;
+	setRef: ISetDomRef;
 
 	// e.g. [Symbol(SHARED_MEMORY), Symbol(CUSTOM_ELEMENT_INSTANCES)]
 	[libraryGlobalName: string]: any;

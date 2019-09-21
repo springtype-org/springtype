@@ -1,15 +1,18 @@
-import { DI } from "../DI";
+import { INJECTION_STRATEGY } from "../DI";
 import { InjectionStrategy } from "../enum/InjectionStrategy";
+import { IInjectionStrategyConfig } from "../interface/IInjectionStrategyConfig";
 
 export const Injectable = (
 	injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON,
 	factoryFn?: Function
 ) => {
 	return (originalCtor: any) => {
-		return DI.createDerivedInjectableClass(
-			originalCtor,
-			injectionStrategy,
-			factoryFn
-		);
+		Object.defineProperty(originalCtor, INJECTION_STRATEGY, {
+			value: {
+				injectionStrategy,
+				factoryFn
+			} as IInjectionStrategyConfig
+		});
+		return originalCtor;
 	};
 };

@@ -1,9 +1,11 @@
 import { st } from "../../core";
+import { DEFAULT_EMPTY_PATH } from "../../core/cd/PropChangeManager";
 import { RenderReason } from "./interface/ILifecycle";
+import { SpringElement } from "./SpringElement";
 
 export const OBSERVED_ATTRIBUTES: any = Symbol("OBSERVED_ATTRIBUTES");
 export const CUSTOM_ELEMENT_OPTIONS: any = Symbol("CUSTOM_ELEMENT_OPTIONS");
-export const CUSTOM_ELEMENT_INSTANCES: any = Symbol("CUSTOM_ELEMENT_INSTANCES");
+export const CUSTOM_ELEMENT_INSTANCES: any = "CUSTOM_ELEMENT_INSTANCES";
 export const TAG_NAME: any = Symbol("TAG_NAME");
 
 export class CustomElementManager {
@@ -45,77 +47,35 @@ export class CustomElementManager {
 		}
 	}
 
-	static observeAttribute(instance: any, name: string) {
-		let value = instance[name];
+	static observeAttribute(instance: SpringElement, attributeName: string) {
+		// TODO: Check for multi instance (functional scope?!)
+		// backing value (real value storage)
+		let value = (instance as any)[attributeName];
 
-		Object.defineProperty(instance, name, {
+		Object.defineProperty(instance, attributeName, {
 			get: () => value,
 			set: (newValue: any) => {
 				const prevValue = value;
 
 				if (prevValue !== newValue) {
-					// really set value
+					// really set backing value
 					value = newValue;
 
 					if (
+						// don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
+						instance._notInitialRender &&
+						// and don't render if the user land condition denies
 						instance.shouldRender(RenderReason.ATTRIBUTE_CHANGE, {
-							name,
+							path: DEFAULT_EMPTY_PATH,
+							name: attributeName,
 							value,
 							prevValue
 						})
 					) {
-						instance.render();
+						instance.reflow();
 					}
 				}
 			}
 		});
-
-		/*
-		PropChangeManager.initChangeDetection(
-			instance,
-			attributeName,
-			(value: any, prevValue) => {
-				CustomElementManager.changeHandler(instance, value, prevValue);
-			},
-			(path: string, value: any, prevValue: any) => {
-				CustomElementManager.deepChangeHandler(
-					instance,
-					path,
-					value,
-					prevValue
-				);
-			}
-		);
-		*/
 	}
-
-	/*
-	static deepChangeHandler(
-		instance: any,
-		path: string,
-		value: any,
-		oldValue: any
-	) {
-		if (
-			instance.shouldRender(RenderReason.PROPERTY_CHANGE_DEEP, {
-				propertyChangePath: path,
-				propertyNewValue: value,
-				propertyOldValue: oldValue
-			})
-		) {
-			instance.render();
-		}
-	}
-
-	static changeHandler(instance: any, value: any, prevValue: any) {
-		if (
-			instance.shouldRender(RenderReason.PROPERTY_CHANGE, {
-				value,
-				prevValue
-			})
-		) {
-			instance.render();
-		}
-	}
-	*/
 }
