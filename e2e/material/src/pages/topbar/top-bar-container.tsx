@@ -1,16 +1,17 @@
-import {Attribute, CustomElement, ILifecycle} from "../../../../../src/web/customelement";
-import {IVirtualNode, IVirtualNodeAttributes} from "../../../../../src/web/vdom/interface/IVirtualNode";
 import {VariantType} from "../../../../../material/src/component/mwc-top-bar/mwc-top-bar";
-import {tsx} from "../../../../../src/web";
+import {st} from "../../../../../src/core/st";
+import {attr, customElement} from "../../../../../src/web/customelement";
 import '../../../../../material/src/component/mwc-top-bar/mwc-top-bar'
+import { tsx } from "../../../../../src/web/vdom";
+import {IVirtualNode} from "../../../../../src/web/vdom/interface";
 
-@CustomElement('top-bar-container', {shadowMode: "none"})
-export class TopBarContainer extends HTMLElement implements ILifecycle {
-    @Attribute()
+@customElement('top-bar-container', {shadowMode: "none"})
+export class TopBarContainer extends st.customElement {
+    @attr()
     type: VariantType = false;
 
 
-    render(): IVirtualNode<IVirtualNodeAttributes> {
+    render(): IVirtualNode<any> {
         const name = !this.type ? 'STANDARD' : this.type.toUpperCase();
         return <div>
             <h2>{name}</h2>

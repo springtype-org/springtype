@@ -19,8 +19,7 @@ export default (component: MwcTopBar) => {
             'mdc-top-app-bar--short': short,
             'mdc-top-app-bar--short-collapsed': short,
             'mdc-top-app-bar--short-has-action-item': short
-        })} style={'width: ' + component.prop.offsetWidth + 'px'
-        }>
+        })} >
             <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                     { /* TODO: add topbar-start */}

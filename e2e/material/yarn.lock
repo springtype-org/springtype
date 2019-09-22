@@ -45,6 +45,18 @@
   resolved "https://registry.yarnpkg.com/@material/feature-targeting/-/feature-targeting-3.1.0.tgz#a6f6cacd1e0c9b60dc82f2f3bb2de8cfd472252b"
   integrity sha512-aXAa1Pv6w32URacE9LfMsl9zI6hFwx1K0Lp3Xpyf4rAkmaAB6z0gOkhicOrVFc0f64YheJgHjE7hJFieVenQdw==
 
+"@material/floating-label@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/floating-label/-/floating-label-3.2.0.tgz#6de47528d1534b7d87f42286ed952fe63153c4d9"
+  integrity sha512-szzsSou+xXj3E6InEuOCr8E28IE5EdcBfKRaHoR5EBkzgcRxLuZkFSqD19zsUgVErdTCcRSbeU9mYa6cP8+Nzw==
+  dependencies:
+    "@material/animation" "^3.1.0"
+    "@material/base" "^3.1.0"
+    "@material/rtl" "^3.2.0"
+    "@material/theme" "^3.1.0"
+    "@material/typography" "^3.1.0"
+    tslib "^1.9.3"
+
 "@material/icon-button@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@material/icon-button/-/icon-button-3.2.0.tgz#7a132fffe5be347db77281d63e7e4c5ffe0881ca"
@@ -53,6 +65,72 @@
     "@material/base" "^3.1.0"
     "@material/feature-targeting" "^3.1.0"
     "@material/ripple" "^3.2.0"
+    "@material/theme" "^3.1.0"
+    tslib "^1.9.3"
+
+"@material/line-ripple@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@material/line-ripple/-/line-ripple-3.1.0.tgz#63a4f41f2a2a5df01c2e229a76fc2b0735cd62c0"
+  integrity sha512-o6E6wrDqoOK4esCnM1MQ9t7DC/JQrzSrwYsYdqtOpGnr3G5Jx7WWVt6GEVh2eNXy8OnVYkJdQbMjyPVEVJb/Dg==
+  dependencies:
+    "@material/animation" "^3.1.0"
+    "@material/base" "^3.1.0"
+    "@material/theme" "^3.1.0"
+    tslib "^1.9.3"
+
+"@material/list@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/list/-/list-3.2.0.tgz#f14c277f0ffe09d4f0875f0add6daa8b87633d36"
+  integrity sha512-WtMbN7u4z3qbwU7w/I1DdU6ges5oqorQD5bBXJcS+/c/lMqVul/qchVbnqRUBpewSlX14t7B6HSiLSwptDZK1Q==
+  dependencies:
+    "@material/base" "^3.1.0"
+    "@material/dom" "^3.1.0"
+    "@material/feature-targeting" "^3.1.0"
+    "@material/ripple" "^3.2.0"
+    "@material/rtl" "^3.2.0"
+    "@material/shape" "^3.1.0"
+    "@material/theme" "^3.1.0"
+    "@material/typography" "^3.1.0"
+    tslib "^1.9.3"
+
+"@material/menu-surface@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/menu-surface/-/menu-surface-3.2.0.tgz#b779276bd69c1ff898f40b7cae54e5d8a874b1a4"
+  integrity sha512-/B8FB5CR3QVNJZIlJzepeVluxPnQ6V2EbalgIAtOF5GIn441bXRDaZ9fNsq2yV424v2nhnDjyEcRgzBoXdeLVg==
+  dependencies:
+    "@material/animation" "^3.1.0"
+    "@material/base" "^3.1.0"
+    "@material/elevation" "^3.1.0"
+    "@material/feature-targeting" "^3.1.0"
+    "@material/rtl" "^3.2.0"
+    "@material/shape" "^3.1.0"
+    "@material/theme" "^3.1.0"
+    tslib "^1.9.3"
+
+"@material/menu@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/menu/-/menu-3.2.0.tgz#9a34a22f7a97f91d0703ea10f323d9c9d9ce541d"
+  integrity sha512-UGCSKp1WTAYN/LmPbZGA9uU9Cz6iF+zi32BhgJ7aeLOLW5L5KMvtE0VBO4LciznpK9paxnghww1kiN5W1k+CoA==
+  dependencies:
+    "@material/base" "^3.1.0"
+    "@material/dom" "^3.1.0"
+    "@material/feature-targeting" "^3.1.0"
+    "@material/list" "^3.2.0"
+    "@material/menu-surface" "^3.2.0"
+    "@material/ripple" "^3.2.0"
+    "@material/rtl" "^3.2.0"
+    tslib "^1.9.3"
+
+"@material/notched-outline@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/notched-outline/-/notched-outline-3.2.0.tgz#3b7e79e6282e747a18e97b0d0c79f06eab924aa0"
+  integrity sha512-IFuxVoQqlOy/WSSawI2Fglh/U1hS0QtVUiGsc8GUoVUd1pifn7RXidHP3vQrMDEo8M/RwA9p6uveQKjPwW41RA==
+  dependencies:
+    "@material/animation" "^3.1.0"
+    "@material/base" "^3.1.0"
+    "@material/floating-label" "^3.2.0"
+    "@material/rtl" "^3.2.0"
+    "@material/shape" "^3.1.0"
     "@material/theme" "^3.1.0"
     tslib "^1.9.3"
 
@@ -72,6 +150,25 @@
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-3.2.0.tgz#0b2f7321463100674dfbf4507b54ccd052f05378"
   integrity sha512-L/w9m9Yx1ceOw/VjEfeJoqD4rW9QP3IBb9MamXAg3qUi/zsztoXD/FUw179pxkLn4huFFNlVYZ4Y1y6BpM0PMA==
+
+"@material/select@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@material/select/-/select-3.2.0.tgz#69961f6758eda5cce9ed8ab6a72db32661697fd6"
+  integrity sha512-6zqNBXXNsUtzaJwKvj+GOGCqvKCiu+MNsPZM+2ClNsCWLphFV6dC7iU83C4XQ2MdT7t+H2ggCQOBj5gieC1l7g==
+  dependencies:
+    "@material/animation" "^3.1.0"
+    "@material/base" "^3.1.0"
+    "@material/floating-label" "^3.2.0"
+    "@material/line-ripple" "^3.1.0"
+    "@material/menu" "^3.2.0"
+    "@material/menu-surface" "^3.2.0"
+    "@material/notched-outline" "^3.2.0"
+    "@material/ripple" "^3.2.0"
+    "@material/rtl" "^3.2.0"
+    "@material/shape" "^3.1.0"
+    "@material/theme" "^3.1.0"
+    "@material/typography" "^3.1.0"
+    tslib "^1.9.3"
 
 "@material/shape@^3.1.0":
   version "3.1.0"
@@ -1566,10 +1663,10 @@ fuse-box-typechecker@^3.0.0-next.29:
     tslib "^1.10.0"
     watch "^1.0.2"
 
-fuse-box@4.0.0-next.135:
-  version "4.0.0-next.135"
-  resolved "https://registry.yarnpkg.com/fuse-box/-/fuse-box-4.0.0-next.135.tgz#20a6b2491fa671ea4f5521c8489379f8c6e414ef"
-  integrity sha512-DhXTBFCCfAZtlKKoB7kuBKcEbf1bPLvYH84I9kzLTgTLT/3B3HSeoHZNEGhLuD1vXkXsbG4cBD2Jqo706nz66g==
+fuse-box@4.0.0-next.134:
+  version "4.0.0-next.134"
+  resolved "https://registry.yarnpkg.com/fuse-box/-/fuse-box-4.0.0-next.134.tgz#e096312f004e13d79ca68b56ceb1acb6215f5fe6"
+  integrity sha512-cgg2W42aUri7yb3o5qwyMtSg90safsyqF5uILNwe7kyIDCG1RbGwhLMs5FcIgBWmpUBGCrCYy4tmvVywh+HK+g==
   dependencies:
     ansi "^0.3.1"
     app-root-path "^2.0.1"
@@ -3784,11 +3881,6 @@ readdirp@^3.1.1:
   integrity sha512-8rhl0xs2cxfVsqzreYCvs8EwBfn/DhVdqtoLmw19uI3SC5avYX9teCurlErfpPXGmYtMHReGaP2RsLnFvz/lnw==
   dependencies:
     picomatch "^2.0.4"
-
-reflect-metadata@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
-  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 regex-not@^1.0.0, regex-not@^1.0.2:
   version "1.0.2"

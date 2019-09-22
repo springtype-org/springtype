@@ -1,12 +1,13 @@
-import {customElementsHMRPolyfill} from "../../../src/web/polyfill";
-import {Route} from "../../../src/web/router/decorator/Route";
+import {customElementsHMRPolyfill} from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import {TopBarPage} from "./pages/topbar/topbar-page";
+import {route} from "../../../src/web/router";
 
 if (process.env.NODE_ENV === "development") {
     customElementsHMRPolyfill;
 }
 
-@Route(TopBarPage.ROUTE, TopBarPage)
+
+@route(TopBarPage.ROUTE, TopBarPage)
 export class AppModule {
 
 }

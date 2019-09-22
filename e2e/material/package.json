@@ -1,5 +1,5 @@
 {
-	"name": "@springtype/e2e-multipage",
+	"name": "@springtype/e2e-material",
 	"version": "1.0.0",
 	"description": "e2e test",
 	"scripts": {
@@ -10,13 +10,13 @@
 	"author": "Aron Homberg <info@aron-homberg.de>",
 	"license": "MIT",
 	"devDependencies": {
+		"@material/select": "^3.2.0",
 		"@material/top-app-bar": "^3.2.0",
 		"@springtype/bundle": "^2.0.0-alpha.1.6",
 		"@types/node": "^12.7.5",
 		"cross-env": "^5.2.1",
-		"fuse-box": "4.0.0-next.135",
+		"fuse-box": "4.0.0-next.134",
 		"fuse-box-typechecker": "^3.0.0-next.29",
-		"reflect-metadata": "^0.1.13",
 		"ts-node": "^8.4.1",
 		"tslib": "^1.10.0",
 		"typescript": "^3.5.1"
