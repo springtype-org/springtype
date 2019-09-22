@@ -1,6 +1,6 @@
-import { isPrimitive } from "../lang/isPrimitive";
-import { ChangeDetector } from "./ChangeDetector";
-import { IOnPropChange, PropChangeType } from "./interface/IOnPropChange";
+import { isPrimitive } from "../lang/is-primitive";
+import { ChangeDetector } from "./change-detector";
+import { IOnPropChange, PropChangeType } from "./interface/i-on-prop-change";
 
 export const PROPS: any = Symbol("PROPS");
 

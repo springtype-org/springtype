@@ -1,10 +1,13 @@
 import {
 	IOnPropChangeHandler,
 	PropChangeType
-} from "../cd/interface/IOnPropChange";
-import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../cd/PropChangeManager";
-import { isPrimitive } from "../lang/isPrimitive";
-import { st } from "../st/ST";
+} from "../cd/interface/i-on-prop-change";
+import {
+	DEFAULT_EMPTY_PATH,
+	PropChangeManager
+} from "../cd/prop-change-manager";
+import { isPrimitive } from "../lang/is-primitive";
+import { st } from "../st/st";
 
 /* internal API */
 
@@ -97,6 +100,10 @@ export const addChangeHandler = (
 	}
 };
 
+if (!st.addShareChangeHandler) {
+	st.addShareChangeHandler = addChangeHandler;
+}
+
 /**
  * Initializes a global shared object
  * @param shareName App-wide unique name of the share
@@ -121,8 +128,9 @@ function initShare<S = {}>(
 
 	return st[SHARED_MEMORY][shareName].value;
 }
-st.initShare = initShare;
-
+if (!st.initShare) {
+	st.initShare = initShare;
+}
 /**
  * Removes single change handlers for cases where the functional API is used.
  * @param sharedName Name of the share
@@ -138,6 +146,9 @@ export const removeChangeHandler = (
 	}
 };
 
+if (!st.removeShareChangeHandler) {
+	st.removeShareChangeHandler = removeChangeHandler;
+}
 /**
  * Used for class instance GC. Removes all change handlers that belong to a GC'd instance.
  * @param instance Custom element instance or generic class instance
@@ -177,4 +188,6 @@ function getShare<S = {}>(
 	addChangeHandler(shareName, onChange!, instance);
 	return st[SHARED_MEMORY][shareName].value;
 }
-st.getShare = getShare;
+if (!st.getShare) {
+	st.getShare = getShare;
+}

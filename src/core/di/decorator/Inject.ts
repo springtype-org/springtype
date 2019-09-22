@@ -1,7 +1,7 @@
-import { st } from "../../st/ST";
+import { st } from "../../st/st";
 
-export function inject(ctor: any): any {
+export const inject = (ctor: any): any => {
 	return (instance: any, propName: string) => {
 		instance[propName] = st.di.get(ctor);
 	};
-}
+};

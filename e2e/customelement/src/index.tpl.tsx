@@ -4,7 +4,7 @@ import { Foo } from "./index";
 
 export const tpl = (customElement: Foo) => {
 	return (
-		<div alt="asd">
+		<div alt="asd1">
 			<button onClick={customElement.onButtonClick}>Rerender</button>
 			<a href="foo">{"bar" + customElement.some}</a>
 

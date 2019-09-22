@@ -1,4 +1,4 @@
-import { IST } from "./interface/IST";
+import { i$st } from "./interface/i$st";
 
 /**
  * μ is pronounced /mei/ and stands for "micro".
@@ -26,4 +26,4 @@ if (!_globalThis[ST_KEY]) {
 }
 
 export const globalThis: any = _globalThis;
-export const st: IST = _globalThis[ST_KEY];
+export const st: i$st = _globalThis[ST_KEY];

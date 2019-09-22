@@ -17,6 +17,7 @@ export type IFormatterFunction = (value: string) => string;
 export type It = (key: string, values?: ITranslationValues) => string;
 
 export interface Ii18n {
+	valueInterpolationRegexp: RegExp;
 	formatters: IFormatters;
 	translations: ITranslations;
 	currentLanguage: string;
@@ -25,4 +26,11 @@ export interface Ii18n {
 	addTranslation: (language: string, translation: ITranslation) => Ii18n;
 	t: (key: string, values?: ITranslationValues) => string;
 	setLanguage: (language: string) => Ii18n;
+
+	applyValuesAndFormatters: (
+		translation: string,
+		values: ITranslationValues
+	) => string;
+
+	resolve: (key: string, translationJSON: ITranslation) => string;
 }

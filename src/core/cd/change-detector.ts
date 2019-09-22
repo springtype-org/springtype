@@ -1,5 +1,5 @@
-import { isPrimitive } from "../lang/isPrimitive";
-import { st } from "../st/ST";
+import { isPrimitive } from "../lang/is-primitive";
+import { st } from "../st/st";
 
 const PATH_SEPARATOR = ".";
 const TARGET = Symbol("target");

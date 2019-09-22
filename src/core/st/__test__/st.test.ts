@@ -1,4 +1,4 @@
-import { globalThis, st } from "../ST";
+import { globalThis, st } from "../st";
 
 describe("$st", () => {
 	it('globalThis["st"] is an object', () => {

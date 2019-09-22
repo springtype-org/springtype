@@ -1,6 +1,6 @@
-import { IElement } from "../interface/IElement";
-import { Renderer } from "../Renderer";
-import { tsx } from "../VirtualDOM";
+import { IElement } from "../interface/ielement";
+import { Renderer } from "../renderer";
+import { tsx } from "../tsx";
 
 describe("Renderer create operation", () => {
 	let parentDOMElement: IElement;
@@ -29,7 +29,7 @@ describe("Renderer create operation", () => {
 	/*
 	it("creates a Text element", () => {
 		const innerTextElementVNode = <div>Some text</div>;
-		const textElement = DOM.createElement(
+		const textElement = st.dom.createElement(
 			innerTextElementVNode.props.children[0]
 		) as Text;
 		expect(textElement.nodeValue).toEqual("Some text");
@@ -41,7 +41,7 @@ describe("Renderer create operation", () => {
 				<li></li>
 			</ul>
 		);
-		const listElement = DOM.createElement(listVNode) as IElement;
+		const listElement = st.dom.createElement(listVNode) as IElement;
 		expect(listElement.nodeName).toEqual("UL");
 	});
 
@@ -51,9 +51,9 @@ describe("Renderer create operation", () => {
 				<a href="#">Test</a>
 			</div>
 		);
-		const parentElement = DOM.createElement(<div></div>) as IElement;
+		const parentElement = st.dom.createElement(<div></div>) as IElement;
 
-		DOM.createChildElements(childVNode.props.children, parentElement);
+		st.dom.createChildElements(childVNode.props.children, parentElement);
 
 		expect(parentElement.childNodes.length).toEqual(1);
 		expect(parentElement.childNodes[0].nodeName).toEqual("A");
@@ -61,9 +61,9 @@ describe("Renderer create operation", () => {
 
 	it("applies props as attributes", () => {
 		const vnodeWithAttribute = <div id={"123"}></div>;
-		const parentElement = DOM.createElement(<div></div>) as IElement;
+		const parentElement = st.dom.createElement(<div></div>) as IElement;
 
-		DOM.setAttributes(vnodeWithAttribute.props, parentElement);
+		st.dom.setAttributes(vnodeWithAttribute.props, parentElement);
 
 		expect(parentElement.getAttribute("id")).toEqual("123");
 	});

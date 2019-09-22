@@ -1,0 +1,1 @@
+export { ilogFunction } from "./log";

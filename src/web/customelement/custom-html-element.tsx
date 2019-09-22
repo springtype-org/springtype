@@ -1,27 +1,25 @@
 import { st } from "../../core";
-import { IOnPropChange, IPropChange } from "../../core/cd";
+import { IOnPropChange, IPropChange } from "../../core/cd/interface";
 import {
 	DEFAULT_EMPTY_PATH,
 	PropChangeManager,
 	PROPS
-} from "../../core/cd/PropChangeManager";
+} from "../../core/cd/prop-change-manager";
 import { removeSharedMemoryChangeHandlersOfInstance } from "../../core/sharedmemory/share";
-import { ITypedStyleSheet, TSS } from "../tss";
+import { ITypedStyleSheet } from "../tss/interface";
 import { tsx } from "../vdom";
-import { IElement } from "../vdom/interface/IElement";
-import { IVirtualNode } from "../vdom/interface/IVirtualNode";
-import { Renderer } from "../vdom/Renderer";
+import { IElement, IVirtualNode } from "../vdom/interface";
 import {
 	CustomElementManager,
 	CUSTOM_ELEMENT_OPTIONS,
 	OBSERVED_ATTRIBUTES
-} from "./CustomElementManager";
-import { ICustomElementOptions } from "./interface/ICustomElementOptions";
+} from "./custom-element-manager";
+import { ICustomElementOptions } from "./interface";
 import {
 	ILifecycle,
 	RenderReason,
 	RenderReasonMetaData
-} from "./interface/ILifecycle";
+} from "./interface/ilifecycle";
 
 export class CustomHTMLElement extends HTMLElement
 	implements ILifecycle, IOnPropChange {
@@ -215,7 +213,7 @@ export class CustomHTMLElement extends HTMLElement
 		}
 
 		// render virtual DOM of TSS
-		const tssVdom = TSS.render(this, options.tss, this.renderStyle);
+		const tssVdom = st.tss.render(this, options.tss, this.renderStyle);
 
 		let nodesToRender = [vdom!];
 		if (tssVdom) {
@@ -224,7 +222,7 @@ export class CustomHTMLElement extends HTMLElement
 
 		if (!this._notInitialRender) {
 			// if there isn't a prev. VDOM state, render initially
-			Renderer.renderInitial(nodesToRender, (this
+			st.renderer.renderInitial(nodesToRender, (this
 				._root as unknown) as IElement);
 
 			this._notInitialRender = true;
@@ -235,7 +233,7 @@ export class CustomHTMLElement extends HTMLElement
 			}
 		} else {
 			// differential VDOM/DOM rendering algorithm
-			Renderer.patch((this._root as any).childNodes, nodesToRender, (this
+			st.renderer.patch((this._root as any).childNodes, nodesToRender, (this
 				._root as unknown) as IElement);
 		}
 
@@ -248,4 +246,7 @@ export class CustomHTMLElement extends HTMLElement
 	onAfterInitialRender() {}
 	onAfterRender() {}
 }
-st.customElement = CustomHTMLElement;
+
+if (!st.customElement) {
+	st.customElement = CustomHTMLElement;
+}

@@ -1,4 +1,4 @@
-export interface TypedCSSStyleDeclaration {
+export interface ITypedCSSStyleDeclaration {
     alignContent: number | string | null | Array<number | string | null>;
     alignItems: number | string | null | Array<number | string | null>;
     alignSelf: number | string | null | Array<number | string | null>;

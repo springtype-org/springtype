@@ -1,6 +1,6 @@
 import { st } from "../..";
-import "../I18n";
-import { ITranslation } from "../interface/Ii18n";
+import "../i18n";
+import { ITranslation } from "../interface/ii18n";
 
 export const translation = (
 	language: string,

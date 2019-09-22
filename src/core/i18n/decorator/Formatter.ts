@@ -1,5 +1,5 @@
 import { st } from "../..";
-import { IFormatterFunction } from "../interface/Ii18n";
+import { IFormatterFunction } from "../interface/ii18n";
 
 export const formatter = (
 	name: string,

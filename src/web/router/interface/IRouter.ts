@@ -1,4 +1,9 @@
-import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
+import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
+
+export interface IRouteComponent {
+	params: any;
+	element: IVirtualNode;
+}
 
 export interface IRouter {
 	TOKENIZED_ROUTES: ITokenizedRoutes;
@@ -15,15 +20,11 @@ export interface IRouter {
 	enable(): void;
 	navigate(path: string, params?: any): void;
 	registerRouterOutlet(routerOutlet: any): void;
-	reload(): void;
 	refresh(): void;
 	tokenizeRoute(route: string, registration?: boolean): Array<string>;
 	getComponent(
 		cmpOrDef: IRouteDefinition | IVirtualNode | any
-	): {
-		params: any;
-		element: IVirtualNode;
-	};
+	): IRouteComponent;
 	match(realRoute: string): ILocationChangeDecision | null;
 	setParams(params: any): void;
 	decideOnLocationChange(hash: string): Promise<void>;

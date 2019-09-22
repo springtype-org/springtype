@@ -1,7 +1,2 @@
-export { ChangeDetector } from "./ChangeDetector";
+export { ChangeDetector } from "./change-detector";
 export { prop } from "./decorator/prop";
-export {
-	IOnPropChange,
-	IPropChange,
-	PropChangeType
-} from "./interface/IOnPropChange";

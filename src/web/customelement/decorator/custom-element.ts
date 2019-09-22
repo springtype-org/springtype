@@ -1,6 +1,6 @@
 import { st } from "../../../core";
-import { CUSTOM_ELEMENT_OPTIONS, TAG_NAME } from "../CustomElementManager";
-import { ICustomElementOptions } from "../interface/ICustomElementOptions";
+import { CUSTOM_ELEMENT_OPTIONS, TAG_NAME } from "../custom-element-manager";
+import { ICustomElementOptions } from "../interface/icustom-element-options";
 
 export const customElement = (
 	tagName: string,

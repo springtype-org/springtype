@@ -1,14 +1,16 @@
 import { st } from "../../../core";
-import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
+import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
+import "../router";
+import "../router-outlet";
 
-export function route(
+export const route = (
 	route: string,
 	routeTargetWebComponent: IVirtualNode | any
-): any {
+): any => {
 	return (targetWebComponent: any) => {
 		st.router.registerRoutes({
 			[route]: routeTargetWebComponent
 		});
 		return targetWebComponent;
 	};
-}
+};

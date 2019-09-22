@@ -1,8 +1,8 @@
 import { st } from "../../core";
 import { attr, customElement } from "../customelement";
-import { IVirtualNode } from "../vdom/interface/IVirtualNode";
-import { tsx } from "../vdom/VirtualDOM";
-import { ILocationChangeDecision } from "./interface/IRouter";
+import { IVirtualNode } from "../vdom/interface/ivirtual-node";
+import { tsx } from "../vdom/tsx";
+import { ILocationChangeDecision } from "./interface/irouter";
 
 @customElement("router-outlet")
 export class RouterOutlet extends st.customElement {
@@ -31,6 +31,7 @@ export class RouterOutlet extends st.customElement {
 			return this.element;
 		}
 
+		// TODO: nicer
 		return (
 			<div>{"ERROR (RouterOutlet): No component found for route!"}</div>
 		) as IVirtualNode;

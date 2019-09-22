@@ -1,7 +1,7 @@
 import { st } from "../../../src/core";
 import { share } from "../../../src/core/sharedmemory";
 import { attr, customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tpl } from "./index.tpl";
 import { tss } from "./index.tss";
 

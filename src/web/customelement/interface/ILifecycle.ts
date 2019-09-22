@@ -1,6 +1,6 @@
-import { PropChangeType } from "../../../core/cd";
-import { ITypedStyleSheet } from "../../tss";
-import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
+import { PropChangeType } from "../../../core/cd/interface";
+import { ITypedStyleSheet } from "../../tss/interface";
+import { IVirtualNode } from "../../vdom/interface";
 
 export enum RenderReason {
 	CONNECT = "CONNECT",

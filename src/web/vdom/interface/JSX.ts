@@ -1,4 +1,4 @@
-import { IDOMAttributes } from "./IDOMAttributes";
+import { IDOMAttributes } from "./idom-attributes";
 
 declare global {
 	namespace JSX {
@@ -619,7 +619,7 @@ declare global {
 		}
 
 		export interface IVirtualIntrinsicElements {
-			"st-unwrap": HTMLAttributes;
+			//some-custom-element-name: HTMLAttributes;
 		}
 
 		export interface IntrinsicElements extends IVirtualIntrinsicElements {

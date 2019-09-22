@@ -1,7 +1,7 @@
 import { st } from "../../core";
-import { DEFAULT_EMPTY_PATH } from "../../core/cd/PropChangeManager";
-import { CustomHTMLElement } from "./CustomHTMLElement";
-import { RenderReason } from "./interface/ILifecycle";
+import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
+import { CustomHTMLElement } from "./custom-html-element";
+import { RenderReason } from "./interface/ilifecycle";
 
 export const OBSERVED_ATTRIBUTES: any = Symbol("OBSERVED_ATTRIBUTES");
 export const CUSTOM_ELEMENT_OPTIONS: any = Symbol("CUSTOM_ELEMENT_OPTIONS");

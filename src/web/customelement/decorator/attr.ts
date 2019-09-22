@@ -1,7 +1,7 @@
 import { st } from "../../../core";
-import { CustomElementManager } from "../CustomElementManager";
+import { CustomElementManager } from "../custom-element-manager";
 
-export function attr(): any {
+export const attr = (): any => {
 	return (instance: any, attributeName: string) => {
 		// test and warn for uppercase characters because DOM will lowercase them
 		if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
@@ -15,4 +15,4 @@ export function attr(): any {
 			attributeName
 		);
 	};
-}
+};

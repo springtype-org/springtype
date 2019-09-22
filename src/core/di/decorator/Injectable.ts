@@ -1,6 +1,6 @@
-import { INJECTION_STRATEGY } from "../DI";
-import { InjectionStrategy } from "../enum/InjectionStrategy";
-import { IInjectionStrategyConfig } from "../interface/IInjectionStrategyConfig";
+import { INJECTION_STRATEGY } from "../di";
+import { InjectionStrategy } from "../enum/injection-strategy";
+import { IInjectionStrategyConfig } from "../interface/iinjection-strategy-config";
 
 export const injectable = (
 	injectionStrategy: InjectionStrategy = InjectionStrategy.SINGLETON,

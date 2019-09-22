@@ -1,7 +1,6 @@
-import { st } from "../st/ST";
-import { InjectionStrategy } from "./enum/InjectionStrategy";
-import { IDI } from "./interface/IDI";
-import { IInjectionStrategyConfig } from "./interface/IInjectionStrategyConfig";
+import { st } from "../st/st";
+import { InjectionStrategy } from "./enum/injection-strategy";
+import { IInjectionStrategyConfig } from "./interface/iinjection-strategy-config";
 
 export const INJECTION_STRATEGY = Symbol("INJECTION_STRATEGY");
 
@@ -52,5 +51,5 @@ if (!st.di) {
 			}
 			return instance;
 		}
-	} as IDI;
+	};
 }

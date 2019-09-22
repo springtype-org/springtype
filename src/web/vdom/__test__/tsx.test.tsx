@@ -1,4 +1,4 @@
-import { tsx } from "../VirtualDOM";
+import { tsx } from "../tsx";
 
 describe("VirtualDOM", () => {
 	it("transforms a <ul> list into JSX.Element which extends IVirtualNode", () => {

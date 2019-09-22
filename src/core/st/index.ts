@@ -1,3 +1,1 @@
-import "./ST";
-
-export { globalThis, st } from "./ST";
+export { globalThis, st } from "./st";

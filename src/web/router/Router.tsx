@@ -1,231 +1,224 @@
 import { st } from "../../core";
-import { TAG_NAME } from "../customelement/CustomElementManager";
+import { TAG_NAME } from "../customelement/custom-element-manager";
 import { tsx } from "../vdom";
-import { IVirtualNode } from "../vdom/interface/IVirtualNode";
+import { IVirtualNode } from "../vdom/interface/ivirtual-node";
 import {
 	ILocationChangeDecision,
+	IRouteComponent,
 	IRouteDefinition,
-	IRouter,
-	IRoutes,
-	ITokenizedRoutes
-} from "./interface/IRouter";
-import { RouterOutlet } from "./RouterOutlet";
+	IRoutes
+} from "./interface/irouter";
+import { RouterOutlet } from "./router-outlet";
 
 export const ROUTE_NOT_FOUND = "*404*";
 export const ROUTE_BASE = "";
 
-export class Router implements IRouter {
-	static init() {
-		if (!st.router) {
-			st.router = new Router();
-		}
-	}
+if (!st.router) {
+	st.router = {
+		TOKENIZED_ROUTES: {},
+		ROUTE_MAP: {},
+		CURRENT_PARAMS: {},
+		CURRENT_PATH: "",
+		CURRENT_DECISION: undefined,
 
-	TOKENIZED_ROUTES: ITokenizedRoutes = {};
-	ROUTE_MAP: IRoutes = {};
-	CURRENT_PARAMS: any = {};
-	CURRENT_PATH: string = "";
-	CURRENT_DECISION: any;
+		// might be unset until someone puts a <router-outlet>
+		ROUTER_OUTLET: undefined,
 
-	// might be unset until someone puts a <router-outlet>
-	ROUTER_OUTLET!: RouterOutlet;
+		setParams: (params: any): void => {
+			st.router.CURRENT_PARAMS = params;
+		},
 
-	setParams(params: any): void {
-		st.router.CURRENT_PARAMS = params;
-	}
+		getParams: (): any => {
+			return st.router.CURRENT_PARAMS;
+		},
 
-	getParams(): any {
-		return st.router.CURRENT_PARAMS;
-	}
+		getPath: (): string => {
+			return st.router.CURRENT_PATH;
+		},
 
-	getPath(): string {
-		return st.router.CURRENT_PATH;
-	}
+		refresh: () => {
+			st.router.ROUTER_OUTLET.refresh();
+		},
 
-	reload() {
-		st.router.navigate(st.router.getPath(), st.router.getParams());
-	}
+		registerRoutes: (routes: IRoutes): void => {
+			for (let route in routes) {
+				st.router.TOKENIZED_ROUTES[route] = st.router.tokenizeRoute(
+					route,
+					true
+				);
+			}
+			st.router.ROUTE_MAP = {
+				...st.router.ROUTE_MAP,
+				...routes
+			};
+		},
 
-	refresh() {
-		st.router.ROUTER_OUTLET.refresh();
-	}
+		tokenizeRoute: (
+			route: string,
+			registration: boolean = false
+		): Array<string> => {
+			const tokenizedRoute = route.split("/");
 
-	registerRoutes(routes: IRoutes): void {
-		for (let route in routes) {
-			st.router.TOKENIZED_ROUTES[route] = st.router.tokenizeRoute(route, true);
-		}
-		st.router.ROUTE_MAP = {
-			...st.router.ROUTE_MAP,
-			...routes
-		};
-	}
+			if (registration && route[0] === "/") {
+				tokenizedRoute[0] = "#";
+			}
 
-	tokenizeRoute(route: string, registration: boolean = false): Array<string> {
-		const tokenizedRoute = route.split("/");
+			if (tokenizedRoute[0] !== "#") {
+				tokenizedRoute.unshift("#");
+			}
+			return tokenizedRoute;
+		},
 
-		if (registration && route[0] === "/") {
-			tokenizedRoute[0] = "#";
-		}
+		match: (realRoute: string): ILocationChangeDecision | null => {
+			const tokenizedRoute = st.router.tokenizeRoute(realRoute);
 
-		if (tokenizedRoute[0] !== "#") {
-			tokenizedRoute.unshift("#");
-		}
-		return tokenizedRoute;
-	}
+			const params: {
+				[key: string]: string;
+			} = {};
 
-	match(realRoute: string): ILocationChangeDecision | null {
-		const tokenizedRoute = st.router.tokenizeRoute(realRoute);
+			for (let route in st.router.TOKENIZED_ROUTES) {
+				const tokenizedRouteCandidate = st.router.TOKENIZED_ROUTES[route];
 
-		const params: {
-			[key: string]: string;
-		} = {};
+				let routeMatches = true;
 
-		for (let route in st.router.TOKENIZED_ROUTES) {
-			const tokenizedRouteCandidate = st.router.TOKENIZED_ROUTES[route];
+				for (let i = 0; i < tokenizedRouteCandidate.length; i++) {
+					const token = tokenizedRouteCandidate[i];
 
-			let routeMatches = true;
-
-			for (let i = 0; i < tokenizedRouteCandidate.length; i++) {
-				const token = tokenizedRouteCandidate[i];
-
-				if (token.startsWith(":")) {
-					params[token.replace(":", "")] = tokenizedRoute[i];
-				} else {
-					if (token !== tokenizedRoute[i]) {
-						routeMatches = false;
-						break; // stop looping further, path doesn't match
+					if (token.startsWith(":")) {
+						params[token.replace(":", "")] = tokenizedRoute[i];
+					} else {
+						if (token !== tokenizedRoute[i]) {
+							routeMatches = false;
+							break; // stop looping further, path doesn't match
+						}
 					}
+				}
+
+				if (routeMatches) {
+					const resolvedComponentAndParams = st.router.getComponent(
+						st.router.ROUTE_MAP[route]
+					);
+
+					return {
+						params: {
+							...resolvedComponentAndParams.params,
+							...params
+						},
+						element: resolvedComponentAndParams.element,
+						route
+					} as ILocationChangeDecision;
 				}
 			}
 
-			if (routeMatches) {
+			if (st.router.ROUTE_MAP[ROUTE_NOT_FOUND]) {
 				const resolvedComponentAndParams = st.router.getComponent(
-					st.router.ROUTE_MAP[route]
+					st.router.ROUTE_MAP[ROUTE_NOT_FOUND]
 				);
 
 				return {
-					params: {
-						...resolvedComponentAndParams.params,
-						...params
-					},
+					route: ROUTE_NOT_FOUND,
 					element: resolvedComponentAndParams.element,
-					route
+					params: resolvedComponentAndParams.params
+				} as ILocationChangeDecision;
+			} else {
+				return {
+					route: ROUTE_NOT_FOUND,
+					element: (
+						<div>{`No Web Component found for rendering this route. Please specify a route for: ${realRoute.replace(
+							"#",
+							""
+						)} or: ${ROUTE_NOT_FOUND}`}</div>
+					),
+					params: {}
 				} as ILocationChangeDecision;
 			}
-		}
+		},
 
-		if (st.router.ROUTE_MAP[ROUTE_NOT_FOUND]) {
-			const resolvedComponentAndParams = st.router.getComponent(
-				st.router.ROUTE_MAP[ROUTE_NOT_FOUND]
-			);
+		getComponent: (
+			cmpOrDef: IRouteDefinition | IVirtualNode | any
+		): IRouteComponent => {
+			let element: any = (cmpOrDef as IRouteDefinition).element
+				? (cmpOrDef as IRouteDefinition).element
+				: (cmpOrDef as IVirtualNode);
+
+			if (element[TAG_NAME]) {
+				element = {
+					type: element[TAG_NAME],
+					attributes: [],
+					children: []
+				} as IVirtualNode;
+			}
+
+			const params = (cmpOrDef as IRouteDefinition).params || {};
 
 			return {
-				route: ROUTE_NOT_FOUND,
-				element: resolvedComponentAndParams.element,
-				params: resolvedComponentAndParams.params
-			} as ILocationChangeDecision;
-		} else {
-			return {
-				route: ROUTE_NOT_FOUND,
-				element: (
-					<div>{`No Web Component found for rendering this route. Please specify a route for: ${realRoute.replace(
-						"#",
-						""
-					)} or: ${ROUTE_NOT_FOUND}`}</div>
-				),
-				params: {}
-			} as ILocationChangeDecision;
-		}
-	}
+				element,
+				params
+			};
+		},
 
-	getComponent(
-		cmpOrDef: IRouteDefinition | IVirtualNode | any
-	): {
-		params: any;
-		element: IVirtualNode;
-	} {
-		let element: any = (cmpOrDef as IRouteDefinition).element
-			? (cmpOrDef as IRouteDefinition).element
-			: (cmpOrDef as IVirtualNode);
+		decideOnLocationChange: async (hash: string): Promise<void> => {
+			const decision = (st.router.CURRENT_DECISION = st.router.match(hash));
 
-		if (element[TAG_NAME]) {
-			element = {
-				type: element[TAG_NAME],
-				attributes: [],
-				children: []
-			} as IVirtualNode;
-		}
+			if (decision !== null) {
+				if (!st.router.ROUTER_OUTLET) {
+					throw new Error(
+						"You must place a <router-outlet /> somewhere in your HTML."
+					);
+				} else {
+					// set active route params
+					st.router.setParams(decision.params);
 
-		const params = (cmpOrDef as IRouteDefinition).params || {};
+					let isAllowedToPresent = true;
 
-		return {
-			element,
-			params
-		};
-	}
+					if (decision.guard && typeof decision.guard === "function") {
+						isAllowedToPresent = await decision.guard(decision);
+					}
 
-	async decideOnLocationChange(hash: string): Promise<void> {
-		const decision = (st.router.CURRENT_DECISION = st.router.match(hash));
-
-		if (decision !== null) {
-			if (!st.router.ROUTER_OUTLET) {
-				throw new Error(
-					"You must place a <router-outlet /> somewhere in your HTML."
-				);
+					if (isAllowedToPresent) {
+						st.router.ROUTER_OUTLET.present(decision);
+					}
+				}
 			} else {
-				// set active route params
-				st.router.setParams(decision.params);
-
-				let isAllowedToPresent = true;
-
-				if (decision.guard && typeof decision.guard === "function") {
-					isAllowedToPresent = await decision.guard(decision);
-				}
-
-				if (isAllowedToPresent) {
-					st.router.ROUTER_OUTLET.present(decision);
-				}
+				throw new Error(
+					`No route registered for hash url: '${hash}'. Add this route to an @WebModule({ route: { ... } })!`
+				);
 			}
-		} else {
-			throw new Error(
-				`No route registered for hash url: '${hash}'. Add this route to an @WebModule({ route: { ... } })!`
-			);
-		}
-	}
+		},
 
-	disable(): void {
-		// numb callback
-		window.onpopstate = () => {};
-	}
+		disable: (): void => {
+			// numb callback
+			window.onpopstate = () => {};
+		},
 
-	async onLocationChange(): Promise<void> {
-		await st.router.decideOnLocationChange(window.location.hash);
-	}
+		onLocationChange: async (): Promise<void> => {
+			await st.router.decideOnLocationChange(window.location.hash);
+		},
 
-	async enable(): Promise<void> {
-		// register callback
-		window.onpopstate = async () => {
+		enable: async (): Promise<void> => {
+			// register callback
+			window.onpopstate = async () => {
+				await st.router.onLocationChange();
+			};
+
+			// initial call for base URL
 			await st.router.onLocationChange();
-		};
+		},
 
-		// initial call for base URL
-		await st.router.onLocationChange();
-	}
+		registerRouterOutlet: (routerOutlet: RouterOutlet) => {
+			st.router.ROUTER_OUTLET = routerOutlet;
+		},
 
-	registerRouterOutlet(routerOutlet: RouterOutlet) {
-		st.router.ROUTER_OUTLET = routerOutlet;
-	}
+		navigate: (pathOrCustomElement: string, params?: any) => {
+			let route = pathOrCustomElement;
 
-	navigate(pathOrCustomElement: string, params?: any) {
-		let route = pathOrCustomElement;
-
-		for (let param in params) {
-			if (params.hasOwnProperty(param)) {
-				route = route.replace(":" + param, params[param]);
+			for (let param in params) {
+				if (params.hasOwnProperty(param)) {
+					route = route.replace(":" + param, params[param]);
+				}
 			}
+			st.router.CURRENT_PATH = "#" + route;
+			window.location.href = st.router.CURRENT_PATH;
 		}
-		st.router.CURRENT_PATH = "#" + route;
-		window.location.href = st.router.CURRENT_PATH;
-	}
+	};
 }
-Router.init();

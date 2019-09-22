@@ -1,7 +1,8 @@
 import { st } from "../../../src/core";
-import { inject, injectable, InjectionStrategy } from "../../../src/core/di";
+import { inject, injectable } from "../../../src/core/di";
+import { InjectionStrategy } from "../../../src/core/di/enum";
 import { customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;

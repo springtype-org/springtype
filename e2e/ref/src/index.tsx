@@ -1,6 +1,6 @@
 import { st } from "../../../src/core";
 import { customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { domRef, tsx } from "../../../src/web/vdom";
 
 if (process.env.NODE_ENV === "development") {

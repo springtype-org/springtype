@@ -1,8 +1,8 @@
 import { st } from "../../../src/core";
-import { IPropChange } from "../../../src/core/cd";
+import { IPropChange } from "../../../src/core/cd/interface";
 import { share } from "../../../src/core/sharedmemory";
 import { attr, customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/customElementsHMRPolyfill";
+import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tsx } from "../../../src/web/vdom";
 
 if (process.env.NODE_ENV === "development") {

@@ -1,4 +1,4 @@
-import { InjectionStrategy } from "../enum/InjectionStrategy";
+import { InjectionStrategy } from "../enum/injection-strategy";
 
 export interface IInjectionStrategyConfig {
 	injectionStrategy: InjectionStrategy;

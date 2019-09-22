@@ -1,10 +1,11 @@
+// @ts-ignore JSON module import activated in bundler config
 import { st } from "../../../../src/core";
-import { ChangeDetector, IPropChange, prop } from "../../../../src/core/cd";
+import { ChangeDetector, prop } from "../../../../src/core/cd";
+import { IPropChange } from "../../../../src/core/cd/interface";
 import { formatter, translation } from "../../../../src/core/i18n";
 import { share } from "../../../../src/core/sharedmemory";
 import { attr, customElement } from "../../../../src/web/customelement";
 import { tsx } from "../../../../src/web/vdom";
-// @ts-ignore JSON module import activated in bundler config
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
 import * as en from "./i18n/en.json";
@@ -44,7 +45,7 @@ export class Foo2 extends st.customElement {
 	render() {
 		console.log("render!");
 		return (
-			<div alt="asd">
+			<div alt="asd2" unwrap>
 				<span>
 					LALA
 					<slot name="counter">default</slot>

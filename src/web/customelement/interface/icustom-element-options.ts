@@ -1,5 +1,5 @@
-import { ITypedStyleSheet } from "../../tss";
-import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
+import { ITypedStyleSheet } from "../../tss/interface";
+import { IVirtualNode } from "../../vdom/interface";
 
 export type IShadowAttachMode = "open" | "closed" | "none";
 
