@@ -3,15 +3,15 @@
 > "Everything should be made as simple as possible, but no simpler." - Albert Einstein
 
 SpringType is a tiny but full-featured web app framework written in TypeScript.
-You get most features of Angular, React and Vue in < 20KiB (gzipped).
+You get most features of Angular, React and Vue in < 10 KiB (gzipped).
 SpringType is faster and more memory efficient than any of the three major frameworks.
 
 It features (out-of-the-box):
 
 - [ ] Functional reactive programming using RxJS for time-complexities
 - [ ] Redux based state machine with an intuitive API and optional immutability and local persistence
-- [ ] Headache-free DOM element to Web Component binding
 - [ ] SSR, server side rendering and VDOM hydration
+- [x] Headache-free DOM element to Web Component binding
 - [x] Use of modern API's (Web Components, Proxy, Symbol, Decorators, ...)
 - [x] TSX (typed JSX) based templating
 - [x] Shared memory for hassle-free Web Component inter-linking
@@ -35,3 +35,7 @@ Like with any architecture, there are pro's and con's. Here are the con's:
 - SpringType is tiny and efficient because it lacks some bells and whistles
 
 https://www.conventionalcommits.org/en/v1.0.0-beta.3/
+
+### Typical gotchas
+
+- Unexplainable `undefined` errors: Check for cyclic dependencies like: `class A imports class B imports class A`.

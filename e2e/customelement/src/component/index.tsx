@@ -1,47 +1,40 @@
-import {
-	ChangeDetector,
-	Formatter,
-	getShare,
-	initShare,
-	log,
-	OnPropChange,
-	PropChange,
-	Share,
-	t,
-	Translation
-} from "../../../../src/core";
-import { Attribute, CustomElement, ILifecycle, tsx } from "../../../../src/web";
 // @ts-ignore JSON module import activated in bundler config
+import { st } from "../../../../src/core";
+import { ChangeDetector, prop } from "../../../../src/core/cd";
+import { IPropChange } from "../../../../src/core/cd/interface";
+import { formatter, translation } from "../../../../src/core/i18n";
+import { share } from "../../../../src/core/sharedmemory";
+import { attr, customElement } from "../../../../src/web/customelement";
+import { tsx } from "../../../../src/web/vdom";
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
 import * as en from "./i18n/en.json";
 
-@Formatter("uppercase", value => value.toUpperCase())
-@Translation("de", de)
-@Translation("en", en)
-@CustomElement("my-foo2")
-export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
-	@Attribute()
+@formatter("uppercase", value => value.toUpperCase())
+@translation("de", de)
+@translation("en", en)
+@customElement("my-foo2")
+export class Foo2 extends st.customElement {
+	@attr()
 	foo: string = "Jesus!!!";
 
-	@Attribute()
+	@attr()
 	foo2: boolean = false;
 
-	@Attribute()
+	@attr()
 	foo3: any = {
 		huhu: {
 			haha: 345
 		}
 	};
 
-	@Share("foo")
-	foo4: any = initShare("foo", {});
+	@share("foo")
+	foo4: any = st.initShare("foo", {});
 
-	constructor() {
-		super();
-	}
+	@prop()
+	lala: any = { a: "hase" };
 
-	onPropChange(change: PropChange) {
+	onPropChange(change: IPropChange) {
 		console.log("PROP change", change);
 	}
 
@@ -52,7 +45,7 @@ export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
 	render() {
 		console.log("render!");
 		return (
-			<div alt="asd">
+			<div alt="asd2" unwrap>
 				<span>
 					LALA
 					<slot name="counter">default</slot>
@@ -70,13 +63,16 @@ export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
 		setTimeout(() => {
 			this.foo =
 				"GOOOOOOOD" +
-				t("deep222.msg", {
+				st.t("deep222.msg", {
 					someValue: "Yeah!"
 				}) +
-				t("deep.msg2", {
+				st.t("deep.msg2", {
 					someValue2: "Yeah!"
 				}) +
 				this.getAttribute("foo3");
+
+			this.lala.a = "hase!";
+			this.lala = "kabel";
 
 			this.foo2 = true;
 
@@ -84,11 +80,11 @@ export class Foo2 extends HTMLElement implements ILifecycle, OnPropChange {
 
 			console.log("foo3", this.getAttribute("foo3"));
 
-			log("foo2", typeof this.foo2, this.foo2);
+			st.log("foo2", typeof this.foo2, this.foo2);
 
 			console.log("reading shared memory", this.foo4);
 			this.foo4 = {};
-			const x: any = getShare("foo");
+			const x: any = st.getShare("foo");
 
 			x.asd = true;
 

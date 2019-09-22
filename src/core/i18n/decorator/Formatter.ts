@@ -1,9 +1,9 @@
 import { st } from "../..";
-import { FormatterFunction } from "../interface/Ii18n";
+import { IFormatterFunction } from "../interface/ii18n";
 
-export const Formatter = (
+export const formatter = (
 	name: string,
-	formatterFn: FormatterFunction
+	formatterFn: IFormatterFunction
 ): any => {
 	st.i18n.addFormatter(name, formatterFn);
 

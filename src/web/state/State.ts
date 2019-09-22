@@ -1,4 +1,4 @@
-import { InjectionStrategy, st } from "../../core";
+import { st } from "../../core";
 import { StateMutationMode } from "./enum/StateMutationMode";
 import { StatePersistenceMode } from "./enum/StatePersistenceMode";
 import { IState } from "./interface/IState";
@@ -23,14 +23,6 @@ export class State implements IState {
 			// global state store for the application state as
 			// a proxied singleton instance of AppState
 			st.state = new State();
-
-			// register with DI only if enabled
-			// allows to inject State in constructors
-			if (st.di) {
-				st.di.setClassName(State, "State");
-				st.di.registerSingletonInstance(st.state);
-				st.di.setInjectionStrategyConfig(State, InjectionStrategy.SINGLETON);
-			}
 		}
 	}
 

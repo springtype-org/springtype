@@ -1,7 +1,9 @@
-import { CustomElement, ILifecycle, tsx } from "../../../../../src/web";
+import { st } from "../../../../../src/core";
+import { customElement } from "../../../../../src/web/customelement";
+import { tsx } from "../../../../../src/web/vdom";
 
-@CustomElement("homepage-root")
-export class HomePage extends HTMLElement implements ILifecycle {
+@customElement("homepage-root")
+export class HomePage extends st.customElement {
 	static ROUTE = "";
 
 	render() {
@@ -9,7 +11,7 @@ export class HomePage extends HTMLElement implements ILifecycle {
 			<div>
 				HomePage <br />
 				{/* manually typed link, also no API used for routing */}
-				<a href="/#/blog">Blog</a>
+				<a href="/#/blog/">Blog</a>
 			</div>
 		);
 	}

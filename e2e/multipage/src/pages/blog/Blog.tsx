@@ -1,15 +1,12 @@
 import { st } from "../../../../../src/core";
-import { CustomElement, Router, tsx } from "../../../../../src/web";
+import { customElement } from "../../../../../src/web/customelement";
+import { tsx } from "../../../../../src/web/vdom";
 import { HomePage } from "../home/Home";
 import { FirstPostPage } from "./posts/FirstPost";
 
-@CustomElement("blogpage-root")
-export class BlogPage extends HTMLElement {
+@customElement("blogpage-root")
+export class BlogPage extends st.customElement {
 	static ROUTE = "/blog";
-
-	constructor(protected router: Router) {
-		super();
-	}
 
 	nagivateHome = () => {
 		st.router.navigate(HomePage.ROUTE);
@@ -27,7 +24,7 @@ export class BlogPage extends HTMLElement {
 				<a
 					href="javascript:void(0)"
 					onClick={() => {
-						this.router.navigate(FirstPostPage.ROUTE, {
+						st.router.navigate(FirstPostPage.ROUTE, {
 							id: 5
 						});
 					}}

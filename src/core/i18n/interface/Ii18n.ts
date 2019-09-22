@@ -5,23 +5,32 @@ export interface ITranslation {
 export interface ITranslationValues {
 	[key: string]: any;
 }
-export interface Translations {
+export interface ITranslations {
 	[language: string]: ITranslation;
 }
 
-export interface Formatters {
+export interface IFormatters {
 	[key: string]: Function;
 }
 
-export type FormatterFunction = (value: string) => string;
+export type IFormatterFunction = (value: string) => string;
+export type It = (key: string, values?: ITranslationValues) => string;
 
 export interface Ii18n {
-	formatters: Formatters;
-	translations: Translations;
+	valueInterpolationRegexp: RegExp;
+	formatters: IFormatters;
+	translations: ITranslations;
 	currentLanguage: string;
 	initLanguage: (language: string) => void;
-	addFormatter: (identifier: string, formatter: FormatterFunction) => Ii18n;
+	addFormatter: (identifier: string, formatter: IFormatterFunction) => Ii18n;
 	addTranslation: (language: string, translation: ITranslation) => Ii18n;
 	t: (key: string, values?: ITranslationValues) => string;
 	setLanguage: (language: string) => Ii18n;
+
+	applyValuesAndFormatters: (
+		translation: string,
+		values: ITranslationValues
+	) => string;
+
+	resolve: (key: string, translationJSON: ITranslation) => string;
 }

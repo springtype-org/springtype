@@ -1,0 +1,1 @@
+export { IRouter } from "./irouter";

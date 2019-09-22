@@ -1,5 +1,7 @@
-export { Attribute } from "./decorator/Attribute";
-export { CustomElement } from "./decorator/CustomElement";
-export { ICustomElementOptions } from "./interface/ICustomElementOptions";
-export { ILifecycle } from "./interface/ILifecycle";
-export { Lifecycle } from "./Lifecycle";
+// custom element needs TSS and VDOM
+import "../tss";
+import "../vdom";
+
+export { CustomHTMLElement } from "./custom-html-element";
+export { attr } from "./decorator/attr";
+export { customElement } from "./decorator/custom-element";

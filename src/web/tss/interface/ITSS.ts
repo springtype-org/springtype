@@ -1,3 +1,15 @@
+import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
+
 export interface ITSS {
-	setTheme<T = {}>(theme: T): void;
+	currentTheme: any;
+
+	generateDeclaration(declaration: any, mediaQuery?: boolean): any;
+
+	render(
+		instance: any,
+		tssFn?: Function,
+		renderStyleFn?: Function
+	): IVirtualNode | undefined;
+
+	setTheme(theme: any): void;
 }

@@ -1,10 +1,11 @@
 import { st } from "../../../../../../src/core";
-import { CustomElement, tsx } from "../../../../../../src/web";
+import { customElement } from "../../../../../../src/web/customelement";
+import { tsx } from "../../../../../../src/web/vdom";
 import { HomePage } from "../../home/Home";
 
-@CustomElement("firstpostpage-root")
-export class FirstPostPage extends HTMLElement {
-	static ROUTE = "/blog/firstpost/:id";
+@customElement("firstpostpage-root")
+export class FirstPostPage extends st.customElement {
+	static ROUTE = "/blog/firstpost/:id/";
 
 	render() {
 		return (

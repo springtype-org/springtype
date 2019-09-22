@@ -1,2 +1,1 @@
-export { isPrimitive } from "./isPrimitive";
-export { camelToKebabCase } from "./string/camelToKebabCase";
+export { isPrimitive } from "./is-primitive";

@@ -1,6 +1,6 @@
-import { PropChangeType } from "../../../core";
-import { ITypedStyleSheet } from "../../tss";
-import { IVirtualNode } from "../../vdom/interface/IVirtualNode";
+import { PropChangeType } from "../../../core/cd/interface";
+import { ITypedStyleSheet } from "../../tss/interface";
+import { IVirtualNode } from "../../vdom/interface";
 
 export enum RenderReason {
 	CONNECT = "CONNECT",
@@ -14,7 +14,7 @@ export interface RenderReasonMetaData {
 	// only in case of prop and deep change
 	path: string;
 	// only in case of prop change
-	type: PropChangeType;
+	type?: PropChangeType;
 	// new value
 	value: any;
 	// previous value
@@ -22,11 +22,14 @@ export interface RenderReasonMetaData {
 }
 
 export interface ILifecycle {
+	_root: ShadowRoot | HTMLElement | undefined;
+	_notInitialRender: boolean;
+
 	// before the component gets mounted to the DOM
 	onBeforeConnect?(): void;
 
 	// after the component gets mounted to the DOM
-	onConnect?(): void;
+	onConnect?(): void | boolean;
 
 	// prior to removal from the DOM
 	onBeforeDisconnect?(): void;
@@ -55,6 +58,9 @@ export interface ILifecycle {
 	// implement this and return TSX to be rendered
 	render?(): IVirtualNode;
 
+	// lifecycle method to call to trigger a VDOM reflow
+	reflow(): void;
+
 	// implement this and return TSS for the markup to be styled
-	renderStyle?(theme?: any): ITypedStyleSheet;
+	renderStyle?(theme?: any): ITypedStyleSheet | undefined;
 }

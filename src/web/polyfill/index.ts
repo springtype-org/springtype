@@ -1,1 +1,0 @@
-export { customElementsHMRPolyfill } from "./customElementsHMRPolyfill";
