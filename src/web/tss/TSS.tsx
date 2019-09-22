@@ -1,5 +1,9 @@
 import { st } from "../../core";
 import { CustomElementManager } from "../customelement/custom-element-manager";
+import {
+	ILifecycle,
+	RenderReason
+} from "../customelement/interface/ilifecycle";
 import { tsx } from "../vdom";
 import { IVirtualNode } from "../vdom/interface/ivirtual-node";
 
@@ -11,13 +15,16 @@ if (!st.tss) {
 	st.tss = {
 		currentTheme: {},
 
-		generateDeclaration: (declaration: any, mediaQuery: boolean = false) => {
+		generateStyleDeclaration: (
+			declaration: any,
+			mediaQuery: boolean = false
+		) => {
 			let styles = "";
 
 			for (let selector in declaration) {
 				if (declaration.hasOwnProperty(selector)) {
 					if (selector.indexOf("@media") === 0) {
-						styles = `${styles}\n\n${selector} {${st.tss.generateDeclaration(
+						styles = `${styles}\n\n${selector} {${st.tss.generateStyleDeclaration(
 							declaration[selector],
 							true
 						)}    \n}\n\n`;
@@ -51,7 +58,7 @@ if (!st.tss) {
 			return styles;
 		},
 
-		render: (
+		renderStyleNode: (
 			instance: any,
 			tssFn?: Function,
 			renderStyleFn?: Function
@@ -75,15 +82,34 @@ if (!st.tss) {
 			}
 
 			return (
-				<style type="text/css">{st.tss.generateDeclaration(declaration)}</style>
+				<style type="text/css">
+					{st.tss.generateStyleDeclaration(declaration)}
+				</style>
 			);
 		},
 
+		renderStyleTemplate(
+			instance: any,
+			tssFn?: Function,
+			renderStyleFn?: Function
+		): HTMLTemplateElement | undefined {
+			const styleNode = st.tss.renderStyleNode(instance, tssFn, renderStyleFn);
+			return st.dom.createElement(
+				styleNode,
+				document.createElement("template"),
+				false
+			) as HTMLTemplateElement | undefined;
+		},
 		setTheme(theme: any) {
 			st.tss.currentTheme = theme || {};
 
 			for (let instance of CustomElementManager.getAllInstances()) {
-				instance.reflow();
+				if (
+					((instance as ILifecycle).shouldRender!(RenderReason.THEME_CHANGE),
+					{})
+				) {
+					(instance as ILifecycle).doRender(true /*tssOnly*/);
+				}
 			}
 		}
 	};

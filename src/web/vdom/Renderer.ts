@@ -5,7 +5,7 @@ import {
 	IVirtualChildren,
 	IVirtualNode
 } from "./interface/ivirtual-node";
-import { tsxToStandardAttributeName } from "./tsx";
+import { flattenChildren, tsxToStandardAttributeName } from "./tsx";
 
 const LIST_KEY_ATTRIBUTE_NAME = "key";
 
@@ -62,6 +62,9 @@ if (!st.renderer) {
 			virtualElements: IVirtualChildren,
 			parent: IElement
 		) => {
+			// flatten/normalize Array<Array<IVirtualChild>>
+			virtualElements = flattenChildren(virtualElements);
+
 			// length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
 			let maxLength =
 				domElements.length > virtualElements.length
@@ -75,14 +78,12 @@ if (!st.renderer) {
 					break;
 				}
 
-				let domElement = domElements[i];
-
 				if (typeof virtualElements[i] === "object") {
-					st.renderer.patchElement(parent, domElement, virtualElements[
+					st.renderer.patchElement(parent, domElements[i], virtualElements[
 						i
 					] as IVirtualNode);
 				} else {
-					st.renderer.patchTextNode(parent, domElement, (virtualElements[
+					st.renderer.patchTextNode(parent, domElements[i], (virtualElements[
 						i
 					] as IVirtualChild) as string);
 				}

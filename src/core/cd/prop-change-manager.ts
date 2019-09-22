@@ -1,3 +1,5 @@
+import { ICustomHTMLElement } from "../../web/customelement/interface";
+import { RenderReason } from "../../web/customelement/interface/ilifecycle";
 import { isPrimitive } from "../lang/is-primitive";
 import { st } from "../st/st";
 import { ChangeDetector } from "./change-detector";
@@ -5,7 +7,7 @@ import {
 	IOnChangeHandler,
 	IOnDeepChangeHandler
 } from "./interface/ion-change-handler";
-import { IOnPropChange, PropChangeType } from "./interface/ion-prop-change";
+import { IPropChange, PropChangeType } from "./interface/ion-prop-change";
 
 export const PROPS: any = Symbol("PROPS");
 
@@ -25,31 +27,49 @@ export class PropChangeManager {
 		}
 	}
 
-	static initProp(instance: IOnPropChange, name: string) {
+	static handleCustomElementPropChange(instance: any, change: IPropChange) {
+		// call handler method if implemented
+		if (typeof instance.onPropChange == "function") {
+			instance.onPropChange(change);
+		}
+
+		// if the instance never rendered yet, don't call doRender()!
+		if (!instance._notInitialRender) return;
+
+		if (
+			instance.shouldRender(RenderReason.PROP_CHANGE, {
+				name: change.name,
+				path: change.path,
+				value: change.value,
+				prevValue: change.prevValue,
+				type: change.type
+			})
+		) {
+			instance.doRender();
+		}
+	}
+
+	static initProp(instance: ICustomHTMLElement, name: string) {
 		PropChangeManager.onPropChange(
 			instance,
 			name,
 			(value: any, prevValue: any) => {
-				if (typeof instance.onPropChange == "function") {
-					instance.onPropChange({
-						type: PropChangeType.CHANGE,
-						path: DEFAULT_EMPTY_PATH,
-						name,
-						value,
-						prevValue
-					});
-				}
+				PropChangeManager.handleCustomElementPropChange(instance, {
+					type: PropChangeType.CHANGE,
+					path: DEFAULT_EMPTY_PATH,
+					name,
+					value,
+					prevValue
+				});
 			},
 			(path: string, value: any, prevValue: any) => {
-				if (typeof instance.onPropChange == "function") {
-					instance.onPropChange({
-						type: PropChangeType.DEEP_CHANGE,
-						path,
-						name,
-						value,
-						prevValue
-					});
-				}
+				PropChangeManager.handleCustomElementPropChange(instance, {
+					type: PropChangeType.DEEP_CHANGE,
+					path,
+					name,
+					value,
+					prevValue
+				});
 			}
 		);
 	}

@@ -74,7 +74,7 @@ export class CustomElementManager {
 							prevValue
 						})
 					) {
-						instance.reflow();
+						instance.doRender();
 					}
 				}
 			}

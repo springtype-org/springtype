@@ -23,10 +23,10 @@ import {
 
 export class CustomHTMLElement extends HTMLElement
 	implements ILifecycle, IOnPropChange {
-	constructor(
-		public _root: ShadowRoot | HTMLElement | undefined = undefined,
-		public _notInitialRender = false
-	) {
+	_root: ShadowRoot | HTMLElement | undefined = undefined;
+	_notInitialRender: boolean = false;
+
+	constructor() {
 		super();
 
 		// init @prop support
@@ -50,6 +50,8 @@ export class CustomHTMLElement extends HTMLElement
 		// default render root is this custom element instance
 		this._root = this;
 
+		// TODO: TSS <templates>
+
 		// in case of "open" or "closed" shadow DOM, use shadow DOM root node
 		if (options.shadowMode != "none" && !this.shadowRoot) {
 			this._root = this.attachShadow({
@@ -66,14 +68,16 @@ export class CustomHTMLElement extends HTMLElement
 		return Object.getPrototypeOf(this).constructor[OBSERVED_ATTRIBUTES] || [];
 	}
 
+	onBeforeConnect() {}
+
 	// internal web component standard method
 	connectedCallback() {
 		if (typeof this.onConnect == "function") {
 			this.onConnect();
 		}
 
-		if (this.shouldRender(RenderReason.CONNECT)) {
-			this.reflow();
+		if (this.shouldRender(RenderReason.INITIAL)) {
+			this.doRender();
 		}
 	}
 
@@ -91,6 +95,8 @@ export class CustomHTMLElement extends HTMLElement
 			this.onDisconnect();
 		}
 	}
+
+	onBeforeDisconnect() {}
 
 	onDisconnect() {}
 
@@ -110,7 +116,7 @@ export class CustomHTMLElement extends HTMLElement
 				prevValue
 			})
 		) {
-			this.reflow();
+			this.doRender();
 		}
 	}
 
@@ -140,19 +146,8 @@ export class CustomHTMLElement extends HTMLElement
 		}
 	}
 
-	onPropChange(change: IPropChange) {
-		if (
-			this.shouldRender(RenderReason.PROP_CHANGE, {
-				name: change.name,
-				path: change.path,
-				value: change.value,
-				prevValue: change.prevValue,
-				type: change.type
-			})
-		) {
-			this.reflow();
-		}
-	}
+	// @ts-ignore: Unused variables are valid here
+	onPropChange(change: IPropChange) {}
 
 	/**
 	 * Lifecycle method: Implement to get notified when attributes change
@@ -173,7 +168,8 @@ export class CustomHTMLElement extends HTMLElement
 		return true;
 	}
 
-	onBeforeRender() {}
+	// @ts-ignore: Unused variables are valid here
+	onBeforeRender(tssOnly: boolean = false) {}
 
 	render(): IVirtualNode {
 		const msg = `🔥Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
@@ -189,11 +185,30 @@ export class CustomHTMLElement extends HTMLElement
 		return undefined;
 	}
 
-	// TODO: ----> split style and tpl rendering for theming
-	reflow() {
+	doRenderStyle(): IVirtualNode | undefined {
+		console.log("doRenderStyle");
+
+		const options: ICustomElementOptions = Object.getPrototypeOf(this)
+			.constructor[CUSTOM_ELEMENT_OPTIONS];
+
+		// render virtual DOM of TSS
+		const tssVdom = st.tss.renderStyleNode(this, options.tss, this.renderStyle);
+
+		const styleTpl = st.tss.renderStyleTemplate(
+			this,
+			options.tss,
+			this.renderStyle
+		);
+
+		console.log("styleTpl", this, styleTpl);
+
+		return tssVdom;
+	}
+
+	doRender(tssOnly: boolean = false) {
 		// call lifecycle method
 		if (typeof this.onBeforeRender === "function") {
-			this.onBeforeRender();
+			this.onBeforeRender(tssOnly);
 		}
 
 		const options: ICustomElementOptions = Object.getPrototypeOf(this)
@@ -201,11 +216,10 @@ export class CustomHTMLElement extends HTMLElement
 
 		let vdom: IVirtualNode<any>;
 		try {
-			// render virtual DOM of childrens markup
-			if (typeof this.render == "function") {
-				vdom = this.render();
-			} else if (typeof options.tpl == "function") {
+			if (typeof options.tpl == "function") {
 				vdom = options.tpl(this);
+			} else {
+				vdom = this.render();
 			}
 		} catch (e) {
 			if (e.message.indexOf("tsx") > -1) {
@@ -216,8 +230,7 @@ export class CustomHTMLElement extends HTMLElement
 			throw e;
 		}
 
-		// render virtual DOM of TSS
-		const tssVdom = st.tss.render(this, options.tss, this.renderStyle);
+		const tssVdom = this.doRenderStyle();
 
 		let nodesToRender = [vdom!];
 		if (tssVdom) {
@@ -243,13 +256,17 @@ export class CustomHTMLElement extends HTMLElement
 
 		// call lifecycle method
 		if (typeof this.onAfterRender === "function") {
-			this.onAfterRender();
+			this.onAfterRender(tssOnly);
 		}
 	}
 
 	onAfterInitialRender() {}
-	onAfterRender() {}
+
+	// @ts-ignore: Unused variables are valid here
+	onAfterRender(tssOnly: boolean = false) {}
 }
+
+export type ICustomHTMLElement = typeof CustomHTMLElement;
 
 if (!st.customElement) {
 	st.customElement = CustomHTMLElement;
