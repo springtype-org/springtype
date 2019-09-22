@@ -1,21 +1,23 @@
-import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
+import { IVirtualNode } from "../../vdom/interface";
 
 export interface ITSS {
 	currentTheme: any;
 
 	generateStyleDeclaration(declaration: any, mediaQuery?: boolean): any;
 
-	renderStyleNode(
+	getDeclaration(
 		instance: any,
 		tssFn?: Function,
 		renderStyleFn?: Function
-	): IVirtualNode | undefined;
+	): any;
 
-	renderStyleTemplate(
+	renderStyleSheet(
 		instance: any,
 		tssFn?: Function,
 		renderStyleFn?: Function
-	): HTMLTemplateElement | undefined;
+	): CSSStyleSheet;
+
+	renderStyleNode(declaration: any): IVirtualNode;
 
 	setTheme(theme: any): void;
 }
