@@ -1,4 +1,7 @@
-import { ICustomElementInstances } from "../../../web/customelement/interface";
+import {
+	ICustomElementInstances,
+	ICustomHTMLElement
+} from "../../../web/customelement/interface";
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
 import {
@@ -68,7 +71,7 @@ export interface i$st {
 	setDomRef: ISetDomRef;
 
 	// custom element base class implemenetation to inherit from
-	customElement: any;
+	customElement: ICustomHTMLElement;
 
 	// logging
 	log: ilogFunction;

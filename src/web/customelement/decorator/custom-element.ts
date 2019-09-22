@@ -9,7 +9,7 @@ export const customElement = (
 	if (!options) options = {};
 
 	// default to none for max. backward compatibility
-	if (typeof options.shadowMode == "undefined") {
+	if (!options.shadowMode) {
 		options.shadowMode = "open";
 	}
 
@@ -33,6 +33,9 @@ export const customElement = (
 		// assign options to be used in CustomElement derived class constructor
 		targetClass[TAG_NAME] = tagName;
 		targetClass[CUSTOM_ELEMENT_OPTIONS] = options;
+
+		// prevent any mutation
+		Object.seal(targetClass);
 
 		return targetClass;
 	};

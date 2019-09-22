@@ -1,5 +1,6 @@
 import { st } from "../../core";
 import {
+	IVirtualChild,
 	IVirtualChildren,
 	IVirtualNode,
 	IVirtualNodeType
@@ -47,3 +48,18 @@ export const tsx = (st.tsx = (
 		children
 	};
 });
+
+export const flattenChildren = (
+	originalChildren: Array<IVirtualChild>
+): Array<IVirtualChild> => {
+	const children: Array<IVirtualChild> = [];
+	for (let child of originalChildren) {
+		if (Array.isArray(child)) {
+			// TODO: set auto-generated key
+			children.push(...child);
+		} else {
+			children.push(child);
+		}
+	}
+	return children;
+};

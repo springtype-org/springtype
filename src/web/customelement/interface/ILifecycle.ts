@@ -3,9 +3,10 @@ import { ITypedStyleSheet } from "../../tss/interface";
 import { IVirtualNode } from "../../vdom/interface";
 
 export enum RenderReason {
-	CONNECT = "CONNECT",
+	INITIAL = "INITIAL",
 	PROP_CHANGE = "PROP_CHANGE",
-	ATTRIBUTE_CHANGE = "ATTRIBUTE_CHANGE"
+	ATTRIBUTE_CHANGE = "ATTRIBUTE_CHANGE",
+	THEME_CHANGE = "THEME_CHANGE"
 }
 
 export interface RenderReasonMetaData {
@@ -22,8 +23,8 @@ export interface RenderReasonMetaData {
 }
 
 export interface ILifecycle {
-	_root: ShadowRoot | HTMLElement | undefined;
-	_notInitialRender: boolean;
+	_root?: ShadowRoot | HTMLElement | undefined;
+	_notInitialRender?: boolean;
 
 	// before the component gets mounted to the DOM
 	onBeforeConnect?(): void;
@@ -47,10 +48,10 @@ export interface ILifecycle {
 	shouldRender?(reason: RenderReason, meta?: RenderReasonMetaData): boolean;
 
 	// before render()
-	onBeforeRender?(): void;
+	onBeforeRender?(tssOnly?: boolean): void;
 
 	// after render()
-	onAfterRender?(): void;
+	onAfterRender?(tssOnly?: boolean): void;
 
 	// after first render()
 	onAfterInitialRender?(): void;
@@ -58,8 +59,11 @@ export interface ILifecycle {
 	// implement this and return TSX to be rendered
 	render?(): IVirtualNode;
 
-	// lifecycle method to call to trigger a VDOM reflow
-	reflow(): void;
+	// lifecycle method to trigger a VDOM tpl reflow
+	doRender?(tssOnly?: boolean): void;
+
+	// lifecycle method to tigger a VDOM tss
+	doRenderStyle?(): IVirtualNode | undefined;
 
 	// implement this and return TSS for the markup to be styled
 	renderStyle?(theme?: any): ITypedStyleSheet | undefined;

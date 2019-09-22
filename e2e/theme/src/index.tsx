@@ -1,5 +1,10 @@
 import { st } from "../../../src/core";
 import { customElement } from "../../../src/web/customelement";
+import { ILifecycle } from "../../../src/web/customelement/interface";
+import {
+	RenderReason,
+	RenderReasonMetaData
+} from "../../../src/web/customelement/interface/ilifecycle";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tsx } from "../../../src/web/vdom";
 
@@ -20,10 +25,11 @@ const themeB: MyTheme = {
 };
 
 @customElement("theme-test")
-export class ThemeTest extends st.customElement {
+export class ThemeTest extends st.customElement implements ILifecycle {
 	onConnect() {
 		this.changeThemeA();
 	}
+
 	changeThemeA = () => {
 		st.tss.setTheme(themeA);
 	};
@@ -32,6 +38,9 @@ export class ThemeTest extends st.customElement {
 		st.tss.setTheme(themeB);
 	};
 
+	setAttribute() {
+		console.log("foo");
+	}
 	render() {
 		return (
 			<div>
@@ -48,6 +57,12 @@ export class ThemeTest extends st.customElement {
 				background: theme.primaryColor
 			}
 		};
+	}
+
+	shouldRender(reason: RenderReason, meta: RenderReasonMetaData): boolean {
+		console.log("reason", reason, "meta", meta);
+
+		return true;
 	}
 }
 

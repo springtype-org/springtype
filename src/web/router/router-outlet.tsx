@@ -4,7 +4,9 @@ import { IVirtualNode } from "../vdom/interface/ivirtual-node";
 import { tsx } from "../vdom/tsx";
 import { ILocationChangeDecision } from "./interface/irouter";
 
-@customElement("router-outlet")
+@customElement("router-outlet", {
+	shadowMode: "none"
+})
 export class RouterOutlet extends st.customElement {
 	locationChangeDecision: ILocationChangeDecision | null = null;
 
