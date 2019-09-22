@@ -1,3 +1,4 @@
+import { ICustomElementInstances } from "../../../web/customelement/interface";
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
 import {
@@ -9,10 +10,12 @@ import {
 	IVirtualNode,
 	IVirtualNodeType
 } from "../../../web/vdom/interface";
-import { IOnPropChangeHandler } from "../../cd/interface";
+import { IOnChangeHandler, IOnPropChangeHandler } from "../../cd/interface";
+import { IOnDeepChangeHandler } from "../../cd/interface/ion-change-handler";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { ilogFunction } from "../../log/interface";
+import { ISharedMemoryEntries } from "../../sharedmemory/interface";
 
 /**
  * public $st and internal st API
@@ -46,18 +49,23 @@ export interface i$st {
 	// initial and patch (differential) rendering
 	renderer: IRenderer;
 
-	// onChange
-	// applyChangeDetection -> rename onPropChange
-	// removeChangeHandler -> rename: removeShareChangeHandler
-	// addShareChangeHandler
-	// state
+	// change detection for objects and arrays (deep changes)
+	onChange: (object: any, onChange: IOnDeepChangeHandler, options: any) => any;
+
+	// change detection with support for (deep changes + reference set changes)
+	onPropChange: (
+		instance: any,
+		name: string | symbol,
+		onChange: IOnChangeHandler,
+		onDeepChange?: IOnDeepChangeHandler
+	) => any;
 
 	// set and get DOM references from within @customElement classes using @ref
 	getDomRef: IGetDomRef;
 	setDomRef: ISetDomRef;
 
 	// custom element base class implemenetation to inherit from
-	customElement: any; // typeof CustomHTMLElement TODO: Interface otherwise it imports!
+	customElement: any;
 
 	// logging
 	log: ilogFunction;
@@ -90,6 +98,9 @@ export interface i$st {
 		onChange?: IOnPropChangeHandler
 	) => void;
 
-	// e.g. [Symbol(SHARED_MEMORY), Symbol(CUSTOM_ELEMENT_INSTANCES)]
-	[libraryGlobalName: string]: any;
+	SHARED_MEMORY: ISharedMemoryEntries;
+	CUSTOM_ELEMENT_INSTANCES: ICustomElementInstances;
+
+	// registries like: CUSTOM_ELEMENT_INSTANCES, SHARED_MEMORY, etc.
+	[registryName: string]: any;
 }

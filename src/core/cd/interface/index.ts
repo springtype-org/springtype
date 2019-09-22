@@ -1,6 +1,7 @@
+export { IOnChangeHandler } from "./ion-change-handler";
 export {
 	IOnPropChange,
 	IOnPropChangeHandler,
 	IPropChange,
 	PropChangeType
-} from "./i-on-prop-change";
+} from "./ion-prop-change";

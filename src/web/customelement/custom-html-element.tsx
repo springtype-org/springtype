@@ -184,7 +184,8 @@ export class CustomHTMLElement extends HTMLElement
 		return <pre>{msg}</pre>;
 	}
 
-	renderStyle(): ITypedStyleSheet | undefined {
+	// @ts-ignore: Unused variables are valid here
+	renderStyle(theme?: any): ITypedStyleSheet | undefined {
 		return undefined;
 	}
 

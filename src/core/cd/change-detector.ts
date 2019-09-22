@@ -1,15 +1,10 @@
 import { isPrimitive } from "../lang/is-primitive";
 import { st } from "../st/st";
+import { IOnDeepChangeHandler } from "./interface/ion-change-handler";
 
 const PATH_SEPARATOR = ".";
 const TARGET = Symbol("target");
 const UNSUBSCRIBE = Symbol("unsubscribe");
-
-export type OnChangeHandler = (
-	path: string,
-	newValue: any,
-	previousValue: any
-) => void;
 
 export class ChangeDetector {
 	static isBuiltinWithoutMutableMethods = (value: any) =>
@@ -50,7 +45,7 @@ export class ChangeDetector {
 
 	static onChange = (
 		object: any,
-		onChange: OnChangeHandler,
+		onChange: IOnDeepChangeHandler,
 		options: any = {}
 	) => {
 		const proxyTarget = Symbol("ProxyTarget");
@@ -167,10 +162,8 @@ export class ChangeDetector {
 
 				if (!ignore) {
 					invalidateCachedDescriptor(target, property);
-
 					handleChange(pathCache!.get(target), property, previous);
 				}
-
 				return result;
 			},
 
@@ -335,3 +328,7 @@ export class ChangeDetector {
 (<any>ChangeDetector.onChange).target = (proxy: any) => proxy[TARGET] || proxy;
 (<any>ChangeDetector.onChange).unsubscribe = (proxy: any) =>
 	proxy[UNSUBSCRIBE] || proxy;
+
+if (!st.onChange) {
+	st.onChange = ChangeDetector.onChange;
+}

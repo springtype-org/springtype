@@ -5,8 +5,10 @@ import { RenderReason } from "./interface/ilifecycle";
 
 export const OBSERVED_ATTRIBUTES: any = Symbol("OBSERVED_ATTRIBUTES");
 export const CUSTOM_ELEMENT_OPTIONS: any = Symbol("CUSTOM_ELEMENT_OPTIONS");
-export const CUSTOM_ELEMENT_INSTANCES: any = "CUSTOM_ELEMENT_INSTANCES";
 export const TAG_NAME: any = Symbol("TAG_NAME");
+
+// used externally
+export const CUSTOM_ELEMENT_INSTANCES: string = "CUSTOM_ELEMENT_INSTANCES";
 
 export class CustomElementManager {
 	static addInstance(instance: any) {

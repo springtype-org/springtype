@@ -1,7 +1,7 @@
 import {
 	IOnPropChangeHandler,
 	PropChangeType
-} from "../cd/interface/i-on-prop-change";
+} from "../cd/interface/ion-prop-change";
 import {
 	DEFAULT_EMPTY_PATH,
 	PropChangeManager
@@ -52,7 +52,7 @@ const initSharedMemoryEntry = (shareName: string, initialValue: any) => {
 		// set initial value in shared memory
 		st[SHARED_MEMORY][shareName].value = initialValue;
 
-		PropChangeManager.applyChangeDetection(
+		PropChangeManager.onPropChange(
 			st[SHARED_MEMORY][shareName],
 			"value",
 			(value: any, prevValue: any) => {

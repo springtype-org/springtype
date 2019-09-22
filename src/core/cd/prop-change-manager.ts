@@ -1,17 +1,15 @@
 import { isPrimitive } from "../lang/is-primitive";
+import { st } from "../st/st";
 import { ChangeDetector } from "./change-detector";
-import { IOnPropChange, PropChangeType } from "./interface/i-on-prop-change";
+import {
+	IOnChangeHandler,
+	IOnDeepChangeHandler
+} from "./interface/ion-change-handler";
+import { IOnPropChange, PropChangeType } from "./interface/ion-prop-change";
 
 export const PROPS: any = Symbol("PROPS");
 
 export const DEFAULT_EMPTY_PATH = "";
-
-export type OnChangeHandler = (value: any, prevValue: any) => void;
-export type OnDeepChangeHandler = (
-	path: string,
-	value: any,
-	prevValue: any
-) => void;
 
 export class PropChangeManager {
 	static addProp(ctor: any, name: string | symbol) {
@@ -28,7 +26,7 @@ export class PropChangeManager {
 	}
 
 	static initProp(instance: IOnPropChange, name: string) {
-		PropChangeManager.applyChangeDetection(
+		PropChangeManager.onPropChange(
 			instance,
 			name,
 			(value: any, prevValue: any) => {
@@ -58,7 +56,7 @@ export class PropChangeManager {
 
 	static conditionallyApplyDeepChangeDetection(
 		value: any,
-		onDeepChange: OnDeepChangeHandler
+		onDeepChange: IOnDeepChangeHandler
 	): any {
 		// only activate deep change detection if there is some function to listen to it
 		if (!isPrimitive(value) && typeof onDeepChange == "function") {
@@ -67,11 +65,11 @@ export class PropChangeManager {
 		return value;
 	}
 
-	static applyChangeDetection(
+	static onPropChange(
 		instance: any,
 		name: string | symbol,
-		onChange: OnChangeHandler,
-		onDeepChange?: OnDeepChangeHandler
+		onChange: IOnChangeHandler,
+		onDeepChange?: IOnDeepChangeHandler
 	): any {
 		let value = PropChangeManager.conditionallyApplyDeepChangeDetection(
 			instance[name],
@@ -93,4 +91,8 @@ export class PropChangeManager {
 		});
 		return value;
 	}
+}
+
+if (!st.onPropChange) {
+	st.onPropChange = PropChangeManager.onPropChange;
 }

@@ -9,6 +9,8 @@ const camelToKebabCase = (name: string): string => {
 
 if (!st.tss) {
 	st.tss = {
+		currentTheme: {},
+
 		generateDeclaration: (declaration: any, mediaQuery: boolean = false) => {
 			let styles = "";
 
@@ -56,11 +58,16 @@ if (!st.tss) {
 		): IVirtualNode | undefined => {
 			// use renderStyle() function return value if function is defined
 			let declaration =
-				typeof renderStyleFn == "function" ? renderStyleFn(instance) : null;
+				typeof renderStyleFn == "function"
+					? renderStyleFn(st.tss.currentTheme)
+					: null;
 
 			// else use style template (bound in @CustomElement({ tss: ... }))
 			if (!declaration) {
-				declaration = typeof tssFn == "function" ? tssFn(instance) : null;
+				declaration =
+					typeof tssFn == "function"
+						? tssFn(instance, st.tss.currentTheme)
+						: null;
 			}
 
 			if (!declaration) {
@@ -72,21 +79,12 @@ if (!st.tss) {
 			);
 		},
 
-		setTheme<T = {}>(theme: T) {
-			console.log(
-				"setting theme",
-				theme,
-				CustomElementManager.getAllInstances()
-			);
+		setTheme(theme: any) {
+			st.tss.currentTheme = theme || {};
 
-			// TODO: Trigger re-render renderStyle() on all custom element instances
-			// TODO: Needs a split of renderTSX and renderTSS
-			// TODO: Second parameter for renderTSS function/tpl function
+			for (let instance of CustomElementManager.getAllInstances()) {
+				instance.reflow();
+			}
 		}
-
-		/*
-	getTheme<T = {}>(): T {
-		return {};
-	}*/
 	};
 }
