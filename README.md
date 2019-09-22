@@ -3,7 +3,7 @@
 > "Everything should be made as simple as possible, but no simpler." - Albert Einstein
 
 SpringType is a tiny but full-featured web app framework written in TypeScript.
-You get most features of Angular, React and Vue in < 20KiB (gzipped).
+You get most features of Angular, React and Vue in < 10 KiB (gzipped).
 SpringType is faster and more memory efficient than any of the three major frameworks.
 
 It features (out-of-the-box):
