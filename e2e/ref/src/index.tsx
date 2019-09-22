@@ -2,13 +2,14 @@ import { st } from "../../../src/core";
 import { customElement } from "../../../src/web/customelement";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { domRef, tsx } from "../../../src/web/vdom";
+import {ILifecycle} from "../../../src/web/customelement/interface";
 
 if (process.env.NODE_ENV === "development") {
 	customElementsHMRPolyfill;
 }
 
 @customElement("ref-test")
-export class RefTest extends st.customElement {
+export class RefTest extends st.customElement implements ILifecycle{
 	time: number = 0;
 
 	@domRef("someDiv")
