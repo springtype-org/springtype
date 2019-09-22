@@ -10,8 +10,8 @@ It features (out-of-the-box):
 
 - [ ] Functional reactive programming using RxJS for time-complexities
 - [ ] Redux based state machine with an intuitive API and optional immutability and local persistence
-- [ ] Headache-free DOM element to Web Component binding
 - [ ] SSR, server side rendering and VDOM hydration
+- [x] Headache-free DOM element to Web Component binding
 - [x] Use of modern API's (Web Components, Proxy, Symbol, Decorators, ...)
 - [x] TSX (typed JSX) based templating
 - [x] Shared memory for hassle-free Web Component inter-linking

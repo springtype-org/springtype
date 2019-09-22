@@ -10,8 +10,11 @@ import {
 	IVirtualNode,
 	IVirtualNodeType
 } from "../../../web/vdom/interface";
-import { IOnChangeHandler, IOnPropChangeHandler } from "../../cd/interface";
-import { IOnDeepChangeHandler } from "../../cd/interface/ion-change-handler";
+import {
+	IOnChangeHandler,
+	IOnDeepChangeHandler,
+	IOnPropChangeHandler
+} from "../../cd/interface";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { ilogFunction } from "../../log/interface";

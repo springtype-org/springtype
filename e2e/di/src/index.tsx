@@ -1,12 +1,6 @@
 import { st } from "../../../src/core";
 import { inject, injectable } from "../../../src/core/di";
 import { InjectionStrategy } from "../../../src/core/di/enum";
-import { customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
-
-if (process.env.NODE_ENV === "development") {
-	customElementsHMRPolyfill;
-}
 
 // test injectable classes
 
@@ -25,8 +19,7 @@ class FooFactoryFunction extends FooFactory {}
 
 // --- customElement test
 
-@customElement("di-e2e")
-export class DIE2E extends st.customElement {
+export class DIE2E {
 	@inject(FooSingleton)
 	fooSingleton!: FooSingleton;
 
@@ -37,10 +30,6 @@ export class DIE2E extends st.customElement {
 	fooFactoryFunction!: FooFactoryFunction;
 
 	constructor() {
-		super();
-	}
-
-	onConnect() {
 		// @ts-ignore: way to keep the TS compiler friendly
 		if (this.fooSingleton === st.di.get(FooSingleton)) {
 			console.log("singleton inject OK");
@@ -56,4 +45,4 @@ export class DIE2E extends st.customElement {
 	}
 }
 
-document.body.innerHTML = "<di-e2e></di-e2e>";
+new DIE2E();

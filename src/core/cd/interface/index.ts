@@ -1,4 +1,4 @@
-export { IOnChangeHandler } from "./ion-change-handler";
+export { IOnChangeHandler, IOnDeepChangeHandler } from "./ion-change-handler";
 export {
 	IOnPropChange,
 	IOnPropChangeHandler,
