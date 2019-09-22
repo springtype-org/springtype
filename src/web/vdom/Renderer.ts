@@ -1,6 +1,5 @@
 import { st } from "../../core/st/st";
 import { IElement } from "./interface/ielement";
-import { IRenderer } from "./interface/irenderer";
 import {
 	IVirtualChild,
 	IVirtualChildren,

@@ -120,6 +120,7 @@ export class CustomHTMLElement extends HTMLElement
 	 * @param newValue Value to accept or revoke
 	 * @param oldValue Previous value
 	 */
+	// @ts-ignore: Unused variables are valid here
 	shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
 		return true;
 	}
@@ -156,6 +157,7 @@ export class CustomHTMLElement extends HTMLElement
 	/**
 	 * Lifecycle method: Implement to get notified when attributes change
 	 */
+	// @ts-ignore: Unused variables are valid here
 	onAttributeChange(name: string, newValue: any, oldValue: any) {}
 
 	/**
@@ -166,6 +168,7 @@ export class CustomHTMLElement extends HTMLElement
 		return (this as any)[name];
 	}
 
+	// @ts-ignore: Unused variables are valid here
 	shouldRender(reason: RenderReason, meta?: RenderReasonMetaData): boolean {
 		return true;
 	}

@@ -1,3 +1,4 @@
+/*
 function createStore(initialReducer, initialState = {}, enhancer) {
 	if (enhancer) {
 		return enhancer(createStore)(initialReducer, initialState);
@@ -25,3 +26,4 @@ function createStore(initialReducer, initialState = {}, enhancer) {
 		}
 	};
 }
+*/

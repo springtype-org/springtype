@@ -1,5 +1,5 @@
+import { st } from "../../../core";
 import { IElement } from "../interface/ielement";
-import { Renderer } from "../renderer";
 import { tsx } from "../tsx";
 
 describe("Renderer create operation", () => {
@@ -18,7 +18,7 @@ describe("Renderer create operation", () => {
 			</ul>
 		);
 
-		Renderer.renderInitial(list, parentDOMElement);
+		st.renderer.renderInitial(list, parentDOMElement);
 
 		expect((parentDOMElement.childNodes[0] as HTMLLIElement).id).toEqual("123");
 		expect(
