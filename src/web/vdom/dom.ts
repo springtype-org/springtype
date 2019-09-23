@@ -2,23 +2,11 @@ import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
-import { flattenChildren, tsxToStandardAttributeName } from "./tsx";
+import { tsxToStandardAttributeName } from "./tsx";
 
 if (!st.dom) {
   st.dom = {
     svgContext: false,
-
-    /**
-     * Used to setup the entry point of a web user interface by creating a custom element and adding it to <body>.
-     * The base class implementation st.customElement takes care of triggering the VDOM rendering algorithm once
-     * appended to the parent node (<body /> in this case).
-     *
-     * Might be called automatically when using the router ('router-outlet').
-     * Otherwise might be called by userland code in an entry point file.
-     */
-    setRoot: (tagName: string): Element => {
-      return document.body.appendChild(document.createElement(tagName));
-    },
 
     hasSvgNamespace: (type: string): boolean => {
       return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
@@ -57,7 +45,7 @@ if (!st.dom) {
       if (virtualNode.children) {
         // TODO: Fixme
         // flatten/normalize Array<Array<IVirtualChild>>
-        virtualNode.children = flattenChildren(virtualNode.children);
+        //virtualNode.children = flattenChildren(virtualNode.children);
 
         st.dom.createChildElements(virtualNode.children, newEl, isSvg);
       }
