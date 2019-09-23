@@ -16,6 +16,10 @@ export class MwcSelect extends st.element {
   @attr()
   "mwc-label": string;
 
+  onConnect() {
+    console.log("MwcSelect", this["mwc-label"]);
+  }
+
   onMwcSelected = (evt: any) => {
     evt.preventDefault();
     const test = this["mwc-items"].find(value => value.id == evt.target.value);

@@ -1,6 +1,6 @@
 import { st } from "../../core";
 import { customElement } from "../customelement";
-import { TAG_NAME } from "../customelement/custom-element-manager";
+import { TAG_NAME } from "../customelement/interface/icustom-html-element";
 import { tsx } from "../vdom";
 import { ILocationChangeDecision, IRoutes } from "./interface/irouter";
 import { RouterOutlet } from "./router-outlet";

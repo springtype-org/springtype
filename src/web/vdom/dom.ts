@@ -8,6 +8,10 @@ if (!st.dom) {
   st.dom = {
     svgContext: false,
 
+    setRoot(tagName: string): Element {
+      return document.body.appendChild(document.createElement(tagName));
+    },
+
     hasSvgNamespace: (type: string): boolean => {
       return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
     },
@@ -46,6 +50,8 @@ if (!st.dom) {
         // TODO: Fixme
         // flatten/normalize Array<Array<IVirtualChild>>
         //virtualNode.children = flattenChildren(virtualNode.children);
+
+        virtualNode.children = ([] as IVirtualChildren).concat.apply([], virtualNode.children);
 
         st.dom.createChildElements(virtualNode.children, newEl, isSvg);
       }

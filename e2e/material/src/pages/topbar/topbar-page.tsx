@@ -19,17 +19,15 @@ export class TopBarPage extends st.element {
   ];
 
   @attr()
-  selectedTopbarItem: ISelectItem<VariantType> = { id: "1", value: false, displayValue: <strong>Standard</strong> };
+  "selected-topbar-item": ISelectItem<VariantType> = { id: "1", value: false, displayValue: <strong>Standard</strong> };
 
-  constructor() {
-    super();
-    setTimeout(() => {
-      console.log("rerender", this.render());
-      this.doRender();
-    }, 1000);
+  onAttributeChange(name: string, value: any) {
+    console.log("topbar-page onAttributeChange", name, value);
   }
 
   render() {
+    console.log("re-rendering topbar-page", this.selectItems);
+
     return (
       <div>
         <div style="margin: 15px">
@@ -41,10 +39,10 @@ export class TopBarPage extends st.element {
             mwc-items={this.selectItems}
             onselect={(evt: any) => {
               console.log("evt.detail.data", evt.detail);
-              this.selectedTopbarItem = evt.detail;
+              this["selected-topbar-item"] = evt.detail;
             }}
           />
-          <top-bar-container attr-type={this.selectedTopbarItem.value} attr-name={this.selectedTopbarItem.displayValue} />
+          <top-bar-container attr-type={this["selected-topbar-item"].value} attr-name={this["selected-topbar-item"].displayValue} />
         </div>
       </div>
     );

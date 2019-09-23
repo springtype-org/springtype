@@ -38,7 +38,7 @@ export class TopBarContainer extends st.element {
         </div>
       </div>
     );
-    console.log("result container", JSON.stringify(result, null, 2));
+    //console.log("result container", JSON.stringify(result, null, 2));
 
     return result;
   }

@@ -1,43 +1,26 @@
 import { st } from "../../../core";
-import { CustomElementManager } from "../custom-element-manager";
-import {
-	ICustomElementOptions,
-	IFunctionalCustomElementOptions
-} from "../interface/icustom-element-options";
-import {
-	RenderFunction,
-	RenderStyleFunction
-} from "../interface/icustom-html-element";
+import { defineCustomElement } from "../custom-html-element";
+import { ICustomElementOptions, ShadowAttachMode } from "../interface/icustom-element-options";
+import { RenderFunction, RenderStyleFunction } from "../interface/icustom-html-element";
 
 export const customElement = function(
-	configOrTagName: IFunctionalCustomElementOptions | string,
-	optionsOrRenderFunction?: ICustomElementOptions | RenderFunction,
-	renderStyleFunction?: RenderStyleFunction
+  tagName: string,
+  optionsOrRenderFunction?: ICustomElementOptions | RenderFunction,
+  renderStyleFunction?: RenderStyleFunction,
+  shadowMode?: ShadowAttachMode,
 ): any {
-	// functional use: customElement('tag-name', (scope) => { ... }, ...)
-	if (typeof optionsOrRenderFunction == "function") {
-		return CustomElementManager.defineCustomElement(
-			typeof configOrTagName == "string"
-				? configOrTagName
-				: configOrTagName.tagName,
-			class extends st.element {},
-			{
-				shadowMode:
-					typeof configOrTagName == "string"
-						? undefined
-						: configOrTagName.shadowMode,
-				tpl: optionsOrRenderFunction as RenderFunction,
-				tss: renderStyleFunction
-			}
-		);
-	} else {
-		// decorator use on class @customElement('tag-name', { ... })
-		return (targetClass: any) => {
-			return CustomElementManager.defineCustomElement(
-				configOrTagName as string,
-				targetClass,
-				optionsOrRenderFunction as ICustomElementOptions
-			);
-		};
-	}
+  // functional use: customElement('tag-name', (scope) => { ... }, ...)
+  if (typeof optionsOrRenderFunction == "function") {
+    // customElement('tag-name', () => <div></div>, () => ({ div: { color: red } }), 'open')
+    return defineCustomElement(tagName, class extends st.element {}, {
+      shadowMode,
+      tpl: optionsOrRenderFunction as RenderFunction,
+      tss: renderStyleFunction,
+    });
+  } else {
+    // decorator use on class @customElement('tag-name', { ... })
+    return (targetClass: any) => {
+      return defineCustomElement(tagName, targetClass, optionsOrRenderFunction as ICustomElementOptions);
+    };
+  }
 };

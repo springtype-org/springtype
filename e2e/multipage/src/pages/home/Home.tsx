@@ -6,6 +6,12 @@ import { tsx } from "../../../../../src/web/vdom";
 export class HomePage extends st.element {
   static ROUTE = "";
 
+  constructor() {
+    super();
+
+    console.log("new HomePage instance");
+  }
+
   render() {
     return (
       <div>
@@ -18,9 +24,6 @@ export class HomePage extends st.element {
 
   onConnect() {
     console.log("onConnect HomePage");
-    setTimeout(() => {
-      st.router.refresh();
-    }, 1500);
   }
 
   renderStyle() {
