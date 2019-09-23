@@ -25,6 +25,19 @@ if (!st.dom) {
 
 			if (!virtualNode) return;
 
+			if (
+				!virtualNode.attributes ||
+				!virtualNode.type ||
+				!virtualNode.children
+			) {
+				st.warn(
+					"The IVirtualNode ",
+					virtualNode,
+					"does NOT look like one! Parent DOM element: ",
+					parentDomElement
+				);
+			}
+
 			if (virtualNode.attributes["unwrap"]) {
 				st.dom.createChildElements(
 					virtualNode.children || [],
@@ -54,6 +67,7 @@ if (!st.dom) {
 			}
 
 			if (virtualNode.children) {
+				// TODO: Fixme
 				// flatten/normalize Array<Array<IVirtualChild>>
 				//virtualNode.children = flattenChildren(virtualNode.children);
 

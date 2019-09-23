@@ -1,6 +1,15 @@
 import { IDOMAttributes } from "./idom-attributes";
 
 declare global {
+	interface CSSStyleSheet {
+		replace(text: string): Promise<CSSStyleSheet>;
+		replaceSync(text: string): void;
+	}
+
+	interface ShadowRoot {
+		adoptedStyleSheets: Array<CSSStyleSheet>;
+	}
+
 	namespace JSX {
 		export interface SVGAttributes extends HTMLAttributes {
 			accentHeight?: number | string;

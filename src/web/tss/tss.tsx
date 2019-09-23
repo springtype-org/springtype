@@ -5,7 +5,7 @@ import {
 	RenderReason
 } from "../customelement/interface/ilifecycle";
 import { tsx } from "../vdom";
-import { IVirtualNode } from "../vdom/interface/ivirtual-node";
+import { IVirtualNode } from "../vdom/interface";
 
 const camelToKebabCase = (name: string): string => {
 	return name.replace(/[A-Z]/g, g => "-" + g[0].toLowerCase());
@@ -58,11 +58,11 @@ if (!st.tss) {
 			return styles;
 		},
 
-		renderStyleNode: (
+		getDeclaration: (
 			instance: any,
 			tssFn?: Function,
 			renderStyleFn?: Function
-		): IVirtualNode | undefined => {
+		): any => {
 			// use renderStyle() function return value if function is defined
 			let declaration =
 				typeof renderStyleFn == "function"
@@ -76,11 +76,16 @@ if (!st.tss) {
 						? tssFn(instance, st.tss.currentTheme)
 						: null;
 			}
+			return declaration || undefined;
+		},
 
-			if (!declaration) {
-				return;
-			}
+		renderStyleSheet: (declaration: any): CSSStyleSheet => {
+			const stylesheet = new CSSStyleSheet();
+			stylesheet.replace(st.tss.generateStyleDeclaration(declaration));
+			return stylesheet;
+		},
 
+		renderStyleNode: (declaration: any): IVirtualNode => {
 			return (
 				<style type="text/css">
 					{st.tss.generateStyleDeclaration(declaration)}
@@ -88,27 +93,12 @@ if (!st.tss) {
 			);
 		},
 
-		renderStyleTemplate(
-			instance: any,
-			tssFn?: Function,
-			renderStyleFn?: Function
-		): HTMLTemplateElement | undefined {
-			const styleNode = st.tss.renderStyleNode(instance, tssFn, renderStyleFn);
-			return st.dom.createElement(
-				styleNode,
-				document.createElement("template"),
-				false
-			) as HTMLTemplateElement | undefined;
-		},
 		setTheme(theme: any) {
 			st.tss.currentTheme = theme || {};
 
 			for (let instance of CustomElementManager.getAllInstances()) {
-				if (
-					((instance as ILifecycle).shouldRender!(RenderReason.THEME_CHANGE),
-					{})
-				) {
-					(instance as ILifecycle).doRender(true /*tssOnly*/);
+				if ((instance as ILifecycle).shouldRender!(RenderReason.THEME_CHANGE)) {
+					(instance as ILifecycle).doRender!(true /*tssOnly*/);
 				}
 			}
 		}

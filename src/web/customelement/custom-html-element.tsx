@@ -192,24 +192,21 @@ export class CustomHTMLElement extends HTMLElement
         return undefined;
     }
 
-    doRenderStyle(): IVirtualNode | undefined {
-		console.log("doRenderStyle");
-
+	doRenderStyle(): any {
         const options: ICustomElementOptions = Object.getPrototypeOf(this)
             .constructor[CUSTOM_ELEMENT_OPTIONS];
 
-        // render virtual DOM of TSS
-        const tssVdom = st.tss.renderStyleNode(this, options.tss, this.renderStyle);
-
-        const styleTpl = st.tss.renderStyleTemplate(
+		const declaration = st.tss.getDeclaration(
             this,
             options.tss,
             this.renderStyle
         );
 
-		console.log("styleTpl", this, styleTpl);
-
-        return tssVdom;
+		if (this._root! instanceof ShadowRoot) {
+			return st.tss.renderStyleSheet(declaration);
+		} else {
+			return st.tss.renderStyleNode(declaration);
+		}
     }
 
     doRender(tssOnly: boolean = false) {
@@ -248,11 +245,14 @@ export class CustomHTMLElement extends HTMLElement
             throw e;
         }
 
-        const tssVdom = this.doRenderStyle();
+		const tss: IVirtualNode | CSSStyleSheet = this.doRenderStyle();
 
-        let nodesToRender = [vdom!];
-        if (tssVdom) {
-            nodesToRender = [tssVdom, vdom!];
+		let nodesToRender: Array<IVirtualNode>;
+		if (tss instanceof CSSStyleSheet) {
+			(this._root! as ShadowRoot).adoptedStyleSheets = [tss];
+			nodesToRender = [vdom!];
+		} else {
+			nodesToRender = [tss, vdom!];
         }
         if (!this._notInitialRender) {
             // if there isn't a prev. VDOM state, render initially

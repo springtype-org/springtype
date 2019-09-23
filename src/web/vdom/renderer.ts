@@ -70,6 +70,7 @@ if (!st.renderer) {
             virtualElements: IVirtualChildren,
             parent: IElement
         ) => {
+			// TODO: Fixme
             // flatten/normalize Array<Array<IVirtualChild>>
             // virtualElements = flattenChildren(virtualElements);
 			const refList = getReferenceList(domElements);
