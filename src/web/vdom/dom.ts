@@ -1,159 +1,120 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { IElement } from "./interface/ielement";
-import {
-	IVirtualChild,
-	IVirtualChildren,
-	IVirtualNode
-} from "./interface/ivirtual-node";
+import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
 import { flattenChildren, tsxToStandardAttributeName } from "./tsx";
 
 if (!st.dom) {
-	st.dom = {
-		svgContext: false,
+  st.dom = {
+    svgContext: false,
 
-		hasSvgNamespace: (type: string): boolean => {
-			return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
-		},
+    /**
+     * Used to setup the entry point of a web user interface by creating a custom element and adding it to <body>.
+     * The base class implementation st.customElement takes care of triggering the VDOM rendering algorithm once
+     * appended to the parent node (<body /> in this case).
+     *
+     * Might be called automatically when using the router ('router-outlet').
+     * Otherwise might be called by userland code in an entry point file.
+     */
+    setRoot: (tagName: string): Element => {
+      return document.body.appendChild(document.createElement(tagName));
+    },
 
-		createElement: (
-			virtualNode: IVirtualNode | undefined,
-			parentDomElement: Element,
-			isSvg?: boolean
-		): Element | undefined => {
-			let newEl: Element;
+    hasSvgNamespace: (type: string): boolean => {
+      return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
+    },
 
-			if (!virtualNode) return;
+    createElement: (virtualNode: IVirtualNode | undefined, parentDomElement: Element, isSvg?: boolean): Element | undefined => {
+      let newEl: Element;
 
-			if (
-				!virtualNode.attributes ||
-				!virtualNode.type ||
-				!virtualNode.children
-			) {
-				st.warn(
-					"The IVirtualNode ",
-					virtualNode,
-					"does NOT look like one! Parent DOM element: ",
-					parentDomElement
-				);
-			}
+      if (!virtualNode) return;
 
-			if (virtualNode.attributes["unwrap"]) {
-				st.dom.createChildElements(
-					virtualNode.children || [],
-					parentDomElement,
-					isSvg
-				);
-				return;
-			}
+      if (!virtualNode.attributes || !virtualNode.type || !virtualNode.children) {
+        st.warn("The IVirtualNode ", virtualNode, "does NOT look like one! Parent DOM element: ", parentDomElement);
+      }
 
-			if (typeof isSvg == "undefined") {
-				if (virtualNode.type.toUpperCase() == "SVG") {
-					st.dom.svgContext = isSvg = true;
-				}
-			}
+      if (virtualNode.attributes["unwrap"]) {
+        st.dom.createChildElements(virtualNode.children || [], parentDomElement, isSvg);
+        return;
+      }
 
-			if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
-				newEl = document.createElementNS(
-					"http://www.w3.org/2000/svg",
-					virtualNode.type as string
-				);
-			} else {
-				newEl = document.createElement(virtualNode.type as string);
-			}
+      if (typeof isSvg == "undefined") {
+        if (virtualNode.type.toUpperCase() == "SVG") {
+          st.dom.svgContext = isSvg = true;
+        }
+      }
 
-			if (virtualNode.attributes) {
-				st.dom.setAttributes(virtualNode.attributes, newEl, isSvg);
-			}
+      if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
+        newEl = document.createElementNS("http://www.w3.org/2000/svg", virtualNode.type as string);
+      } else {
+        newEl = document.createElement(virtualNode.type as string);
+      }
 
-			if (virtualNode.children) {
-				// TODO: Fixme
-				// flatten/normalize Array<Array<IVirtualChild>>
-				virtualNode.children = flattenChildren(virtualNode.children);
+      if (virtualNode.attributes) {
+        st.dom.setAttributes(virtualNode.attributes, newEl, isSvg);
+      }
 
-				st.dom.createChildElements(virtualNode.children, newEl, isSvg);
-			}
+      if (virtualNode.children) {
+        // TODO: Fixme
+        // flatten/normalize Array<Array<IVirtualChild>>
+        virtualNode.children = flattenChildren(virtualNode.children);
 
-			// call lifecycle method if it is a web component
-			if (virtualNode.type.indexOf("-") > -1) {
-				if (typeof (<IElement>newEl).onBeforeConnect == "function") {
-					(<IElement>newEl).onBeforeConnect!();
-				}
-			}
+        st.dom.createChildElements(virtualNode.children, newEl, isSvg);
+      }
 
-			parentDomElement.appendChild(newEl);
-			return newEl;
-		},
+      // call lifecycle method if it is a web component
+      if (virtualNode.type.indexOf("-") > -1) {
+        if (typeof (<IElement>newEl).onBeforeConnect == "function") {
+          (<IElement>newEl).onBeforeConnect!();
+        }
+      }
 
-		createTextNode: (text: string, parentDomElement: Element) => {
-			parentDomElement.appendChild(document.createTextNode(text));
-		},
+      parentDomElement.appendChild(newEl);
+      return newEl;
+    },
 
-		createChildElements: (
-			virtualChildren: IVirtualChildren,
-			parentDomElement: Element,
-			isSvg?: boolean
-		) => {
-			for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
-				if (isPrimitive(virtualChild)) {
-					st.dom.createTextNode(
-						(virtualChild || "").toString(),
-						parentDomElement
-					);
-				} else {
-					st.dom.createElement(
-						virtualChild as IVirtualNode,
-						parentDomElement,
-						isSvg
-					);
+    createTextNode: (text: string, parentDomElement: Element) => {
+      parentDomElement.appendChild(document.createTextNode(text));
+    },
 
-					// leave SVG context
-					st.dom.svgContext = false;
-				}
-			}
-		},
+    createChildElements: (virtualChildren: IVirtualChildren, parentDomElement: Element, isSvg?: boolean) => {
+      for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
+        if (isPrimitive(virtualChild)) {
+          st.dom.createTextNode((virtualChild || "").toString(), parentDomElement);
+        } else {
+          st.dom.createElement(virtualChild as IVirtualNode, parentDomElement, isSvg);
 
-		setAttribute: (
-			name: string,
-			value: any,
-			parentDomElement: Element,
-			isSvg?: boolean
-		) => {
-			// stores referenced DOM nodes in a memory efficient WeakMap
-			// for access from CustomElements
-			if (name === "ref") {
-				const refName = Object.keys(value)[0];
-				st.setDomRef(refName, value[refName], parentDomElement);
-				return;
-			}
+          // leave SVG context
+          st.dom.svgContext = false;
+        }
+      }
+    },
 
-			if (name.startsWith("on") && typeof value == "function") {
-				parentDomElement.addEventListener(
-					name.substring(2).toLowerCase(),
-					value
-				);
-				return;
-			}
+    setAttribute: (name: string, value: any, parentDomElement: Element, isSvg?: boolean) => {
+      // stores referenced DOM nodes in a memory efficient WeakMap
+      // for access from CustomElements
+      if (name === "ref") {
+        const refName = Object.keys(value)[0];
+        st.setDomRef(refName, value[refName], parentDomElement);
+        return;
+      }
 
-			if (isSvg && name.startsWith("xlink")) {
-				parentDomElement.setAttributeNS(
-					"http://www.w3.org/1999/xlink",
-					tsxToStandardAttributeName(name),
-					value
-				);
-			} else {
-				parentDomElement.setAttribute(name, value);
-			}
-		},
+      if (name.startsWith("on") && typeof value == "function") {
+        parentDomElement.addEventListener(name.substring(2).toLowerCase(), value);
+        return;
+      }
 
-		setAttributes: (
-			attributes: any,
-			parentDomElement: Element,
-			isSvg?: boolean
-		) => {
-			for (let name in attributes) {
-				st.dom.setAttribute(name, attributes[name], parentDomElement, isSvg);
-			}
-		}
-	};
+      if (isSvg && name.startsWith("xlink")) {
+        parentDomElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
+      } else {
+        parentDomElement.setAttribute(name, value);
+      }
+    },
+
+    setAttributes: (attributes: any, parentDomElement: Element, isSvg?: boolean) => {
+      for (let name in attributes) {
+        st.dom.setAttribute(name, attributes[name], parentDomElement, isSvg);
+      }
+    },
+  };
 }

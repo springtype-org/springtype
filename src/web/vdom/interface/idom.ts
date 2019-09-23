@@ -1,34 +1,23 @@
 import { IVirtualChildren, IVirtualNode } from "./ivirtual-node";
 
+export interface IDOMRootAttributes {
+  [name: string]: string;
+}
+
 export interface IDOM {
-	svgContext: boolean;
+  svgContext: boolean;
 
-	hasSvgNamespace(type: string): boolean;
+  setRoot(tagName: string): Element;
 
-	createElement(
-		virtualNode: IVirtualNode | undefined,
-		parentDomElement: Element,
-		isSvg?: boolean
-	): Element | undefined;
+  hasSvgNamespace(type: string): boolean;
 
-	createTextNode(text: string, parentDomElement: Element): void;
+  createElement(virtualNode: IVirtualNode | undefined, parentDomElement: Element, isSvg?: boolean): Element | undefined;
 
-	createChildElements(
-		virtualChildren: IVirtualChildren,
-		parentDomElement: Element,
-		isSvg?: boolean
-	): void;
+  createTextNode(text: string, parentDomElement: Element): void;
 
-	setAttribute(
-		name: string,
-		value: any,
-		parentDomElement: Element,
-		isSvg?: boolean
-	): void;
+  createChildElements(virtualChildren: IVirtualChildren, parentDomElement: Element, isSvg?: boolean): void;
 
-	setAttributes(
-		attributes: any,
-		parentDomElement: Element,
-		isSvg?: boolean
-	): void;
+  setAttribute(name: string, value: any, parentDomElement: Element, isSvg?: boolean): void;
+
+  setAttributes(attributes: any, parentDomElement: Element, isSvg?: boolean): void;
 }

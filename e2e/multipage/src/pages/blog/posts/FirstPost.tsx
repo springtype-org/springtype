@@ -4,7 +4,7 @@ import { tsx } from "../../../../../../src/web/vdom";
 import { HomePage } from "../../home/Home";
 
 @customElement("firstpostpage-root")
-export class FirstPostPage extends st.customElement {
+export class FirstPostPage extends st.element {
 	static ROUTE = "/blog/firstpost/:id/";
 
 	render() {

@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === "development") {
 	tss,
 	shadowMode: "none"
 })
-export class Foo extends st.customElement {
+export class Foo extends st.element {
 	@attr()
 	some: string = "test";
 
@@ -22,7 +22,7 @@ export class Foo extends st.customElement {
 	lolShared: any = st.getShare("foo");
 
 	onButtonClick = () => {
-		this.reflow();
+		this.doRender();
 	};
 
 	render() {
@@ -33,25 +33,14 @@ export class Foo extends st.customElement {
 	constructor() {
 		super();
 
+		this.some = "haha";
+
 		console.log("foo st", st);
 
 		st.i18n.setLanguage("en");
 
 		setTimeout(() => {
-			st.log(
-				"router",
-				st.router,
-				"di",
-				st.di,
-				"i18n",
-				st.i18n,
-				"store",
-				st.store,
-				"state",
-				st.state,
-				"tss",
-				st.tss
-			);
+			st.log("router", st.router, "di", st.di, "i18n", st.i18n, "tss", st.tss);
 		}, 200);
 	}
 
@@ -87,4 +76,4 @@ declare global {
 	}
 }
 
-document.body.innerHTML = "<my-foo some='haha'></my-foo>";
+st.dom.setRoot("my-foo");

@@ -1,5 +1,5 @@
 import { st } from "../../core";
-import { CustomElementManager } from "../customelement/custom-element-manager";
+import { GlobalCache } from "../../core/st/interface/i$st";
 import {
 	ILifecycle,
 	RenderReason
@@ -96,7 +96,7 @@ if (!st.tss) {
 		setTheme(theme: any) {
 			st.tss.currentTheme = theme || {};
 
-			for (let instance of CustomElementManager.getAllInstances()) {
+			for (let instance of st[GlobalCache.CUSTOM_ELEMENT_INSTANCES] || []) {
 				if ((instance as ILifecycle).shouldRender!(RenderReason.THEME_CHANGE)) {
 					(instance as ILifecycle).doRender!(true /*tssOnly*/);
 				}

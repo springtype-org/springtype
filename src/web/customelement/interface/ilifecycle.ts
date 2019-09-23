@@ -32,12 +32,6 @@ export interface ILifecycle {
 	// after the component gets mounted to the DOM
 	onConnect?(): void | boolean;
 
-	// prior to removal from the DOM
-	onBeforeDisconnect?(): void;
-
-	// after the component has been unmounted from the DOM
-	onDisconnect?(): void;
-
 	// before attribute changes get accepted
 	shouldAttributeChange?(name: string, value: any, prevValue: any): boolean;
 
@@ -67,4 +61,10 @@ export interface ILifecycle {
 
 	// implement this and return TSS for the markup to be styled
 	renderStyle?(theme?: any): ITypedStyleSheet | undefined;
+
+	// prior to removal from the DOM
+	onBeforeDisconnect?(): void;
+
+	// after the component has been unmounted from the DOM
+	onDisconnect?(): void;
 }

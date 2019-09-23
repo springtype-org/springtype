@@ -1,49 +1,60 @@
 import { st } from "../../core";
-import { attr, customElement } from "../customelement";
-import { IVirtualNode } from "../vdom/interface/ivirtual-node";
-import { tsx } from "../vdom/tsx";
+import { customElement } from "../customelement";
 import { ILocationChangeDecision } from "./interface/irouter";
 
 @customElement("router-outlet", {
-	shadowMode: "none"
+  shadowMode: "none",
 })
-export class RouterOutlet extends st.customElement {
-	locationChangeDecision: ILocationChangeDecision | null = null;
+export class RouterOutlet extends st.element {
+  // custom element instance cache
+  instanceCache: any = {};
 
-	@attr()
-	element: IVirtualNode | null = null;
+  currentTagName: string = "";
 
-	constructor() {
-		super();
-		st.router.registerRouterOutlet(this);
-		st.router.enable();
-	}
+  constructor() {
+    super();
+    st.router.registerRouterOutlet(this);
+    st.router.enable();
+  }
 
-	refresh() {
-		this.element = this.locationChangeDecision!.element;
-	}
+  refresh() {
+    delete this.instanceCache[this.currentTagName];
+    this._present();
+  }
 
-	present(locationChangeDecision: ILocationChangeDecision): void {
-		this.locationChangeDecision = locationChangeDecision;
-		this.element = this.locationChangeDecision.element;
-	}
+  async present(locationChangeDecision: ILocationChangeDecision) {
+    this.currentTagName = locationChangeDecision.tagName;
+    await this.whenConnected();
+    this._present();
+  }
 
-	render() {
-		if (this.element) {
-			return this.element;
-		}
+  protected _present() {
+    if (this.currentTagName) {
+      if (this.childNodes.length) {
+        this.removeChild(this.childNodes[0]);
+      }
+      this.appendChild(this.getCachedInstance(this.currentTagName));
+    }
+  }
 
-		// TODO: nicer
-		return (
-			<div>{"ERROR (RouterOutlet): No component found for route!"}</div>
-		) as IVirtualNode;
-	}
+  getCachedInstance(tagName: string) {
+    if (!this.instanceCache[tagName]) {
+      this.instanceCache[tagName] = document.createElement(tagName);
+    }
+    return this.instanceCache[tagName];
+  }
+
+  shouldRender() {
+    // should really never render
+    // cause children are managed _present() instead
+    return false;
+  }
 }
 
 declare global {
-	namespace JSX {
-		interface IntrinsicElements {
-			"router-outlet": Partial<RouterOutlet>;
-		}
-	}
+  namespace JSX {
+    interface IntrinsicElements {
+      "router-outlet": Partial<RouterOutlet>;
+    }
+  }
 }

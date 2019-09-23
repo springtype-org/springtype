@@ -1,5 +1,6 @@
+import { GlobalCache } from "../../st/interface/i$st";
 import { st } from "../../st/st";
-import { initSharedMemory, SHARED_MEMORY } from "../share";
+import { initSharedMemory } from "../share";
 
 export const share = (shareName: string): any => {
 	initSharedMemory();
@@ -9,10 +10,10 @@ export const share = (shareName: string): any => {
 		// use the shared memory instead
 		Object.defineProperty(instance, propName, {
 			get: () => {
-				return st[SHARED_MEMORY][shareName].value;
+				return st[GlobalCache.SHARED_MEMORY][shareName].value;
 			},
 			set: value => {
-				st[SHARED_MEMORY][shareName].value = value;
+				st[GlobalCache.SHARED_MEMORY][shareName].value = value;
 			},
 			configurable: false
 		});

@@ -22,7 +22,7 @@ export const tsxToStandardAttributeName = (
 	return tsxAttributeName;
 };
 
-export const tsx = (st.tsx = (
+export const tsx = (
 	type: IVirtualNodeType,
 	attributes:
 		| JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any>
@@ -47,7 +47,11 @@ export const tsx = (st.tsx = (
 		attributes,
 		children
 	};
-});
+};
+
+if (!st.tsx) {
+	st.tsx = tsx;
+}
 
 export const flattenChildren = (
 	originalChildren: Array<IVirtualChild>

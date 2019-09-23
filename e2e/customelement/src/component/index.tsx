@@ -14,7 +14,7 @@ import * as en from "./i18n/en.json";
 @translation("de", de)
 @translation("en", en)
 @customElement("my-foo2")
-export class Foo2 extends st.customElement {
+export class Foo2 extends st.element {
 	@attr()
 	foo: string = "Jesus!!!";
 

@@ -71,7 +71,7 @@ export interface i$st {
 	setDomRef: ISetDomRef;
 
 	// custom element base class implemenetation to inherit from
-	customElement: ICustomHTMLElement;
+	element: ICustomHTMLElement;
 
 	// logging
 	log: ilogFunction;
@@ -104,9 +104,12 @@ export interface i$st {
 		onChange?: IOnPropChangeHandler
 	) => void;
 
+	// global memory
 	SHARED_MEMORY: ISharedMemoryEntries;
 	CUSTOM_ELEMENT_INSTANCES: ICustomElementInstances;
+}
 
-	// registries like: CUSTOM_ELEMENT_INSTANCES, SHARED_MEMORY, etc.
-	[registryName: string]: any;
+export enum GlobalCache {
+	CUSTOM_ELEMENT_INSTANCES = "CUSTOM_ELEMENT_INSTANCES",
+	SHARED_MEMORY = "SHARED_MEMORY"
 }

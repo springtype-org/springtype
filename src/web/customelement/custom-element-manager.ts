@@ -1,83 +1,105 @@
 import { st } from "../../core";
 import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
-import { CustomHTMLElement } from "./custom-html-element";
+import { GlobalCache } from "../../core/st/interface/i$st";
+import { ICustomElementOptions } from "./interface";
 import { RenderReason } from "./interface/ilifecycle";
 
-export const OBSERVED_ATTRIBUTES: any = Symbol("OBSERVED_ATTRIBUTES");
 export const CUSTOM_ELEMENT_OPTIONS: any = Symbol("CUSTOM_ELEMENT_OPTIONS");
 export const TAG_NAME: any = Symbol("TAG_NAME");
 
-// used externally
-export const CUSTOM_ELEMENT_INSTANCES: string = "CUSTOM_ELEMENT_INSTANCES";
+export const ATTRIBUTES: any = Symbol("ATTRIBUTES");
 
 export class CustomElementManager {
-	static addInstance(instance: any) {
-		if (!st[CUSTOM_ELEMENT_INSTANCES]) {
-			st[CUSTOM_ELEMENT_INSTANCES] = [];
-		}
-		st[CUSTOM_ELEMENT_INSTANCES].push(instance);
-	}
+  static defineCustomElement(tagName: string, targetClass: any, options: ICustomElementOptions = {}) {
+    // default to none for max. backward compatibility
+    if (!options.shadowMode) {
+      options.shadowMode = "open";
+    }
 
-	static removeInstance(instance: any) {
-		let index = st[CUSTOM_ELEMENT_INSTANCES].indexOf(instance);
-		if (index > -1) {
-			st[CUSTOM_ELEMENT_INSTANCES].splice(index, 1);
-		}
-	}
+    if (!tagName) {
+      st.error(`💣 The custom element ${targetClass.name} has no tag name! It should look like: @customElement('my-element', ...) or functional: st.customElement('my-element', ...)`);
+    }
 
-	static getAllInstances(): Array<any> {
-		return st[CUSTOM_ELEMENT_INSTANCES] || [];
-	}
+    // must contain a kebab-dash for namespacing
+    if (tagName.indexOf("-") === -1) {
+      st.error(`💣 The custom element ${targetClass.name}'s tag name: ${tagName} has no namespace! All custom elements must be namespaced, like: my-element (whereas 'my' is the namespace).`);
+    }
 
-	/**
-	 * Adds the attribute name provided by @Attribute('$attributeName')
-	 * to the custom element class constructor property Symbol(OBSERVED_ATTRIBUTES)
-	 * which is an array.
-	 * @param ctor Custom element class constructor function
-	 * @param attributeName Name of the attribute to observe
-	 */
-	static addObservedAttribute(ctor: any, attributeName: string | symbol) {
-		if (!ctor[OBSERVED_ATTRIBUTES]) {
-			ctor[OBSERVED_ATTRIBUTES] = [];
-		}
-		ctor[OBSERVED_ATTRIBUTES].push(attributeName);
-	}
+    // register with DOM API
+    customElements.define(tagName, targetClass);
 
-	static observeAttributes(instance: any, attributeNames: Array<string>) {
-		for (let i = 0; i < attributeNames.length; i++) {
-			CustomElementManager.observeAttribute(instance, attributeNames[i]);
-		}
-	}
+    // assign options to be used in CustomElement derived class constructor
+    targetClass[TAG_NAME] = tagName;
+    targetClass[CUSTOM_ELEMENT_OPTIONS] = options;
 
-	static observeAttribute(instance: CustomHTMLElement, attributeName: string) {
-		// TODO: Check for multi instance (functional scope?!)
-		// backing value (real value storage)
-		let value = (instance as any)[attributeName];
+    // return enhanced class
+    return targetClass;
+  }
 
-		Object.defineProperty(instance, attributeName, {
-			get: () => value,
-			set: (newValue: any) => {
-				const prevValue = value;
+  // --- custom element instance management
 
-				if (prevValue !== newValue) {
-					// really set backing value
-					value = newValue;
+  static addInstance(instance: any) {
+    if (!st[GlobalCache.CUSTOM_ELEMENT_INSTANCES]) {
+      st[GlobalCache.CUSTOM_ELEMENT_INSTANCES] = [];
+    }
+    st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].push(instance);
+  }
 
-					if (
-						// don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
-						instance._notInitialRender &&
-						// and don't render if the user land condition denies
-						instance.shouldRender(RenderReason.ATTRIBUTE_CHANGE, {
-							path: DEFAULT_EMPTY_PATH,
-							name: attributeName,
-							value,
-							prevValue
-						})
-					) {
-						instance.doRender();
-					}
-				}
-			}
-		});
-	}
+  static removeInstance(instance: any) {
+    let index = st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].indexOf(instance);
+    if (index > -1) {
+      st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].splice(index, 1);
+    }
+  }
+
+  // --- @attr() attribute management
+
+  static initAttribute(attributeName: string, instance: any) {
+    // test and warn for uppercase characters because DOM will lowercase them
+    if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
+      st.error(`💣 The custom element ${instance.constructor.name} has an @attr with camelCase naming: ${attributeName}. Use kebab-case instead!`);
+    }
+
+    if (!instance[ATTRIBUTES]) {
+      instance[ATTRIBUTES] = {};
+    }
+
+    Object.defineProperty(instance, attributeName, {
+      get: () => {
+        return CustomElementManager.getAttribute(instance, attributeName);
+      },
+      set: (value: any) => {
+        CustomElementManager.setAttribute(instance, attributeName, value);
+      },
+    });
+  }
+
+  static getAttribute(instance: any, name: any): string {
+    return instance[ATTRIBUTES][name];
+  }
+
+  static setAttribute(instance: any, name: string, value: string) {
+    const prevValue = instance[ATTRIBUTES][name];
+
+    if (prevValue !== value && instance.shouldAttributeChange(name, value, prevValue)) {
+      instance[ATTRIBUTES][name] = value;
+
+      if (
+        // don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
+        instance._notInitialRender &&
+        // and don't render if the user land condition denies
+        instance.shouldRender(RenderReason.ATTRIBUTE_CHANGE, {
+          path: DEFAULT_EMPTY_PATH,
+          name,
+          value,
+          prevValue,
+        })
+      ) {
+        instance.doRender();
+      }
+
+      // call lifecycle method
+      instance.onAttributeChange(name, value, prevValue);
+    }
+  }
 }
