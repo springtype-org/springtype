@@ -1,3 +1,4 @@
+import { ICustomHTMLElement } from "../../customelement/interface";
 import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
 
 export interface IRouteComponent {
@@ -28,20 +29,19 @@ export interface IRouter {
 }
 
 export interface IRoutes {
-  [route: string]: IRouteDefinition | IVirtualNode | any;
+  [route: string]: IRouteDefinition | ICustomHTMLElement;
 }
 export interface ITokenizedRoutes {
   [route: string]: Array<string>; // path tokens
 }
 
 export interface IRouteDefinition {
-  element: IVirtualNode | any;
-  guard?: (locationChangeDecision?: ILocationChangeDecision) => Promise<boolean>;
-  params?: Object;
+  customElement: ICustomHTMLElement;
+  guard?: (locationChangeDecision?: ILocationChangeDecision) => Promise<string | boolean>;
 }
 
 export interface ILocationChangeDecision {
-  guard?: (locationChangeDecision?: ILocationChangeDecision) => Promise<boolean>;
+  guard?: (locationChangeDecision?: ILocationChangeDecision) => Promise<string | boolean>;
   tagName: string;
   params: Object;
   route: string;

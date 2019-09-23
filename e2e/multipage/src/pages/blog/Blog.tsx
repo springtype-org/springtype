@@ -25,7 +25,7 @@ export class BlogPage extends st.element {
           href="javascript:void(0)"
           onClick={() => {
             st.router.navigate(FirstPostPage.ROUTE, {
-              id: 5,
+              id: 7,
             });
           }}
         >

@@ -11,7 +11,14 @@ if (process.env.NODE_ENV === "development") {
 
 @route(HomePage.ROUTE, HomePage)
 @route(BlogPage.ROUTE, BlogPage)
-@route(FirstPostPage.ROUTE, FirstPostPage)
+@route(FirstPostPage.ROUTE, {
+  customElement: FirstPostPage,
+  guard: async () => {
+    console.log("guard");
+    // reject access randomly
+    return Math.random() > 0.5;
+  },
+})
 export class AppModule {}
 
 st.dom.setRoot("router-outlet");

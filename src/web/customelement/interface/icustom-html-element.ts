@@ -19,6 +19,6 @@ export type RenderFunction = (instance: any) => IVirtualNode;
 export type RenderStyleFunction = (instance: any, theme?: any) => ITypedStyleSheet;
 
 export const CUSTOM_ELEMENT_OPTIONS: unique symbol = Symbol("CUSTOM_ELEMENT_OPTIONS");
-export const TAG_NAME: unique symbol = Symbol("TAG_NAME");
+export const TAG_NAME: any = Symbol("TAG_NAME");
 export const ATTRS: unique symbol = Symbol("ATTRS");
 export const INTERNAL: unique symbol = Symbol("INTERNAL");

@@ -1,9 +1,10 @@
 import { st } from "../../../core";
-import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
+import { ICustomHTMLElement } from "../../customelement/interface";
+import { IRouteDefinition } from "../interface/irouter";
 import "../router";
 import "../router-outlet";
 
-export const route = (route: string, routeTargetWebComponent: IVirtualNode | any): any => {
+export const route = (route: string, routeTargetWebComponent: ICustomHTMLElement | IRouteDefinition): any => {
   return (targetWebComponent: any) => {
     st.router.registerRoutes({
       [route]: routeTargetWebComponent,

@@ -1,8 +1,8 @@
 import { st } from "../../core";
 import { customElement } from "../customelement";
-import { TAG_NAME } from "../customelement/interface/icustom-html-element";
+import { ICustomHTMLElement, TAG_NAME } from "../customelement/interface/icustom-html-element";
 import { tsx } from "../vdom";
-import { ILocationChangeDecision, IRoutes } from "./interface/irouter";
+import { ILocationChangeDecision, IRouteDefinition, IRoutes } from "./interface/irouter";
 import { RouterOutlet } from "./router-outlet";
 
 export const ROUTE_NOT_FOUND = "*404*";
@@ -10,7 +10,15 @@ export const ROUTE_BASE = "";
 
 if (!st.router) {
   customElement("router-no-custom-element-found", () => (
-    <div>{`No custom element found for rendering this route. Please specify a route for: ${document.location.hash.replace("#", "")} or: ${ROUTE_NOT_FOUND}`}</div>
+    <div>{`No custom element found for rendering this route.
+    Please specify a route for: ${document.location.hash.replace("#", "")}
+    or: ${ROUTE_NOT_FOUND}`}</div>
+  ));
+
+  customElement("router-error-generic-access-denied", () => (
+    <div>{`
+      Access to this route is denied (generic error).
+    `}</div>
   ));
 
   st.router = {
@@ -71,7 +79,6 @@ if (!st.router) {
 
       for (let route in st.router.TOKENIZED_ROUTES) {
         const tokenizedRouteCandidate = st.router.TOKENIZED_ROUTES[route];
-
         let routeMatches = true;
 
         for (let i = 0; i < tokenizedRouteCandidate.length; i++) {
@@ -87,10 +94,18 @@ if (!st.router) {
           }
         }
 
+        const routeConfig: IRouteDefinition | ICustomHTMLElement = st.router.ROUTE_MAP[route];
+
         if (routeMatches) {
+          let tagName = (routeConfig as any)[TAG_NAME];
+          if ((routeConfig as any).customElement) {
+            tagName = (routeConfig as any).customElement[TAG_NAME];
+          }
+
           return {
             params,
-            tagName: st.router.ROUTE_MAP[route][TAG_NAME],
+            tagName,
+            guard: (routeConfig as IRouteDefinition).guard,
             route,
           } as ILocationChangeDecision;
         }
@@ -99,7 +114,7 @@ if (!st.router) {
       if (st.router.ROUTE_MAP[ROUTE_NOT_FOUND]) {
         return {
           route: ROUTE_NOT_FOUND,
-          tagName: st.router.ROUTE_MAP[ROUTE_NOT_FOUND][TAG_NAME],
+          tagName: (st.router.ROUTE_MAP[ROUTE_NOT_FOUND] as any)[TAG_NAME],
           params: params,
         } as ILocationChangeDecision;
       } else {
@@ -118,18 +133,20 @@ if (!st.router) {
         // set active route params
         st.router.setParams(decision.params);
 
-        let isAllowedToPresent = true;
-
         if (decision.guard && typeof decision.guard == "function") {
-          isAllowedToPresent = await decision.guard(decision);
+          const guardResult = await decision.guard(decision);
+
+          if (typeof guardResult == "string") {
+            decision.tagName = guardResult;
+          } else if (guardResult === false) {
+            decision.tagName = "router-error-generic-access-denied";
+          }
         }
 
-        if (isAllowedToPresent) {
-          if (!st.router.ROUTER_OUTLET) {
-            st.warn("No <router-outlet> was found. Please call: st.dom.setRoot('router-outlet') somewhere.");
-          }
-          st.router.ROUTER_OUTLET.present(decision);
+        if (!st.router.ROUTER_OUTLET) {
+          st.warn("No <router-outlet> was found. Please call: st.dom.setRoot('router-outlet') somewhere.");
         }
+        st.router.ROUTER_OUTLET.present(decision);
       } else {
         throw new Error(`No route registered for hash url: '${hash}'. Add this route to an @WebModule({ route: { ... } })!`);
       }
