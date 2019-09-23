@@ -5,7 +5,6 @@ import {st} from "../../../../src/core/st";
 import {attr, customElement} from "../../../../src/web/customelement";
 import {prop} from "../../../../src/core/cd";
 import tss from "./mwc-top-bar-override.tss"
-import {tsx} from "../../../../src/web/vdom";
 
 export type VariantType = false | 'fixed' | 'prominent' | 'fixed-prominent' | 'short' | 'fixed-short';
 

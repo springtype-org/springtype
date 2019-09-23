@@ -2,21 +2,23 @@ import {VariantType} from "../../../../../material/src/component/mwc-top-bar/mwc
 import {st} from "../../../../../src/core/st";
 import {attr, customElement} from "../../../../../src/web/customelement";
 import '../../../../../material/src/component/mwc-top-bar/mwc-top-bar'
-import { tsx } from "../../../../../src/web/vdom";
+import {tsx} from "../../../../../src/web/vdom";
 import {IVirtualNode} from "../../../../../src/web/vdom/interface";
 
 @customElement('top-bar-container', {shadowMode: "none"})
 export class TopBarContainer extends st.customElement {
     @attr()
-    type: VariantType = false;
+    'attr-type': VariantType = false;
 
+    @attr()
+    'attr-name': any;
 
-    render(): IVirtualNode<any> {
-        const name = !this.type ? 'STANDARD' : this.type.toUpperCase();
-        return <div>
-            <h2>{name}</h2>
-            <div style="max-width: 400px; max-height: 300px; overflow: hidden; scrollbar-y: auto; overflow-y: auto; border: 1px black solid;">
-                <mwc-top-bar mwc-title={name} mwc-variant={this.type}/>
+    render(): IVirtualNode {
+        const result = <div>
+            <h2>{this["attr-name"]}</h2>
+            <div
+                style="max-width: 400px; max-height: 300px; overflow: hidden; scrollbar-y: auto; overflow-y: auto; border: 1px black solid;">
+                <mwc-top-bar mwc-title={this["attr-name"]} mwc-variant={this["attr-type"]}/>
                 <div>
                     <div style="margin: 15px;"><p>Lorem ipsum dolor sit amet, consectetuer adipiscing
                         elit. Aenean commodo ligula eget dolor. Aenean massa
@@ -38,7 +40,14 @@ export class TopBarContainer extends st.customElement {
                         Curabitur ullamcorper ultricies nisi.</p></div>
                 </div>
             </div>
-            </div>
+        </div>;
+        console.log('result container', JSON.stringify(result, null, 2));
+
+        return result;
+    }
+
+    onAttributeChange(name: string, newValue: any, oldValue: any) {
+        console.log('onAttributeChange', name, newValue, oldValue);
     }
 }
 

@@ -6,7 +6,7 @@ import {
 	IVirtualChildren,
 	IVirtualNode
 } from "./interface/ivirtual-node";
-import { flattenChildren, tsxToStandardAttributeName } from "./tsx";
+import { tsxToStandardAttributeName } from "./tsx";
 
 if (!st.dom) {
 	st.dom = {
@@ -55,7 +55,7 @@ if (!st.dom) {
 
 			if (virtualNode.children) {
 				// flatten/normalize Array<Array<IVirtualChild>>
-				virtualNode.children = flattenChildren(virtualNode.children);
+				//virtualNode.children = flattenChildren(virtualNode.children);
 
 				st.dom.createChildElements(virtualNode.children, newEl, isSvg);
 			}
