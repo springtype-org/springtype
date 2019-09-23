@@ -1,6 +1,5 @@
 import {st} from "../../core";
 import {
-    IVirtualChild,
     IVirtualChildren,
     IVirtualNode,
     IVirtualNodeType
@@ -46,27 +45,4 @@ export const tsx = st.tsx = (
         attributes,
         children
     };
-};
-
-
-export const transformVisitor = (node: IVirtualNode, processors: Array<Function> = []): any => {
-
-	const process = (node: IVirtualNode) => {
-		for (let processor of processors) {
-			node = processor(node);
-		}
-		return node;
-	};
-
-    const visit = (node: IVirtualNode) => {
-    	if (!node) return node;
-    	node = process(node);
-    	if (!node.children) return node;
-        for (let i = 0; i < node.children.length; i++) {
-			node.children[i] = visit(node.children[i]);
-        }
-        return node;
-    };
-	node = visit(node);
-    return node;
 };

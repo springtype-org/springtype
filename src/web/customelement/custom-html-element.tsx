@@ -20,7 +20,6 @@ import {
     RenderReason,
     RenderReasonMetaData
 } from "./interface/ilifecycle";
-import {transformVisitor} from "../vdom/tsx";
 
 export class CustomHTMLElement extends HTMLElement
     implements ILifecycle, IOnPropChange {
@@ -225,16 +224,6 @@ export class CustomHTMLElement extends HTMLElement
             } else {
                 vdom = this.render();
             }
-
-            vdom = transformVisitor(vdom, [
-            	//TODO: own function
-                (node: any) => {
-                    if (node.children) {
-                        node.children = [].concat.apply([], node.children);
-                    }
-                    return node;
-                }]);
-
             console.log('DOM after transform', vdom);
         } catch (e) {
             if (e.message.indexOf("tsx") > -1) {

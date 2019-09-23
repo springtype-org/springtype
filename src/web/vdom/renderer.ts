@@ -38,8 +38,10 @@ if (!st.renderer) {
             virtualElements: Array<IVirtualNode | string | undefined>,
             parent: IElement
         ) => {
-
-			const refList = getReferenceList(domElements);
+            if (virtualElements) {
+                virtualElements = ([] as Array<IVirtualNode | string | undefined>).concat.apply([], virtualElements);
+            }
+            const refList = getReferenceList(domElements);
             // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
             let maxLength =
                 domElements.length > virtualElements.length
@@ -70,10 +72,12 @@ if (!st.renderer) {
             virtualElements: IVirtualChildren,
             parent: IElement
         ) => {
-			// TODO: Fixme
             // flatten/normalize Array<Array<IVirtualChild>>
+            if (virtualElements) {
+                virtualElements = ([] as IVirtualChildren).concat.apply([], virtualElements);
+            }
             // virtualElements = flattenChildren(virtualElements);
-			const refList = getReferenceList(domElements);
+            const refList = getReferenceList(domElements);
 
             // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
             let maxLength =
@@ -113,9 +117,9 @@ if (!st.renderer) {
             virtualElement: IVirtualNode
         ) => {
             // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
-            if (domElement && domElement.hasAttribute("data-vdom-ignore") ) return;
+            if (domElement && domElement.hasAttribute("data-vdom-ignore")) return;
 
-            let customElement = (domElement && virtualElement.type.indexOf('-') > -1) ;
+            let customElement = (domElement && virtualElement.type.indexOf('-') > -1);
 
             let created = false;
             let replaced = false;
@@ -174,11 +178,10 @@ if (!st.renderer) {
                                 if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
                                     st.renderer.callOnBeforeDisconnectLifecycleMethod(domElement);
                                     parent.removeChild(domElement);
+                                    st.dom.createElement(virtualElement, parent);
                                     replaced = true;
-                                    st.dom.createElement(virtualElement, parent) as IElement;
                                 } else {
                                     // DOMElement attribute value differs from VirtualElement attribute: Update
-
                                     // TODO: SVG?
                                     st.dom.setAttribute(
                                         attributeName,
@@ -216,22 +219,22 @@ if (!st.renderer) {
 
             // process children (recursion)
 
-			// optimization: If freshly created, all children are already perfectly rendered
-			// so no need to walk through all child nodes
-			if (!created && !replaced && !customElement) {
-				// parent elements must be both existing
-				if (
-					domElement &&
-					virtualElement &&
-					// and at least the existing DOM subtree
-					// or the virtual DOM subtree must be given
-					((domElement.childNodes && domElement.childNodes.length) ||
-						(virtualElement.children && virtualElement.children.length))
-				) {
-					// recursive call with childNodes and virtualElement childNodes
-					st.renderer.patchElementTree(
-						(domElement.childNodes as NodeListOf<IElement>) ||
-						(([] as unknown) as NodeListOf<IElement>),
+            // optimization: If freshly created, all children are already perfectly rendered
+            // so no need to walk through all child nodes
+            if (!created && !replaced && !customElement) {
+                // parent elements must be both existing
+                if (
+                    domElement &&
+                    virtualElement &&
+                    // and at least the existing DOM subtree
+                    // or the virtual DOM subtree must be given
+                    ((domElement.childNodes && domElement.childNodes.length) ||
+                        (virtualElement.children && virtualElement.children.length))
+                ) {
+                    // recursive call with childNodes and virtualElement childNodes
+                    st.renderer.patchElementTree(
+                        (domElement.childNodes as NodeListOf<IElement>) ||
+                        (([] as unknown) as NodeListOf<IElement>),
                         virtualElement.children,
                         domElement
                     );
