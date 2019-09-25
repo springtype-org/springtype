@@ -7,6 +7,8 @@ export interface IDOMRootAttributes {
 export interface IDOM {
   svgContext: boolean;
 
+  isReady(): Promise<void>;
+
   setRoot(tagName: string): Element;
 
   hasSvgNamespace(type: string): boolean;

@@ -1,5 +1,5 @@
 import { st } from "../../core";
-import { customElement } from "../customelement";
+import { customElement, render } from "../customelement";
 import { ICustomHTMLElement, TAG_NAME } from "../customelement/interface/icustom-html-element";
 import { tsx } from "../vdom";
 import { ILocationChangeDecision, IRouteDefinition, IRoutes } from "./interface/irouter";
@@ -9,17 +9,23 @@ export const ROUTE_NOT_FOUND = "*404*";
 export const ROUTE_BASE = "";
 
 if (!st.router) {
-  customElement("router-no-custom-element-found", () => (
-    <div>{`No custom element found for rendering this route.
+  customElement(
+    "router-no-custom-element-found",
+    render(() => (
+      <div>{`No custom element found for rendering this route.
     Please specify a route for: ${document.location.hash.replace("#", "")}
     or: ${ROUTE_NOT_FOUND}`}</div>
-  ));
+    )),
+  );
 
-  customElement("router-error-generic-access-denied", () => (
-    <div>{`
+  customElement(
+    "router-error-generic-access-denied",
+    render(() => (
+      <div>{`
       Access to this route is denied (generic error).
     `}</div>
-  ));
+    )),
+  );
 
   st.router = {
     TOKENIZED_ROUTES: {},

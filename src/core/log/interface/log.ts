@@ -1,1 +1,1 @@
-export type ilogFunction = (...args: Array<any>) => void;
+export type IlogFunction = (...args: Array<any>) => void;

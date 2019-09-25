@@ -11,9 +11,9 @@ export type VariantType = false | "fixed" | "prominent" | "fixed-prominent" | "s
   shadowMode: "none",
 })
 export class MwcSelect extends st.element {
-  @attr()
+  @attr
   "mwc-items": ISelectItem[] = [];
-  @attr()
+  @attr
   "mwc-label": string;
 
   onConnect() {

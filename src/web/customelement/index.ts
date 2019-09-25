@@ -5,3 +5,6 @@ import "../vdom";
 export { CustomHTMLElement } from "./custom-html-element";
 export { attr } from "./decorator/attr";
 export { customElement } from "./decorator/custom-element";
+export { customEvent } from "./decorator/custom-event";
+export { emitCustomEvent } from "./function/emit-custom-event";
+export { render } from "./function/render";

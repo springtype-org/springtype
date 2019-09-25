@@ -18,7 +18,7 @@ interface LolShared {
 
 @customElement("my-foo")
 export class Foo extends st.element implements ILifecycle {
-  @attr()
+  @attr
   some: string = "test";
 
   @share("foo")
@@ -50,7 +50,7 @@ export class Foo extends st.element implements ILifecycle {
     this.some = "haha";
 
     setTimeout(() => {
-      st.log("di", st.di, "i18n");
+      st.info("di", st.di, "i18n");
 
       // external change (reset of reference)
       this.lolShared = { lala: 456 };

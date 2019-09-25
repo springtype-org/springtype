@@ -10,6 +10,21 @@ import { ICustomElementOptions } from "./interface";
 import { ATTRS, CUSTOM_ELEMENT_OPTIONS, ICustomHTMLElementInternals, INTERNAL, TAG_NAME } from "./interface/icustom-html-element";
 import { ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
 
+const initAttrs = (instance: any) => {
+  // add change detection / reflection for all @attrs
+  for (let attributeName of instance[ATTRS] || []) {
+    Object.defineProperty(instance, attributeName, {
+      get: () => {
+        return instance.getAttribute(attributeName);
+      },
+      set: (value: any) => {
+        instance.setAttribute(attributeName, value);
+      },
+    });
+  }
+  delete instance[ATTRS]; // cleanup temp. registry
+};
+
 export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPropChange {
   // shadow functionallity that shouldn't break userland impl.
   [INTERNAL]: ICustomHTMLElementInternals;
@@ -24,24 +39,11 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
     this[INTERNAL] = {
       root: this,
       notInitialRender: false,
-      connected: false,
-      callOnConnect: [],
       attributes: {},
       options: Object.getPrototypeOf(this).constructor[CUSTOM_ELEMENT_OPTIONS],
-    };
+    } as ICustomHTMLElementInternals;
 
-    // add change detection / reflection for all @attrs
-    for (let attributeName of this[ATTRS] || []) {
-      Object.defineProperty(this, attributeName, {
-        get: () => {
-          return this.getAttribute(attributeName);
-        },
-        set: (value: any) => {
-          this.setAttribute(attributeName, value);
-        },
-      });
-    }
-    delete this[ATTRS]; // cleanup temp. registry
+    initAttrs(this);
 
     // init @prop support
     PropChangeManager.initProps(this, Object.getPrototypeOf(this).constructor[PROPS] || []);
@@ -61,26 +63,11 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
 
   // internal web component standard method
   connectedCallback() {
-    this[INTERNAL].connected = true;
-
-    for (let onConnect of this[INTERNAL].callOnConnect) {
-      onConnect();
-    }
-
     this.onConnect();
 
     if (this.shouldRender(RenderReason.INITIAL)) {
       this.doRender();
     }
-  }
-
-  async whenConnected() {
-    if (this[INTERNAL].connected) {
-      return Promise.resolve();
-    }
-    return new Promise(resolve => {
-      this[INTERNAL].callOnConnect.push(resolve);
-    });
   }
 
   onConnect() {}
@@ -169,7 +156,7 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
   onBeforeRender(tssOnly: boolean = false) {}
 
   render(): IVirtualNode {
-    const msg = `🔥Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
+    const msg = `Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
 
     // TODO: Function to render error
     st.warn(msg);
@@ -204,7 +191,7 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
       }
     } catch (e) {
       if (e.message.indexOf("tsx") > -1) {
-        st.error(`💣 The function tsx of package vdom must be imported for wherever you use <tsx></tsx> syntax!`);
+        st.error(`The function tsx of package vdom must be imported for wherever you use <tsx></tsx> syntax!`);
       }
       throw e;
     }
@@ -259,12 +246,12 @@ export const defineCustomElement = (tagName: string, targetClass: any, options: 
   }
 
   if (!tagName) {
-    st.error(`💣 The custom element ${targetClass.name} has no tag name! It should look like: @customElement('my-element', ...) or functional: st.customElement('my-element', ...)`);
+    st.error(`The custom element ${targetClass.name} has no tag name! It should look like: @customElement('my-element', ...) or functional: st.customElement('my-element', ...)`);
   }
 
   // must contain a kebab-dash for namespacing
   if (tagName.indexOf("-") === -1) {
-    st.error(`💣 The custom element ${targetClass.name}'s tag name: ${tagName} has no namespace! All custom elements must be namespaced, like: my-element (whereas 'my' is the namespace).`);
+    st.error(`The custom element ${targetClass.name}'s tag name: ${tagName} has no namespace! All custom elements must be namespaced, like: my-element (whereas 'my' is the namespace).`);
   }
 
   // register with DOM API

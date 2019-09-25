@@ -14,22 +14,22 @@ export type VariantType = false | "fixed" | "prominent" | "fixed-prominent" | "s
   tss,
 })
 export class MwcTopBar extends st.element {
-  @attr()
+  @attr
   "mwc-dense": boolean = false;
 
-  @attr()
+  @attr
   "mwc-title": string = "";
 
-  @attr()
+  @attr
   "mwc-variant": VariantType = false;
 
-  @attr()
+  @attr
   "menu-open": boolean = false;
 
-  @attr()
+  @attr
   "mwc-scrolled": boolean = false;
 
-  @prop()
+  @prop
   prop: { offsetWidth: number } = { offsetWidth: 0 };
 }
 

@@ -21,7 +21,7 @@ export const tsx = (st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttrib
   // TODO: mock
   // it's a custom element, but it's not registered
   if (type.indexOf("-") > -1 && !customElements.get(type)) {
-    st.error(new Error(`💣 <${type} /> is used but not imported. Make sure to import the custom element class that defines ${type}. Look for a file containing: @customElement('${type}')!`));
+    st.error(new Error(`<${type} /> is used but not imported. Make sure to import the custom element class that defines ${type}. Look for a file containing: @customElement('${type}')!`));
   }
 
   return {

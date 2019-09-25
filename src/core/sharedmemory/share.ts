@@ -41,11 +41,12 @@ const initSharedMemoryEntry = (shareName: string, initialValue: any) => {
     PropChangeManager.onPropChange(
       st[GlobalCache.SHARED_MEMORY][shareName],
       "value",
+      PropChangeType.DEEP,
       (value: any, prevValue: any) => {
-        callChangeHandlers(st[GlobalCache.SHARED_MEMORY][shareName].onChangeHandlers, shareName, PropChangeType.CHANGE, value, prevValue);
+        callChangeHandlers(st[GlobalCache.SHARED_MEMORY][shareName].onChangeHandlers, shareName, PropChangeType.REFERENCE, value, prevValue);
       },
       (path: string, value: any, prevValue: any) => {
-        callChangeHandlers(st[GlobalCache.SHARED_MEMORY][shareName].onChangeHandlers, shareName, PropChangeType.CHANGE, value, prevValue, path);
+        callChangeHandlers(st[GlobalCache.SHARED_MEMORY][shareName].onChangeHandlers, shareName, PropChangeType.REFERENCE, value, prevValue, path);
       },
     );
   }
@@ -82,7 +83,7 @@ if (!st.addShareChangeHandler) {
  */
 function initShare<S = {}>(shareName: string, initialValue: S, onChange?: IOnPropChangeHandler, instance?: any) {
   if (isPrimitive(initialValue)) {
-    throw new Error(`🔥You cannot share a primitive value like ${initialValue}. The shared value of ${shareName.toString()} must be an object.`);
+    throw new Error(`You cannot share a primitive value like ${initialValue}. The shared value of ${shareName.toString()} must be an object.`);
   }
   initSharedMemory();
   initSharedMemoryEntry(shareName, initialValue);

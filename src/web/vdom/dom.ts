@@ -8,7 +8,12 @@ if (!st.dom) {
   st.dom = {
     svgContext: false,
 
-    setRoot(tagName: string): Element {
+    isReady: async (): Promise<void> => {
+      if (document.body) Promise.resolve();
+      return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
+    },
+
+    setRoot: (tagName: string): Element => {
       return document.body.appendChild(document.createElement(tagName));
     },
 
@@ -89,12 +94,27 @@ if (!st.dom) {
       // for access from CustomElements
       if (name === "ref") {
         const refName = Object.keys(value)[0];
+        if (process.env.NODE_ENV != "production" && st.debug) {
+          st.info("dom.ts", "setting", value[refName], `.${refName} = `, parentDomElement);
+        }
         st.setDomRef(refName, value[refName], parentDomElement);
         return;
       }
 
       if (name.startsWith("on") && typeof value == "function") {
-        parentDomElement.addEventListener(name.substring(2).toLowerCase(), value);
+        let eventName = name.substring(2).toLowerCase();
+        const capture = eventName.indexOf("capture");
+        const doCapture = capture > -1;
+
+        if (doCapture) {
+          eventName = eventName.substring(0, eventName.indexOf("capture"));
+        }
+
+        if (process.env.NODE_ENV != "production" && st.debug) {
+          st.info("dom.ts", parentDomElement, `.addEventListener('${eventName}', `, value, ", /* capture */ ", doCapture, `)`);
+        }
+
+        parentDomElement.addEventListener(eventName, value, doCapture);
         return;
       }
 

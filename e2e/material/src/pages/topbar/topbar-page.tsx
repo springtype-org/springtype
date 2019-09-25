@@ -18,7 +18,7 @@ export class TopBarPage extends st.element {
     { id: "6", value: "fixed-short", displayValue: <strong>Fixed-Short</strong> },
   ];
 
-  @attr()
+  @attr
   "selected-topbar-item": ISelectItem<VariantType> = { id: "1", value: false, displayValue: <strong>Standard</strong> };
 
   onAttributeChange(name: string, value: any) {

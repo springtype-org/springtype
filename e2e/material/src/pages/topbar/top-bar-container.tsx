@@ -7,10 +7,10 @@ import { IVirtualNode } from "../../../../../src/web/vdom/interface";
 
 @customElement("top-bar-container", { shadowMode: "none" })
 export class TopBarContainer extends st.element {
-  @attr()
+  @attr
   "attr-type": VariantType = false;
 
-  @attr()
+  @attr
   "attr-name": any;
 
   render(): IVirtualNode {

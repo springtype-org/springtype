@@ -6,7 +6,6 @@ import { ILocationChangeDecision } from "./interface/irouter";
   shadowMode: "none",
 })
 export class RouterOutlet extends st.element {
-  // custom element instance cache
   instanceCache: any = {};
 
   currentTagName: string = "";
@@ -19,16 +18,22 @@ export class RouterOutlet extends st.element {
 
   refresh() {
     delete this.instanceCache[this.currentTagName];
-    this._present();
+    this.updateRootNode();
+  }
+
+  onConnect() {
+    this.currentTagName = st.router.CURRENT_DECISION.tagName;
+    this.updateRootNode();
   }
 
   async present(locationChangeDecision: ILocationChangeDecision) {
-    this.currentTagName = locationChangeDecision.tagName;
-    await this.whenConnected();
-    this._present();
+    if (this.isConnected) {
+      this.currentTagName = locationChangeDecision.tagName;
+      this.updateRootNode();
+    }
   }
 
-  protected _present() {
+  protected updateRootNode() {
     if (this.currentTagName) {
       if (this.childNodes.length) {
         this.removeChild(this.childNodes[0]);

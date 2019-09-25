@@ -1,17 +1,17 @@
 import { st } from "../../../core";
 import { ATTRS } from "../interface/icustom-html-element";
 
-export const attr = (): any => {
-  return (instance: any, attributeName: string) => {
+export const attr = (instance: any, attributeName: string): any => {
+  if (process.env.NODE_ENV != "production") {
     // test and warn for uppercase characters because DOM will lowercase them
     if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
-      st.error(`💣 The custom element ${instance.constructor.name} has an @attr with camelCase naming: ${attributeName}. Use kebab-case instead!`);
+      st.warn(`The attribute ${attributeName} in custom element ${instance.constructor.name} has a bad naming. It should be: ${attributeName.toLowerCase()}`);
     }
+  }
 
-    // temporarily register for Object.defineProperty() calls, cleaned up later
-    if (!instance[ATTRS]) {
-      instance[ATTRS] = [];
-    }
-    instance[ATTRS].push(attributeName);
-  };
+  // temporarily register for Object.defineProperty() calls, cleaned up later
+  if (!instance[ATTRS]) {
+    instance[ATTRS] = [];
+  }
+  instance[ATTRS].push(attributeName);
 };

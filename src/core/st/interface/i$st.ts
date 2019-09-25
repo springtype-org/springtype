@@ -2,16 +2,18 @@ import { ICustomElementInstances, ICustomHTMLElement } from "../../../web/custom
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
 import { IDOM, IGetDomRef, IRenderer, ISetDomRef, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
-import { IOnChangeHandler, IOnDeepChangeHandler, IOnPropChangeHandler } from "../../cd/interface";
+import { IOnChangeHandler, IOnDeepChangeHandler, IOnPropChangeHandler, PropChangeType } from "../../cd/interface";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
-import { ilogFunction } from "../../log/interface";
+import { IlogFunction } from "../../log/interface";
 import { ISharedMemoryEntries } from "../../sharedmemory/interface";
 
 /**
  * public $st and internal st API
  */
-export interface i$st {
+export interface I$st {
+  // enables trace mode (internal framework log messages)
+  debug: boolean;
   // DOM routing
   router: IRouter;
 
@@ -38,7 +40,7 @@ export interface i$st {
   onChange: (object: any, onChange: IOnDeepChangeHandler, options: any) => any;
 
   // change detection with support for (deep changes + reference set changes)
-  onPropChange: (instance: any, name: string | symbol, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
+  onPropChange: (instance: any, name: string | symbol, type: PropChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
 
   // set and get DOM references from within @customElement classes using @ref
   getDomRef: IGetDomRef;
@@ -48,10 +50,9 @@ export interface i$st {
   element: ICustomHTMLElement;
 
   // logging
-  log: ilogFunction;
-  info: ilogFunction;
-  warn: ilogFunction;
-  error: ilogFunction;
+  info: IlogFunction;
+  warn: IlogFunction;
+  error: IlogFunction;
 
   // shared memory
   getShare<S = {}>(shareName: string, onChange?: IOnPropChangeHandler, instance?: any): S;
