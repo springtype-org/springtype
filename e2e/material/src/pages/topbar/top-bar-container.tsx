@@ -14,7 +14,7 @@ export class TopBarContainer extends st.customElement {
     'attr-name': any;
 
     render(): IVirtualNode {
-        const result = <div>
+        return<div>
             <h2>{this["attr-name"]}</h2>
             <div
                 style="max-width: 400px; max-height: 300px; overflow: hidden; scrollbar-y: auto; overflow-y: auto; border: 1px black solid;">
@@ -41,13 +41,6 @@ export class TopBarContainer extends st.customElement {
                 </div>
             </div>
         </div>;
-        console.log('result container', JSON.stringify(result, null, 2));
-
-        return result;
-    }
-
-    onAttributeChange(name: string, newValue: any, oldValue: any) {
-        console.log('onAttributeChange', name, newValue, oldValue);
     }
 }
 

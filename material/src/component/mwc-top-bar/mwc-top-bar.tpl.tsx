@@ -6,10 +6,15 @@ export default (component: MwcTopBar) => {
     const prominent = component['mwc-variant'] == 'fixed-prominent' || component['mwc-variant'] == 'prominent';
     const fixed = component['mwc-variant'] == 'fixed-prominent' || component['mwc-variant'] == 'fixed-short' || component['mwc-variant'] == 'fixed';
     const short = (component['mwc-variant'] == 'short' && !component["menu-open"])
-        || (component['mwc-variant'] == 'fixed-short' && component["mwc-scrolled"] && !component["menu-open"]);
+        || (component['mwc-variant'] == 'fixed-short' && !component["menu-open"]);
 
-    return <div>
-        <div class={classes({
+    let width = '100%';
+    if(short){
+        width = ''
+    }
+
+    return <div unwrap>
+        <div id="mdc-top-app-bar" class={classes({
             'mdc-top-app-bar': true,
             'mdc-top-app-bar--non-fixed': !fixed,
             'mdc-top-app-bar--fixed': fixed,
@@ -18,8 +23,9 @@ export default (component: MwcTopBar) => {
             'mdc-top-app-bar--prominent': prominent,
             'mdc-top-app-bar--short': short,
             'mdc-top-app-bar--short-collapsed': short,
-            'mdc-top-app-bar--short-has-action-item': short
-        })} >
+            'mdc-top-app-bar--short-has-action-item': short,
+            'mdc-top-app-bar--width': true
+        })}>
             <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                     { /* TODO: add topbar-start */}
@@ -61,6 +67,7 @@ export default (component: MwcTopBar) => {
             "mdc-top-app-bar--dense": component["mwc-dense"]
         })}>
         </div>
+        <div id="width-div"></div>
     </div>
 
 }
