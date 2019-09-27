@@ -23,7 +23,7 @@ const themeB: MyTheme = {
 @customElement("theme-test", {
 	shadowMode: "open" // also works for "none"
 })
-export class ThemeTest extends st.customElement implements ILifecycle {
+export class ThemeTest extends st.element implements ILifecycle {
 	onConnect() {
 		this.changeThemeA();
 	}
@@ -55,4 +55,4 @@ export class ThemeTest extends st.customElement implements ILifecycle {
 	}
 }
 
-document.body.innerHTML = "<theme-test></theme-test>";
+st.dom.setRoot("theme-test");

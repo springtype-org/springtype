@@ -1,18 +1,17 @@
 import { st } from "../../../core";
-import { CustomElementManager } from "../custom-element-manager";
+import { ATTRS } from "../interface/icustom-html-element";
 
-export const attr = (): any => {
-	return (instance: any, attributeName: string) => {
-		// test and warn for uppercase characters because DOM will lowercase them
-		if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
-			st.error(
-				`💣 The @customElement ${instance.constructor.name} has an @attr with camelCase naming: ${attributeName}. Use kebab-case instead!`
-			);
-		}
+export const attr = (instance: any, attributeName: string): any => {
+  if (process.env.NODE_ENV != "production") {
+    // test and warn for uppercase characters because DOM will lowercase them
+    if (/[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(attributeName!.toString())) {
+      st.warn(`The attribute ${attributeName} in custom element ${instance.constructor.name} has a bad naming. It should be: ${attributeName.toLowerCase()}`);
+    }
+  }
 
-		CustomElementManager.addObservedAttribute(
-			instance.constructor,
-			attributeName
-		);
-	};
+  // temporarily register for Object.defineProperty() calls, cleaned up later
+  if (!instance[ATTRS]) {
+    instance[ATTRS] = [];
+  }
+  instance[ATTRS].push(attributeName);
 };

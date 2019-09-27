@@ -1,1 +1,1 @@
-export { ilogFunction } from "./log";
+export { IlogFunction } from "./log";

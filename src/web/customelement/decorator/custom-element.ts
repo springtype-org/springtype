@@ -1,42 +1,35 @@
 import { st } from "../../../core";
-import { CUSTOM_ELEMENT_OPTIONS, TAG_NAME } from "../custom-element-manager";
-import { ICustomElementOptions } from "../interface/icustom-element-options";
+import { IVirtualNode } from "../../vdom/interface";
+import { CustomHTMLElement, defineCustomElement } from "../custom-html-element";
+import { ICustomElementOptions, ShadowAttachMode } from "../interface/icustom-element-options";
+import { RenderStyleFunction } from "../interface/icustom-html-element";
 
-export const customElement = (
-	tagName: string,
-	options?: ICustomElementOptions
-): any => {
-	if (!options) options = {};
+export type ElementFunction = (scope: CustomHTMLElement) => () => IVirtualNode;
 
-	// default to none for max. backward compatibility
-	if (!options.shadowMode) {
-		options.shadowMode = "open";
-	}
+export const customElement = (tagName: string, optionsOrElementFunction?: ICustomElementOptions | ElementFunction, renderStyleFunction?: RenderStyleFunction, shadowMode?: ShadowAttachMode): any => {
+  // functional use: customElement('tag-name', (scope) => { ... }, ...)
+  if (typeof optionsOrElementFunction == "function") {
+    // customElement('tag-name', () => <div></div>, () => ({ div: { color: red } }), 'open')
+    return defineCustomElement(
+      tagName,
+      class extends st.element {
+        constructor() {
+          super();
 
-	return (targetClass: any) => {
-		if (!tagName) {
-			st.error(
-				`💣 The @customElement ${targetClass.name} has no tag name! It should look like: @customElement('my-element', { ... }?)`
-			);
-		}
+          console.log("optionsOrElementFunction", optionsOrElementFunction);
 
-		// must contain a kebab-dash
-		if (tagName.indexOf("-") === -1) {
-			st.error(
-				`💣 The @customElement ${targetClass.name}  tag name has no namespace. It should look like: my-element, but its: ${tagName}`
-			);
-		}
-
-		// register with DOM API
-		customElements.define(tagName, targetClass);
-
-		// assign options to be used in CustomElement derived class constructor
-		targetClass[TAG_NAME] = tagName;
-		targetClass[CUSTOM_ELEMENT_OPTIONS] = options;
-
-		// prevent any mutation
-		Object.seal(targetClass);
-
-		return targetClass;
-	};
+          this.render = (optionsOrElementFunction as ElementFunction)(this);
+        }
+      },
+      {
+        shadowMode,
+        tss: renderStyleFunction,
+      },
+    );
+  } else {
+    // decorator use on class @customElement('tag-name', { ... })
+    return (targetClass: any) => {
+      return defineCustomElement(tagName, targetClass, optionsOrElementFunction as ICustomElementOptions);
+    };
+  }
 };

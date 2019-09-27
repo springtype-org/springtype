@@ -1,1 +1,1 @@
-export { i$st } from "./i$st";
+export { I$st as i$st } from "./i$st";
