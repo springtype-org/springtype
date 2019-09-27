@@ -15,8 +15,11 @@ export const tsxToStandardAttributeName = (tsxAttributeName: string): string => 
   return tsxAttributeName;
 };
 
-export const tsx = (st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: IVirtualChildren[]): IVirtualNode<any> => {
+export const tsx = st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: IVirtualChildren[]): IVirtualNode<any> => {
   // attributes can be null or an object: clone
+  if (children) {
+    children = ([] as IVirtualChildren[]).concat.apply([], children);
+  }
   attributes = { ...attributes };
   // TODO: mock
   // it's a custom element, but it's not registered
@@ -29,4 +32,4 @@ export const tsx = (st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttrib
     attributes,
     children,
   };
-});
+};

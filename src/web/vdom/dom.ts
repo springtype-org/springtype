@@ -52,12 +52,6 @@ if (!st.dom) {
       }
 
       if (virtualNode.children) {
-        // TODO: Fixme
-        // flatten/normalize Array<Array<IVirtualChild>>
-        //virtualNode.children = flattenChildren(virtualNode.children);
-
-        virtualNode.children = ([] as IVirtualChildren).concat.apply([], virtualNode.children);
-
         st.dom.createChildElements(virtualNode.children, newEl, isSvg);
       }
 

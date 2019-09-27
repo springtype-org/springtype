@@ -24,9 +24,6 @@ if (!st.renderer) {
     },
 
     patch: (domElements: NodeListOf<IElement>, virtualElements: Array<IVirtualNode | string | undefined>, parent: IElement) => {
-      if (virtualElements) {
-        virtualElements = ([] as Array<IVirtualNode | string | undefined>).concat.apply([], virtualElements);
-      }
       const refList = getReferenceList(domElements);
       // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
       let maxLength = domElements.length > virtualElements.length ? refList.length : virtualElements.length;
@@ -51,11 +48,6 @@ if (!st.renderer) {
     },
 
     patchElementTree: (domElements: NodeListOf<IElement>, virtualElements: IVirtualChildren, parent: IElement) => {
-      // flatten/normalize Array<Array<IVirtualChild>>
-      if (virtualElements) {
-        virtualElements = ([] as IVirtualChildren).concat.apply([], virtualElements);
-      }
-      // virtualElements = flattenChildren(virtualElements);
       const refList = getReferenceList(domElements);
 
       // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
