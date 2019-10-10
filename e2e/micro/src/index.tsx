@@ -1,6 +1,6 @@
 import { st } from "../../../src/core";
-import { share } from "../../../src/core/sharedmemory";
-import { IPropChange } from "../../../src/core/state/interface";
+import { context } from "../../../src/core/context";
+import { IStateChange } from "../../../src/core/state/interface";
 import { attr, customElement } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
@@ -21,20 +21,20 @@ export class Foo extends st.element implements ILifecycle {
   @attr
   some: string = "test";
 
-  @share("foo")
-  lolShared: LolShared = st.initShare<LolShared>(
+  @context("foo")
+  lolShared: LolShared = st.initContext<LolShared>(
     "foo",
     { lala: 123 },
-    (change: IPropChange) => {
+    (change: IStateChange) => {
       console.log("initShare on prime", this, change);
     },
     this,
   );
 
-  @share("foo")
-  lolSharedMirror: LolShared = st.getShare<LolShared>(
+  @context("foo")
+  lolSharedMirror: LolShared = st.getContext<LolShared>(
     "foo",
-    (change: IPropChange) => {
+    (change: IStateChange) => {
       console.log("getShare on mirror", this, change);
     },
     this,

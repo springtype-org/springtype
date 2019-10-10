@@ -1,8 +1,8 @@
 // @ts-ignore JSON module import activated in bundler config
 import { st } from "../../../../src/core";
 import { ChangeDetector } from "../../../../src/core/cd";
+import { context } from "../../../../src/core/context";
 import { formatter, translation } from "../../../../src/core/i18n";
-import { share } from "../../../../src/core/sharedmemory";
 import { IStateChange } from "../../../../src/core/state/interface";
 import { attr, customElement, state } from "../../../../src/web/customelement";
 import { tsx } from "../../../../src/web/vdom";
@@ -28,8 +28,8 @@ export class Foo2 extends st.element {
     },
   };
 
-  @share("foo")
-  foo4: any = st.initShare("foo", {});
+  @context("foo")
+  foo4: any = st.initContext("foo", {});
 
   @state
   lala: any = { a: "hase" };
@@ -82,9 +82,9 @@ export class Foo2 extends st.element {
 
       st.info("foo2", typeof this.foo2, this.foo2);
 
-      console.log("reading shared memory", this.foo4);
+      console.log("reading context memory", this.foo4);
       this.foo4 = {};
-      const x: any = st.getShare("foo");
+      const x: any = st.getContext("foo");
 
       x.asd = true;
 
@@ -93,6 +93,7 @@ export class Foo2 extends st.element {
       const willAuchShareHaben = ChangeDetector.onChange(x, (path: string, value: any, prevValue: any) => {
         console.log("willAuchShareHaben", path, value, prevValue);
       });
+      x.asd = false;
 
       this.foo4.test = "asdasd";
       this.foo4.test = "asdasd1";

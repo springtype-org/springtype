@@ -1,2 +1,3 @@
 import "./tss";
-export { adoptStylesheet, ADOPT_STYLESHEETS } from "./decorator/adoptStylesheet";
+export { adoptStylesheet } from "./decorator/adoptStylesheet";
+export { ADOPT_STYLESHEETS } from "./tss";

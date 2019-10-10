@@ -1,5 +1,5 @@
 import { st } from "../../../core";
-import { ATTRS } from "../interface/icustom-html-element";
+import { ATTRS } from "../trait/attr";
 
 // TODO: Functional style!
 

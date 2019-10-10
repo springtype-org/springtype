@@ -1,12 +1,12 @@
 import { IVirtualNode } from "../../vdom/interface";
-import { IAdoptedStyleSheet } from "../decorator/adoptStylesheet";
+import { IAdoptedStyleSheet } from "./iadopted-stylesheet";
 
 export interface ITSS {
   headStyleSheets: any;
   cssStyleSheets: any;
   globalStyles: any;
   addHeadStyleSheets(adoptedStylesheets: Array<IAdoptedStyleSheet>): Promise<void>;
-  getShadowStyleSheets(adoptedStylesheets: Array<IAdoptedStyleSheet>): Promise<Array<CSSStyleSheet>>;
+  toCSSStyleSheets(adoptedStylesheets: Array<IAdoptedStyleSheet>): Promise<Array<CSSStyleSheet>>;
   currentTheme: any;
 
   generateStyleDeclaration(declaration: any, mediaQuery?: boolean): any;

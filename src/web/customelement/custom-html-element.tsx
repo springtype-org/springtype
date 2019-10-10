@@ -1,30 +1,18 @@
 import { st } from "../../core";
-import { removeSharedMemoryChangeHandlersOfInstance } from "../../core/sharedmemory/share";
+import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { IOnStateChange, IStateChange, StateChangeType } from "../../core/state/interface";
-import { DEFAULT_EMPTY_PATH, StateChangeManager } from "../../core/state/state-change-manager";
+import { IOnStateChange, IStateChange } from "../../core/state/interface";
+import { DEFAULT_EMPTY_PATH } from "../../core/state/state-change-manager";
 import { ADOPT_STYLESHEETS } from "../tss";
 import { ITypedStyleSheet } from "../tss/interface";
 import { tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { ICustomElementOptions } from "./interface";
-import { ATTRS, CUSTOM_ELEMENT_OPTIONS, ICustomHTMLElementInternals, INTERNAL, TAG_NAME } from "./interface/icustom-html-element";
+import { CUSTOM_ELEMENT_OPTIONS, ICustomHTMLElementInternals, INTERNAL, TAG_NAME } from "./interface/icustom-html-element";
 import { ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
-
-const initAttrs = (instance: any) => {
-  // add change detection / reflection for all @attrs
-  for (let attributeName of instance[ATTRS] || []) {
-    Object.defineProperty(instance, attributeName, {
-      get: () => {
-        return instance.getAttribute(attributeName);
-      },
-      set: (value: any) => {
-        instance.setAttribute(attributeName, value);
-      },
-    });
-  }
-  delete instance[ATTRS]; // cleanup temp. registry
-};
+import { ATTRS, AttrTrait } from "./trait/attr";
+import { ShadowDOMTrait } from "./trait/shadow-dom";
+import { StateTrait } from "./trait/state";
 
 export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
@@ -45,22 +33,9 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnSta
       adoptedStylesheets: Object.getPrototypeOf(this).constructor[ADOPT_STYLESHEETS],
     } as ICustomHTMLElementInternals;
 
-    // TODO:
-    // State.enableFor(this)
-    // Attr.enableFor(this)
-    // ShadowDOM.enableFor(this, shadowMode)
-
-    initAttrs(this);
-
-    // init @state support
-    StateTrait.initStates(this, Object.getPrototypeOf(this).constructor[STATE] || []);
-
-    // in case of "open" or "closed" shadow DOM, use shadow DOM root node
-    if (this[INTERNAL].options.shadowMode != "none" && !this.shadowRoot) {
-      this[INTERNAL].root = this.attachShadow({
-        mode: this[INTERNAL].options.shadowMode as ShadowRootMode,
-      });
-    }
+    StateTrait.enableFor(this);
+    AttrTrait.enableFor(this);
+    ShadowDOMTrait.enableFor(this);
 
     // register with global instance registry
     st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].push(this);
@@ -87,8 +62,8 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnSta
       st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].splice(index, 1);
     }
 
-    // remove @shared handlers
-    removeSharedMemoryChangeHandlersOfInstance(this);
+    // remove @context handlers
+    removeContextChangeHandlersOfInstance(this);
 
     this.onDisconnect();
   }
@@ -186,10 +161,7 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnSta
       let styleSheets: Array<CSSStyleSheet> = [];
 
       if (this[INTERNAL].adoptedStylesheets) {
-        // fetch CSSStyleSheet instances
-        const shadowStyleSheets = await st.tss.getShadowStyleSheets(this[INTERNAL].adoptedStylesheets);
-
-        styleSheets = [...shadowStyleSheets];
+        styleSheets = [...(await st.tss.toCSSStyleSheets(this[INTERNAL].adoptedStylesheets))];
       }
       styleSheets.push(st.tss.renderStyleSheet(declaration));
 
@@ -284,85 +256,6 @@ export const defineCustomElement = (tagName: string, targetClass: any, options: 
   // return enhanced class
   return targetClass;
 };
-
-// FIXME: Trait: StateTrait raus hier
-
-export const STATE: any = Symbol("STATE");
-
-interface IState {
-  name: string;
-  type: StateChangeType;
-}
-
-export class StateTrait {
-  static addState(ctor: any, name: string | symbol, type: StateChangeType) {
-    if (!ctor[STATE]) {
-      ctor[STATE] = [];
-    }
-    ctor[STATE].push({
-      name,
-      type,
-    });
-  }
-
-  static initStates(instance: any, states: Array<IState>) {
-    for (let i = 0; i < states.length; i++) {
-      StateTrait.initState(instance, states[i].name, states[i].type);
-    }
-  }
-
-  static handleCustomElementStateChange(instance: any, change: IStateChange) {
-    if (process.env.NODE_ENV != "production" && st.debug) {
-      st.info("state-change-manager.ts", "@state()", change.name, "change detected on", instance, change);
-    }
-
-    // call handler method if implemented
-    if (typeof instance.onStateChange == "function") {
-      instance.onStateChange(change);
-    }
-
-    // if the instance never rendered yet, don't call doRender()!
-    if (!(instance[INTERNAL] as ICustomHTMLElementInternals).notInitialRender) return;
-
-    if (
-      instance.shouldRender(RenderReason.PROP_CHANGE, {
-        name: change.name,
-        path: change.path,
-        value: change.value,
-        prevValue: change.prevValue,
-        type: change.type,
-      })
-    ) {
-      instance.doRender();
-    }
-  }
-
-  static initState(instance: ICustomHTMLElement, name: string, type: StateChangeType) {
-    StateChangeManager.onStateChange(
-      instance,
-      name,
-      type,
-      (value: any, prevValue: any) => {
-        StateTrait.handleCustomElementStateChange(instance, {
-          type: StateChangeType.REFERENCE,
-          path: DEFAULT_EMPTY_PATH,
-          name,
-          value,
-          prevValue,
-        });
-      },
-      (path: string, value: any, prevValue: any) => {
-        StateTrait.handleCustomElementStateChange(instance, {
-          type: StateChangeType.DEEP,
-          path,
-          name,
-          value,
-          prevValue,
-        });
-      },
-    );
-  }
-}
 
 // initialize global instance cache
 if (!st[GlobalCache.CUSTOM_ELEMENT_INSTANCES]) {

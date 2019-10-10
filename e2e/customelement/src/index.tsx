@@ -1,5 +1,5 @@
 import { st } from "../../../src/core";
-import { share } from "../../../src/core/sharedmemory";
+import { context } from "../../../src/core/context";
 import { attr, customElement, CustomHTMLElement } from "../../../src/web/customelement";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tpl } from "./index.tpl";
@@ -24,8 +24,8 @@ export class Foo extends st.element {
   @attr
   some: string = attr_(this, "some", "test");
 
-  @share("foo")
-  lolShared: any = st.getShare("foo");
+  @context("foo")
+  lolShared: any = st.getContext("foo");
 
   onButtonClick = () => {
     this.doRender();

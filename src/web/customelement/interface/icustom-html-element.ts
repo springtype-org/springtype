@@ -1,5 +1,4 @@
-import { IAdoptedStyleSheet } from "../../tss/decorator/adoptStylesheet";
-import { ITypedStyleSheet } from "../../tss/interface";
+import { IAdoptedStyleSheet, ITypedStyleSheet } from "../../tss/interface";
 import { ICustomElementOptions } from "./icustom-element-options";
 
 export { ICustomHTMLElement } from "../custom-html-element";
@@ -18,5 +17,4 @@ export type RenderStyleFunction = (instance: any, theme?: any) => ITypedStyleShe
 
 export const CUSTOM_ELEMENT_OPTIONS: unique symbol = Symbol("CUSTOM_ELEMENT_OPTIONS");
 export const TAG_NAME: any = Symbol("TAG_NAME");
-export const ATTRS: unique symbol = Symbol("ATTRS");
 export const INTERNAL: unique symbol = Symbol("INTERNAL");

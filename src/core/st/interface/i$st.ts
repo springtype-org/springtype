@@ -6,8 +6,8 @@ import { IOnDeepChangeHandler } from "../../cd/interface";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
-import { ISharedMemoryEntries } from "../../sharedmemory/interface";
 import { IOnChangeHandler, IOnStateChangeHandler, StateChangeType } from "../../state/interface";
+import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
 
 /**
  * public $st and internal st API
@@ -15,15 +15,17 @@ import { IOnChangeHandler, IOnStateChangeHandler, StateChangeType } from "../../
 export interface I$st {
   // adds/replaces the root DOM node in <body> with a new instance of the custom element given
   render: (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => void;
+
   // enables trace mode (internal framework log messages)
   debug: boolean;
-  // DOM routing
+
+  // DOM routing API
   router: IRouter;
 
-  // dependency injection
+  // Dependency injection API
   di: IDI;
 
-  // internationalization (i18n), translation
+  // Internationalization (i18n), translation API
   i18n: Ii18n;
   t: It;
 
@@ -39,12 +41,15 @@ export interface I$st {
   // initial and patch (differential) rendering
   renderer: IRenderer;
 
+  // Change detection API
+
   // change detection for objects and arrays (deep changes)
   onChange: (object: any, onChange: IOnDeepChangeHandler, options: any) => any;
 
   // change detection with support for (deep changes + reference set changes)
   onStateChange: (instance: any, name: string | symbol, type: StateChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
 
+  // DOM reference API
   // set and get DOM references from within @customElement classes using @ref
   getDomRef: IGetDomRef;
   setDomRef: ISetDomRef;
@@ -52,26 +57,26 @@ export interface I$st {
   // custom element base class implemenetation to inherit from
   element: ICustomHTMLElement;
 
-  // logging
+  // logging API
   info: IlogFunction;
   warn: IlogFunction;
   error: IlogFunction;
 
-  // shared memory
-  getShare<S = {}>(shareName: string, onChange?: IOnStateChangeHandler, instance?: any): S;
+  // context API
+  getContext<S = {}>(contextName: string, onChange?: IOnStateChangeHandler, instance?: any): S;
 
-  initShare<S = {}>(shareName: string, initialValue: S, onChange?: IOnStateChangeHandler, instance?: any): S;
+  initContext<S = {}>(contextName: string, initialValue: S, onChange?: IOnStateChangeHandler, instance?: any): S;
 
-  addShareChangeHandler: (shareName: string, onChange: IOnStateChangeHandler, instance?: any) => void;
+  addContextChangeHandler: (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => void;
 
-  removeShareChangeHandler: (sharedName: string, onChange?: IOnStateChangeHandler) => void;
+  removeContextChangeHandler: (contextName: string, onChange?: IOnStateChangeHandler) => void;
 
-  // global memory
-  SHARED_MEMORY: ISharedMemoryEntries;
+  // global cache API
+  CONTEXT: IContextCacheEntries;
   CUSTOM_ELEMENT_INSTANCES: ICustomElementInstances;
 }
 
 export enum GlobalCache {
   CUSTOM_ELEMENT_INSTANCES = "CUSTOM_ELEMENT_INSTANCES",
-  SHARED_MEMORY = "SHARED_MEMORY",
+  CONTEXT = "CONTEXT",
 }

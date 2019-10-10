@@ -1,9 +1,9 @@
 import "../../../src/core";
 import "../../../src/core/cd";
+import "../../../src/core/context";
 import "../../../src/core/di";
 import "../../../src/core/i18n";
 import "../../../src/core/log";
-import "../../../src/core/sharedmemory";
 import "../../../src/web/customelement";
 import "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import "../../../src/web/router";

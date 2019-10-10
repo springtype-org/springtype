@@ -1,5 +1,5 @@
 import { StateChangeType } from "../../../core/state/interface/ion-state-change";
-import { StateTrait } from "../custom-html-element";
+import { StateTrait } from "../trait/state";
 
 export const state = (instanceOrType: HTMLElement | StateChangeType, name?: string | symbol): any => {
   if (!name) {

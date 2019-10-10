@@ -1,9 +1,4 @@
-export const ADOPT_STYLESHEETS = "ADOPT_STYLESHEETS";
-
-export interface IAdoptedStyleSheet {
-  ref: Promise<string>;
-  refName: string;
-}
+import { ADOPT_STYLESHEETS } from "../tss";
 
 export const adoptStylesheet = (ref: Promise<string> | string, refName?: string): any => {
   return (targetClass: any) => {

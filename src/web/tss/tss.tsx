@@ -3,12 +3,13 @@ import { GlobalCache } from "../../core/st/interface/i$st";
 import { ILifecycle, RenderReason } from "../customelement/interface/ilifecycle";
 import { tsx } from "../vdom";
 import { IVirtualNode } from "../vdom/interface";
-import { IAdoptedStyleSheet } from "./decorator/adoptStylesheet";
-import M = require("minimatch");
+import { IAdoptedStyleSheet } from "./interface";
 
 const camelToKebabCase = (name: string): string => {
   return name.replace(/[A-Z]/g, g => "-" + g[0].toLowerCase());
 };
+
+export const ADOPT_STYLESHEETS = "ADOPT_STYLESHEETS";
 
 if (!st.tss) {
   st.tss = {
@@ -74,6 +75,10 @@ if (!st.tss) {
       return <style type="text/css">{st.tss.generateStyleDeclaration(declaration)}</style>;
     },
 
+    /**
+     * Sets a new theme and re-renders the style of all web component instances
+     * @param theme Arbitrary object containing theme style information
+     */
     setTheme(theme: any) {
       st.tss.currentTheme = theme || {};
 
@@ -84,6 +89,11 @@ if (!st.tss) {
       }
     },
 
+    /**
+     * Used for when mode @adoptStyleSheet is used with a non-shadow-dom web component.
+     * Adds a <style> tag to the <head> instead of using CSSStyleSheet / adoptedStylesheet API.
+     * @param adoptedStyleSheets Array of CSS text stylesheets or promises to adopt
+     */
     async addHeadStyleSheets(adoptedStyleSheets: Array<IAdoptedStyleSheet>): Promise<void> {
       for (let styleSheet of adoptedStyleSheets) {
         // cache optimization
@@ -104,7 +114,11 @@ if (!st.tss) {
       }
     },
 
-    async getShadowStyleSheets(adoptedStyleSheets: Array<IAdoptedStyleSheet>): Promise<Array<CSSStyleSheet>> {
+    /**
+     * Transforms CSS text stylesheets into CSSStyleSheet adoptable stylesheets or re-uses cached ones (by ref name).
+     * @param adoptedStyleSheets Array of CSS text stylesheets or promises to adopt
+     */
+    async toCSSStyleSheets(adoptedStyleSheets: Array<IAdoptedStyleSheet>): Promise<Array<CSSStyleSheet>> {
       const cssStyleSheets = [];
 
       for (let styleSheet of adoptedStyleSheets) {
