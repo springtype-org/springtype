@@ -2,16 +2,19 @@ import { ICustomElementInstances, ICustomHTMLElement } from "../../../web/custom
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
 import { IDOM, IGetDomRef, IRenderer, ISetDomRef, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
-import { IOnChangeHandler, IOnDeepChangeHandler, IOnPropChangeHandler, PropChangeType } from "../../cd/interface";
+import { IOnDeepChangeHandler } from "../../cd/interface";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
 import { ISharedMemoryEntries } from "../../sharedmemory/interface";
+import { IOnChangeHandler, IOnStateChangeHandler, StateChangeType } from "../../state/interface";
 
 /**
  * public $st and internal st API
  */
 export interface I$st {
+  // adds/replaces the root DOM node in <body> with a new instance of the custom element given
+  render: (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => void;
   // enables trace mode (internal framework log messages)
   debug: boolean;
   // DOM routing
@@ -40,7 +43,7 @@ export interface I$st {
   onChange: (object: any, onChange: IOnDeepChangeHandler, options: any) => any;
 
   // change detection with support for (deep changes + reference set changes)
-  onPropChange: (instance: any, name: string | symbol, type: PropChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
+  onStateChange: (instance: any, name: string | symbol, type: StateChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
 
   // set and get DOM references from within @customElement classes using @ref
   getDomRef: IGetDomRef;
@@ -55,13 +58,13 @@ export interface I$st {
   error: IlogFunction;
 
   // shared memory
-  getShare<S = {}>(shareName: string, onChange?: IOnPropChangeHandler, instance?: any): S;
+  getShare<S = {}>(shareName: string, onChange?: IOnStateChangeHandler, instance?: any): S;
 
-  initShare<S = {}>(shareName: string, initialValue: S, onChange?: IOnPropChangeHandler, instance?: any): S;
+  initShare<S = {}>(shareName: string, initialValue: S, onChange?: IOnStateChangeHandler, instance?: any): S;
 
-  addShareChangeHandler: (shareName: string, onChange: IOnPropChangeHandler, instance?: any) => void;
+  addShareChangeHandler: (shareName: string, onChange: IOnStateChangeHandler, instance?: any) => void;
 
-  removeShareChangeHandler: (sharedName: string, onChange?: IOnPropChangeHandler) => void;
+  removeShareChangeHandler: (sharedName: string, onChange?: IOnStateChangeHandler) => void;
 
   // global memory
   SHARED_MEMORY: ISharedMemoryEntries;

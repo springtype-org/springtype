@@ -1,24 +1,29 @@
 {
-	"name": "@springtype/bundle",
-	"version": "2.0.0-alpha.1.6",
-	"publishConfig": {
-		"access": "public"
-	},
-	"description": "Bundler for SpringType projects: bundle({ ... })",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/springtype-org/springtype.git"
-	},
-	"scripts": {
-		"build": "tsc",
-		"prerelease": "npm login",
-		"release": "npm publish"
-	},
-	"devDependencies": {
-		"fuse-box": "^4.0.0-next.134",
-		"fuse-box-typechecker": "^3.0.0-next.29"
-	},
-	"main": "dist/index.js",
-	"author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
-	"license": "MIT"
+  "name": "@springtype/bundle",
+  "version": "2.0.0-alpha.1.16",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Bundler for SpringType projects: bundle({ ... })",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/springtype-org/springtype.git"
+  },
+  "scripts": {
+    "clean": "rm -rf dist && rm -rf test/dist",
+    "build": "tsc",
+    "pretest": "tsc",
+    "e2e": "testcafe chrome:headless **/__e2e__/*",
+    "test": "cross-env NODE_ENV=production ts-node bundle.ts",
+    "prerelease": "npm login",
+    "release": "npm publish"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "fuse-box": "^4.0.0-next.141",
+    "fuse-box-typechecker": "^3.0.0-next.29"
+  },
+  "main": "dist/index.js",
+  "author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
+  "license": "MIT"
 }

@@ -1,0 +1,5 @@
+{
+  "deep": {
+    "msg": "123de-{{ someValue, uppercase }}"
+  }
+}

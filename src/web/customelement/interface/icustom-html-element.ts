@@ -1,3 +1,4 @@
+import { IAdoptedStyleSheet } from "../../tss/decorator/adoptStylesheet";
 import { ITypedStyleSheet } from "../../tss/interface";
 import { ICustomElementOptions } from "./icustom-element-options";
 
@@ -6,6 +7,7 @@ export { ICustomHTMLElement } from "../custom-html-element";
 export interface ICustomHTMLElementInternals {
   root: ShadowRoot | HTMLElement;
   notInitialRender: boolean;
+  adoptedStylesheets: Array<IAdoptedStyleSheet>;
   attributes: {
     [name: string]: string;
   };

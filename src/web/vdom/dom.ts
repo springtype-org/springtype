@@ -1,5 +1,6 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
+import { TAG_NAME } from "./../customelement/interface/icustom-html-element";
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
 import { tsxToStandardAttributeName } from "./tsx";
@@ -125,4 +126,15 @@ if (!st.dom) {
       }
     },
   };
+
+  if (!st.render) {
+    st.render = (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => {
+      const element = st.dom.setRoot(customElementClassRef[TAG_NAME]);
+
+      for (let name in attributes) {
+        // TODO: add support for SVG setAttributeNS
+        element.setAttribute(name, attributes[name]);
+      }
+    };
+  }
 }

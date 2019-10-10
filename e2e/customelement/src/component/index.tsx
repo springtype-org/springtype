@@ -1,10 +1,10 @@
 // @ts-ignore JSON module import activated in bundler config
 import { st } from "../../../../src/core";
-import { ChangeDetector, prop } from "../../../../src/core/cd";
-import { IPropChange } from "../../../../src/core/cd/interface";
+import { ChangeDetector } from "../../../../src/core/cd";
 import { formatter, translation } from "../../../../src/core/i18n";
 import { share } from "../../../../src/core/sharedmemory";
-import { attr, customElement } from "../../../../src/web/customelement";
+import { IStateChange } from "../../../../src/core/state/interface";
+import { attr, customElement, state } from "../../../../src/web/customelement";
 import { tsx } from "../../../../src/web/vdom";
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
@@ -31,11 +31,11 @@ export class Foo2 extends st.element {
   @share("foo")
   foo4: any = st.initShare("foo", {});
 
-  @prop
+  @state
   lala: any = { a: "hase" };
 
-  onPropChange(change: IPropChange) {
-    console.log("PROP change", change);
+  onStateChange(change: IStateChange) {
+    console.log("state change", change);
   }
 
   onAttributeChange(name: string, value: any, prevValue: any) {

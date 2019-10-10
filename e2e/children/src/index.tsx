@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === "development") {
   customElementsHMRPolyfill;
 }
 
-@customElement("e2e-children", { shadowMode: "none" })
+@customElement("e2e-children")
 export class Foo extends st.element {
   @attr
   mapofnames = ["Rene"];
@@ -15,7 +15,7 @@ export class Foo extends st.element {
     super();
     setTimeout(() => {
       this.mapofnames = ["Michael", "Aron", "Daniel", "Bernd", "Holger"];
-    }, 1500);
+    }, 500);
   }
 
   render() {

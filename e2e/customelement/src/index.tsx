@@ -50,7 +50,7 @@ export class Foo extends st.element {
     }, 200);
   }
 
-  onPropChange(change: any) {
+  onStateChange(change: any) {
     console.log("1PROP change", change);
   }
 

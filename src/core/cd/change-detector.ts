@@ -1,6 +1,6 @@
 import { isPrimitive } from "../lang/is-primitive";
 import { st } from "../st/st";
-import { IOnDeepChangeHandler } from "./interface/ion-change-handler";
+import { IOnDeepChangeHandler } from "./interface/ion-deep-change-handler";
 
 const PATH_SEPARATOR = ".";
 const TARGET = Symbol("target");

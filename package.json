@@ -1,32 +1,33 @@
 {
-	"name": "springtype",
-	"version": "2.0.0-alpha.1.1",
-	"publishConfig": {
-		"access": "public"
-	},
-	"description": "The power of simplicity",
-	"scripts": {
-		"clean": "npx st-rm-rf dist",
-		"build": "tsc -p tsconfig.dist.json",
-		"postbuild": "cp package.json dist",
-		"e2e": "testcafe chrome:headless **/__e2e__/*",
-		"test": "jest --verbose --watch",
-		"test:ci": "jest --verbose --runInBand",
-		"coverage": "jest --verbose --coverage",
-		"coverage:ci": "jest --verbose --coverage --runInBand"
-	},
-	"author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
-	"license": "MIT",
-	"devDependencies": {
-		"@types/jest": "^24.0.18",
-		"@types/node": "^12.7.5",
-		"jest": "^24.9.0",
-		"prettier": "^1.18.2",
-		"reflect-metadata": "^0.1.13",
-		"testcafe": "^1.5.0",
-		"ts-jest": "^24.1.0",
-		"ts-node": "^8.4.1",
-		"tslib": "^1.10.0",
-		"typescript": "^3.5.1"
-	}
+  "name": "springtype",
+  "version": "2.0.0-alpha.1.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "The power of simplicity",
+  "scripts": {
+    "clean": "npx st-rm-rf dist",
+    "build": "tsc -p tsconfig.dist.json",
+    "postbuild": "cp package.json dist",
+    "pree2e": "ts-node ./scripts/e2e-build-all.ts",
+    "e2e": "testcafe chrome:headless e2e/**/__e2e__/*",
+    "test": "jest --verbose --watch",
+    "test:ci": "jest --verbose --runInBand",
+    "coverage": "jest --verbose --coverage",
+    "coverage:ci": "jest --verbose --coverage --runInBand"
+  },
+  "author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.12",
+    "jest": "^24.9.0",
+    "prettier": "^1.18.2",
+    "reflect-metadata": "^0.1.13",
+    "testcafe": "^1.5.0",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.5.1"
+  }
 }

@@ -11,10 +11,10 @@
   "author": "Aron Homberg <info@aron-homberg.de>",
   "license": "MIT",
   "devDependencies": {
-    "@springtype/bundle": "^2.0.0-alpha.1.6",
-    "@types/node": "^12.7.5",
-    "cross-env": "^6.0.0",
-    "fuse-box": "^4.0.0-next.134",
+    "@springtype/bundle": "^2.0.0-alpha.1.16",
+    "@types/node": "^12.7.12",
+    "cross-env": "^6.0.3",
+    "fuse-box": "^4.0.0-next.141",
     "fuse-box-typechecker": "^3.0.0-next.29",
     "ts-node": "^8.4.1",
     "typescript": "^3.5.1"

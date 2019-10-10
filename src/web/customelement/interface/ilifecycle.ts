@@ -1,4 +1,4 @@
-import { PropChangeType } from "../../../core/cd/interface";
+import { StateChangeType } from "../../../core/state/interface";
 import { ITypedStyleSheet } from "../../tss/interface";
 import { IVirtualNode } from "../../vdom/interface";
 
@@ -15,7 +15,7 @@ export interface RenderReasonMetaData {
   // only in case of prop and deep change
   path: string;
   // only in case of prop change
-  type?: PropChangeType;
+  type?: StateChangeType;
   // new value
   value: any;
   // previous value
@@ -51,10 +51,10 @@ export interface ILifecycle {
   render?(): IVirtualNode;
 
   // lifecycle method to trigger a VDOM tpl reflow
-  doRender?(tssOnly?: boolean): void;
+  doRender?(tssOnly?: boolean): Promise<void>;
 
   // lifecycle method to tigger a VDOM tss
-  doRenderStyle?(): IVirtualNode | undefined;
+  doRenderStyle?(): Promise<IVirtualNode | undefined>;
 
   // implement this and return TSS for the markup to be styled
   renderStyle?(theme?: any): ITypedStyleSheet | undefined;

@@ -5,7 +5,7 @@ import { attr, customElement } from "../../../../../src/web/customelement";
 import { tsx } from "../../../../../src/web/vdom";
 import { IVirtualNode } from "../../../../../src/web/vdom/interface";
 
-@customElement("top-bar-container", { shadowMode: "none" })
+@customElement("top-bar-container")
 export class TopBarContainer extends st.element {
   @attr
   "attr-type": VariantType = false;

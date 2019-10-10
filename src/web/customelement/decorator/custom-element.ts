@@ -15,9 +15,6 @@ export const customElement = (tagName: string, optionsOrElementFunction?: ICusto
       class extends st.element {
         constructor() {
           super();
-
-          console.log("optionsOrElementFunction", optionsOrElementFunction);
-
           this.render = (optionsOrElementFunction as ElementFunction)(this);
         }
       },

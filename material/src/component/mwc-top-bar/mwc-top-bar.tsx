@@ -1,16 +1,16 @@
-import "@material/icon-button/dist/mdc.icon-button.css";
-import "@material/top-app-bar/dist/mdc.top-app-bar.css";
-import { prop } from "../../../../src/core/cd";
 import { st } from "../../../../src/core/st";
-import { attr, customElement } from "../../../../src/web/customelement";
+import { attr, customElement, state } from "../../../../src/web/customelement";
+import { adoptStylesheet } from "../../../../src/web/tss";
 import tss from "./mwc-top-bar-override.tss";
 import tpl from "./mwc-top-bar.tpl";
-
 export type VariantType = false | "fixed" | "prominent" | "fixed-prominent" | "short" | "fixed-short";
 
+// TODO: MwcIcon class?
+@adoptStylesheet("@import url(https://fonts.googleapis.com/icon?family=Material+Icons)", "mdc-icons")
+@adoptStylesheet(import("@material/top-app-bar/dist/mdc.top-app-bar.css"), "mdc-top-app-bar")
+@adoptStylesheet(import("@material/icon-button/dist/mdc.icon-button.css"), "mdc-icon-button")
 @customElement("mwc-top-bar", {
   tpl,
-  shadowMode: "none",
   tss,
 })
 export class MwcTopBar extends st.element {
@@ -29,7 +29,7 @@ export class MwcTopBar extends st.element {
   @attr
   "mwc-scrolled": boolean = false;
 
-  @prop
+  @state
   prop: { offsetWidth: number } = { offsetWidth: 0 };
 }
 

@@ -6,7 +6,7 @@ import { attr, customElement } from "../../../../../src/web/customelement";
 import { tsx } from "../../../../../src/web/vdom";
 import "./top-bar-container";
 
-@customElement("topbar-page", { shadowMode: "none" })
+@customElement("topbar-page")
 export class TopBarPage extends st.element {
   static ROUTE = "";
   selectItems: ISelectItem<VariantType>[] = [

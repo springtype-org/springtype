@@ -1,7 +1,6 @@
 import { st } from "../../../src/core";
-import { prop } from "../../../src/core/cd";
-import { PropChangeType } from "../../../src/core/cd/interface";
-import { customElement } from "../../../src/web/customelement";
+import { StateChangeType } from "../../../src/core/state/interface";
+import { customElement, state } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tsx } from "../../../src/web/vdom";
@@ -16,17 +15,17 @@ if (process.env.NODE_ENV === "development") {
 
 @customElement("st-index")
 export class Index extends st.element implements ILifecycle {
-  // using a @prop() decoration enables change detection and auto-rerendering
+  // using a @state() decoration enables change detection and auto-rerendering
   // whenever the reference changes (like this.eventDetails = $somethingElse)
   // or a deep change happens (like this.eventDetails.foo = 'bar')
-  @prop
+  @state
   evtDetail?: StButtonClickEventDetail;
 
-  @prop(PropChangeType.REFERENCE)
+  @state(StateChangeType.REFERENCE)
   evtDetailDeep?: StButtonClickEventDetail;
 
   onStButtonClick = (evt: StButtonClickEvent) => {
-    // assignment causes a re-rendering because evtDetails is a @prop()
+    // assignment causes a re-rendering because evtDetails is a @state()
     this.evtDetail = evt.detail;
 
     console.log("yep", evt.detail.specialStEvent);

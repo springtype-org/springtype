@@ -1,6 +1,6 @@
 import { st } from "../../../src/core";
-import { IPropChange } from "../../../src/core/cd/interface";
 import { share } from "../../../src/core/sharedmemory";
+import { IPropChange } from "../../../src/core/state/interface";
 import { attr, customElement } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";

@@ -1,8 +1,9 @@
 import { st } from "../../core";
-import { IOnPropChange, IPropChange } from "../../core/cd/interface";
-import { DEFAULT_EMPTY_PATH, PropChangeManager, PROPS } from "../../core/cd/prop-change-manager";
 import { removeSharedMemoryChangeHandlersOfInstance } from "../../core/sharedmemory/share";
 import { GlobalCache } from "../../core/st/interface/i$st";
+import { IOnStateChange, IStateChange, StateChangeType } from "../../core/state/interface";
+import { DEFAULT_EMPTY_PATH, StateChangeManager } from "../../core/state/state-change-manager";
+import { ADOPT_STYLESHEETS } from "../tss";
 import { ITypedStyleSheet } from "../tss/interface";
 import { tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
@@ -25,7 +26,7 @@ const initAttrs = (instance: any) => {
   delete instance[ATTRS]; // cleanup temp. registry
 };
 
-export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPropChange {
+export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
   [INTERNAL]: ICustomHTMLElementInternals;
 
@@ -41,12 +42,18 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
       notInitialRender: false,
       attributes: {},
       options: Object.getPrototypeOf(this).constructor[CUSTOM_ELEMENT_OPTIONS],
+      adoptedStylesheets: Object.getPrototypeOf(this).constructor[ADOPT_STYLESHEETS],
     } as ICustomHTMLElementInternals;
+
+    // TODO:
+    // State.enableFor(this)
+    // Attr.enableFor(this)
+    // ShadowDOM.enableFor(this, shadowMode)
 
     initAttrs(this);
 
-    // init @prop support
-    PropChangeManager.initProps(this, Object.getPrototypeOf(this).constructor[PROPS] || []);
+    // init @state support
+    StateTrait.initStates(this, Object.getPrototypeOf(this).constructor[STATE] || []);
 
     // in case of "open" or "closed" shadow DOM, use shadow DOM root node
     if (this[INTERNAL].options.shadowMode != "none" && !this.shadowRoot) {
@@ -131,7 +138,7 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
   }
 
   // @ts-ignore: Unused variables are valid here
-  onPropChange(change: IPropChange) {}
+  onStateChange(change: IStateChange) {}
 
   /**
    * Lifecycle method: Implement to get notified when attributes change
@@ -156,12 +163,15 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
   onBeforeRender(tssOnly: boolean = false) {}
 
   render(): IVirtualNode {
-    const msg = `Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
+    if (typeof this[INTERNAL].options.tpl! != "function") {
+      const msg = `Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
 
-    // TODO: Function to render error
-    st.warn(msg);
+      // TODO: Function to render error
+      st.warn(msg);
 
-    return <pre>{msg}</pre>;
+      return <pre>{msg}</pre>;
+    }
+    return this[INTERNAL].options.tpl!(this);
   }
 
   // @ts-ignore: Unused variables are valid here
@@ -169,26 +179,36 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
     return undefined;
   }
 
-  doRenderStyle(): any {
-    const declaration = st.tss.getDeclaration(this, this[INTERNAL].options.tss, this.renderStyle);
+  async doRenderStyle(): Promise<any> {
+    let declaration = st.tss.getDeclaration(this, this[INTERNAL].options.tss, this.renderStyle);
 
     if (this[INTERNAL].root! instanceof ShadowRoot) {
-      return st.tss.renderStyleSheet(declaration);
+      let styleSheets: Array<CSSStyleSheet> = [];
+
+      if (this[INTERNAL].adoptedStylesheets) {
+        // fetch CSSStyleSheet instances
+        const shadowStyleSheets = await st.tss.getShadowStyleSheets(this[INTERNAL].adoptedStylesheets);
+
+        styleSheets = [...shadowStyleSheets];
+      }
+      styleSheets.push(st.tss.renderStyleSheet(declaration));
+
+      return styleSheets;
     } else {
+      if (this[INTERNAL].adoptedStylesheets) {
+        // adding <link ref="stylesheet"> to <head> and caching by name
+        st.tss.addHeadStyleSheets(this[INTERNAL].adoptedStylesheets);
+      }
       return st.tss.renderStyleNode(declaration);
     }
   }
 
-  doRender(tssOnly: boolean = false) {
+  async doRender(tssOnly: boolean = false) {
     this.onBeforeRender(tssOnly);
 
     let vdom: IVirtualNode<any>;
     try {
-      if (typeof this[INTERNAL].options.tpl == "function") {
-        vdom = this[INTERNAL].options.tpl!(this);
-      } else {
-        vdom = this.render();
-      }
+      vdom = this.render();
     } catch (e) {
       if (e.message.indexOf("tsx") > -1) {
         st.error(`The function tsx of package vdom must be imported for wherever you use <tsx></tsx> syntax!`);
@@ -196,14 +216,14 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnPro
       throw e;
     }
 
-    const tss: IVirtualNode | CSSStyleSheet = this.doRenderStyle();
+    const tss: IVirtualNode | Array<CSSStyleSheet> = await this.doRenderStyle();
 
     let nodesToRender: Array<IVirtualNode>;
-    if (tss instanceof CSSStyleSheet) {
-      (this[INTERNAL].root as ShadowRoot).adoptedStyleSheets = [tss];
+    if ((tss && (tss as Array<CSSStyleSheet>)[0] instanceof CSSStyleSheet) || !tss) {
+      (this[INTERNAL].root as ShadowRoot).adoptedStyleSheets = tss as Array<CSSStyleSheet>;
       nodesToRender = [vdom!];
     } else {
-      nodesToRender = [tss, vdom!];
+      nodesToRender = [tss as IVirtualNode, vdom!];
     }
 
     if (!this[INTERNAL].notInitialRender) {
@@ -264,6 +284,85 @@ export const defineCustomElement = (tagName: string, targetClass: any, options: 
   // return enhanced class
   return targetClass;
 };
+
+// FIXME: Trait: StateTrait raus hier
+
+export const STATE: any = Symbol("STATE");
+
+interface IState {
+  name: string;
+  type: StateChangeType;
+}
+
+export class StateTrait {
+  static addState(ctor: any, name: string | symbol, type: StateChangeType) {
+    if (!ctor[STATE]) {
+      ctor[STATE] = [];
+    }
+    ctor[STATE].push({
+      name,
+      type,
+    });
+  }
+
+  static initStates(instance: any, states: Array<IState>) {
+    for (let i = 0; i < states.length; i++) {
+      StateTrait.initState(instance, states[i].name, states[i].type);
+    }
+  }
+
+  static handleCustomElementStateChange(instance: any, change: IStateChange) {
+    if (process.env.NODE_ENV != "production" && st.debug) {
+      st.info("state-change-manager.ts", "@state()", change.name, "change detected on", instance, change);
+    }
+
+    // call handler method if implemented
+    if (typeof instance.onStateChange == "function") {
+      instance.onStateChange(change);
+    }
+
+    // if the instance never rendered yet, don't call doRender()!
+    if (!(instance[INTERNAL] as ICustomHTMLElementInternals).notInitialRender) return;
+
+    if (
+      instance.shouldRender(RenderReason.PROP_CHANGE, {
+        name: change.name,
+        path: change.path,
+        value: change.value,
+        prevValue: change.prevValue,
+        type: change.type,
+      })
+    ) {
+      instance.doRender();
+    }
+  }
+
+  static initState(instance: ICustomHTMLElement, name: string, type: StateChangeType) {
+    StateChangeManager.onStateChange(
+      instance,
+      name,
+      type,
+      (value: any, prevValue: any) => {
+        StateTrait.handleCustomElementStateChange(instance, {
+          type: StateChangeType.REFERENCE,
+          path: DEFAULT_EMPTY_PATH,
+          name,
+          value,
+          prevValue,
+        });
+      },
+      (path: string, value: any, prevValue: any) => {
+        StateTrait.handleCustomElementStateChange(instance, {
+          type: StateChangeType.DEEP,
+          path,
+          name,
+          value,
+          prevValue,
+        });
+      },
+    );
+  }
+}
 
 // initialize global instance cache
 if (!st[GlobalCache.CUSTOM_ELEMENT_INSTANCES]) {

@@ -1,9 +1,14 @@
 import { bundle } from "@springtype/bundle";
 
-bundle({
-	homeDir: "../../",
-	entry: "e2e/children/src/index.tsx",
-	paths: {
-		"@springtype/*": "./*"
-	}
-});
+(async () => {
+  await bundle({
+    homeDir: "../../",
+    entry: "e2e/children/src/index.tsx",
+    paths: {
+      "@springtype/*": "./*",
+    },
+    devServer: {
+      enabled: process.env.NODE_ENV != "production",
+    },
+  });
+})();
