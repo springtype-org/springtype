@@ -15,7 +15,7 @@ export const tsxToStandardAttributeName = (tsxAttributeName: string): string => 
   return tsxAttributeName;
 };
 
-export const tsx = st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: IVirtualChildren[]): IVirtualNode<any> => {
+export const tsx = (st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: IVirtualChildren[]): IVirtualNode<any> => {
   // attributes can be null or an object: clone
   if (children) {
     children = ([] as IVirtualChildren[]).concat.apply([], children);
@@ -23,6 +23,7 @@ export const tsx = st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttribu
   attributes = { ...attributes };
   // TODO: mock
   // it's a custom element, but it's not registered
+
   if (type.indexOf("-") > -1 && !customElements.get(type)) {
     st.error(new Error(`<${type} /> is used but not imported. Make sure to import the custom element class that defines ${type}. Look for a file containing: @customElement('${type}')!`));
   }
@@ -32,4 +33,4 @@ export const tsx = st.tsx = (type: IVirtualNodeType, attributes: JSX.HTMLAttribu
     attributes,
     children,
   };
-};
+});

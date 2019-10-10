@@ -128,7 +128,9 @@ if (!st.dom) {
   };
 
   if (!st.render) {
-    st.render = (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => {
+    st.render = async (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => {
+      await st.dom.isReady();
+
       const element = st.dom.setRoot(customElementClassRef[TAG_NAME]);
 
       for (let name in attributes) {
