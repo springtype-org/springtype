@@ -2,9 +2,13 @@
   "name": "material",
   "version": "1.0.0-alpha.1.13",
   "description": "SpringType chrome extension.",
+  "scripts": {
+    "download" : "ts-node scripts/download.ts"
+  },
   "devDependencies": {
     "cross-env": "^5.2.1",
     "tslib": "^1.10.0",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.2"
   },
   "browserslist": [
