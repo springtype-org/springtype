@@ -1,6 +1,6 @@
 {
   "name": "@springtype/bundle",
-  "version": "2.0.0-alpha.1.16",
+  "version": "2.0.0-alpha.1.17",
   "publishConfig": {
     "access": "public"
   },

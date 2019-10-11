@@ -29,7 +29,7 @@ export const bundle = (overlayConfig: any = {}) => {
           ...overlayConfig.watch,
         },
         cache: {
-          enabled: prod ? false : true,
+          enabled: false,
           FTL: true,
           ...overlayConfig.cache,
         },
