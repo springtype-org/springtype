@@ -4,6 +4,7 @@ import { attr, customElement, CustomHTMLElement } from "../../../src/web/custome
 import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tpl } from "./index.tpl";
 import { tss } from "./index.tss";
+import "./polyfills";
 
 if (process.env.NODE_ENV === "development") {
   customElementsHMRPolyfill;
