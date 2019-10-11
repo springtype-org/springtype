@@ -5,7 +5,14 @@ yarn.lock
 .gitignore
 packages/examples
 coverage
-dist
-coverage
 .idea
 .DS_Store
+e2e
+material
+ionic
+scripts
+devtools
+.prettierrc.yml
+jest.config.js
+tsconfig.dist.json
+tsconfig.json
