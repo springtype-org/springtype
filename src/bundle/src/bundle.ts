@@ -60,7 +60,7 @@ export const bundle = (overlayConfig: IConfig = {}) => {
           ...overlayConfig.webIndex,
         },
         devServer: {
-          enabled: true,
+          enabled: process.env.NODE_ENV != "production",
 
           // @ts-ignore
           ...overlayConfig.devServer,
