@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "The power of simplicity",
+  "description": "Next-gen web framwork promoting the power of simplicity.",
   "scripts": {
     "clean": "npx st-rm-rf dist",
     "build": "tsc -p tsconfig.dist.json",
@@ -14,7 +14,9 @@
     "test": "jest --verbose --watch",
     "test:ci": "jest --verbose --runInBand",
     "coverage": "jest --verbose --coverage",
-    "coverage:ci": "jest --verbose --coverage --runInBand"
+    "coverage:ci": "jest --verbose --coverage --runInBand",
+    "prerelease": "npm login",
+    "release": "npm publish"
   },
   "author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
   "license": "MIT",
