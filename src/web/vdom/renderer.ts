@@ -158,7 +158,7 @@ if (!st.renderer) {
       // process children (recursion)
 
       // inner should only be patched if it is not a custom element and has no shadow DOM
-      let updateInner = domElement.shadowRoot || !(virtualElement.type.indexOf("-") > -1);
+      let updateInner = domElement && domElement.shadowRoot || !(virtualElement.type.indexOf("-") > -1);
 
       // optimization: If freshly created, all children are already perfectly rendered
       // so no need to walk through all child nodes
