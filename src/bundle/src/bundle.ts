@@ -18,7 +18,7 @@ export const bundle = (overlayConfig: IConfig = {}) => {
       const config = {
         target: "browser",
         ...overlayConfig,
-        entry: overlayConfig.entry ? overlayConfig.entry : "./src/index.ts",
+        entry: overlayConfig.entry ? overlayConfig.entry : "./src/index.tsx",
         dependencies: {
           // @ts-ignore
           include: ["tslib", ...(overlayConfig.dependencies || { include: [] }).include],
