@@ -3,6 +3,7 @@ import { removeContextChangeHandlersOfInstance } from "../../core/context/contex
 import { GlobalCache } from "../../core/st/interface/i$st";
 import { IOnStateChange, IStateChange } from "../../core/state/interface";
 import { DEFAULT_EMPTY_PATH } from "../../core/state/state-change-manager";
+import { customElementsHMRPolyfill } from "../polyfill/custom-elements-hmr-polyfill";
 import { ADOPT_STYLESHEETS } from "../tss";
 import { ITypedStyleSheet } from "../tss/interface";
 import { tsx } from "../vdom";
@@ -13,6 +14,10 @@ import { ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilif
 import { ATTRS, AttrTrait } from "./trait/attr";
 import { ShadowDOMTrait } from "./trait/shadow-dom";
 import { StateTrait } from "./trait/state";
+
+if (process.env.NODE_ENV === "development") {
+  customElementsHMRPolyfill;
+}
 
 export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
