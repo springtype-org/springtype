@@ -1,3 +1,4 @@
+
 export type IVirtualNodeType = string;
 export interface IVirtualNodeAttributes {
   key?: string;
@@ -5,10 +6,16 @@ export interface IVirtualNodeAttributes {
   [attributeName: string]: any;
 }
 
+export interface ISlotChildren {
+  // default can be an Array
+  [slotName: string]: IVirtualNode|Array<IVirtualNode>
+}
+
 export interface IVirtualNode<A = IVirtualNodeAttributes> {
   type: IVirtualNodeType;
   attributes: A;
   children: IVirtualChildren;
+  slotChildren?: ISlotChildren;
 }
 
 export type IVirtualKey = string | number | any;

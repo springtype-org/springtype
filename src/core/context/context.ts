@@ -1,22 +1,16 @@
+import { IOnStateChangeHandler } from "../../web/customelement/interface/ion-state-change";
+import { ChangeType } from "../cd/interface/change-type";
+import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../cd/prop-change-manager";
 import { isPrimitive } from "../lang/is-primitive";
 import { GlobalCache } from "../st/interface/i$st";
 import { st } from "../st/st";
-import { IOnStateChangeHandler, StateChangeType } from "../state/interface/ion-state-change";
-import { DEFAULT_EMPTY_PATH, StateChangeManager } from "../state/state-change-manager";
 
 /* internal API */
 
 const DEFAULT_CONTEXT_VALUE = {};
 const HANDLER_OWNING_INSTANCE: any = Symbol("HANDLER_OWNING_INSTANCE");
 
-// used by @context decorator internally
-export const initContextCache = () => {
-  if (!st[GlobalCache.CONTEXT]) {
-    st[GlobalCache.CONTEXT] = {};
-  }
-};
-
-const callChangeHandlers = (onChangeHandlers: Array<IOnStateChangeHandler>, name: string, type: StateChangeType, value: any, prevValue: any, path: string = DEFAULT_EMPTY_PATH) => {
+const callChangeHandlers = (onChangeHandlers: Array<IOnStateChangeHandler>, name: string, type: ChangeType, value: any, prevValue: any, path: string = DEFAULT_EMPTY_PATH) => {
   for (let onChnageHandler of onChangeHandlers) {
     onChnageHandler({
       name,
@@ -38,15 +32,15 @@ const initContextCacheEntry = (contextName: string, initialValue: any) => {
     // set initial value in context cache
     st[GlobalCache.CONTEXT][contextName].value = initialValue;
 
-    StateChangeManager.onStateChange(
+    PropChangeManager.onChange(
       st[GlobalCache.CONTEXT][contextName],
       "value",
-      StateChangeType.DEEP,
+      ChangeType.DEEP,
       (value: any, prevValue: any) => {
-        callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, StateChangeType.REFERENCE, value, prevValue);
+        callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, ChangeType.REFERENCE, value, prevValue);
       },
       (path: string, value: any, prevValue: any) => {
-        callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, StateChangeType.REFERENCE, value, prevValue, path);
+        callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, ChangeType.DEEP, value, prevValue, path);
       },
     );
   }
@@ -60,8 +54,7 @@ const initContextCacheEntry = (contextName: string, initialValue: any) => {
  * @param onChange Handler function, called on change
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-export const addContextChangeHandler = (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => {
-  initContextCache();
+export const addContextChangeHandler = st.addContextChangeHandler = (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => {
   if (typeof onChange == "function") {
     if (instance) {
       (onChange as any)[HANDLER_OWNING_INSTANCE] = instance;
@@ -70,10 +63,6 @@ export const addContextChangeHandler = (contextName: string, onChange: IOnStateC
   }
 };
 
-if (!st.addContextChangeHandler) {
-  st.addContextChangeHandler = addContextChangeHandler;
-}
-
 /**
  * Initializes a global context object
  * @param contextName App-wide unique name of the context
@@ -81,34 +70,28 @@ if (!st.addContextChangeHandler) {
  * @param onChange Handler function to be applied when the context object gets changed by reference or deeply
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-function initContext<S = {}>(contextName: string, initialValue: S, onChange?: IOnStateChangeHandler, instance?: any) {
+st.initContext = function initContext<S = {}>(contextName: string, initialValue: S, onChange?: IOnStateChangeHandler, instance?: any) {
   if (isPrimitive(initialValue)) {
     throw new Error(`A context cannot be a primitive value like ${initialValue}. Wrap the value of ${contextName.toString()} in an object.`);
   }
-  initContextCache();
   initContextCacheEntry(contextName, initialValue);
   addContextChangeHandler(contextName, onChange!, instance);
 
   return st[GlobalCache.CONTEXT][contextName].value;
-}
-if (!st.initContext) {
-  st.initContext = initContext;
-}
+};
+
 /**
  * Removes single change handlers for cases where the functional API is used.
  * @param contextName Name reference of the context
  * @param [onChange] Handler function reference. Must equal (===) the orginal function registered
  */
-export const removeContextChangeHandler = (contextName: string, onChange?: IOnStateChangeHandler) => {
+export const removeContextChangeHandler = (st.removeContextChangeHandler = (contextName: string, onChange?: IOnStateChangeHandler) => {
   let index = st[GlobalCache.CONTEXT][contextName].onChangeHandlers.indexOf(onChange!);
   if (index > -1) {
     st[GlobalCache.CONTEXT][contextName].onChangeHandlers.splice(index, 1);
   }
-};
+});
 
-if (!st.removeContextChangeHandler) {
-  st.removeContextChangeHandler = removeContextChangeHandler;
-}
 /**
  * Used for class instance GC. Removes all change handlers that belong to a GC'd instance.
  * @param instance Custom element instance or generic class instance
@@ -132,12 +115,8 @@ export const removeContextChangeHandlersOfInstance = (instance: any) => {
  * @param onChange Handler function to be applied when the context object gets changed by reference or deeply
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-function getContext<S = {}>(contextName: string, onChange?: IOnStateChangeHandler, instance?: any): S {
-  initContextCache();
+st.getContext = function getContext<S = {}>(contextName: string, onChange?: IOnStateChangeHandler, instance?: any): S {
   initContextCacheEntry(contextName, DEFAULT_CONTEXT_VALUE);
   addContextChangeHandler(contextName, onChange!, instance);
   return st[GlobalCache.CONTEXT][contextName].value;
-}
-if (!st.getContext) {
-  st.getContext = getContext;
 }

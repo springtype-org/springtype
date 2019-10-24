@@ -1,6 +1,6 @@
 import { st } from "../../core";
 import { customElement, render } from "../customelement";
-import { ICustomHTMLElement, TAG_NAME } from "../customelement/interface/icustom-html-element";
+import { ICustomHTMLElement } from "../customelement/interface/icustom-html-element";
 import { tsx } from "../vdom";
 import { ILocationChangeDecision, IRouteDefinition, IRoutes } from "./interface/irouter";
 import { RouterOutlet } from "./router-outlet";
@@ -9,8 +9,7 @@ export const ROUTE_NOT_FOUND = "*404*";
 export const ROUTE_BASE = "";
 
 if (!st.router) {
-  customElement(
-    "router-no-custom-element-found",
+  const RouterNoCustomElementFound = customElement(
     render(() => (
       <div>{`No custom element found for rendering this route.
     Please specify a route for: ${document.location.hash.replace("#", "")}
@@ -18,8 +17,7 @@ if (!st.router) {
     )),
   );
 
-  customElement(
-    "router-error-generic-access-denied",
+  const RouterErrorGenericAccessDenied = customElement(
     render(() => (
       <div>{`
       Access to this route is denied (generic error).
@@ -103,14 +101,9 @@ if (!st.router) {
         const routeConfig: IRouteDefinition | ICustomHTMLElement = st.router.ROUTE_MAP[route];
 
         if (routeMatches) {
-          let tagName = (routeConfig as any)[TAG_NAME];
-          if ((routeConfig as any).customElement) {
-            tagName = (routeConfig as any).customElement[TAG_NAME];
-          }
-
           return {
             params,
-            tagName,
+            component: (routeConfig as any).customElement || (routeConfig as any),
             guard: (routeConfig as IRouteDefinition).guard,
             route,
           } as ILocationChangeDecision;
@@ -120,13 +113,13 @@ if (!st.router) {
       if (st.router.ROUTE_MAP[ROUTE_NOT_FOUND]) {
         return {
           route: ROUTE_NOT_FOUND,
-          tagName: (st.router.ROUTE_MAP[ROUTE_NOT_FOUND] as any)[TAG_NAME],
+          component: st.router.ROUTE_MAP[ROUTE_NOT_FOUND] as any,
           params: params,
         } as ILocationChangeDecision;
       } else {
         return {
           route: ROUTE_NOT_FOUND,
-          tagName: "router-no-custom-element-found",
+          component: RouterNoCustomElementFound,
           params: {},
         } as ILocationChangeDecision;
       }
@@ -142,10 +135,8 @@ if (!st.router) {
         if (decision.guard && typeof decision.guard == "function") {
           const guardResult = await decision.guard(decision);
 
-          if (typeof guardResult == "string") {
-            decision.tagName = guardResult;
-          } else if (guardResult === false) {
-            decision.tagName = "router-error-generic-access-denied";
+          if (guardResult === false) {
+            decision.component = RouterErrorGenericAccessDenied;
           }
         }
 

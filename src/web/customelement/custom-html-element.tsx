@@ -1,55 +1,48 @@
 import { st } from "../../core";
+import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
+import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { IOnStateChange, IStateChange } from "../../core/state/interface";
-import { DEFAULT_EMPTY_PATH } from "../../core/state/state-change-manager";
-import { customElementsHMRPolyfill } from "../polyfill/custom-elements-hmr-polyfill";
-import { ADOPT_STYLESHEETS } from "../tss";
-import { ITypedStyleSheet } from "../tss/interface";
-import { tsx } from "../vdom";
+import { transformSlots, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { ICustomElementOptions } from "./interface";
-import { CUSTOM_ELEMENT_OPTIONS, ICustomHTMLElementInternals, INTERNAL, TAG_NAME } from "./interface/icustom-html-element";
-import { ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
-import { ATTRS, AttrTrait } from "./trait/attr";
-import { ShadowDOMTrait } from "./trait/shadow-dom";
+import { CUSTOM_ELEMENT_OPTIONS, ICustomHTMLElementInternals, INTERNAL } from "./interface/icustom-html-element";
+import { IComponentLifecycle, ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
+import { IOnStateChange, IStateChange } from "./interface/ion-state-change";
+import { AttrTrait, AttrType } from "./trait/attr";
 import { StateTrait } from "./trait/state";
 
-if (process.env.NODE_ENV === "development") {
-  customElementsHMRPolyfill;
-}
-
-export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnStateChange {
+export class CustomHTMLElement implements IComponentLifecycle, ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
   [INTERNAL]: ICustomHTMLElementInternals;
 
-  // attributes registered to be reference change-detected
-  [ATTRS]: Array<string>;
-
   constructor() {
-    super();
 
     // internal state initialization
     this[INTERNAL] = {
-      root: this,
       notInitialRender: false,
       attributes: {},
       options: Object.getPrototypeOf(this).constructor[CUSTOM_ELEMENT_OPTIONS],
-      adoptedStylesheets: Object.getPrototypeOf(this).constructor[ADOPT_STYLESHEETS],
     } as ICustomHTMLElementInternals;
 
     StateTrait.enableFor(this);
     AttrTrait.enableFor(this);
-    ShadowDOMTrait.enableFor(this);
+    ContextTrait.enableFor(this);
 
     // register with global instance registry
     st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].push(this);
+  }
+
+  getRoot(): HTMLElement {
+    return this[INTERNAL].root;
   }
 
   onBeforeConnect() {}
 
   // internal web component standard method
   connectedCallback() {
+    this[INTERNAL].isConnected = true;
+
     this.onConnect();
 
     if (this.shouldRender(RenderReason.INITIAL)) {
@@ -60,6 +53,9 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnSta
   onConnect() {}
 
   disconnectedCallback() {
+
+    this[INTERNAL].isConnected = false;
+
     // evict from global instance registry
     // (e.g. doesn't retrigger render on TSS theme change)
     let index = st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].indexOf(this);
@@ -92,11 +88,25 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnSta
    * Overriding this method and not calling the super method
    * allows to take the original attribute value from VDOM (no DOM traversal string typecast)
    */
-  setAttribute(name: string, value: any): void {
+  setAttribute(name: string, value: any, type?: AttrType): void {
+
     const prevValue = this[INTERNAL].attributes[name];
 
-    if (prevValue !== value && this.shouldAttributeChange(name, value, prevValue)) {
+    if (
+      prevValue !== value && // ignore if not changed (scalar)
+      this.shouldAttributeChange(name, value, prevValue)
+    ) {
+      // store internal attribute state value
       this[INTERNAL].attributes[name] = value;
+
+      if (this[INTERNAL].root &&
+          (
+            (typeof type !== 'undefined' && type === AttrType.DOM_TRANSPARENT) ||
+              AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)
+          ) {
+        // reflect to DOM (casts to string)
+        this[INTERNAL].root.setAttribute(name, value);
+      }
 
       if (
         // don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
@@ -142,78 +152,69 @@ export class CustomHTMLElement extends HTMLElement implements ILifecycle, IOnSta
   // @ts-ignore: Unused variables are valid here
   onBeforeRender(tssOnly: boolean = false) {}
 
-  render(): IVirtualNode {
+  render(): IVirtualNode|Array<IVirtualNode> {
     if (typeof this[INTERNAL].options.tpl! != "function") {
-      const msg = `Custom element ${this.constructor.name} (<${this.nodeName} />) has no render() method nor a valid template (tpl)!`;
-
-      // TODO: Function to render error
-      st.warn(msg);
-
-      return <pre>{msg}</pre>;
+      throw new Error(`Custom element (<${this.constructor.name} />) has no render() method nor a valid template (tpl)!`);
     }
     return this[INTERNAL].options.tpl!(this);
   }
 
   // @ts-ignore: Unused variables are valid here
-  renderStyle(theme?: any): ITypedStyleSheet | undefined {
+  renderStyle(theme?: any): string|undefined {
     return undefined;
   }
 
-  async doRenderStyle(): Promise<any> {
-    let declaration = st.tss.getDeclaration(this, this[INTERNAL].options.tss, this.renderStyle);
+  async doRenderStyle(): Promise<IVirtualNode|undefined> {
 
-    if (this[INTERNAL].root! instanceof ShadowRoot) {
-      let styleSheets: Array<CSSStyleSheet> = [];
+    const cssText = this[INTERNAL].options.tss ?
+      this[INTERNAL].options.tss!(this, st.tss.currentTheme) :
+      this.renderStyle(st.tss.currentTheme);
 
-      if (this[INTERNAL].adoptedStylesheets) {
-        styleSheets = [...(await st.tss.toCSSStyleSheets(this[INTERNAL].adoptedStylesheets))];
-      }
-      styleSheets.push(st.tss.renderStyleSheet(declaration));
-
-      return styleSheets;
-    } else {
-      if (this[INTERNAL].adoptedStylesheets) {
-        // adding <link ref="stylesheet"> to <head> and caching by name
-        st.tss.addHeadStyleSheets(this[INTERNAL].adoptedStylesheets);
-      }
-      return st.tss.renderStyleNode(declaration);
-    }
+    return <style type="text/css">{cssText}</style>;
   }
 
   async doRender(tssOnly: boolean = false) {
     this.onBeforeRender(tssOnly);
 
-    let vdom: IVirtualNode<any>;
-    try {
-      vdom = this.render();
-    } catch (e) {
-      if (e.message.indexOf("tsx") > -1) {
-        st.error(`The function tsx of package vdom must be imported for wherever you use <tsx></tsx> syntax!`);
-      }
-      throw e;
+    const vdom: IVirtualNode|Array<IVirtualNode> = this.render();
+    const tss: IVirtualNode|undefined = await this.doRenderStyle();
+
+    if (!vdom) {
+      throw new Error(`The render() method or the template (tpl) of <${this.constructor.name} /> must return virtual nodes.`);
     }
 
-    const tss: IVirtualNode | Array<CSSStyleSheet> = await this.doRenderStyle();
+    const nodesToRender = Array.isArray(vdom) ? [tss as IVirtualNode, ...vdom!] : [tss as IVirtualNode, vdom!];
 
-    let nodesToRender: Array<IVirtualNode>;
-    if ((tss && (tss as Array<CSSStyleSheet>)[0] instanceof CSSStyleSheet) || !tss) {
-      (this[INTERNAL].root as ShadowRoot).adoptedStyleSheets = tss as Array<CSSStyleSheet>;
-      nodesToRender = [vdom!];
-    } else {
-      nodesToRender = [tss as IVirtualNode, vdom!];
+    // performance-optimization: only process slots if <template> tags are found (fills slotChildren)
+
+    if (this[INTERNAL].slotChildren) {
+
+      // @ts-ignore
+      vdom = transformSlots(vdom as IVirtualNode, this[INTERNAL].slotChildren);
     }
 
     if (!this[INTERNAL].notInitialRender) {
+
+
       // if there isn't a prev. VDOM state, render initially
-      st.renderer.renderInitial(nodesToRender, (this[INTERNAL].root as unknown) as IElement);
+      st.renderer.renderInitial(
+        nodesToRender,
+        (this[INTERNAL].root as unknown) as IElement
+      );
 
       this[INTERNAL].notInitialRender = true;
 
       // call lifecycle method
       this.onAfterInitialRender();
+
     } else {
-      // differential VDOM/DOM rendering algorithm
-      st.renderer.patch((this[INTERNAL].root as any).childNodes, nodesToRender, (this[INTERNAL].root as unknown) as IElement);
+
+      // differential VDOM / DOM rendering algorithm
+      st.renderer.patch(
+        (this[INTERNAL].root as any).childNodes,
+        nodesToRender,
+        (this[INTERNAL].root as unknown) as IElement
+      );
     }
 
     // call lifecycle method
@@ -236,33 +237,14 @@ if (!st.element) {
   st.element = CustomHTMLElement;
 }
 
-export const defineCustomElement = (tagName: string, targetClass: any, options: ICustomElementOptions = {}) => {
-  // default to none for max. backward compatibility
-  if (!options.shadowMode) {
-    options.shadowMode = "open";
-  }
+export const defineCustomElement = (targetClassOrFunction: any, options: ICustomElementOptions = {}) => {
 
-  if (!tagName) {
-    st.error(`The custom element ${targetClass.name} has no tag name! It should look like: @customElement('my-element', ...) or functional: st.customElement('my-element', ...)`);
-  }
-
-  // must contain a kebab-dash for namespacing
-  if (tagName.indexOf("-") === -1) {
-    st.error(`The custom element ${targetClass.name}'s tag name: ${tagName} has no namespace! All custom elements must be namespaced, like: my-element (whereas 'my' is the namespace).`);
-  }
-
-  // register with DOM API
-  customElements.define(tagName, targetClass);
+  // register with element registry
+  //st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
 
   // assign options to be used in CustomElement derived class constructor
-  targetClass[TAG_NAME] = tagName;
-  targetClass[CUSTOM_ELEMENT_OPTIONS] = options;
+  targetClassOrFunction[CUSTOM_ELEMENT_OPTIONS] = options;
 
-  // return enhanced class
-  return targetClass;
+  // return enhanced class / function
+  return targetClassOrFunction;
 };
-
-// initialize global instance cache
-if (!st[GlobalCache.CUSTOM_ELEMENT_INSTANCES]) {
-  st[GlobalCache.CUSTOM_ELEMENT_INSTANCES] = [];
-}

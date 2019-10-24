@@ -1,12 +1,13 @@
-import { StateChangeType } from "../../../core/state/interface/ion-state-change";
+import { ChangeType } from "../../../core/cd/interface/change-type";
+import { ILifecycle } from "../interface/ilifecycle";
 import { StateTrait } from "../trait/state";
 
-export const state = (instanceOrType: HTMLElement | StateChangeType, name?: string | symbol): any => {
+export const state = (prototypeOrType: ILifecycle | ChangeType, name?: string | symbol): any => {
   if (!name) {
-    return (instance: HTMLElement, name: string | symbol) => {
-      StateTrait.addState((instance as HTMLElement).constructor, name, instanceOrType as StateChangeType);
+    return (instance: ILifecycle, name: string | symbol) => {
+      StateTrait.addState((instance as ILifecycle).constructor, name, prototypeOrType as ChangeType);
     };
   } else {
-    StateTrait.addState((instanceOrType as HTMLElement).constructor, name, StateChangeType.DEEP);
+    StateTrait.addState((prototypeOrType as ILifecycle).constructor, name, ChangeType.DEEP);
   }
 };

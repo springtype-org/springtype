@@ -1,4 +1,4 @@
-import { tsx } from "../tsx";
+import { tsx } from "../";
 
 describe("VirtualDOM", () => {
 	it("transforms a <ul> list into JSX.Element which extends IVirtualNode", () => {
@@ -9,8 +9,7 @@ describe("VirtualDOM", () => {
 		);
 
 		expect(list).toBeDefined();
-		expect(list.props).toBeDefined();
-		expect(list.props.children).toBeDefined();
-		expect(list.props.children.length).toBe(1);
+		expect(list.children).toBeDefined();
+		expect(list.children.length).toBe(1);
 	});
 });

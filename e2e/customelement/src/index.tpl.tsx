@@ -1,5 +1,5 @@
 import { tsx } from "../../../src/web/vdom";
-import "./component";
+import { Foo2 } from "./component";
 import { Foo } from "./index";
 
 export const tpl = (customElement: Foo) => {
@@ -8,12 +8,12 @@ export const tpl = (customElement: Foo) => {
 			<button onClick={customElement.onButtonClick}>Rerender</button>
 			<a href="foo">{"bar" + customElement.some}</a>
 
-			<my-foo2 foo="outerspace" foo2={true}>
-				<span slot="counter">1234</span>
-			</my-foo2>
+			<Foo2 foo="outerspace" foo2={true}>
+				<template slot="counter">1234</template>
+			</Foo2>
 
 			<svg version="1.1" xlinkHref={"https://developer.mozilla.org/"}>
-				<circle cx="100" cy="100" r="50" fill="black" data-vdom-ignore />
+				<circle cx="100" cy="100" r="50" fill="black" novdom />
 				<script type="text/javascript">
 					{`
             var KEY = { w:87, a:65, s:83, d:68 };

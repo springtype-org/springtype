@@ -1,12 +1,15 @@
 import { ICustomElementInstances, ICustomHTMLElement } from "../../../web/customelement/interface";
+import { ICustomElementRegistry } from "../../../web/customelement/interface/icustom-element-registry";
+import { IOnStateChangeHandler } from "../../../web/customelement/interface/ion-state-change";
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
 import { IDOM, IGetDomRef, IRenderer, ISetDomRef, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
 import { IOnDeepChangeHandler } from "../../cd/interface";
+import { ChangeType } from "../../cd/interface/change-type";
+import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
-import { IOnChangeHandler, IOnStateChangeHandler, StateChangeType } from "../../state/interface";
 import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
 
 /**
@@ -33,7 +36,7 @@ export interface I$st {
   tss: ITSS;
 
   // TSX transformator function
-  tsx: (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: IVirtualChildren[]) => IVirtualNode<any>;
+  tsx: (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: Array<IVirtualChildren>) => Array<IVirtualNode>|IVirtualNode|undefined;
 
   // DOM mutation abstraction
   dom: IDOM;
@@ -47,7 +50,7 @@ export interface I$st {
   onChange: (object: any, onChange: IOnDeepChangeHandler, options: any) => any;
 
   // change detection with support for (deep changes + reference set changes)
-  onStateChange: (instance: any, name: string | symbol, type: StateChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
+  onStateChange: (instance: any, name: string | symbol, type: ChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
 
   // DOM reference API
   // set and get DOM references from within @customElement classes using @ref
@@ -74,9 +77,11 @@ export interface I$st {
   // global cache API
   CONTEXT: IContextCacheEntries;
   CUSTOM_ELEMENT_INSTANCES: ICustomElementInstances;
+  CUSTOM_ELEMENT_REGISTRY: ICustomElementRegistry;
 }
 
 export enum GlobalCache {
   CUSTOM_ELEMENT_INSTANCES = "CUSTOM_ELEMENT_INSTANCES",
   CONTEXT = "CONTEXT",
+  CUSTOM_ELEMENT_REGISTRY = "CUSTOM_ELEMENT_REGISTRY",
 }

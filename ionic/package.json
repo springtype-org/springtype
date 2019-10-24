@@ -1,0 +1,24 @@
+{
+  "name": "st-ionic",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "2.0.0-alpha.1",
+  "description": "SpringType Ionic 4 integration",
+  "devDependencies": {
+    "@ionic/core": "^4.11.2",
+    "springtype": "^2.0.0-alpha.1.12"
+  },
+  "author": "Aron Homberg <info@aron-homberg.de>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "npx st-rm-rf dist",
+    "prebuild": "yarn clean",
+    "build": "tsc -p tsconfig.json",
+    "postbuild": "cp package.json dist && cp -r node_modules dist && cp README.md dist",
+    "release": "yarn publish"
+  },
+  "bundledDependencies": [
+    "@ionic/core"
+  ]
+}

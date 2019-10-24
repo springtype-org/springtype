@@ -1,41 +1,46 @@
-### SpringType v2
+## SpringType
+
+[![Gitter](https://badges.gitter.im/springtype-official/springtype.svg)](https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+### Simplicity
 
 > "Everything should be made as simple as possible, but no simpler." - Albert Einstein
 
-SpringType is a tiny but full-featured web app framework written in TypeScript.
-You get most features of Angular, React and Vue in < 10 KiB (gzipped).
-SpringType is faster and more memory efficient than any of the three major frameworks.
+A lit full-stack web framework 💎
+Imagine coding without headaches 🍀
+We 🤗 elegant web and Node.js APIs.
+It's 📦tiny, ⚡fast and fun to use 😃
+And written in ❤️ TypeScript 👩‍💻👨‍💻
 
-It features (out-of-the-box):
-
-- [ ] Functional reactive programming using RxJS for time-complexities
-- [ ] Redux based state machine with an intuitive API and optional immutability and local persistence
-- [ ] SSR, server side rendering and VDOM hydration
-- [x] Headache-free DOM element to Web Component binding
-- [x] Use of modern API's (Web Components, Proxy, Symbol, Decorators, ...)
-- [x] TSX (typed JSX) based templating
-- [x] Shared memory for hassle-free Web Component inter-linking
-- [x] Fast lazy VDOM supporting SVG and even custom script DOM manipulation
-- [x] Modular i18n, supporting custom formatters
-- [x] Dynamic DOM router
-- [x] ShadowDOM encapsulated styling (TSS, typed style sheets)
+- [x] Zero runtime dependencies
+- [x] Supports all main features you know from React, Angular and Vue.js in about 10KiB (gip) all-in(!)
+- [x] Superior type-checking (compile-time, no runtime overhead)
+- [x] Fast and lazy VDOM supporting SVG and even custom script DOM manipulation
+- [x] Headache-free DOM element to VDOM binding
+- [x] Modern API's and ECMAScript language features (WeakMap, Proxy, Symbol, Decorators, ...)
+- [x] TSX (typed JSX) based templating (compile-time, no runtime overhead, much like React)
+- [x] PostCSS (CSS modules) / template string based SCSS/LESS/CSS4 styling (compile-time, no runtime overhead, much like styled-components), supports theming out of the box
+- [x] Shared memory for hassle-free component inter-linking (no Provider/Context headache)
+- [x] Simple and dynamic DOM router for client-side routing
+- [x] Modular i18n, supporting JSON translations and custom formatter
 - [x] Environment-aware logging
-- [x] Dependency Injection
-- [x] Super-simple, zero-configuration bundling
-- [x] Ultra-fast HMR bundling
-- [x] Deep change detection and automatic re-rendering, circuit-breakable
-- [x] Headache-free style to Web Component binding
+- [x] Dependency Injection using decorators (much like Angular, but simpler)
+- [x] Super-simple, zero-configuration bundling (based on Webpack 4 atm, but we have big plans)
+- [x] Deep change detection and automatic re-rendering, circuit-breakable (Proxy-based)
+- [x] Google Material Design UI toolkit
+- [x] Ionic 4 toolkit integration
+
+#### On the roadmap
+- [ ] Functional reactive programming for time-complexities
+- [ ] Redux based state machine with an intuitive API and optional immutability + local/session storage persistence
+- [ ] SSR, server side rendering, static page rendering and VDOM re-hydration (once SpringType server landed)
+
+#### Caveats
 
 We've designed SpringType to be simple, but incredibly powerful and efficient.
-Like with any architecture, there are pro's and con's. Here are the con's:
+Like with any architecture, there are pro's and con's.
 
-- SpringType uses modern API's and requires polyfills to work in some browsers
-- SpringType uses custom, alternative implementations for all modules excluding RxJS
-- SpringType works best when you transpile your CSS, SCSS, SASS, LESS, Stylus to TSS
-- SpringType is tiny and efficient because it lacks some bells and whistles
+Here are some con's:
 
-https://www.conventionalcommits.org/en/v1.0.0-beta.3/
-
-### Typical gotchas
-
-- Unexplainable `undefined` errors: Check for cyclic dependencies like: `class A imports class B imports class A`.
+- SpringType uses custom, alternative implementations for commonly known patterns (re-invented the wheel)
+- To be tiny and efficient, SpringType lacks some bells and whistles

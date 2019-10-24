@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "jsx": "react",
+        "jsxFactory": "tsx",
+        "outDir": "dist",
+        "declaration": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true
+    },
+    "exclude": ["node_modules"],
+    "include": ["src"]
+}

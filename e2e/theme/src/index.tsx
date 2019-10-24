@@ -1,13 +1,7 @@
 import { st } from "../../../src/core";
 import { customElement } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tsx } from "../../../src/web/vdom";
-
-if (process.env.NODE_ENV === "development") {
-	customElementsHMRPolyfill;
-}
-
 interface MyTheme {
 	primaryColor: string;
 }
@@ -20,9 +14,7 @@ const themeB: MyTheme = {
 	primaryColor: "#0000cc"
 };
 
-@customElement("theme-test", {
-	shadowMode: "open" // also works for "none"
-})
+@customElement()
 export class ThemeTest extends st.element implements ILifecycle {
 	onConnect() {
 		this.changeThemeA();
@@ -47,12 +39,10 @@ export class ThemeTest extends st.element implements ILifecycle {
 	}
 
 	renderStyle(theme: MyTheme) {
-		return {
-			".basic": {
-				background: theme.primaryColor
-			}
-		};
+		return `.basic {
+			background: ${theme.primaryColor}
+		}`;
 	}
 }
 
-st.dom.setRoot("theme-test");
+st.render(ThemeTest);

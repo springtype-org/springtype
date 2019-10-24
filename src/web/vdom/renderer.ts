@@ -1,13 +1,14 @@
 import { st } from "../../core/st/st";
+import { INTERNAL } from "../customelement/interface/icustom-html-element";
 import { IElement } from "./interface/ielement";
-import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
-import { tsxToStandardAttributeName } from "./tsx";
+import { IVirtualNode } from "./interface/ivirtual-node";
+import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";
 
 const LIST_KEY_ATTRIBUTE_NAME = "key";
 
 const getReferenceList = (childNodes: NodeListOf<IElement>): IElement[] => {
   const referenceList: IElement[] = [];
-  for (let child of childNodes) {
+  for (let child of (childNodes as unknown) as Array<IElement>) {
     referenceList.push(child);
   }
   return referenceList;
@@ -23,8 +24,12 @@ if (!st.renderer) {
       }
     },
 
-    patch: (domElements: NodeListOf<IElement>, virtualElements: Array<IVirtualNode | string | undefined>, parent: IElement) => {
-      const refList = getReferenceList(domElements);
+    patch: (domElements: Array<IElement>, virtualElements: Array<IVirtualNode | string | undefined>, parent: IElement) => {
+      const refList = getReferenceList((domElements as unknown) as NodeListOf<IElement>);
+
+      // comments and undefines can occur at any place dynamically
+      virtualElements = filterCommentsAndUndefines(virtualElements) as Array<IVirtualNode>;
+
       // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
       let maxLength = domElements.length > virtualElements.length ? refList.length : virtualElements.length;
 
@@ -35,11 +40,10 @@ if (!st.renderer) {
         let virtualElement = virtualElements[i];
 
         if (!virtualElement && !domElement) {
-          break; // CHECK ME
+          break;
         }
 
-        // Text node type equals 3
-        if (typeof virtualElements[i] === "object") {
+        if (typeof virtualElement === "object") {
           st.renderer.patchElement(parent, domElement, virtualElement as IVirtualNode);
         } else {
           st.renderer.patchTextNode(parent, domElement, (virtualElement as unknown) as string);
@@ -47,52 +51,29 @@ if (!st.renderer) {
       }
     },
 
-    patchElementTree: (domElements: NodeListOf<IElement>, virtualElements: IVirtualChildren, parent: IElement) => {
-      const refList = getReferenceList(domElements);
-
-      // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
-      let maxLength = domElements.length > virtualElements.length ? refList.length : virtualElements.length;
-      // walk through max. possible  differences on this level of the subtree
-      for (let i = 0; i < maxLength; i++) {
-        let domElement = refList[i];
-        let virtualElement = virtualElements[i];
-
-        // removeChild() called before and end of similarities is logically reached
-        if (!virtualElement && !domElement) {
-          break; // CHECK ME
-        }
-
-        // Text node type equals 3
-        if (typeof virtualElements[i] === "object") {
-          st.renderer.patchElement(parent, domElement, virtualElement as IVirtualNode);
-        } else {
-          st.renderer.patchTextNode(parent, domElement, (virtualElement as IVirtualChild) as string);
-        }
+    removeElement: (parent: IElement, domElement: IElement) => {
+      if (domElement.component) {
+        domElement.component.onBeforeDisconnect!();
       }
-    },
 
-    callOnBeforeDisconnectLifecycleMethod: (domElement: IElement) => {
-      if (customElements.get(domElement.nodeName)) {
-        if (typeof domElement.onBeforeDisconnect == "function") {
-          domElement.onBeforeDisconnect!();
-        }
+      parent.removeChild(domElement);
+
+      if (domElement.component) {
+        domElement.component.disconnectedCallback!();
       }
     },
 
     patchElement: (parent: IElement, domElement: IElement, virtualElement: IVirtualNode) => {
       // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
 
-      if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement.hasAttribute("data-vdom-ignore")) return;
+      if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement.hasAttribute("novdom")) return;
 
       let created = false;
       let replaced = false;
 
       if (!virtualElement && domElement) {
         // DOMElement existing but no such VirtualElement: Evict zombie node
-
-        // call lifecycle method
-        st.renderer.callOnBeforeDisconnectLifecycleMethod(domElement);
-        parent.removeChild(domElement);
+        st.renderer.removeElement(parent, domElement);
       } else if (virtualElement && !domElement) {
         // VirtualElement exists but no DOMElement: Append node
         domElement = st.dom.createElement(virtualElement, parent) as IElement;
@@ -102,8 +83,7 @@ if (!st.renderer) {
         // also: DOMElement is a TextNode (typeof tagName == 'undefined') but VirtualElement is not
 
         // tag name differs, replace node
-        st.renderer.callOnBeforeDisconnectLifecycleMethod(domElement);
-        parent.removeChild(domElement);
+        st.renderer.removeElement(parent, domElement);
 
         domElement = st.dom.createElement(virtualElement, parent) as IElement;
         created = true;
@@ -126,13 +106,12 @@ if (!st.renderer) {
                 domElement.removeAttribute(attributeName);
               } else if (domElement.getAttribute(attributeName) !== virtualElement.attributes[attributeName]) {
                 if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
-                  st.renderer.callOnBeforeDisconnectLifecycleMethod(domElement);
-                  parent.removeChild(domElement);
+                  st.renderer.removeElement(parent, domElement);
+
                   st.dom.createElement(virtualElement, parent);
                   replaced = true;
                 } else {
                   // DOMElement attribute value differs from VirtualElement attribute: Update
-                  // TODO: SVG?
                   st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
                 }
               }
@@ -147,8 +126,6 @@ if (!st.renderer) {
 
             if (virtualElement.attributes.hasOwnProperty(attributeName) && !domElement.hasAttribute(attributeName) && !attributeName.startsWith("on")) {
               // DOMElement attribute value differs from VirtualElement attribute: Set
-
-              // TODO: SVG?
               st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
             }
           }
@@ -158,11 +135,20 @@ if (!st.renderer) {
       // process children (recursion)
 
       // inner should only be patched if it is not a custom element and has no shadow DOM
-      let updateInner = domElement && domElement.shadowRoot || !(virtualElement.type.indexOf("-") > -1);
+
+      if (domElement && domElement.component) {
+        // update slot children
+        // @ts-ignore
+        domElement.component[INTERNAL].slotChildren = virtualElement.slotChildren;
+
+        // @ts-ignore
+        domElement.component.doRender();
+        return;
+      }
 
       // optimization: If freshly created, all children are already perfectly rendered
       // so no need to walk through all child nodes
-      if (!created && !replaced && updateInner) {
+      if (!created && !replaced) {
         // parent elements must be both existing
         if (
           domElement &&
@@ -172,7 +158,7 @@ if (!st.renderer) {
           ((domElement.childNodes && domElement.childNodes.length) || (virtualElement.children && virtualElement.children.length))
         ) {
           // recursive call with childNodes and virtualElement childNodes
-          st.renderer.patchElementTree((domElement.childNodes as NodeListOf<IElement>) || (([] as unknown) as NodeListOf<IElement>), virtualElement.children, domElement);
+          st.renderer.patch(((domElement.childNodes as unknown) as Array<IElement>) || (([] as unknown) as Array<IElement>), virtualElement.children as any, domElement);
         }
       }
     },

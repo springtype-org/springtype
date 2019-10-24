@@ -1,3 +1,3 @@
-import { ILifecycle } from "./ilifecycle";
+import { IComponentLifecycle } from "./ilifecycle";
 
-export type ICustomElementInstances = Array<ILifecycle>;
+export type ICustomElementInstances = Array<IComponentLifecycle>;

@@ -1,19 +1,17 @@
 import { st } from "../../../src/core";
-import { StateChangeType } from "../../../src/core/state/interface";
+import { ChangeType } from "../../../src/core/cd/interface/change-type";
 import { customElement, state } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tsx } from "../../../src/web/vdom";
-import { StButtonClickEvent, StButtonClickEventDetail } from "./st-button";
+import { StButton, StButtonClickEvent, StButtonClickEventDetail } from "./st-button";
 
 if (process.env.NODE_ENV === "development") {
-  customElementsHMRPolyfill;
 
   // enable framework internal logging
   st.debug = true;
 }
 
-@customElement("st-index")
+@customElement()
 export class Index extends st.element implements ILifecycle {
   // using a @state() decoration enables change detection and auto-rerendering
   // whenever the reference changes (like this.eventDetails = $somethingElse)
@@ -21,21 +19,20 @@ export class Index extends st.element implements ILifecycle {
   @state
   evtDetail?: StButtonClickEventDetail;
 
-  @state(StateChangeType.REFERENCE)
+  @state(ChangeType.REFERENCE)
   evtDetailDeep?: StButtonClickEventDetail;
 
   onStButtonClick = (evt: StButtonClickEvent) => {
     // assignment causes a re-rendering because evtDetails is a @state()
     this.evtDetail = evt.detail;
 
-    console.log("yep", evt.detail.specialStEvent);
+    console.log("specialStEvent", evt.detail.specialStEvent);
   };
 
   render() {
-    console.log("render");
     return (
       <div>
-        <st-button onStClick={this.onStButtonClick}>Click me! {this.evtDetail && this.evtDetail.specialStEvent ? "Yes" : "No"}</st-button>
+        <StButton onStClick={this.onStButtonClick}>Click me! {this.evtDetail && this.evtDetail.specialStEvent ? "Yes" : "No"}</StButton>
 
         <h3>Did custom event dispatch?</h3>
         <div>{this.evtDetail && this.evtDetail.specialStEvent ? "Yes" : "No"}</div>
@@ -52,4 +49,4 @@ declare global {
   }
 }
 
-st.dom.setRoot("st-index");
+st.render(<Index />);

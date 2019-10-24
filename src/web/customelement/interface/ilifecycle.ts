@@ -1,10 +1,10 @@
-import { StateChangeType } from "../../../core/state/interface";
-import { ITypedStyleSheet } from "../../tss/interface";
+import { ChangeType } from '../../../core/cd/interface/change-type';
 import { IVirtualNode } from "../../vdom/interface";
+import { AttrType } from '../trait/attr';
 
 export enum RenderReason {
   INITIAL = "INITIAL",
-  PROP_CHANGE = "PROP_CHANGE",
+  STATE_CHANGE = "STATE_CHANGE",
   ATTRIBUTE_CHANGE = "ATTRIBUTE_CHANGE",
   THEME_CHANGE = "THEME_CHANGE",
 }
@@ -15,11 +15,16 @@ export interface RenderReasonMetaData {
   // only in case of prop and deep change
   path: string;
   // only in case of prop change
-  type?: StateChangeType;
+  type?: ChangeType;
   // new value
   value: any;
   // previous value
   prevValue: any;
+}
+
+export interface IComponentLifecycle extends ILifecycle {
+  connectedCallback(): void;
+  disconnectedCallback(): void;
 }
 
 export interface ILifecycle {
@@ -28,9 +33,6 @@ export interface ILifecycle {
 
   // after the component gets mounted to the DOM
   onConnect?(): void | boolean;
-
-  // before attribute changes get accepted
-  shouldAttributeChange?(name: string, value: any, prevValue: any): boolean;
 
   // after an attribute got set
   onAttributeChange?(name: string, value: any, prevValue: any): void;
@@ -48,7 +50,7 @@ export interface ILifecycle {
   onAfterInitialRender?(): void;
 
   // implement this and return TSX to be rendered
-  render?(): IVirtualNode;
+  render?(): IVirtualNode|Array<IVirtualNode>;
 
   // lifecycle method to trigger a VDOM tpl reflow
   doRender?(tssOnly?: boolean): Promise<void>;
@@ -57,11 +59,19 @@ export interface ILifecycle {
   doRenderStyle?(): Promise<IVirtualNode | undefined>;
 
   // implement this and return TSS for the markup to be styled
-  renderStyle?(theme?: any): ITypedStyleSheet | undefined;
+  renderStyle?(theme?: any): string | undefined;
 
   // prior to removal from the DOM
   onBeforeDisconnect?(): void;
 
   // after the component has been unmounted from the DOM
   onDisconnect?(): void;
+
+  // returns the root HTML element mounted to a virtual component
+  getRoot(): HTMLElement;
+
+  setAttribute(name: string, value: any, type?: AttrType): void;
+
+  // before attribute changes get accepted
+  shouldAttributeChange(name: string, value: any, prevValue: any): boolean;
 }

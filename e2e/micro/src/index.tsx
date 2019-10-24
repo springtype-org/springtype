@@ -1,102 +1,61 @@
 import { st } from "../../../src/core";
-import { context } from "../../../src/core/context";
-import { IStateChange } from "../../../src/core/state/interface";
 import { attr, customElement } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
+import { css } from "../../../src/web/tss/tss";
 import { tsx } from "../../../src/web/vdom";
+// imports a global CSS stylesheet
+import '../assets/globalStyles.css';
 
-if (process.env.NODE_ENV === "development") {
-  customElementsHMRPolyfill;
-}
-
-interface LolShared {
-  lala: number;
-
-  deep?: boolean;
-}
-
-@customElement("my-foo")
+/**
+ * A trivial, simple example of a custom element component
+ * that comes with a change-detected attribute "some".
+ * The example also shows VDOM and TSS template style rendering
+ * including the import and use of global CSS stylesheets.
+ * Also shows the use of the logging API.
+ */
+@customElement()
 export class Foo extends st.element implements ILifecycle {
-  @attr
+
+  @attr()
   some: string = "test";
-
-  @context("foo")
-  lolShared: LolShared = st.initContext<LolShared>(
-    "foo",
-    { lala: 123 },
-    (change: IStateChange) => {
-      console.log("initShare on prime", this, change);
-    },
-    this,
-  );
-
-  @context("foo")
-  lolSharedMirror: LolShared = st.getContext<LolShared>(
-    "foo",
-    (change: IStateChange) => {
-      console.log("getShare on mirror", this, change);
-    },
-    this,
-  );
-
-  onAttributeChange(name: string, value: any) {
-    console.log("@attr", name, "changed to", value);
-  }
 
   constructor() {
     super();
 
-    this.some = "haha";
-
-    setTimeout(() => {
-      st.info("di", st.di, "i18n");
-
-      // external change (reset of reference)
-      this.lolShared = { lala: 456 };
-
-      // external deep change
-      this.lolShared.deep = true;
-
-      this.some = "haha_after_first_render";
-    }, 200);
-
-    setTimeout(() => {
-      //document.body.removeChild(document.body.childNodes[0]);
-    }, 800);
-
-    setTimeout(() => {
-      console.log("GC?");
-    }, 10000);
+    // change sets after class property initialization
+    this.some = "construct";
   }
 
-  onDisconnect() {
-    console.log("onDisconnect");
+  onAttributeChange(name: string, value: any) {
+    st.info("@attr", name, "changed to", value);
   }
+
+  onAfterInitialRender() {
+    // change triggers a re-rendering
+    this.some = "after_initial_render";
+  }
+
   render() {
-    return <div>asd</div>;
+    return <div>{this.some}</div>;
   }
 
-  renderStyle() {
-    return {
-      "@font-face": {
-        "font-family": "CustomFont",
-        src: 'url("CustomFont.eot")',
-      },
-      "@media (color-index: 16)": {
-        body: {
-          background: "#000000",
-        },
-      },
-      body: {
-        background: "#ff0000",
-      },
-    };
-  }
+  renderStyle = () => css`
+    @font-face {
+      font-family: CustomFont;
+      src: url("CustomFont.eot");
+    }
 
-  shouldRender() {
-    return true;
-  }
+    @media (color-index: 16) {
+      body {
+        background: #000000;
+      }
+    }
+
+    body {
+      background: #ff0000;
+    }
+  `;
 }
 
-st.dom.setRoot("my-foo");
+// Tells SpringType to render the component now
+st.render(<Foo />);

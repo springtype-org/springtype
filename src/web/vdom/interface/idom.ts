@@ -9,7 +9,7 @@ export interface IDOM {
 
   isReady(): Promise<void>;
 
-  setRoot(tagName: string): Element;
+  isRegisteredComponent(tagName: string): boolean;
 
   hasSvgNamespace(type: string): boolean;
 

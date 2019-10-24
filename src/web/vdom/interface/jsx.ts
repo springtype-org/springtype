@@ -1,14 +1,6 @@
-import { IDOMAttributes } from "./idom-attributes";
+import { ISpringTypeAttributes } from "./ielement";
 
 declare global {
-	interface CSSStyleSheet {
-		replace(text: string): Promise<CSSStyleSheet>;
-		replaceSync(text: string): void;
-	}
-
-	interface ShadowRoot {
-		adoptedStyleSheets: Array<CSSStyleSheet>;
-	}
 
 	namespace JSX {
 		export interface SVGAttributes extends HTMLAttributes {
@@ -288,7 +280,7 @@ declare global {
 		export type GenericEventHandler = EventHandler<Event>;
 		export type PointerEventHandler = EventHandler<PointerEvent>;
 
-		export interface DOMAttributes extends IDOMAttributes {
+		export interface DOMAttributes extends ISpringTypeAttributes {
 			// Image Events
 			onLoad?: GenericEventHandler;
 			onLoadCapture?: GenericEventHandler;
@@ -478,7 +470,7 @@ declare global {
 			onTransitionEndCapture?: TransitionEventHandler;
 		}
 
-		export interface HTMLAttributes extends IDOMAttributes, DOMAttributes {
+		export interface HTMLAttributes extends DOMAttributes {
 			// Standard HTML Attributes
 			accept?: string;
 			acceptCharset?: string;
@@ -792,6 +784,16 @@ declare global {
 			text: SVGAttributes;
 			tspan: SVGAttributes;
 			use: SVGAttributes;
+		}
+
+		// addition for <template slot="$name">
+		interface IntrinsicElements {
+			"template": HTMLAttributes;
+		}
+
+		// addition for <fragment unwrap>
+		interface IntrinsicElements {
+			"fragment": HTMLAttributes;
 		}
 	}
 }

@@ -1,32 +1,30 @@
 import { st } from "../../../core";
 import { IVirtualNode } from "../../vdom/interface";
 import { CustomHTMLElement, defineCustomElement } from "../custom-html-element";
-import { ICustomElementOptions, ShadowAttachMode } from "../interface/icustom-element-options";
+import { ICustomElementOptions } from "../interface/icustom-element-options";
 import { RenderStyleFunction } from "../interface/icustom-html-element";
 
 export type ElementFunction = (scope: CustomHTMLElement) => () => IVirtualNode;
 
-export const customElement = (tagName: string, optionsOrElementFunction?: ICustomElementOptions | ElementFunction, renderStyleFunction?: RenderStyleFunction, shadowMode?: ShadowAttachMode): any => {
-  // functional use: customElement('tag-name', (scope) => { ... }, ...)
+export const customElement = (optionsOrElementFunction?: ICustomElementOptions | ElementFunction, renderStyleFunction?: RenderStyleFunction): any => {
+  // functional use: customElement((scope) => { ... }, ...)
   if (typeof optionsOrElementFunction == "function") {
-    // customElement('tag-name', () => <div></div>, () => ({ div: { color: red } }), 'open')
-    return defineCustomElement(
-      tagName,
-      class extends st.element {
-        constructor() {
-          super();
-          this.render = (optionsOrElementFunction as ElementFunction)(this);
-        }
-      },
-      {
-        shadowMode,
-        tss: renderStyleFunction,
-      },
-    );
+    // customElement(() => <div></div>, () => ({ div: { color: red } }), 'open')
+    return defineCustomElement(optionsOrElementFunction as ElementFunction, {
+      tss: renderStyleFunction,
+    });
+
   } else {
-    // decorator use on class @customElement('tag-name', { ... })
+    // decorator use on class @customElement({ ... })
     return (targetClass: any) => {
-      return defineCustomElement(tagName, targetClass, optionsOrElementFunction as ICustomElementOptions);
+      if (process.env.NODE_ENV === "development") {
+        if (Object.getPrototypeOf(targetClass) !== st.element) {
+          throw new Error(
+            `@customElement class ${targetClass.name} doesn't extend base class st.element. Make sure to write: class ${targetClass.name} extends st.element implements ILifecycle { ... your implementation ... }`,
+          );
+        }
+      }
+      return defineCustomElement(targetClass, optionsOrElementFunction as ICustomElementOptions);
     };
   }
 };

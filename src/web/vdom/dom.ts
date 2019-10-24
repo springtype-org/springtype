@@ -1,11 +1,15 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
-import { TAG_NAME } from "./../customelement/interface/icustom-html-element";
+import { CustomHTMLElement } from "../customelement";
+import { CUSTOM_ELEMENT_OPTIONS, INTERNAL } from "../customelement/interface/icustom-html-element";
+import { GlobalCache } from "./../../core/st/interface/i$st";
+import { IComponentLifecycle } from "./../customelement/interface/ilifecycle";
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
-import { tsxToStandardAttributeName } from "./tsx";
+import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
 
 if (!st.dom) {
+  // DOM abstraction layer for manipulation
   st.dom = {
     svgContext: false,
 
@@ -14,27 +18,14 @@ if (!st.dom) {
       return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
     },
 
-    setRoot: (tagName: string): Element => {
-      return document.body.appendChild(document.createElement(tagName));
-    },
-
     hasSvgNamespace: (type: string): boolean => {
       return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
     },
 
-    createElement: (virtualNode: IVirtualNode | undefined, parentDomElement: Element, isSvg?: boolean): Element | undefined => {
+    isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][tagName],
+
+    createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, isSvg?: boolean): IElement | undefined => {
       let newEl: Element;
-
-      if (!virtualNode) return;
-
-      if (!virtualNode.attributes || !virtualNode.type || !virtualNode.children) {
-        st.warn("The IVirtualNode ", virtualNode, "does NOT look like one! Parent DOM element: ", parentDomElement);
-      }
-
-      if (virtualNode.attributes["unwrap"]) {
-        st.dom.createChildElements(virtualNode.children || [], parentDomElement, isSvg);
-        return;
-      }
 
       if (typeof isSvg == "undefined") {
         if (virtualNode.type.toUpperCase() == "SVG") {
@@ -48,6 +39,48 @@ if (!st.dom) {
         newEl = document.createElement(virtualNode.type as string);
       }
 
+      let component: IComponentLifecycle | undefined = undefined;
+
+      // identified virtual component
+      if (st.dom.isRegisteredComponent(virtualNode.type)) {
+        // @ts-ignore
+        component = st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][virtualNode.type];
+
+        // functional API
+        // @ts-ignore
+        if (!component.name) {
+          // @ts-ignore
+          const fn = component as Function;
+
+          // create shallow component instance
+          component = new CustomHTMLElement();
+
+          // assign options
+          // @ts-ignore
+          component[INTERNAL].options = fn[CUSTOM_ELEMENT_OPTIONS];
+
+          // execute function and assign render method
+          component.render = fn(component);
+        } else {
+          // class API
+          // create instance of component
+          // @ts-ignore
+          component = new component();
+        }
+
+        // reference component logical controller component
+        // @ts-ignore
+        (newEl as IElement).component = component;
+
+        // set root DOM node ref
+        // @ts-ignore
+        component[INTERNAL].root = newEl;
+
+        // assign slot children for rewrite
+        // @ts-ignore
+        component[INTERNAL].slotChildren = virtualNode.slotChildren;
+      }
+
       if (virtualNode.attributes) {
         st.dom.setAttributes(virtualNode.attributes, newEl, isSvg);
       }
@@ -56,27 +89,32 @@ if (!st.dom) {
         st.dom.createChildElements(virtualNode.children, newEl, isSvg);
       }
 
-      // call lifecycle method if it is a web component
-      if (virtualNode.type.indexOf("-") > -1) {
-        if (typeof (<IElement>newEl).onBeforeConnect == "function") {
-          (<IElement>newEl).onBeforeConnect!();
-        }
+      if (component) {
+        component.onBeforeConnect!();
       }
 
       parentDomElement.appendChild(newEl);
-      return newEl;
+
+      if (component) {
+        component.connectedCallback!();
+      }
+      return newEl as IElement;
     },
 
-    createTextNode: (text: string, parentDomElement: Element) => {
-      parentDomElement.appendChild(document.createTextNode(text));
+    createTextNode: (text: string, domElement: IElement) => {
+      domElement.appendChild(document.createTextNode(text));
     },
 
-    createChildElements: (virtualChildren: IVirtualChildren, parentDomElement: Element, isSvg?: boolean) => {
+    createChildElements: (virtualChildren: IVirtualChildren, domElement: IElement, isSvg?: boolean) => {
       for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
         if (isPrimitive(virtualChild)) {
-          st.dom.createTextNode((virtualChild || "").toString(), parentDomElement);
+          st.dom.createTextNode((virtualChild || "").toString(), domElement);
         } else {
-          st.dom.createElement(virtualChild as IVirtualNode, parentDomElement, isSvg);
+          if (isJSXComment(virtualChild as IVirtualNode)) {
+            continue;
+          }
+
+          st.dom.createElement(virtualChild as IVirtualNode, domElement, isSvg);
 
           // leave SVG context
           st.dom.svgContext = false;
@@ -84,15 +122,15 @@ if (!st.dom) {
       }
     },
 
-    setAttribute: (name: string, value: any, parentDomElement: Element, isSvg?: boolean) => {
+    setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean) => {
       // stores referenced DOM nodes in a memory efficient WeakMap
       // for access from CustomElements
       if (name === "ref") {
         const refName = Object.keys(value)[0];
-        if (process.env.NODE_ENV != "production" && st.debug) {
-          st.info("dom.ts", "setting", value[refName], `.${refName} = `, parentDomElement);
+        if (process.env.NODE_ENV === "development") {
+          st.debug && st.info("dom.ts", "setting", value[refName], `.${refName} = `, domElement);
         }
-        st.setDomRef(refName, value[refName], parentDomElement);
+        st.setDomRef(refName, value[refName], domElement);
         return;
       }
 
@@ -105,38 +143,37 @@ if (!st.dom) {
           eventName = eventName.substring(0, eventName.indexOf("capture"));
         }
 
-        if (process.env.NODE_ENV != "production" && st.debug) {
-          st.info("dom.ts", parentDomElement, `.addEventListener('${eventName}', `, value, ", /* capture */ ", doCapture, `)`);
+        if (process.env.NODE_ENV === "development") {
+          st.debug && st.info("dom.ts", domElement, `.addEventListener('${eventName}', `, value, ", /* capture */ ", doCapture, `)`);
         }
 
-        parentDomElement.addEventListener(eventName, value, doCapture);
+        domElement.addEventListener(eventName, value, doCapture);
         return;
       }
 
       if (isSvg && name.startsWith("xlink")) {
-        parentDomElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
+        domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
       } else {
-        parentDomElement.setAttribute(name, value);
+        if (domElement.component) {
+          domElement.component.setAttribute(name, value);
+        } else {
+          domElement.setAttribute(name, value);
+        }
       }
     },
 
-    setAttributes: (attributes: any, parentDomElement: Element, isSvg?: boolean) => {
+    setAttributes: (attributes: any, domElement: IElement, isSvg?: boolean) => {
       for (let name in attributes) {
-        st.dom.setAttribute(name, attributes[name], parentDomElement, isSvg);
+        st.dom.setAttribute(name, attributes[name], domElement, isSvg);
       }
     },
   };
 
   if (!st.render) {
-    st.render = async (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => {
+    // add render method for awaiting / initial rendering
+    st.render = async (node: IVirtualNode) => {
       await st.dom.isReady();
-
-      const element = st.dom.setRoot(customElementClassRef[TAG_NAME]);
-
-      for (let name in attributes) {
-        // TODO: add support for SVG setAttributeNS
-        element.setAttribute(name, attributes[name]);
-      }
+      st.dom.createElement(node, document.body);
     };
   }
 }

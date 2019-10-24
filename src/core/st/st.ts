@@ -1,4 +1,4 @@
-import { I$st } from "./interface/i$st";
+import { GlobalCache, I$st } from "./interface/i$st";
 
 /**
  * μ is pronounced /mei/ and stands for "micro".
@@ -22,7 +22,11 @@ const _globalThis: any = typeof window === "undefined" ? global : window;
 // and overwritten on subsequent calls / file imports
 if (!_globalThis[ST_KEY]) {
   // register scoped global as an instance of this class
-  _globalThis[ST_KEY] = {};
+  _globalThis[ST_KEY] = {
+    [GlobalCache.CUSTOM_ELEMENT_INSTANCES]: [],
+    [GlobalCache.CONTEXT]: {},
+    [GlobalCache.CUSTOM_ELEMENT_REGISTRY]: {}
+  };
 }
 
 export const globalThis: any = _globalThis;

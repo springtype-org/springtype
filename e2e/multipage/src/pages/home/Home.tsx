@@ -2,7 +2,7 @@ import { st } from "../../../../../src/core";
 import { customElement } from "../../../../../src/web/customelement";
 import { tsx } from "../../../../../src/web/vdom";
 
-@customElement("homepage-root")
+@customElement()
 export class HomePage extends st.element {
   static ROUTE = "";
 
@@ -27,10 +27,11 @@ export class HomePage extends st.element {
   }
 
   renderStyle() {
-    return {
-      div: {
-        background: "red",
-      },
-    };
+
+    console.log('this', this);
+
+    return `body {
+      background: #ff0000
+    }`
   }
 }

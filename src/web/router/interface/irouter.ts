@@ -35,14 +35,16 @@ export interface ITokenizedRoutes {
   [route: string]: Array<string>; // path tokens
 }
 
+export type GuardFunction = (locationChangeDecision?: ILocationChangeDecision) => Promise<boolean>;
+
 export interface IRouteDefinition {
   customElement: ICustomHTMLElement;
-  guard?: (locationChangeDecision?: ILocationChangeDecision) => Promise<string | boolean>;
+  guard?: GuardFunction;
 }
 
 export interface ILocationChangeDecision {
-  guard?: (locationChangeDecision?: ILocationChangeDecision) => Promise<string | boolean>;
-  tagName: string;
+  guard?: GuardFunction;
+  component: ICustomHTMLElement;
   params: Object;
   route: string;
 }

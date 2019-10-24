@@ -3,7 +3,7 @@ import { customElement } from "../../../../../../src/web/customelement";
 import { tsx } from "../../../../../../src/web/vdom";
 import { HomePage } from "../../home/Home";
 
-@customElement("firstpostpage-root")
+@customElement()
 export class FirstPostPage extends st.element {
 	static ROUTE = "/blog/firstpost/:id/";
 

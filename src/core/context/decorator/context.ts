@@ -1,21 +1,18 @@
-import { GlobalCache } from "../../st/interface/i$st";
-import { st } from "../../st/st";
-import { initContextCache } from "../context";
+import { IContextPropAssignments } from './../interface/icontext-prop-assignments';
+
+export const CONTEXT_ASSIGNMENTS: any = Symbol('CONTEXT_ASSIGNMENTS');
 
 export const context = (contextName: string): any => {
-  initContextCache();
 
-  return (instance: any, propName: string) => {
-    // instead of reading and writing from/to the class instance memory,
-    // use the context cache instead
-    Object.defineProperty(instance, propName, {
-      get: () => {
-        return st[GlobalCache.CONTEXT][contextName].value;
-      },
-      set: value => {
-        st[GlobalCache.CONTEXT][contextName].value = value;
-      },
-      configurable: false,
-    });
+  return (prototype: any, propName: string) => {
+
+    if (!prototype[CONTEXT_ASSIGNMENTS]) {
+      prototype[CONTEXT_ASSIGNMENTS] = [];
+    }
+
+    prototype[CONTEXT_ASSIGNMENTS].push({
+      propName,
+      contextName
+    } as IContextPropAssignments);
   };
 };

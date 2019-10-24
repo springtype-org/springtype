@@ -1,17 +1,17 @@
 import { st } from "../../../core";
-import { IStateChange, StateChangeType } from "../../../core/state/interface";
-import { DEFAULT_EMPTY_PATH, StateChangeManager } from "../../../core/state/state-change-manager";
+import { ChangeType } from "../../../core/cd/interface/change-type";
+import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../../../core/cd/prop-change-manager";
 import { ICustomHTMLElement } from "../interface";
 import { ICustomHTMLElementInternals, INTERNAL } from "../interface/icustom-html-element";
 import { RenderReason } from "../interface/ilifecycle";
+import { IStateChange } from "../interface/ion-state-change";
 
 export const STATE: any = Symbol("STATE");
 
 export interface IState {
   name: string;
-  type: StateChangeType;
+  type: ChangeType;
 }
-
 export class StateTrait {
   static enableFor(instance: any) {
     const states = Object.getPrototypeOf(instance).constructor[STATE] || [];
@@ -20,7 +20,7 @@ export class StateTrait {
     }
   }
 
-  static addState(ctor: any, name: string | symbol, type: StateChangeType) {
+  static addState(ctor: any, name: string | symbol, type: ChangeType) {
     if (!ctor[STATE]) {
       ctor[STATE] = [];
     }
@@ -31,8 +31,8 @@ export class StateTrait {
   }
 
   static handleCustomElementStateChange(instance: any, change: IStateChange) {
-    if (process.env.NODE_ENV != "production" && st.debug) {
-      st.info("state-change-manager.ts", "@state()", change.name, "change detected on", instance, change);
+    if (process.env.NODE_ENV === "development") {
+      st.debug && st.info("@state()", change.name, "change detected on", instance, change);
     }
 
     // call handler method if implemented
@@ -44,7 +44,7 @@ export class StateTrait {
     if (!(instance[INTERNAL] as ICustomHTMLElementInternals).notInitialRender) return;
 
     if (
-      instance.shouldRender(RenderReason.PROP_CHANGE, {
+      instance.shouldRender(RenderReason.STATE_CHANGE, {
         name: change.name,
         path: change.path,
         value: change.value,
@@ -56,14 +56,14 @@ export class StateTrait {
     }
   }
 
-  static initState(instance: ICustomHTMLElement, name: string, type: StateChangeType) {
-    StateChangeManager.onStateChange(
+  static initState(instance: ICustomHTMLElement, name: string, type: ChangeType) {
+    PropChangeManager.onChange(
       instance,
       name,
       type,
       (value: any, prevValue: any) => {
         StateTrait.handleCustomElementStateChange(instance, {
-          type: StateChangeType.REFERENCE,
+          type: ChangeType.REFERENCE,
           path: DEFAULT_EMPTY_PATH,
           name,
           value,
@@ -72,7 +72,7 @@ export class StateTrait {
       },
       (path: string, value: any, prevValue: any) => {
         StateTrait.handleCustomElementStateChange(instance, {
-          type: StateChangeType.DEEP,
+          type: ChangeType.DEEP,
           path,
           name,
           value,

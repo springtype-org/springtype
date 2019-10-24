@@ -1,5 +1,7 @@
 {
   "deep": {
     "msg": "123de-{{ someValue, uppercase }}"
-  }
+  },
+  "German": "Deutsch",
+  "English": "Englisch"
 }

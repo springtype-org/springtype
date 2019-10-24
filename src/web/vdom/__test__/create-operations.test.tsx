@@ -1,6 +1,6 @@
+import { tsx } from "../";
 import { st } from "../../../core";
 import { IElement } from "../interface/ielement";
-import { tsx } from "../tsx";
 
 describe("Renderer create operation", () => {
 	let parentDOMElement: IElement;
@@ -11,9 +11,9 @@ describe("Renderer create operation", () => {
 
 	it("renders a <ul> list (JSX.Element extends IVirtualNode) as a child of a DOM element", () => {
 		const list = (
-			<ul>
-				<li id="123">
-					<hr />
+			<ul id="123">
+				<li>
+					Foo
 				</li>
 			</ul>
 		);
@@ -23,7 +23,7 @@ describe("Renderer create operation", () => {
 		expect((parentDOMElement.childNodes[0] as HTMLLIElement).id).toEqual("123");
 		expect(
 			(parentDOMElement.childNodes[0] as HTMLLIElement).childNodes[0].nodeName
-		).toEqual("HR");
+		).toEqual("LI");
 	});
 
 	/*

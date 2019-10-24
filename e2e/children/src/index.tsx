@@ -1,16 +1,13 @@
 import { st } from "../../../src/core";
 import { attr, customElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
 import { tsx } from "../../../src/web/vdom";
 
-if (process.env.NODE_ENV === "development") {
-  customElementsHMRPolyfill;
-}
+@customElement()
+export class E2EChildren extends st.element {
 
-@customElement("e2e-children")
-export class Foo extends st.element {
-  @attr
+  @attr()
   mapofnames = ["Rene"];
+
   constructor() {
     super();
     setTimeout(() => {
@@ -20,7 +17,7 @@ export class Foo extends st.element {
 
   render() {
     return (
-      <div>
+      <div id="e2e-children">
         {this.mapofnames.map(value => (
           <p class="name">{value}</p>
         ))}
@@ -30,4 +27,4 @@ export class Foo extends st.element {
   }
 }
 
-document.body.innerHTML = "<e2e-children></e2e-children>";
+st.render(<E2EChildren />);

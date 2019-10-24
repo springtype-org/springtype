@@ -4,7 +4,7 @@ import { tsx } from "../../../../../src/web/vdom";
 import { HomePage } from "../home/Home";
 import { FirstPostPage } from "./posts/FirstPost";
 
-@customElement("blogpage-root")
+@customElement()
 export class BlogPage extends st.element {
   static ROUTE = "/blog";
 
@@ -12,10 +12,19 @@ export class BlogPage extends st.element {
     st.router.navigate(HomePage.ROUTE);
   };
 
+  onReRenderClick = () => {
+    this.doRender();
+  };
+
   render() {
+
+    console.log('new random');
     return (
       <div>
-        BlogPage
+        {/* funny comment */}
+        <button onClick={this.onReRenderClick}>Re-render</button>
+        {/* funny comment */}
+        BlogPage {Math.random()}
         <br />
         <a href="javascript:void(0)" onClick={this.nagivateHome}>
           Back Home

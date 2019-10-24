@@ -1,14 +1,9 @@
 import { st } from "../../../src/core";
 import { context } from "../../../src/core/context";
 import { attr, customElement, CustomHTMLElement } from "../../../src/web/customelement";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
+import { tsx } from "../../../src/web/vdom";
 import { tpl } from "./index.tpl";
 import { tss } from "./index.tss";
-import "./polyfills";
-
-if (process.env.NODE_ENV === "development") {
-  customElementsHMRPolyfill;
-}
 
 const attr_ = (scope: CustomHTMLElement, name: string, defaultValue?: string, x?: any): string => {
   console.log("register for attribute cd", name);
@@ -16,13 +11,11 @@ const attr_ = (scope: CustomHTMLElement, name: string, defaultValue?: string, x?
   return defaultValue || "";
 };
 
-@customElement("my-foo", {
-  tpl,
-  tss,
-  shadowMode: "none",
+@customElement({
+  tss
 })
 export class Foo extends st.element {
-  @attr
+  @attr()
   some: string = attr_(this, "some", "test");
 
   @context("foo")
@@ -78,9 +71,9 @@ export class Foo extends st.element {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "my-foo": Partial<Foo>;
+      "Foo": Partial<Foo>;
     }
   }
 }
 
-st.dom.setRoot("my-foo");
+st.render(<Foo />);

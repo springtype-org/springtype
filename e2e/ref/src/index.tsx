@@ -1,14 +1,11 @@
 import { st } from "../../../src/core";
 import { customElement } from "../../../src/web/customelement";
 import { ILifecycle } from "../../../src/web/customelement/interface";
-import { customElementsHMRPolyfill } from "../../../src/web/polyfill/custom-elements-hmr-polyfill";
+import { css } from "../../../src/web/tss";
 import { domRef, tsx } from "../../../src/web/vdom";
 
-if (process.env.NODE_ENV === "development") {
-  customElementsHMRPolyfill;
-}
 
-@customElement("ref-test")
+@customElement()
 export class RefTest extends st.element implements ILifecycle {
   time: number = 0;
 
@@ -33,12 +30,12 @@ export class RefTest extends st.element implements ILifecycle {
   }
 
   renderStyle() {
-    return {
-      div: {
-        background: "#cc0000",
-      },
-    };
+    return css`
+      div {
+        background: #cc0000
+      }
+    `
   }
 }
 
-st.dom.setRoot("ref-test");
+st.render(<RefTest />);

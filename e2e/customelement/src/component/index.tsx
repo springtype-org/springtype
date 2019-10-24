@@ -3,25 +3,29 @@ import { st } from "../../../../src/core";
 import { ChangeDetector } from "../../../../src/core/cd";
 import { context } from "../../../../src/core/context";
 import { formatter, translation } from "../../../../src/core/i18n";
-import { IStateChange } from "../../../../src/core/state/interface";
 import { attr, customElement, state } from "../../../../src/web/customelement";
+import { IStateChange } from "../../../../src/web/customelement/interface";
 import { tsx } from "../../../../src/web/vdom";
+// @ts-ignore JSON module import activated in bundler config
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
 import * as en from "./i18n/en.json";
+import { tss } from "./index.tss";
 
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de", de)
 @translation("en", en)
-@customElement("my-foo2")
+@customElement({
+  tss
+})
 export class Foo2 extends st.element {
-  @attr
+  @attr()
   foo: string = "Jesus!!!";
 
-  @attr
+  @attr()
   foo2: boolean = false;
 
-  @attr
+  @attr()
   foo3: any = {
     huhu: {
       haha: 345,
@@ -60,6 +64,10 @@ export class Foo2 extends st.element {
   }
 
   onConnect() {
+
+
+    console.log('???foo3', this.foo3)
+
     setTimeout(() => {
       this.foo =
         "GOOOOOOOD" +

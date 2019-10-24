@@ -1,7 +1,7 @@
 import "testcafe";
 import { Selector } from "testcafe";
 
-fixture`index.html`.page("../dist/index.html");
+fixture`i18n/dist/index.html`.page("../dist/index.html");
 
 test("should translate en_US by default, uppercase format and deep", async t => {
   const trText = Selector("#e2e-tr");

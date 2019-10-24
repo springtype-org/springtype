@@ -1,0 +1,18 @@
+{
+  "name": "@springtype/e2e-slots",
+  "version": "1.0.0",
+  "description": "e2e test",
+  "scripts": {
+    "clean": "npx st-rm-rf dist node_modules",
+    "e2e": "testcafe chrome:headless **/__e2e__/*",
+    "start:prod": "cross-env NODE_ENV=production st-start",
+    "start": "cross-env NODE_ENV=development st-start"
+  },
+  "author": "Aron Homberg <info@aron-homberg.de>",
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "typescript": "^3.5.1",
+    "st-start": "^2.0.0-alpha.13"
+  }
+}

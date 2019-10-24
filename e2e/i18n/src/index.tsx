@@ -10,7 +10,7 @@ import * as en from "./i18n/en.json";
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de_DE", de)
 @translation("en_US", en) // default locale
-@customElement("e2e-i18n")
+@customElement()
 export class E2Ei18n extends st.element {
   setGerman = () => {
     st.i18n.setLanguage("de_DE");
@@ -27,10 +27,10 @@ export class E2Ei18n extends st.element {
       <div>
         <span id="e2e-tr">{st.t("deep.msg", { someValue: "e2e" })}</span>
         <button id="german" onClick={this.setGerman}>
-          German
+          {st.t("German")}
         </button>
         <button id="english" onClick={this.setEnglish}>
-          English
+          {st.t("English")}
         </button>
       </div>
     );
@@ -40,9 +40,9 @@ export class E2Ei18n extends st.element {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "e2e-i18n": Partial<E2Ei18n>;
+      E2Ei18n: Partial<E2Ei18n>;
     }
   }
 }
 
-st.dom.setRoot("e2e-i18n");
+st.render(<E2Ei18n />);

@@ -1,14 +1,16 @@
 import { st } from "../../core";
 import { customElement } from "../customelement";
+import { ICustomHTMLElement, INTERNAL } from "../customelement/interface/icustom-html-element";
 import { ILocationChangeDecision } from "./interface/irouter";
 
-@customElement("router-outlet", {
-  shadowMode: "none",
-})
+@customElement()
 export class RouterOutlet extends st.element {
-  instanceCache: any = {};
 
-  currentTagName: string = "";
+  instanceCache: {
+    [tagName: string]: Element;
+  } = {};
+
+  activeComponent: ICustomHTMLElement | undefined;
 
   constructor() {
     super();
@@ -17,36 +19,47 @@ export class RouterOutlet extends st.element {
   }
 
   refresh() {
-    delete this.instanceCache[this.currentTagName];
+    if (this.activeComponent) {
+      delete this.instanceCache[this.activeComponent!.name];
+    }
     this.updateRootNode();
   }
 
   onConnect() {
-    this.currentTagName = st.router.CURRENT_DECISION.tagName;
+    this.activeComponent = st.router.CURRENT_DECISION.component;
     this.updateRootNode();
   }
 
   async present(locationChangeDecision: ILocationChangeDecision) {
-    if (this.isConnected) {
-      this.currentTagName = locationChangeDecision.tagName;
+    if (this[INTERNAL].isConnected) {
+      this.activeComponent = locationChangeDecision.component;
       this.updateRootNode();
     }
   }
 
   protected updateRootNode() {
-    if (this.currentTagName) {
-      if (this.childNodes.length) {
-        this.removeChild(this.childNodes[0]);
+    if (this.activeComponent) {
+      if (this[INTERNAL].root.childNodes.length) {
+        this[INTERNAL].root.removeChild(this[INTERNAL].root.childNodes[0]);
       }
-      this.appendChild(this.getCachedInstance(this.currentTagName));
-    }
-  }
 
-  getCachedInstance(tagName: string) {
-    if (!this.instanceCache[tagName]) {
-      this.instanceCache[tagName] = document.createElement(tagName);
+      if (!this.instanceCache[this.activeComponent.name]) {
+        this.instanceCache[this.activeComponent.name] = st.dom.createElement(
+          {
+            type: this.activeComponent.name,
+            attributes: {},
+            children: [],
+          },
+          this[INTERNAL].root,
+        )!;
+
+        this.instanceCache[this.activeComponent.name] = this.instanceCache[this.activeComponent.name]!;
+
+        return this.instanceCache[this.activeComponent.name];
+      } else {
+        this[INTERNAL].root.appendChild(this.instanceCache[this.activeComponent.name]);
+      }
     }
-    return this.instanceCache[tagName];
   }
 
   shouldRender() {
