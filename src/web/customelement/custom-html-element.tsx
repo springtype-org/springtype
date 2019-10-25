@@ -240,7 +240,7 @@ if (!st.element) {
 export const defineCustomElement = (targetClassOrFunction: any, options: ICustomElementOptions = {}) => {
 
   // register with element registry
-  //st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
+  st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
 
   // assign options to be used in CustomElement derived class constructor
   targetClassOrFunction[CUSTOM_ELEMENT_OPTIONS] = options;
