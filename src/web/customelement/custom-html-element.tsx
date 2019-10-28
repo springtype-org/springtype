@@ -43,6 +43,9 @@ export class CustomHTMLElement implements IComponentLifecycle, ILifecycle, IOnSt
   connectedCallback() {
     this[INTERNAL].isConnected = true;
 
+    // @todo: Use tag name?
+    this[INTERNAL].root.classList.add(Object.getPrototypeOf(this).constructor.name);
+
     this.onConnect();
 
     if (this.shouldRender(RenderReason.INITIAL)) {
