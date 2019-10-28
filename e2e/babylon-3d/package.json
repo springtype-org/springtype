@@ -15,8 +15,7 @@
   },
   "devDependencies": {
     "cross-env": "^6.0.3",
-    "testcafe": "^1.5.0",
     "typescript": "^3.5.1",
-    "st-start": "^2.0.0-alpha.13"
+    "st-start": "^2.0.0-alpha.21"
   }
 }
