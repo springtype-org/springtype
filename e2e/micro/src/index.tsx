@@ -2,9 +2,9 @@ import { st } from "../../../src/core";
 import { attr, component } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
 import { css } from "../../../src/web/tss/tss";
-import { tsx } from "../../../src/web/vdom";
-// imports a global CSS stylesheet
-import '../assets/globalStyles.css';
+import { domRef, tsx } from "../../../src/web/vdom";
+// you can easily use global CSS stylesheets like this
+import "../assets/global-styles.css";
 
 /**
  * A trivial, simple example of a custom element component
@@ -14,48 +14,57 @@ import '../assets/globalStyles.css';
  * Also shows the use of the logging API.
  */
 @component()
-export class Foo extends st.component implements ILifecycle {
-
+export class TemplateName extends st.component implements ILifecycle {
   @attr()
-  some: string = "test";
+  name: string = "SpringType";
+
+  @domRef("nameDiv")
+  nameDiv: HTMLDivElement;
 
   constructor() {
     super();
 
     // change sets after class property initialization
-    this.some = "construct";
+    this.name = "SpringType v2";
   }
 
+  // attribute changes can be listened to
   onAttributeChange(name: string, value: any) {
     st.info("@attr", name, "changed to", value);
   }
 
+  // this method is called only one time after the first render
   onAfterInitialRender() {
-    // change triggers a re-rendering
-    this.some = "after_initial_render";
+    // changes to attributes trigger a re-rendering
+    this.name = "SpringType v2: re-rendered";
+
+    // we can easily access native DOM elements with @domRef(...)
+    console.log("The DOM element that is re-rendered is:", this.nameDiv);
   }
 
+  // listeners receive the DOM event
+  changeName = (evt: MouseEvent) => {
+    // we can also use the setAttribute() API
+    this.setAttribute("name", "Name changed again and re-rendered!");
+  };
+
+  // you could also use @component({ topl }) and import a TSX template function
   render() {
-    return <div>{this.some}</div>;
+    return (
+      <div ref={{ nameDiv: this }}>
+        name: {this.name}
+        <button onClick={this.changeName}>Change my name</button>
+      </div>
+    );
   }
 
+  // you could also use @component({ tss }) and import a tss style function
   renderStyle = () => css`
-    @font-face {
-      font-family: CustomFont;
-      src: url("CustomFont.eot");
-    }
-
-    @media (color-index: 16) {
-      body {
-        background: #000000;
-      }
-    }
-
     body {
-      background: #ff0000;
+      background: #ddd;
     }
   `;
 }
 
-// Tells SpringType to render the component now
-st.render(<Foo />);
+// Tells SpringType to render this component now
+st.render(<TemplateName />);
