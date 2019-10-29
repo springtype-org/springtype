@@ -1,6 +1,6 @@
-export const SET_REF_NAME = Symbol("SET_REF_NAME");
-export const SET_REF_PROP_NAME = Symbol("SET_REF_PROP_NAME");
-export const SET_REF_VALUE = Symbol("SET_REF_VALUE");
+export const SET_REF_NAME = "SET_REF_NAME";
+export const SET_REF_PROP_NAME = "SET_REF_PROP_NAME";
+export const SET_REF_VALUE = "SET_REF_VALUE";
 
 export const domRef = (refName: string): any => {
 	return (instance: any, propName: string) => {

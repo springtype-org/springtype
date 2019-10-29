@@ -1,6 +1,6 @@
 import { IContextPropAssignments } from './../interface/icontext-prop-assignments';
 
-export const CONTEXT_ASSIGNMENTS: any = Symbol('CONTEXT_ASSIGNMENTS');
+export const CONTEXT_ASSIGNMENTS: any = 'CONTEXT_ASSIGNMENTS';
 
 export const context = (contextName: string): any => {
 

@@ -2,7 +2,7 @@ import { st } from "../st/st";
 import { InjectionStrategy } from "./enum/injection-strategy";
 import { IInjectionStrategyConfig } from "./interface/iinjection-strategy-config";
 
-export const INJECTION_STRATEGY = Symbol("INJECTION_STRATEGY");
+export const INJECTION_STRATEGY = "INJECTION_STRATEGY";
 
 if (!st.di) {
 	st.di = {

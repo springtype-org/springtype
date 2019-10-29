@@ -8,7 +8,7 @@ import { st } from "../st/st";
 /* internal API */
 
 const DEFAULT_CONTEXT_VALUE = {};
-const HANDLER_OWNING_INSTANCE: any = Symbol("HANDLER_OWNING_INSTANCE");
+const HANDLER_OWNING_INSTANCE: any = "HANDLER_OWNING_INSTANCE";
 
 const callChangeHandlers = (onChangeHandlers: Array<IOnStateChangeHandler>, name: string, type: ChangeType, value: any, prevValue: any, path: string = DEFAULT_EMPTY_PATH) => {
   for (let onChnageHandler of onChangeHandlers) {

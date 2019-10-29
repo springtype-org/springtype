@@ -30,6 +30,7 @@ export class RouterOutlet extends st.component {
   }
 
   async present(locationChangeDecision: ILocationChangeDecision) {
+    // @ts-ignore
     if (this[INTERNAL].isConnected) {
       this.activeComponent = locationChangeDecision.component;
       this.updateRootNode();
@@ -38,7 +39,9 @@ export class RouterOutlet extends st.component {
 
   protected updateRootNode() {
     if (this.activeComponent) {
+      // @ts-ignore
       if (this[INTERNAL].el.childNodes.length) {
+        // @ts-ignore
         this[INTERNAL].el.removeChild(this[INTERNAL].el.childNodes[0]);
       }
 
@@ -49,6 +52,7 @@ export class RouterOutlet extends st.component {
             attributes: {},
             children: [],
           },
+          // @ts-ignore
           this[INTERNAL].el,
         )!;
 
@@ -56,6 +60,7 @@ export class RouterOutlet extends st.component {
 
         return this.instanceCache[this.activeComponent.name];
       } else {
+        // @ts-ignore
         this[INTERNAL].el.appendChild(this.instanceCache[this.activeComponent.name]);
       }
     }

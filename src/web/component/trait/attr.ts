@@ -1,6 +1,6 @@
 import { st } from "../../../core";
 
-export const ATTRS: any = Symbol("ATTRS");
+export const ATTRS: string = "ATTRS";
 
 export enum AttrType {
   DOM_TRANSPARENT,

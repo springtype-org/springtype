@@ -16,5 +16,5 @@ export interface IComponentInternals {
 
 export type RenderStyleFunction = (instance: any, theme?: any) => string;
 
-export const COMPONENT_OPTIONS: unique symbol = Symbol("COMPONENT_OPTIONS");
-export const INTERNAL: unique symbol = Symbol("INTERNAL");
+export const COMPONENT_OPTIONS: any = "COMPONENT_OPTIONS";
+export const INTERNAL: any = "INTERNAL";

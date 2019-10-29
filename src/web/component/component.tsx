@@ -14,11 +14,12 @@ import { StateTrait } from "./trait/state";
 
 export class Component implements IComponentLifecycle, ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
+  // @ts-ignore
   [INTERNAL]: IComponentInternals;
 
   constructor() {
-
     // internal state initialization
+    // @ts-ignore
     this[INTERNAL] = {
       notInitialRender: false,
       attributes: {},
@@ -34,6 +35,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   }
 
   getEl(): HTMLElement {
+    // @ts-ignore
     return this[INTERNAL].el;
   }
 
@@ -41,9 +43,10 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
   // internal web component standard method
   connectedCallback() {
+    // @ts-ignore
     this[INTERNAL].isConnected = true;
 
-    // @todo: Use tag name?
+    // @ts-ignore
     this[INTERNAL].el.classList.add(Object.getPrototypeOf(this).constructor.name);
 
     this.onConnect();
@@ -56,7 +59,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   onConnect() {}
 
   disconnectedCallback() {
-
+    // @ts-ignore
     this[INTERNAL].isConnected = false;
 
     // evict from global instance registry
@@ -92,7 +95,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
    * allows to take the original attribute value from VDOM (no DOM traversal string typecast)
    */
   setAttribute(name: string, value: any, type?: AttrType): void {
-
+    // @ts-ignore
     const prevValue = this[INTERNAL].attributes[name];
 
     if (
@@ -100,19 +103,22 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
       this.shouldAttributeChange(name, value, prevValue)
     ) {
       // store internal attribute state value
+
+      // @ts-ignore
       this[INTERNAL].attributes[name] = value;
 
-      if (this[INTERNAL].el &&
-          (
-            (typeof type !== 'undefined' && type === AttrType.DOM_TRANSPARENT) ||
-              AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)
-          ) {
+      // @ts-ignore
+      if (this[INTERNAL].el && ((typeof type !== "undefined" && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
         // reflect to DOM (casts to string)
+
+        // @ts-ignore
         this[INTERNAL].el.setAttribute(name, value);
       }
 
       if (
         // don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
+
+        // @ts-ignore
         this[INTERNAL].notInitialRender &&
         // and don't render if the user land condition denies
         this.shouldRender(RenderReason.ATTRIBUTE_CHANGE, {
@@ -144,6 +150,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
    * allows to fetch the original attribute value from VDOM (no DOM traversal string typecast)
    */
   getAttribute(name: string): any {
+    // @ts-ignore
     return this[INTERNAL].attributes[name];
   }
 
@@ -155,23 +162,23 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   // @ts-ignore: Unused variables are valid here
   onBeforeRender(tssOnly: boolean = false) {}
 
-  render(): IVirtualNode|Array<IVirtualNode> {
+  render(): IVirtualNode | Array<IVirtualNode> {
+    // @ts-ignore
     if (typeof this[INTERNAL].options.tpl! != "function") {
       throw new Error(`Custom element (<${this.constructor.name} />) has no render() method nor a valid template (tpl)!`);
     }
+    // @ts-ignore
     return this[INTERNAL].options.tpl!(this);
   }
 
   // @ts-ignore: Unused variables are valid here
-  renderStyle(theme?: any): string|undefined {
+  renderStyle(theme?: any): string | undefined {
     return undefined;
   }
 
-  async doRenderStyle(): Promise<IVirtualNode|undefined> {
-
-    const cssText = this[INTERNAL].options.tss ?
-      this[INTERNAL].options.tss!(this, st.tss.currentTheme) :
-      this.renderStyle(st.tss.currentTheme);
+  async doRenderStyle(): Promise<IVirtualNode | undefined> {
+    // @ts-ignore
+    const cssText = this[INTERNAL].options.tss ? this[INTERNAL].options.tss!(this, st.tss.currentTheme) : this.renderStyle(st.tss.currentTheme);
 
     return <style type="text/css">{cssText}</style>;
   }
@@ -179,8 +186,8 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   async doRender(tssOnly: boolean = false) {
     this.onBeforeRender(tssOnly);
 
-    const vdom: IVirtualNode|Array<IVirtualNode> = this.render();
-    const tss: IVirtualNode|undefined = await this.doRenderStyle();
+    const vdom: IVirtualNode | Array<IVirtualNode> = this.render();
+    const tss: IVirtualNode | undefined = await this.doRenderStyle();
 
     if (!vdom) {
       throw new Error(`The render() method or the template (tpl) of <${this.constructor.name} /> must return virtual nodes.`);
@@ -190,33 +197,34 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
     // performance-optimization: only process slots if <template> tags are found (fills slotChildren)
 
+    // @ts-ignore
     if (this[INTERNAL].slotChildren) {
-
       // @ts-ignore
       vdom = transformSlots(vdom as IVirtualNode, this[INTERNAL].slotChildren);
     }
 
+    // @ts-ignore
     if (!this[INTERNAL].notInitialRender) {
-
-
       // if there isn't a prev. VDOM state, render initially
       st.renderer.renderInitial(
         nodesToRender,
-        (this[INTERNAL].el as unknown) as IElement
+        // @ts-ignore
+        (this[INTERNAL].el as unknown) as IElement,
       );
 
+      // @ts-ignore
       this[INTERNAL].notInitialRender = true;
 
       // call lifecycle method
       this.onAfterInitialRender();
-
     } else {
-
       // differential VDOM / DOM rendering algorithm
       st.renderer.patch(
+        // @ts-ignore
         (this[INTERNAL].el as any).childNodes,
         nodesToRender,
-        (this[INTERNAL].el as unknown) as IElement
+        // @ts-ignore
+        (this[INTERNAL].el as unknown) as IElement,
       );
     }
 
@@ -240,14 +248,13 @@ if (!st.component) {
   st.component = Component;
 }
 
-export const getComponent = (className: string) => (st[GlobalCache.COMPONENT_REGISTRY][className] as any);
+export const getComponent = (className: string) => st[GlobalCache.COMPONENT_REGISTRY][className] as any;
 
 if (!st.getComponent) {
   st.getComponent = getComponent;
 }
 
 export const defineComponent = (targetClassOrFunction: any, options: IComponentOptions = {}) => {
-
   // register with element registry
   st[GlobalCache.COMPONENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
 

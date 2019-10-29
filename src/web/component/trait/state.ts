@@ -6,7 +6,7 @@ import { IComponentInternals, INTERNAL } from "../interface/icomponent";
 import { RenderReason } from "../interface/ilifecycle";
 import { IStateChange } from "../interface/ion-state-change";
 
-export const STATE: any = Symbol("STATE");
+export const STATE: string = "STATE";
 
 export interface IState {
   name: string;
