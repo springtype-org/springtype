@@ -68,7 +68,7 @@ export interface ILifecycle {
   onDisconnect?(): void;
 
   // returns the root HTML element mounted to a virtual component
-  getRoot(): HTMLElement;
+  getEl(): HTMLElement;
 
   setAttribute(name: string, value: any, type?: AttrType): void;
 

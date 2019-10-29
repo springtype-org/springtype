@@ -4,7 +4,7 @@ import { IComponentOptions } from "./icomponent-options";
 export { IComponent } from "../component";
 
 export interface IComponentInternals {
-  root: HTMLElement;
+  el: HTMLElement;
   notInitialRender: boolean;
   attributes: {
     [name: string]: string;

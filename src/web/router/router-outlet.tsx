@@ -38,8 +38,8 @@ export class RouterOutlet extends st.component {
 
   protected updateRootNode() {
     if (this.activeComponent) {
-      if (this[INTERNAL].root.childNodes.length) {
-        this[INTERNAL].root.removeChild(this[INTERNAL].root.childNodes[0]);
+      if (this[INTERNAL].el.childNodes.length) {
+        this[INTERNAL].el.removeChild(this[INTERNAL].el.childNodes[0]);
       }
 
       if (!this.instanceCache[this.activeComponent.name]) {
@@ -49,14 +49,14 @@ export class RouterOutlet extends st.component {
             attributes: {},
             children: [],
           },
-          this[INTERNAL].root,
+          this[INTERNAL].el,
         )!;
 
         this.instanceCache[this.activeComponent.name] = this.instanceCache[this.activeComponent.name]!;
 
         return this.instanceCache[this.activeComponent.name];
       } else {
-        this[INTERNAL].root.appendChild(this.instanceCache[this.activeComponent.name]);
+        this[INTERNAL].el.appendChild(this.instanceCache[this.activeComponent.name]);
       }
     }
   }

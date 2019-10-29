@@ -24,7 +24,7 @@ export class StButton extends st.component {
 
   // event handlers must always be scope-bound as fat arrow functions
   dispatchStClick = (evt: MouseEvent) => {
-    emit<StButtonClickEventDetail>(this.getRoot(), "stclick", {
+    emit<StButtonClickEventDetail>(this.getEl(), "stclick", {
       bubbles: true,
       cancelable: true,
       composed: true,

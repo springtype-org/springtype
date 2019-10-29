@@ -49,13 +49,13 @@ export class FirstScene extends st.component implements ILifecycle {
 
     private alignVideoDisplay() {
 
-        const halfWidth = this.getRoot().clientWidth / 2;
+        const halfWidth = this.getEl().clientWidth / 2;
 
         if (this.iframe) {
 
-            const videoDisplayHeight = this.getRoot().clientWidth / 3.555;
+            const videoDisplayHeight = this.getEl().clientWidth / 3.555;
 
-            this.iframe.style.top = `${(this.getRoot().clientHeight) - videoDisplayHeight - videoDisplayHeight/2}px`;
+            this.iframe.style.top = `${(this.getEl().clientHeight) - videoDisplayHeight - videoDisplayHeight/2}px`;
 
             this.iframe.style.transform = `perspective(${halfWidth}px) rotateX(15deg)`;
             this.iframe.style.left = `${halfWidth / 2}px`;
@@ -80,7 +80,7 @@ export class FirstScene extends st.component implements ILifecycle {
 
     private createCamera() {
         this.camera = new ArcRotateCamera("Camera", 0, Math.PI / 2, 12, Vector3.Zero(), this.scene);
-        this.camera.attachControl(this.getRoot(), false);
+        this.camera.attachControl(this.getEl(), false);
 
         this.camera.lowerRadiusLimit = 6;
         this.camera.upperRadiusLimit = 6;

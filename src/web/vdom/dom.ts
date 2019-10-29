@@ -78,7 +78,7 @@ if (!st.dom) {
 
         // set root DOM node ref
         // @ts-ignore
-        component[INTERNAL].root = newEl;
+        component[INTERNAL].el = newEl;
 
         // assign slot children for rewrite
         // @ts-ignore

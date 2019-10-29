@@ -33,8 +33,8 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     st[GlobalCache.COMPONENT_INSTANCES].push(this);
   }
 
-  getRoot(): HTMLElement {
-    return this[INTERNAL].root;
+  getEl(): HTMLElement {
+    return this[INTERNAL].el;
   }
 
   onBeforeConnect() {}
@@ -44,7 +44,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     this[INTERNAL].isConnected = true;
 
     // @todo: Use tag name?
-    this[INTERNAL].root.classList.add(Object.getPrototypeOf(this).constructor.name);
+    this[INTERNAL].el.classList.add(Object.getPrototypeOf(this).constructor.name);
 
     this.onConnect();
 
@@ -102,13 +102,13 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
       // store internal attribute state value
       this[INTERNAL].attributes[name] = value;
 
-      if (this[INTERNAL].root &&
+      if (this[INTERNAL].el &&
           (
             (typeof type !== 'undefined' && type === AttrType.DOM_TRANSPARENT) ||
               AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)
           ) {
         // reflect to DOM (casts to string)
-        this[INTERNAL].root.setAttribute(name, value);
+        this[INTERNAL].el.setAttribute(name, value);
       }
 
       if (
@@ -202,7 +202,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
       // if there isn't a prev. VDOM state, render initially
       st.renderer.renderInitial(
         nodesToRender,
-        (this[INTERNAL].root as unknown) as IElement
+        (this[INTERNAL].el as unknown) as IElement
       );
 
       this[INTERNAL].notInitialRender = true;
@@ -214,9 +214,9 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
       // differential VDOM / DOM rendering algorithm
       st.renderer.patch(
-        (this[INTERNAL].root as any).childNodes,
+        (this[INTERNAL].el as any).childNodes,
         nodesToRender,
-        (this[INTERNAL].root as unknown) as IElement
+        (this[INTERNAL].el as unknown) as IElement
       );
     }
 
