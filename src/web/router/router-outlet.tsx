@@ -1,16 +1,15 @@
 import { st } from "../../core";
-import { customElement } from "../customelement";
-import { ICustomHTMLElement, INTERNAL } from "../customelement/interface/icustom-html-element";
+import { component } from "../component";
+import { IComponent, INTERNAL } from "../component/interface/icomponent";
 import { ILocationChangeDecision } from "./interface/irouter";
 
-@customElement()
-export class RouterOutlet extends st.element {
-
+@component()
+export class RouterOutlet extends st.component {
   instanceCache: {
     [tagName: string]: Element;
   } = {};
 
-  activeComponent: ICustomHTMLElement | undefined;
+  activeComponent: IComponent | undefined;
 
   constructor() {
     super();
@@ -72,7 +71,7 @@ export class RouterOutlet extends st.element {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "router-outlet": Partial<RouterOutlet>;
+      RouterOutlet: Partial<RouterOutlet>;
     }
   }
 }

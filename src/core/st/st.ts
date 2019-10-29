@@ -23,9 +23,9 @@ const _globalThis: any = typeof window === "undefined" ? global : window;
 if (!_globalThis[ST_KEY]) {
   // register scoped global as an instance of this class
   _globalThis[ST_KEY] = {
-    [GlobalCache.CUSTOM_ELEMENT_INSTANCES]: [],
+    [GlobalCache.COMPONENT_INSTANCES]: [],
     [GlobalCache.CONTEXT]: {},
-    [GlobalCache.CUSTOM_ELEMENT_REGISTRY]: {}
+    [GlobalCache.COMPONENT_REGISTRY]: {}
   };
 }
 

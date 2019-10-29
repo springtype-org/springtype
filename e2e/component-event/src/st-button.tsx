@@ -1,7 +1,6 @@
 import { st } from "../../../src/core";
-import { customElement, customEvent, emitCustomEvent } from "../../../src/web/customelement";
-import { IEventListener } from "../../../src/web/customelement/interface";
-import { IEvent } from "../../../src/web/customelement/interface/ievent";
+import { component, emit, evt } from "../../../src/web/component";
+import { IEvent, IEventListener } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 
 export interface StButtonClickEventDetail {
@@ -10,10 +9,10 @@ export interface StButtonClickEventDetail {
 
 export interface StButtonClickEvent extends IEvent<StButtonClickEventDetail> {}
 
-@customElement()
-export class StButton extends st.element {
-  @customEvent
-  onStClick: IEventListener<StButtonClickEventDetail, MouseEvent> = customEvent;
+@component()
+export class StButton extends st.component {
+  @evt
+  onStClick: IEventListener<StButtonClickEventDetail, MouseEvent> = evt;
 
   renderStyle() {
     return `button {
@@ -25,7 +24,7 @@ export class StButton extends st.element {
 
   // event handlers must always be scope-bound as fat arrow functions
   dispatchStClick = (evt: MouseEvent) => {
-    emitCustomEvent<StButtonClickEventDetail>(this.getRoot(), "stclick", {
+    emit<StButtonClickEventDetail>(this.getRoot(), "stclick", {
       bubbles: true,
       cancelable: true,
       composed: true,
@@ -51,7 +50,7 @@ export class StButton extends st.element {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "st-button": Partial<StButton>;
+      "StButton": Partial<StButton>;
     }
   }
 }

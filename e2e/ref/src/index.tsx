@@ -1,12 +1,11 @@
 import { st } from "../../../src/core";
-import { customElement } from "../../../src/web/customelement";
-import { ILifecycle } from "../../../src/web/customelement/interface";
+import { component } from "../../../src/web/component";
+import { ILifecycle } from "../../../src/web/component/interface";
 import { css } from "../../../src/web/tss";
 import { domRef, tsx } from "../../../src/web/vdom";
 
-
-@customElement()
-export class RefTest extends st.element implements ILifecycle {
+@component()
+export class RefTest extends st.component implements ILifecycle {
   time: number = 0;
 
   @domRef("someDiv")
@@ -32,9 +31,9 @@ export class RefTest extends st.element implements ILifecycle {
   renderStyle() {
     return css`
       div {
-        background: #cc0000
+        background: #cc0000;
       }
-    `
+    `;
   }
 }
 

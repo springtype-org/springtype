@@ -1,7 +1,7 @@
 import { st } from "../../../src/core";
 import { ChangeType } from "../../../src/core/cd/interface/change-type";
-import { customElement, state } from "../../../src/web/customelement";
-import { ILifecycle } from "../../../src/web/customelement/interface";
+import { component, state } from "../../../src/web/component";
+import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 import { StButton, StButtonClickEvent, StButtonClickEventDetail } from "./st-button";
 
@@ -11,8 +11,8 @@ if (process.env.NODE_ENV === "development") {
   st.debug = true;
 }
 
-@customElement()
-export class Index extends st.element implements ILifecycle {
+@component()
+export class MyIndex extends st.component implements ILifecycle {
   // using a @state() decoration enables change detection and auto-rerendering
   // whenever the reference changes (like this.eventDetails = $somethingElse)
   // or a deep change happens (like this.eventDetails.foo = 'bar')
@@ -31,12 +31,12 @@ export class Index extends st.element implements ILifecycle {
 
   render() {
     return (
-      <div>
+      <fragment>
         <StButton onStClick={this.onStButtonClick}>Click me! {this.evtDetail && this.evtDetail.specialStEvent ? "Yes" : "No"}</StButton>
 
         <h3>Did custom event dispatch?</h3>
         <div>{this.evtDetail && this.evtDetail.specialStEvent ? "Yes" : "No"}</div>
-      </div>
+      </fragment>
     );
   }
 }
@@ -44,9 +44,9 @@ export class Index extends st.element implements ILifecycle {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "st-index": Partial<Index>;
+      "MyIndex": Partial<MyIndex>;
     }
   }
 }
 
-st.render(<Index />);
+st.render(<MyIndex />);

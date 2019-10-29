@@ -1,6 +1,6 @@
 import { st } from "../../../src/core";
-import { attr, customElement } from "../../../src/web/customelement";
-import { ILifecycle } from "../../../src/web/customelement/interface";
+import { attr, component } from "../../../src/web/component";
+import { ILifecycle } from "../../../src/web/component/interface";
 import { css } from "../../../src/web/tss/tss";
 import { tsx } from "../../../src/web/vdom";
 // imports a global CSS stylesheet
@@ -13,8 +13,8 @@ import '../assets/globalStyles.css';
  * including the import and use of global CSS stylesheets.
  * Also shows the use of the logging API.
  */
-@customElement()
-export class Foo extends st.element implements ILifecycle {
+@component()
+export class Foo extends st.component implements ILifecycle {
 
   @attr()
   some: string = "test";

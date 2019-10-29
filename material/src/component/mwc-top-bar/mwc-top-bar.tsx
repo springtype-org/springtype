@@ -13,7 +13,7 @@ export type VariantType = false | "fixed" | "prominent" | "fixed-prominent" | "s
   tpl,
   tss,
 })
-export class MwcTopBar extends st.element {
+export class MwcTopBar extends st.component {
   @attr
   "mwc-dense": boolean = false;
 

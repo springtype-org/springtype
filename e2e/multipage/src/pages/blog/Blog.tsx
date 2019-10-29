@@ -1,11 +1,11 @@
 import { st } from "../../../../../src/core";
-import { customElement } from "../../../../../src/web/customelement";
+import { component } from "../../../../../src/web/component";
 import { tsx } from "../../../../../src/web/vdom";
 import { HomePage } from "../home/Home";
 import { FirstPostPage } from "./posts/FirstPost";
 
-@customElement()
-export class BlogPage extends st.element {
+@component()
+export class BlogPage extends st.component {
   static ROUTE = "/blog";
 
   nagivateHome = () => {

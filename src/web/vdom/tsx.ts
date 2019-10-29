@@ -82,6 +82,8 @@ export const filterCommentsAndUndefines = (children: Array<IVirtualNode> | Array
   return children.filter((child: IVirtualChild) => typeof child !== "undefined" && !isJSXComment(child as IVirtualNode));
 };
 
+export const newUniqueComponentName = () => "cmp-" + (Math.random() * 10000000).toString().substring(0, 5);
+
 export const wmap: WeakMap<Function, string> = new WeakMap();
 
 export const tsx = (st.tsx = (
@@ -110,11 +112,11 @@ export const tsx = (st.tsx = (
     // generate name in case of class name obfuscation or functional components
     if (!wmap.has(fn)) {
       if (!type || type.startsWith("class")) {
-        type = "ele-" + (Math.random() * 10000000).toString().substring(0, 5);
+        type = newUniqueComponentName();
       }
       wmap.set(fn, type);
       // assign global component by type reference
-      st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][type] = fn as any;
+      st[GlobalCache.COMPONENT_REGISTRY][type] = fn as any;
     } else if (!type) {
       // @ts-ignore
       type = wmap.get(fn);

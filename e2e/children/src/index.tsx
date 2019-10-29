@@ -1,9 +1,9 @@
 import { st } from "../../../src/core";
-import { attr, customElement } from "../../../src/web/customelement";
+import { attr, component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 
-@customElement()
-export class E2EChildren extends st.element {
+@component()
+export class E2eChildren extends st.component {
 
   @attr()
   mapofnames = ["Rene"];
@@ -27,4 +27,4 @@ export class E2EChildren extends st.element {
   }
 }
 
-st.render(<E2EChildren />);
+st.render(<E2eChildren />);

@@ -1,10 +1,10 @@
 import { st } from "../../../../../../src/core";
-import { customElement } from "../../../../../../src/web/customelement";
+import { component } from "../../../../../../src/web/component";
 import { tsx } from "../../../../../../src/web/vdom";
 import { HomePage } from "../../home/Home";
 
-@customElement()
-export class FirstPostPage extends st.element {
+@component()
+export class FirstPostPage extends st.component {
 	static ROUTE = "/blog/firstpost/:id/";
 
 	render() {

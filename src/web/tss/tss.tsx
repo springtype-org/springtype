@@ -1,6 +1,6 @@
 import { st } from "../../core";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { ILifecycle, RenderReason } from "../customelement/interface/ilifecycle";
+import { ILifecycle, RenderReason } from "../component/interface/ilifecycle";
 
 if (!st.tss) {
   st.tss = {
@@ -13,7 +13,7 @@ if (!st.tss) {
     setTheme(theme: any) {
       st.tss.currentTheme = theme || {};
 
-      for (let instance of st[GlobalCache.CUSTOM_ELEMENT_INSTANCES] || []) {
+      for (let instance of st[GlobalCache.COMPONENT_INSTANCES] || []) {
         if ((instance as ILifecycle).shouldRender!(RenderReason.THEME_CHANGE)) {
           (instance as ILifecycle).doRender!(true /*tssOnly*/);
         }
@@ -21,6 +21,8 @@ if (!st.tss) {
     },
   };
 }
+
+// just combines CSS template strings like the native implementation
 export const css = (literals: TemplateStringsArray, ...placeholders: string[]) => {
   let result = "";
 

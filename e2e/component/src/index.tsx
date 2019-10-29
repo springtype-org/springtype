@@ -1,20 +1,21 @@
 import { st } from "../../../src/core";
 import { context } from "../../../src/core/context";
-import { attr, customElement, CustomHTMLElement } from "../../../src/web/customelement";
+import { attr, component } from "../../../src/web/component";
+import { Component } from "../../../src/web/component/component";
 import { tsx } from "../../../src/web/vdom";
 import { tpl } from "./index.tpl";
 import { tss } from "./index.tss";
 
-const attr_ = (scope: CustomHTMLElement, name: string, defaultValue?: string, x?: any): string => {
+const attr_ = (scope: Component, name: string, defaultValue?: string, x?: any): string => {
   console.log("register for attribute cd", name);
 
   return defaultValue || "";
 };
 
-@customElement({
+@component({
   tss
 })
-export class Foo extends st.element {
+export class Foo extends st.component {
   @attr()
   some: string = attr_(this, "some", "test");
 

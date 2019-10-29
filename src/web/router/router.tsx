@@ -1,6 +1,6 @@
 import { st } from "../../core";
-import { customElement, render } from "../customelement";
-import { ICustomHTMLElement } from "../customelement/interface/icustom-html-element";
+import { component, render } from "../component";
+import { IComponent } from "../component/interface/icomponent";
 import { tsx } from "../vdom";
 import { ILocationChangeDecision, IRouteDefinition, IRoutes } from "./interface/irouter";
 import { RouterOutlet } from "./router-outlet";
@@ -9,15 +9,15 @@ export const ROUTE_NOT_FOUND = "*404*";
 export const ROUTE_BASE = "";
 
 if (!st.router) {
-  const RouterNoCustomElementFound = customElement(
+  const RouterNoComponentFound = component(
     render(() => (
-      <div>{`No custom element found for rendering this route.
+      <div>{`No component found to render this route.
     Please specify a route for: ${document.location.hash.replace("#", "")}
     or: ${ROUTE_NOT_FOUND}`}</div>
     )),
   );
 
-  const RouterErrorGenericAccessDenied = customElement(
+  const RouterErrorGenericAccessDenied = component(
     render(() => (
       <div>{`
       Access to this route is denied (generic error).
@@ -98,12 +98,12 @@ if (!st.router) {
           }
         }
 
-        const routeConfig: IRouteDefinition | ICustomHTMLElement = st.router.ROUTE_MAP[route];
+        const routeConfig: IRouteDefinition | IComponent = st.router.ROUTE_MAP[route];
 
         if (routeMatches) {
           return {
             params,
-            component: (routeConfig as any).customElement || (routeConfig as any),
+            component: (routeConfig as IRouteDefinition).component || (routeConfig as IRouteDefinition),
             guard: (routeConfig as IRouteDefinition).guard,
             route,
           } as ILocationChangeDecision;
@@ -119,7 +119,7 @@ if (!st.router) {
       } else {
         return {
           route: ROUTE_NOT_FOUND,
-          component: RouterNoCustomElementFound,
+          component: RouterNoComponentFound,
           params: {},
         } as ILocationChangeDecision;
       }
@@ -171,9 +171,7 @@ if (!st.router) {
       st.router.ROUTER_OUTLET = routerOutlet;
     },
 
-    navigate: (pathOrCustomElement: string, params?: any) => {
-      let route = pathOrCustomElement;
-
+    navigate: (route: string, params?: any) => {
       for (let param in params) {
         if (params.hasOwnProperty(param)) {
           route = route.replace(":" + param, params[param]);

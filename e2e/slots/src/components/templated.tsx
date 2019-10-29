@@ -1,9 +1,9 @@
 import { st } from "../../../../src/core";
-import { attr, customElement } from "../../../../src/web/customelement";
-import { ILifecycle } from "../../../../src/web/customelement/interface";
+import { attr, component } from "../../../../src/web/component";
+import { ILifecycle } from "../../../../src/web/component/interface";
 import { tsx } from "../../../../src/web/vdom";
-import { E2ENonSlotted } from "./nonslotted";
-import { E2ESlotted } from "./slotted";
+import { E2eNonSlotted } from "./nonslotted";
+import { E2eSlotted } from "./slotted";
 
 export enum ImplTestCase {
   ALL_SLOTS_DEFINED,
@@ -18,8 +18,8 @@ export enum ImplTestCase {
  * A simple example of using <template slot="foo">...</template> and <slot name="foo">Default content</slot>
  * to render elements given by a parent component at the right places in a child component.
  */
-@customElement()
-export class E2ETemplated extends st.element implements ILifecycle {
+@component()
+export class E2eTemplated extends st.component implements ILifecycle {
 
   @attr()
   title: string = "";
@@ -65,21 +65,21 @@ export class E2ETemplated extends st.element implements ILifecycle {
           <tr>
             <td>
               Before E2ENonSlotted
-              <E2ENonSlotted>
+              <E2eNonSlotted>
                 {/* This content shouldn't bleed-in because there is no default slot in <E2ENonSlotted /> */}
                 <template slot="heeeader">
                   Foo
                 </template>
                 <p>A paragraph for the main content.</p>
                 <p>And another one.</p>
-              </E2ENonSlotted>
+              </E2eNonSlotted>
               After E2ENonSlotted
             </td>
             <td>
               Before E2ENonSlotted
-              <e2enonslotted>
+              <e2e-non-slotted>
                 <p>Custom element without any slot tag. No content should leak here.</p>
-              </e2enonslotted>
+              </e2e-non-slotted>
               After E2ENonSlotted
             </td>
           </tr>
@@ -104,19 +104,19 @@ export class E2ETemplated extends st.element implements ILifecycle {
           </thead>
           <tr>
             <td>
-              Before E2ESlotted
-              <E2ESlotted some="some more">
+              Before e2e-slotted
+              <E2eSlotted some="some more">
                 <template slot="heeeader">
                   Foo
                 </template>
                 <p>A paragraph for the main content.</p>
                 <p>And another one.</p>
-              </E2ESlotted>
+              </E2eSlotted>
               After E2ESlotted
             </td>
             <td>
               Before E2ESlotted
-              <e2eslotted>
+              <e2e-slotted>
                 <div>
                   Begin
                   <div>
@@ -133,7 +133,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
                   </div>
                   End
                 </div>
-              </e2eslotted>
+              </e2e-slotted>
               After E2ESlotted
             </td>
           </tr>
@@ -158,13 +158,13 @@ export class E2ETemplated extends st.element implements ILifecycle {
           <tr>
             <td>
               Before E2ESlotted
-              <E2ESlotted some="some more">
-              </E2ESlotted>
+              <E2eSlotted some="some more">
+              </E2eSlotted>
               After E2ESlotted
             </td>
             <td>
               Before E2ESlotted
-              <e2eslotted>
+              <e2e-slotted>
                 <div>
                   Begin
                   <div>
@@ -180,7 +180,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
                   </div>
                   End
                 </div>
-              </e2eslotted>
+              </e2e-slotted>
               After E2ESlotted
             </td>
           </tr>
@@ -205,15 +205,15 @@ export class E2ETemplated extends st.element implements ILifecycle {
           <tr>
             <td>
               Before E2ESlotted
-              <E2ESlotted some="some more">
+              <E2eSlotted some="some more">
                 <p>A paragraph for the main content.</p>
                 <p>And another one.</p>
-              </E2ESlotted>
+              </E2eSlotted>
               After E2ESlotted
             </td>
             <td>
               Before E2ESlotted
-              <e2eslotted>
+              <e2e-slotted>
                 <div>
                   Begin
                   <div>
@@ -230,7 +230,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
                   </div>
                   End
                 </div>
-              </e2eslotted>
+              </e2e-slotted>
               After E2ESlotted
             </td>
           </tr>
@@ -256,7 +256,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
           <tr>
             <td>
               Before E2ESlotted
-              <E2ESlotted some="some more">
+              <E2eSlotted some="some more">
                 <template slot="header">
                   <h3>Here might be a page title {random}</h3>
                 </template>
@@ -267,13 +267,13 @@ export class E2ETemplated extends st.element implements ILifecycle {
                 <template slot="footer">
                   <p>Here's some contact info</p>
                 </template>
-              </E2ESlotted>
+              </E2eSlotted>
               After E2ESlotted
             </td>
 
             <td>
               Before E2ESlotted
-              <e2eslotted>
+              <e2e-slotted>
                 <div>
                   Begin
                   <div>
@@ -290,7 +290,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
                   </div>
                   End
                 </div>
-              </e2eslotted>
+              </e2e-slotted>
               After E2ESlotted
             </td>
 
@@ -318,7 +318,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
           <tr>
             <td>
               Before E2ESlotted
-              <E2ESlotted some="some more">
+              <E2eSlotted some="some more">
 
                 <p>A paragraph for the main content.</p>
                 <p>And another one.</p>
@@ -326,12 +326,12 @@ export class E2ETemplated extends st.element implements ILifecycle {
                 <template slot="footer">
                   <p>Here's some contact info {random}</p>
                 </template>
-              </E2ESlotted>
+              </E2eSlotted>
               After E2ESlotted
             </td>
             <td>
               Before E2ESlotted
-              <e2eslotted>
+              <e2e-slotted>
                 <div>
                   Begin
                   <div>
@@ -348,7 +348,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
                   </div>
                   End
                 </div>
-              </e2eslotted>
+              </e2e-slotted>
               After E2ESlotted
             </td>
           </tr>
@@ -361,7 +361,7 @@ export class E2ETemplated extends st.element implements ILifecycle {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "E2ETemplated": Partial<E2ETemplated>;
+      "E2ETemplated": Partial<E2eTemplated>;
     }
   }
 }

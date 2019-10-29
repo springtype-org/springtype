@@ -1,6 +1,6 @@
 import { st } from "../../../src/core";
-import { customElement } from "../../../src/web/customelement";
-import { ILifecycle } from "../../../src/web/customelement/interface";
+import { component } from "../../../src/web/component";
+import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 interface MyTheme {
 	primaryColor: string;
@@ -14,8 +14,8 @@ const themeB: MyTheme = {
 	primaryColor: "#0000cc"
 };
 
-@customElement()
-export class ThemeTest extends st.element implements ILifecycle {
+@component()
+export class ThemeTest extends st.component implements ILifecycle {
 	onConnect() {
 		this.changeThemeA();
 	}
@@ -45,4 +45,4 @@ export class ThemeTest extends st.element implements ILifecycle {
 	}
 }
 
-st.render(ThemeTest);
+st.render(<ThemeTest />);

@@ -1,6 +1,5 @@
 import { ChangeType } from "../../../core/cd/interface/change-type";
 
-
 export interface IStateChange {
   type: ChangeType;
   name: string;

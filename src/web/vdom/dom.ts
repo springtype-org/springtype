@@ -1,9 +1,8 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
-import { CustomHTMLElement } from "../customelement";
-import { CUSTOM_ELEMENT_OPTIONS, INTERNAL } from "../customelement/interface/icustom-html-element";
+import { Component } from "../component";
+import { COMPONENT_OPTIONS, INTERNAL } from "../component/interface/icomponent";
 import { GlobalCache } from "./../../core/st/interface/i$st";
-import { IComponentLifecycle } from "./../customelement/interface/ilifecycle";
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
 import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
@@ -22,10 +21,11 @@ if (!st.dom) {
       return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
     },
 
-    isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][tagName],
+    isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.COMPONENT_REGISTRY][tagName],
 
     createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, isSvg?: boolean): IElement | undefined => {
       let newEl: Element;
+      let component = st.getComponent(virtualNode.type) as any;
 
       if (typeof isSvg == "undefined") {
         if (virtualNode.type.toUpperCase() == "SVG") {
@@ -36,28 +36,32 @@ if (!st.dom) {
       if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
         newEl = document.createElementNS("http://www.w3.org/2000/svg", virtualNode.type as string);
       } else {
+
+        if (component) {
+
+          // use <class-name> instead of ClassName which would end up as <classname> in DOM
+          virtualNode.type = component[COMPONENT_OPTIONS].tagName;
+        }
         newEl = document.createElement(virtualNode.type as string);
       }
 
-      let component: IComponentLifecycle | undefined = undefined;
-
       // identified virtual component
-      if (st.dom.isRegisteredComponent(virtualNode.type)) {
-        // @ts-ignore
-        component = st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][virtualNode.type];
+      if (component) {
 
-        // functional API
+        // functional component
         // @ts-ignore
         if (!component.name) {
           // @ts-ignore
           const fn = component as Function;
 
+          // TODO: Can it re-use an existing instance?
+
           // create shallow component instance
-          component = new CustomHTMLElement();
+          component = new Component();
 
           // assign options
           // @ts-ignore
-          component[INTERNAL].options = fn[CUSTOM_ELEMENT_OPTIONS];
+          component[INTERNAL].options = fn[COMPONENT_OPTIONS];
 
           // execute function and assign render method
           component.render = fn(component);
@@ -172,6 +176,12 @@ if (!st.dom) {
   if (!st.render) {
     // add render method for awaiting / initial rendering
     st.render = async (node: IVirtualNode) => {
+
+      if (!node.type || !node.attributes || !node.children) {
+        st.error('Invalid virutal node: ', JSON.stringify(node));
+        throw new Error('This virtual node does NOT look like one');
+      }
+
       await st.dom.isReady();
       st.dom.createElement(node, document.body);
     };

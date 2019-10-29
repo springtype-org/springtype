@@ -1,11 +1,11 @@
 import { st } from "../../../../src/core";
-import { attr, customElement } from "../../../../src/web/customelement";
-import { ILifecycle } from "../../../../src/web/customelement/interface";
-import { AttrType } from "../../../../src/web/customelement/trait/attr";
+import { attr, component } from "../../../../src/web/component";
+import { ILifecycle } from "../../../../src/web/component/interface";
+import { AttrType } from "../../../../src/web/component/trait/attr";
 import { tsx } from "../../../../src/web/vdom";
 
-@customElement()
-export class E2ESlotted extends st.element implements ILifecycle {
+@component()
+export class E2eSlotted extends st.component implements ILifecycle {
 
   @attr(AttrType.DOM_TRANSPARENT)
   some: string = "some";
@@ -32,10 +32,10 @@ export class E2ESlotted extends st.element implements ILifecycle {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "E2ESlotted": Partial<E2ESlotted>;
+      "E2eSlotted": Partial<E2eSlotted>;
 
       // this is only necessary for demonstration of the 1:1 e2e test case
-      "e2eslotted": Partial<E2ESlotted>;
+      "e2e-slotted": Partial<E2eSlotted>;
     }
   }
 }

@@ -6,7 +6,7 @@ import { tsx } from "../../../../../src/web/vdom";
 import { IVirtualNode } from "../../../../../src/web/vdom/interface";
 
 @customElement("top-bar-container")
-export class TopBarContainer extends st.element {
+export class TopBarContainer extends st.component {
   @attr
   "attr-type": VariantType = false;
 

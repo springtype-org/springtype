@@ -5,16 +5,16 @@ import { removeContextChangeHandlersOfInstance } from "../../core/context/contex
 import { GlobalCache } from "../../core/st/interface/i$st";
 import { transformSlots, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
-import { ICustomElementOptions } from "./interface";
-import { CUSTOM_ELEMENT_OPTIONS, ICustomHTMLElementInternals, INTERNAL } from "./interface/icustom-html-element";
+import { IComponentOptions } from "./interface";
+import { COMPONENT_OPTIONS, IComponentInternals, INTERNAL } from "./interface/icomponent";
 import { IComponentLifecycle, ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
 import { IOnStateChange, IStateChange } from "./interface/ion-state-change";
 import { AttrTrait, AttrType } from "./trait/attr";
 import { StateTrait } from "./trait/state";
 
-export class CustomHTMLElement implements IComponentLifecycle, ILifecycle, IOnStateChange {
+export class Component implements IComponentLifecycle, ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
-  [INTERNAL]: ICustomHTMLElementInternals;
+  [INTERNAL]: IComponentInternals;
 
   constructor() {
 
@@ -22,15 +22,15 @@ export class CustomHTMLElement implements IComponentLifecycle, ILifecycle, IOnSt
     this[INTERNAL] = {
       notInitialRender: false,
       attributes: {},
-      options: Object.getPrototypeOf(this).constructor[CUSTOM_ELEMENT_OPTIONS],
-    } as ICustomHTMLElementInternals;
+      options: Object.getPrototypeOf(this).constructor[COMPONENT_OPTIONS],
+    } as IComponentInternals;
 
     StateTrait.enableFor(this);
     AttrTrait.enableFor(this);
     ContextTrait.enableFor(this);
 
     // register with global instance registry
-    st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].push(this);
+    st[GlobalCache.COMPONENT_INSTANCES].push(this);
   }
 
   getRoot(): HTMLElement {
@@ -61,9 +61,9 @@ export class CustomHTMLElement implements IComponentLifecycle, ILifecycle, IOnSt
 
     // evict from global instance registry
     // (e.g. doesn't retrigger render on TSS theme change)
-    let index = st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].indexOf(this);
+    let index = st[GlobalCache.COMPONENT_INSTANCES].indexOf(this);
     if (index > -1) {
-      st[GlobalCache.CUSTOM_ELEMENT_INSTANCES].splice(index, 1);
+      st[GlobalCache.COMPONENT_INSTANCES].splice(index, 1);
     }
 
     // remove @context handlers
@@ -234,19 +234,30 @@ export class CustomHTMLElement implements IComponentLifecycle, ILifecycle, IOnSt
 // from within interface folders, because here we need a typeof of an actual implementation
 // and once we would import the impl. inside of an interface, it becomes a dependency (of the interface)
 // thus we have to invert the dependencies direction
-export type ICustomHTMLElement = typeof CustomHTMLElement;
+export type IComponent = typeof Component;
 
-if (!st.element) {
-  st.element = CustomHTMLElement;
+if (!st.component) {
+  st.component = Component;
 }
 
-export const defineCustomElement = (targetClassOrFunction: any, options: ICustomElementOptions = {}) => {
+export const getComponent = (className: string) => (st[GlobalCache.COMPONENT_REGISTRY][className] as any);
+
+if (!st.getComponent) {
+  st.getComponent = getComponent;
+}
+
+export const defineComponent = (targetClassOrFunction: any, options: IComponentOptions = {}) => {
 
   // register with element registry
-  st[GlobalCache.CUSTOM_ELEMENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
+  st[GlobalCache.COMPONENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
+
+  // defaults the tag name
+  if (!options.tagName) {
+    options.tagName = targetClassOrFunction.name;
+  }
 
   // assign options to be used in CustomElement derived class constructor
-  targetClassOrFunction[CUSTOM_ELEMENT_OPTIONS] = options;
+  targetClassOrFunction[COMPONENT_OPTIONS] = options;
 
   // return enhanced class / function
   return targetClassOrFunction;

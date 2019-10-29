@@ -1,6 +1,5 @@
-import { ICustomElementInstances, ICustomHTMLElement } from "../../../web/customelement/interface";
-import { ICustomElementRegistry } from "../../../web/customelement/interface/icustom-element-registry";
-import { IOnStateChangeHandler } from "../../../web/customelement/interface/ion-state-change";
+import { IComponentInstances, IComponentRegistry } from "../../../web/component/interface";
+import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
 import { IDOM, IGetDomRef, IRenderer, ISetDomRef, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
@@ -10,20 +9,22 @@ import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
+import { IComponent } from "./../../../web/component/component";
 import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
 
 /**
  * public $st and internal st API
  */
 export interface I$st {
-  // adds/replaces the root DOM node in <body> with a new instance of the custom element given
-  render: (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => void;
+  // --- core specific
 
   // enables trace mode (internal framework log messages)
   debug: boolean;
 
-  // DOM routing API
-  router: IRouter;
+  // logging API
+  info: IlogFunction;
+  warn: IlogFunction;
+  error: IlogFunction;
 
   // Dependency injection API
   di: IDI;
@@ -32,18 +33,6 @@ export interface I$st {
   i18n: Ii18n;
   t: It;
 
-  // TSS stylesheet renderer and theme / <style> template manager
-  tss: ITSS;
-
-  // TSX transformator function
-  tsx: (type: IVirtualNodeType, attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null, ...children: Array<IVirtualChildren>) => Array<IVirtualNode>|IVirtualNode|undefined;
-
-  // DOM mutation abstraction
-  dom: IDOM;
-
-  // initial and patch (differential) rendering
-  renderer: IRenderer;
-
   // Change detection API
 
   // change detection for objects and arrays (deep changes)
@@ -51,19 +40,6 @@ export interface I$st {
 
   // change detection with support for (deep changes + reference set changes)
   onStateChange: (instance: any, name: string | symbol, type: ChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
-
-  // DOM reference API
-  // set and get DOM references from within @customElement classes using @ref
-  getDomRef: IGetDomRef;
-  setDomRef: ISetDomRef;
-
-  // custom element base class implemenetation to inherit from
-  element: ICustomHTMLElement;
-
-  // logging API
-  info: IlogFunction;
-  warn: IlogFunction;
-  error: IlogFunction;
 
   // context API
   getContext<S = {}>(contextName: string, onChange?: IOnStateChangeHandler, instance?: any): S;
@@ -76,12 +52,47 @@ export interface I$st {
 
   // global cache API
   CONTEXT: IContextCacheEntries;
-  CUSTOM_ELEMENT_INSTANCES: ICustomElementInstances;
-  CUSTOM_ELEMENT_REGISTRY: ICustomElementRegistry;
+
+  // --- web specific
+
+  // TSS stylesheet renderer and theme / <style> template manager
+  tss: ITSS;
+
+  // TSX transformator function
+  tsx: (
+    type: IVirtualNodeType,
+    attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null,
+    ...children: Array<IVirtualChildren>
+  ) => Array<IVirtualNode> | IVirtualNode | undefined;
+
+  // DOM mutation abstraction
+  dom: IDOM;
+
+  // initial and patch (differential) rendering
+  renderer: IRenderer;
+
+  // DOM routing API
+  router: IRouter;
+
+  // adds/replaces the root DOM node in <body> with a new instance of the custom element given
+  render: (customElementClassRef: any, attributes?: Partial<typeof customElementClassRef>) => void;
+
+  // DOM reference API
+  // set and get DOM references from within @customElement classes using @ref
+  getDomRef: IGetDomRef;
+  setDomRef: ISetDomRef;
+
+  // virtual component base class implemenetation to inherit from
+  component: IComponent;
+  getComponent: (className: string) => IComponent;
+
+  // components are @springtype/web components
+  COMPONENT_INSTANCES: IComponentInstances;
+  COMPONENT_REGISTRY: IComponentRegistry;
 }
 
 export enum GlobalCache {
-  CUSTOM_ELEMENT_INSTANCES = "CUSTOM_ELEMENT_INSTANCES",
+  COMPONENT_INSTANCES = "COMPONENT_INSTANCES",
   CONTEXT = "CONTEXT",
-  CUSTOM_ELEMENT_REGISTRY = "CUSTOM_ELEMENT_REGISTRY",
+  COMPONENT_REGISTRY = "COMPONENT_REGISTRY",
 }

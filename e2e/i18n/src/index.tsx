@@ -1,6 +1,6 @@
 import { st } from "../../../src/core";
 import { formatter, translation } from "../../../src/core/i18n";
-import { customElement } from "../../../src/web/customelement";
+import { component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 // @ts-ignore JSON module import activated in bundler config
 import * as de from "./i18n/de.json";
@@ -10,8 +10,8 @@ import * as en from "./i18n/en.json";
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de_DE", de)
 @translation("en_US", en) // default locale
-@customElement()
-export class E2Ei18n extends st.element {
+@component()
+export class E2Ei18n extends st.component {
   setGerman = () => {
     st.i18n.setLanguage("de_DE");
     this.doRender();

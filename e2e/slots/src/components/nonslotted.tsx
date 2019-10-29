@@ -1,10 +1,10 @@
 import { st } from "../../../../src/core";
-import { customElement } from "../../../../src/web/customelement";
-import { ILifecycle } from "../../../../src/web/customelement/interface";
+import { component } from "../../../../src/web/component";
+import { ILifecycle } from "../../../../src/web/component/interface";
 import { tsx } from "../../../../src/web/vdom";
 
-@customElement()
-export class E2ENonSlotted extends st.element implements ILifecycle {
+@component()
+export class E2eNonSlotted extends st.component implements ILifecycle {
 
   render() {
     return <p>
@@ -16,10 +16,10 @@ export class E2ENonSlotted extends st.element implements ILifecycle {
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      "E2ENonSlotted": Partial<E2ENonSlotted>;
+      "E2ENonSlotted": Partial<E2eNonSlotted>;
 
       // this is only necessary for demonstration of the 1:1 e2e test case
-      "e2enonslotted": Partial<E2ENonSlotted>;
+      "e2e-non-slotted": Partial<E2eNonSlotted>;
     }
   }
 }

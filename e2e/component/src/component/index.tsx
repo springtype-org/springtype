@@ -3,8 +3,8 @@ import { st } from "../../../../src/core";
 import { ChangeDetector } from "../../../../src/core/cd";
 import { context } from "../../../../src/core/context";
 import { formatter, translation } from "../../../../src/core/i18n";
-import { attr, customElement, state } from "../../../../src/web/customelement";
-import { IStateChange } from "../../../../src/web/customelement/interface";
+import { attr, component, state } from "../../../../src/web/component";
+import { IStateChange } from "../../../../src/web/component/interface";
 import { tsx } from "../../../../src/web/vdom";
 // @ts-ignore JSON module import activated in bundler config
 import * as de from "./i18n/de.json";
@@ -15,10 +15,10 @@ import { tss } from "./index.tss";
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de", de)
 @translation("en", en)
-@customElement({
+@component({
   tss
 })
-export class Foo2 extends st.element {
+export class Foo2 extends st.component {
   @attr()
   foo: string = "Jesus!!!";
 

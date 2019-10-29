@@ -4,17 +4,17 @@ import fragmentShader from "raw-loader!../../shaders/warp.frag";
 // @ts-ignore
 import vertexShader from "raw-loader!../../shaders/warp.vert";
 import { st } from "../../../../../src/core";
-import { customElement } from "../../../../../src/web/customelement";
-import { ILifecycle } from "../../../../../src/web/customelement/interface";
+import { component } from '../../../../../src/web/component';
+import { ILifecycle } from '../../../../../src/web/component/interface';
 import { domRef } from "../../../../../src/web/vdom";
 import tss from "./first-scene.style";
 import tpl from "./first-scene.tpl";
 
-@customElement({
+@component({
     tss,
     tpl
 })
-export class FirstScene extends st.element implements ILifecycle {
+export class FirstScene extends st.component implements ILifecycle {
 
     private engine: Engine;
     private scene: Scene;

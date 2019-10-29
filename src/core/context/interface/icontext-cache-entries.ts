@@ -1,4 +1,4 @@
-import { IOnStateChangeHandler } from "../../../web/customelement/interface/ion-state-change";
+import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
 
 export interface IContextCacheEntries {
   [contextName: string]: {

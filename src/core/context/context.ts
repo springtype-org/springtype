@@ -1,4 +1,4 @@
-import { IOnStateChangeHandler } from "../../web/customelement/interface/ion-state-change";
+import { IOnStateChangeHandler } from "../../web/component/interface/ion-state-change";
 import { ChangeType } from "../cd/interface/change-type";
 import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../cd/prop-change-manager";
 import { isPrimitive } from "../lang/is-primitive";
@@ -54,14 +54,14 @@ const initContextCacheEntry = (contextName: string, initialValue: any) => {
  * @param onChange Handler function, called on change
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-export const addContextChangeHandler = st.addContextChangeHandler = (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => {
+export const addContextChangeHandler = (st.addContextChangeHandler = (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => {
   if (typeof onChange == "function") {
     if (instance) {
       (onChange as any)[HANDLER_OWNING_INSTANCE] = instance;
     }
     st[GlobalCache.CONTEXT][contextName].onChangeHandlers.push(onChange);
   }
-};
+});
 
 /**
  * Initializes a global context object
@@ -119,4 +119,4 @@ st.getContext = function getContext<S = {}>(contextName: string, onChange?: IOnS
   initContextCacheEntry(contextName, DEFAULT_CONTEXT_VALUE);
   addContextChangeHandler(contextName, onChange!, instance);
   return st[GlobalCache.CONTEXT][contextName].value;
-}
+};

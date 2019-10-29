@@ -1,14 +1,14 @@
 import { st } from "../../../../../src/core";
-import { customElement } from "../../../../../src/web/customelement";
-import { ILifecycle } from "../../../../../src/web/customelement/interface";
+import { component } from "../../../../../src/web/component";
+import { ILifecycle } from "../../../../../src/web/component/interface";
 import tpl from "./templatename-main.tpl";
 import tss from "./templatename-main.tss";
 
-@customElement({
+@component({
     tpl,
     tss
 })
-export class TemplateNameMain extends st.element implements ILifecycle {
+export class TemplateNameMain extends st.component implements ILifecycle {
 }
 
 declare global {

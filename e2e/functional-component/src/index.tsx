@@ -1,5 +1,5 @@
 import { st } from "../../../src/core";
-import { customElement, CustomHTMLElement, render } from "../../../src/web/customelement";
+import { component, Component, render } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 
 interface Theme {
@@ -11,27 +11,29 @@ st.tss.setTheme({
 });
 
 // define a functional custom element
-const E2EClock = customElement(
-  (scope: CustomHTMLElement) => {
+const E2EClock = component(
+  (scope: Component) => {
     // defined at construction time
     const updateUnixTime = () => scope.setAttribute("now", Date.now());
 
-    // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
-    return () => (
+    const renderFn = () => (
       <div>
         <button onClick={updateUnixTime}>Show time</button>
         <E2ETimeDisplay>{scope.getAttribute("now")}</E2ETimeDisplay>
       </div>
     );
+
+    // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
+    return renderFn;
   },
   // renderStyle fn
-  (scope: CustomHTMLElement, theme: Theme) => `button {
+  (scope: Component, theme: Theme) => `button {
     background: ${theme.primaryColor};
   }`,
 );
 
 // simplified functional element, just renders what comes in
-const E2ETimeDisplay = customElement(
+const E2ETimeDisplay = component(
   render(() => {
     return (
       <div>

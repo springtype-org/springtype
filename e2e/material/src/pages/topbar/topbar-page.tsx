@@ -7,7 +7,7 @@ import { tsx } from "../../../../../src/web/vdom";
 import "./top-bar-container";
 
 @customElement("topbar-page")
-export class TopBarPage extends st.element {
+export class TopBarPage extends st.component {
   static ROUTE = "";
   selectItems: ISelectItem<VariantType>[] = [
     { id: "1", value: false, displayValue: <strong>Standard</strong> },

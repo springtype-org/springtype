@@ -1,9 +1,9 @@
 import { st } from "../../../../../src/core";
-import { customElement } from "../../../../../src/web/customelement";
+import { component } from "../../../../../src/web/component";
 import { tsx } from "../../../../../src/web/vdom";
 
-@customElement()
-export class HomePage extends st.element {
+@component()
+export class HomePage extends st.component {
   static ROUTE = "";
 
   constructor() {

@@ -12,7 +12,7 @@ export type VariantType = false | "fixed" | "prominent" | "fixed-prominent" | "s
 @customElement("mwc-select", {
   tpl,
 })
-export class MwcSelect extends st.element {
+export class MwcSelect extends st.component {
   @attr
   "mwc-items": ISelectItem[] = [];
   @attr

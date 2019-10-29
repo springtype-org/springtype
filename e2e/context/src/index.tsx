@@ -1,7 +1,7 @@
 import { st } from "../../../src/core";
 import { context } from "../../../src/core/context";
-import { customElement } from "../../../src/web/customelement";
-import { ILifecycle, IStateChange } from "../../../src/web/customelement/interface";
+import { component } from "../../../src/web/component";
+import { ILifecycle, IStateChange } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 interface LolShared {
   lala: number;
@@ -11,9 +11,8 @@ interface LolShared {
 
 const contextName = "foo";
 
-@customElement()
-export class E2EContext extends st.element implements ILifecycle {
-
+@component()
+export class E2EContext extends st.component implements ILifecycle {
 
   @context(contextName)
   lolShared: LolShared = st.initContext<LolShared>(contextName, { lala: 123 });
@@ -54,7 +53,7 @@ export class E2EContext extends st.element implements ILifecycle {
   }
 
   render() {
-    return <div>Primary: {JSON.stringify(this.lolSharedMirror)} and Share: {JSON.stringify(this.lolSharedMirror)}</div>;
+    return <div>Primary: {JSON.stringify(this.lolShared)} and Share: {JSON.stringify(this.lolSharedMirror)}</div>;
   }
 }
 
