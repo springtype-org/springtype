@@ -132,7 +132,7 @@ if (!st.dom) {
       if (name === "ref") {
         const refName = Object.keys(value)[0];
         if (process.env.NODE_ENV === "development") {
-          st.debug && st.info("dom.ts", "setting", value[refName], `.${refName} = `, domElement);
+          st.info("dom.ts", "setting", value[refName], `.${refName} = `, domElement);
         }
         st.setDomRef(refName, value[refName], domElement);
         return;
@@ -148,7 +148,7 @@ if (!st.dom) {
         }
 
         if (process.env.NODE_ENV === "development") {
-          st.debug && st.info("dom.ts", domElement, `.addEventListener('${eventName}', `, value, ", /* capture */ ", doCapture, `)`);
+          st.info("dom.ts", domElement, `.addEventListener('${eventName}', `, value, ", /* capture */ ", doCapture, `)`);
         }
 
         domElement.addEventListener(eventName, value, doCapture);

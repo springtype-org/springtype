@@ -1,3 +1,4 @@
+import { LogLevel } from "../log/interface";
 import { GlobalCache, I$st } from "./interface/i$st";
 
 /**
@@ -31,3 +32,12 @@ if (!_globalThis[ST_KEY]) {
 
 export const globalThis: any = _globalThis;
 export const st: I$st = _globalThis[ST_KEY];
+
+// set default core options
+if (!st.options) {
+  st.options = {
+    core: {
+      logLevel: LogLevel.WARN
+    }
+  };
+}

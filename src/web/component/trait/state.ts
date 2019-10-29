@@ -32,7 +32,7 @@ export class StateTrait {
 
   static handleCustomElementStateChange(instance: any, change: IStateChange) {
     if (process.env.NODE_ENV === "development") {
-      st.debug && st.info("@state()", change.name, "change detected on", instance, change);
+      st.info("@state()", change.name, "change detected on", instance, change);
     }
 
     // call handler method if implemented

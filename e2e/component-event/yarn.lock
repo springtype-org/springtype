@@ -6628,10 +6628,10 @@ ssri@^7.0.0:
     figgy-pudding "^3.5.1"
     minipass "^3.0.0"
 
-st-start@^2.0.0-alpha.13:
-  version "2.0.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-alpha.13.tgz#83d0ecebd13f0349d9409d074b53424b06191ec4"
-  integrity sha512-RUpnUCPXUcviZKXUdID6eh64M+XbmwRPB3FegmTjxdyiCz2ePixWcRrAPzfVccAi6Ygd2C8sNN2ihWY1IapDvQ==
+st-start@^2.0.0-alpha.21:
+  version "2.0.0-alpha.21"
+  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-alpha.21.tgz#9cec82dbc3cd58c918fbc6cefc5273866087673a"
+  integrity sha512-VcK5dfrZ8ptf/RvuHxYGpU66wvTXfwzwrHkuQfPkiabczLK7UDZpiuXUXFYxO/Jsxcq6b5MNkXoA3i6UmmG6Zg==
   dependencies:
     "@babel/core" "^7.6.4"
     "@babel/plugin-proposal-class-properties" "^7.5.5"

@@ -11,6 +11,11 @@ import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
 import { IComponent } from "./../../../web/component/component";
 import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
+import { ICoreOptions } from "./icore-options";
+
+export interface IOptions {
+  core: ICoreOptions;
+}
 
 /**
  * public $st and internal st API
@@ -19,10 +24,12 @@ export interface I$st {
   // --- core specific
 
   // enables trace mode (internal framework log messages)
-  debug: boolean;
+  options: IOptions;
 
   // logging API
   info: IlogFunction;
+  log: IlogFunction;
+  debug: IlogFunction;
   warn: IlogFunction;
   error: IlogFunction;
 

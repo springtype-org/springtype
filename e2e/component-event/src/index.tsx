@@ -1,5 +1,6 @@
 import { st } from "../../../src/core";
 import { ChangeType } from "../../../src/core/cd/interface/change-type";
+import { LogLevel } from "../../../src/core/log/interface";
 import { component, state } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
@@ -8,7 +9,7 @@ import { StButton, StButtonClickEvent, StButtonClickEventDetail } from "./st-but
 if (process.env.NODE_ENV === "development") {
 
   // enable framework internal logging
-  st.debug = true;
+  st.options.core.logLevel = LogLevel.INFO;
 }
 
 @component()
