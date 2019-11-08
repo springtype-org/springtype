@@ -6,11 +6,11 @@
   },
   "description": "Simply powerful Website, PWA and App development.",
   "scripts": {
-    "clean": "st-run st-rm-rf dist",
+    "clean": "st-rm-rf dist",
     "prebuild": "yarn clean",
     "build": "tsc -p tsconfig.dist.json",
     "watch": "tsc -p tsconfig.dist.json -w",
-    "postbuild": "st-run st-cp package.json .npmignore README.md LICENSE dist",
+    "postbuild": "st-cp package.json .npmignore README.md LICENSE dist",
     "pree2e": "ts-node ./scripts/e2e-build-all.ts",
     "e2e": "testcafe chrome:headless e2e/**/__e2e__/*",
     "test": "jest --verbose --watch",
@@ -26,10 +26,15 @@
     "@types/node": "^12.12.6",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "st-run": "^2.0.0-alpha.29",
     "testcafe": "^1.6.1",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "st-run": "2.0.0-alpha.23",
     "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "global": "^4.4.0",
+    "st-cp": "^2.0.0-alpha.4",
+    "st-rm-rf": "^2.0.0-alpha.8"
   }
 }

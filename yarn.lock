@@ -2062,6 +2062,11 @@ dns-socket@^4.2.0:
   dependencies:
     dns-packet "^5.1.2"
 
+dom-walk@^0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
+  integrity sha1-ZyIm3HTI95mtNTB9+TaroRrNYBg=
+
 domexception@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/domexception/-/domexception-1.0.1.tgz#937442644ca6a31261ef36e3ec677fe805582c90"
@@ -2500,6 +2505,14 @@ glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3:
     minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
+
+global@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/global/-/global-4.4.0.tgz#3e7b105179006a323ed71aafca3e9c57a5cc6406"
+  integrity sha512-wv/LAoHdRE3BeTGz53FAamhGlPLhlssK45usmGFThIi4XqnBmjKQ16u+RNbP7WvigRZDxUsM0J3gcQ5yicaL0w==
+  dependencies:
+    min-document "^2.19.0"
+    process "^0.11.10"
 
 globals@^11.1.0:
   version "11.12.0"
@@ -3864,6 +3877,13 @@ mimic-response@^1.0.0, mimic-response@^1.0.1:
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
   integrity sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
 
+min-document@^2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/min-document/-/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
+  integrity sha1-e9KC4/WELtKVu3SM3Z8f+iyCRoU=
+  dependencies:
+    dom-walk "^0.1.0"
+
 minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -4468,6 +4488,11 @@ process-nextick-args@~2.0.0:
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==
 
+process@^0.11.10:
+  version "0.11.10"
+  resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
+  integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
+
 promisify-event@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/promisify-event/-/promisify-event-1.0.0.tgz#bd7523ea06b70162f370979016b53a686c60e90f"
@@ -5069,6 +5094,13 @@ sshpk@^1.7.0:
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
 
+st-cp@^2.0.0-alpha.4:
+  version "2.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/st-cp/-/st-cp-2.0.0-alpha.4.tgz#5681c536168fbaf5257aff07020004eabd79b2d2"
+  integrity sha512-MwQWv5+6iqjSPCaYUl326B2pKfRsXx2SOddL6/odWNvIIYY4pT5wul+LIJaFwNdwRRAUHmfbpTpfqh0Qyq6k7A==
+  dependencies:
+    chalk "^2.4.2"
+
 st-rm-rf@^1.0.0-alpha.1.42:
   version "1.0.0-alpha.1.42"
   resolved "https://registry.yarnpkg.com/st-rm-rf/-/st-rm-rf-1.0.0-alpha.1.42.tgz#62edebba9af5be5ffd9580029477a041875c59d6"
@@ -5081,6 +5113,13 @@ st-rm-rf@^2.0.0-alpha.1, st-rm-rf@^2.0.0-alpha.5:
   version "2.0.0-alpha.5"
   resolved "https://registry.yarnpkg.com/st-rm-rf/-/st-rm-rf-2.0.0-alpha.5.tgz#a9d80fe26410ea2c4b0250725f3ba87d2c8542d6"
   integrity sha512-fOmz8zpLidfUXFkTVaM2QkTxwUcWsKSObrZb4fXnIV0eSBr+AvU5RZozH9pfGqmHqwGv7rKWN50W1puz4iB6ag==
+  dependencies:
+    chalk "^2.4.2"
+
+st-rm-rf@^2.0.0-alpha.8:
+  version "2.0.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/st-rm-rf/-/st-rm-rf-2.0.0-alpha.8.tgz#4aa761378d4d7bae2dd6fe19516401cddd4c6c50"
+  integrity sha512-gIdb2lZdsHjtZ9nBMrAYnfiuyO1QEqwdH3QBc8jR2QCq92AOxFdhESt3u5TDWIRuwxA/T+oFmS2x3HPUQaeuqA==
   dependencies:
     chalk "^2.4.2"
 
@@ -5127,17 +5166,6 @@ st-run@2.0.0-alpha.2:
     public-ip "^3.2.0"
     st-rm-rf "^1.0.0-alpha.1.42"
 
-st-run@2.0.0-alpha.23:
-  version "2.0.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/st-run/-/st-run-2.0.0-alpha.23.tgz#89d42b09741f9eae2f44931ce49189d66704f900"
-  integrity sha512-GST+SRytU7hFoXZn4OOVNvsodWuOBThoQ0fFV6Jo5GfcK6GsiGCnqInw4Rj1Z0H3zu/tHHwXV9BSyHCUyvgebw==
-  dependencies:
-    chalk "^2.4.2"
-    cross-spawn "^7.0.1"
-    public-ip "^3.2.0"
-    st-rm-rf "^2.0.0-alpha.5"
-    st-run "2.0.0-alpha.17"
-
 st-run@2.0.0-alpha.4:
   version "2.0.0-alpha.4"
   resolved "https://registry.yarnpkg.com/st-run/-/st-run-2.0.0-alpha.4.tgz#541afb05e43a8c66f57a60835711edfdf7860b3a"
@@ -5148,6 +5176,16 @@ st-run@2.0.0-alpha.4:
     public-ip "^3.2.0"
     st-rm-rf "^1.0.0-alpha.1.42"
     st-run "2.0.0-alpha.2"
+
+st-run@^2.0.0-alpha.29:
+  version "2.0.0-alpha.29"
+  resolved "https://registry.yarnpkg.com/st-run/-/st-run-2.0.0-alpha.29.tgz#8d2c53d9d9004c9d301f9a5163138e9df3fa3b38"
+  integrity sha512-YASJ8J0V1CflqayNe35BYdAbz4mmmV/7bfIua26kDsk+cI0FvNv0PLExXSZUmwB/2d15V5xFsGVshG3Q+k72Hg==
+  dependencies:
+    chalk "^2.4.2"
+    public-ip "^3.2.0"
+    st-rm-rf "^2.0.0-alpha.5"
+    st-run "2.0.0-alpha.17"
 
 stack-utils@^1.0.1:
   version "1.0.2"
