@@ -18,7 +18,8 @@ import { GlobalCache, I$st } from "./interface/i$st";
 const ST_KEY = "$st";
 
 // scoped local global storage reference
-const _globalThis: any = typeof window === "undefined" ? global : window;
+const _globalThis: any = new Function("return this")();
+
 // makes sure the global storage is not re-initialized
 // and overwritten on subsequent calls / file imports
 if (!_globalThis[ST_KEY]) {
@@ -26,7 +27,7 @@ if (!_globalThis[ST_KEY]) {
   _globalThis[ST_KEY] = {
     [GlobalCache.COMPONENT_INSTANCES]: [],
     [GlobalCache.CONTEXT]: {},
-    [GlobalCache.COMPONENT_REGISTRY]: {}
+    [GlobalCache.COMPONENT_REGISTRY]: {},
   };
 }
 
@@ -37,7 +38,7 @@ export const st: I$st = _globalThis[ST_KEY];
 if (!st.options) {
   st.options = {
     core: {
-      logLevel: LogLevel.WARN
-    }
+      logLevel: LogLevel.WARN,
+    },
   };
 }

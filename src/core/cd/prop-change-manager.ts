@@ -28,6 +28,7 @@ export class PropChangeManager {
         }
         onChange(value, prevValue);
       },
+      configurable: true,
     });
     return value;
   }

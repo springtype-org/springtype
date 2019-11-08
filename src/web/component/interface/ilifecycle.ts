@@ -21,12 +21,6 @@ export interface RenderReasonMetaData {
   // previous value
   prevValue: any;
 }
-
-export interface IComponentLifecycle extends ILifecycle {
-  connectedCallback(): void;
-  disconnectedCallback(): void;
-}
-
 export interface ILifecycle {
   // before the component gets mounted to the DOM
   onBeforeConnect?(): void;
@@ -74,4 +68,9 @@ export interface ILifecycle {
 
   // before attribute changes get accepted
   shouldAttributeChange(name: string, value: any, prevValue: any): boolean;
+}
+
+export interface IComponentLifecycle extends ILifecycle {
+  connectedCallback(): void;
+  disconnectedCallback(): void;
 }

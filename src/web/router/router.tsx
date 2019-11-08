@@ -1,6 +1,6 @@
 import { st } from "../../core";
 import { component, render } from "../component";
-import { IComponent } from "../component/interface/icomponent";
+import { IComponent } from "../component/interface";
 import { tsx } from "../vdom";
 import { ILocationChangeDecision, IRouteDefinition, IRoutes } from "./interface/irouter";
 import { RouterOutlet } from "./router-outlet";
@@ -136,6 +136,8 @@ if (!st.router) {
           const guardResult = await decision.guard(decision);
 
           if (guardResult === false) {
+
+            console.log('RouterErrorGenericAccessDenied', RouterErrorGenericAccessDenied());
             decision.component = RouterErrorGenericAccessDenied;
           }
         }

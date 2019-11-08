@@ -1,10 +1,9 @@
-import { st } from "../../../src/core";
-import { attr, component } from "../../../src/web/component";
-import { ILifecycle } from "../../../src/web/component/interface";
-import { css } from "../../../src/web/tss/tss";
-import { domRef, tsx } from "../../../src/web/vdom";
-// you can easily use global CSS stylesheets like this
-import "../assets/global-styles.css";
+//import * as globalStyles from "assets/global-styles.css";
+import { st } from "../../../dist/core";
+import { attr, component } from "../../../dist/web/component";
+import { ILifecycle } from "../../../dist/web/component/interface";
+import { css } from "../../../dist/web/tss/tss";
+import { domRef, tsx } from "../../../dist/web/vdom";
 
 /**
  * A trivial, simple example of a custom element component
@@ -24,13 +23,17 @@ export class TemplateName extends st.component implements ILifecycle {
   constructor() {
     super();
 
+    console.log('name', this.name);
+
     // change sets after class property initialization
     this.name = "SpringType v2";
+
   }
 
   // attribute changes can be listened to
   onAttributeChange(name: string, value: any) {
-    st.info("@attr", name, "changed to", value);
+    st.info("@attr", name, "changed to", value /*, 'and', globalStyles*/);
+
   }
 
   // this method is called only one time after the first render

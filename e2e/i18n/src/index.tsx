@@ -2,10 +2,8 @@ import { st } from "../../../src/core";
 import { formatter, translation } from "../../../src/core/i18n";
 import { component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
-// @ts-ignore JSON module import activated in bundler config
-import * as de from "./i18n/de.json";
-// @ts-ignore JSON module import activated in bundler config
-import * as en from "./i18n/en.json";
+import de from "./i18n/de.json";
+import en from "./i18n/en.json";
 
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de_DE", de)

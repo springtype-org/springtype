@@ -3,10 +3,10 @@ import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
 import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { transformSlots, tsx } from "../vdom";
+import { newUniqueComponentName, transformSlots, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
-import { IComponentOptions } from "./interface";
-import { COMPONENT_OPTIONS, IComponentInternals, INTERNAL } from "./interface/icomponent";
+import { IComponentOptions, INTERNAL } from "./interface";
+import { COMPONENT_OPTIONS, IComponentInternals } from "./interface/icomponent";
 import { IComponentLifecycle, ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
 import { IOnStateChange, IStateChange } from "./interface/ion-state-change";
 import { AttrTrait, AttrType } from "./trait/attr";
@@ -186,7 +186,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   async doRender(tssOnly: boolean = false) {
     this.onBeforeRender(tssOnly);
 
-    const vdom: IVirtualNode | Array<IVirtualNode> = this.render();
+    let vdom: IVirtualNode | Array<IVirtualNode> = this.render();
     const tss: IVirtualNode | undefined = await this.doRenderStyle();
 
     if (!vdom) {
@@ -238,11 +238,6 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   onAfterRender(tssOnly: boolean = false) {}
 }
 
-// exception from the ./interface folder rule (to only export interfaces and types)
-// from within interface folders, because here we need a typeof of an actual implementation
-// and once we would import the impl. inside of an interface, it becomes a dependency (of the interface)
-// thus we have to invert the dependencies direction
-export type IComponent = typeof Component;
 
 if (!st.component) {
   st.component = Component;
@@ -262,6 +257,10 @@ export const defineComponent = (targetClassOrFunction: any, options: IComponentO
   if (!options.tagName) {
     options.tagName = targetClassOrFunction.name;
   }
+
+  if (!options.tagName) {
+    options.tagName = newUniqueComponentName();
+  } 
 
   // assign options to be used in CustomElement derived class constructor
   targetClassOrFunction[COMPONENT_OPTIONS] = options;

@@ -9,7 +9,7 @@ import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
 import { IDI } from "../../di/interface";
 import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
-import { IComponent } from "./../../../web/component/component";
+import { IComponent } from "./../../../web/component/interface";
 import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
 import { ICoreOptions } from "./icore-options";
 

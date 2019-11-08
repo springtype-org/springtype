@@ -1,11 +1,11 @@
-import "../../../src/core";
-import "../../../src/core/cd";
-import "../../../src/core/context";
-import "../../../src/core/di";
-import "../../../src/core/i18n";
-import "../../../src/core/lang";
-import "../../../src/web/component";
-import "../../../src/web/router";
-import "../../../src/web/tss";
-import "../../../src/web/vdom";
+import "../../../dist/core";
+import "../../../dist/core/cd";
+import "../../../dist/core/context";
+import "../../../dist/core/di";
+import "../../../dist/core/i18n";
+import "../../../dist/core/lang";
+import "../../../dist/web/component";
+import "../../../dist/web/router";
+import "../../../dist/web/tss";
+import "../../../dist/web/vdom";
 

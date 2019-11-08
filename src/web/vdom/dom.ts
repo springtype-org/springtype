@@ -1,7 +1,8 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { Component } from "../component";
-import { COMPONENT_OPTIONS, INTERNAL } from "../component/interface/icomponent";
+import { INTERNAL } from "../component/interface";
+import { COMPONENT_OPTIONS } from "../component/interface/icomponent";
 import { GlobalCache } from "./../../core/st/interface/i$st";
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";

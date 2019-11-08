@@ -1,5 +1,5 @@
 import { st } from "../../core/st/st";
-import { INTERNAL } from "../component/interface/icomponent";
+import { INTERNAL } from "../component/interface";
 import { IElement } from "./interface/ielement";
 import { IVirtualNode } from "./interface/ivirtual-node";
 import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";

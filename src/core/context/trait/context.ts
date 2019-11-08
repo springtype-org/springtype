@@ -19,7 +19,7 @@ export class ContextTrait {
         set: value => {
           st[GlobalCache.CONTEXT][contextPropAssignment.contextName].value = value;
         },
-        configurable: false,
+        configurable: true,
       });
     }
   }

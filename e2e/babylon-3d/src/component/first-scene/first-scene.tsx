@@ -1,12 +1,10 @@
 import { ArcRotateCamera, Axis, Color4, Effect, Engine, Mesh, Scene, ShaderMaterial, Texture, Vector3 } from 'babylonjs';
-// @ts-ignore
-import fragmentShader from "raw-loader!../../shaders/warp.frag";
-// @ts-ignore
-import vertexShader from "raw-loader!../../shaders/warp.vert";
 import { st } from "../../../../../src/core";
 import { component } from '../../../../../src/web/component';
 import { ILifecycle } from '../../../../../src/web/component/interface';
 import { domRef } from "../../../../../src/web/vdom";
+import fragmentShader from "../../shaders/warp.frag";
+import vertexShader from "../../shaders/warp.vert";
 import tss from "./first-scene.style";
 import tpl from "./first-scene.tpl";
 

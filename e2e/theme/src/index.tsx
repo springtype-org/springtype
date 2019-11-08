@@ -37,7 +37,6 @@ export class ThemeTest extends st.component implements ILifecycle {
 			</div>
 		);
 	}
-
 	renderStyle(theme: MyTheme) {
 		return `.basic {
 			background: ${theme.primaryColor}

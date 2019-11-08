@@ -1,8 +1,6 @@
 import { ISlotChildren } from '../../vdom/interface/ivirtual-node';
 import { IComponentOptions } from "./icomponent-options";
 
-export { IComponent } from "../component";
-
 export interface IComponentInternals {
   el: HTMLElement;
   notInitialRender: boolean;
@@ -17,4 +15,3 @@ export interface IComponentInternals {
 export type RenderStyleFunction = (instance: any, theme?: any) => string;
 
 export const COMPONENT_OPTIONS: any = "COMPONENT_OPTIONS";
-export const INTERNAL: any = "INTERNAL";

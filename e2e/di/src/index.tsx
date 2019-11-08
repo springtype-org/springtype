@@ -30,6 +30,7 @@ export class DIE2E {
 	fooFactoryFunction!: FooFactoryFunction;
 
 	constructor() {
+
 		// @ts-ignore: way to keep the TS compiler friendly
 		if (this.fooSingleton === st.di.get(FooSingleton)) {
 			console.log("singleton inject OK");

@@ -14,6 +14,17 @@ export interface IInternalAttrEntry {
   type: AttrType;
 }
 
+
+const dp = Object.defineProperty;
+Object.defineProperty = (a: any, b: any, c: any) =>{
+
+  if (b === 'name2') {
+    console.log('redefine name2', c);
+  }
+
+  dp(a,b,c);
+}
+
 export class AttrTrait {
   static enableFor(instance: any) {
     const attrs = Object.getPrototypeOf(instance).constructor[ATTRS] || {};
@@ -27,6 +38,7 @@ export class AttrTrait {
         set: (value: any) => {
           instance.setAttribute(name, value);
         },
+        configurable: true
       });
     }
   }

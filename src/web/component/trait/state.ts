@@ -1,8 +1,8 @@
 import { st } from "../../../core";
 import { ChangeType } from "../../../core/cd/interface/change-type";
 import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../../../core/cd/prop-change-manager";
-import { IComponent } from "../interface";
-import { IComponentInternals, INTERNAL } from "../interface/icomponent";
+import { IComponent, INTERNAL } from "../interface";
+import { IComponentInternals } from "../interface/icomponent";
 import { RenderReason } from "../interface/ilifecycle";
 import { IStateChange } from "../interface/ion-state-change";
 
