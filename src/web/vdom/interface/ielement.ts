@@ -23,10 +23,16 @@ export interface ISpringTypeAttributes {
 
 	// children
 	children?: HTMLCollection | any;
+
+	class?: string | Array<string>;
+
+	//style?: CSSStyleDeclaration;
 }
 
 export interface IElement extends HTMLElement, ISpringTypeAttributes {
 
 	children: HTMLCollection | any;
+
 	slot: string | string;
+
 }

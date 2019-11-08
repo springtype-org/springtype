@@ -156,11 +156,24 @@ if (!st.dom) {
         return;
       }
 
+      // transforms class={['a', 'b']} into class="a b"
+      if (name === "class" && Array.isArray(value)) {
+        value = value.join(' ');
+      }
+
       if (isSvg && name.startsWith("xlink")) {
         domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
       } else {
         if (domElement.component) {
           domElement.component.setAttribute(name, value);
+        } else if (name === "style" && typeof value !== 'string') {
+          console.log('set styles', value)
+
+          for (let prop in value) {
+
+            console.log('prop',prop, value[prop]);
+            domElement.style[prop as any] = value[prop];
+          }
         } else {
           domElement.setAttribute(name, value);
         }

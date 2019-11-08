@@ -493,8 +493,8 @@ declare global {
 			charSet?: string;
 			challenge?: string;
 			checked?: boolean;
-			class?: string;
-			className?: string;
+			class?: string | Array<string>;
+			className?: string | Array<string>;
 			cols?: number;
 			colSpan?: number;
 			content?: string;
