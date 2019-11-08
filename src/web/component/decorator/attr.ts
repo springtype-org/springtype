@@ -1,4 +1,4 @@
-import { ILifecycle } from "../interface";
+import { ILifecycle } from "../interface/ilifecycle";
 import { AttrTrait, AttrType, DEFAULT_ATTR_TYPE } from "../trait/attr";
 
 export const attr = (type: AttrType = DEFAULT_ATTR_TYPE) => {

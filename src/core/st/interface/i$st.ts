@@ -1,4 +1,4 @@
-import { IComponentInstances, IComponentRegistry } from "../../../web/component/interface";
+import { IComponentRegistry } from "../../../web/component/interface";
 import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
 import { IRouter } from "../../../web/router/interface";
 import { ITSS } from "../../../web/tss/interface";
@@ -94,7 +94,7 @@ export interface I$st {
   getComponent: (className: string) => IComponent;
 
   // components are @springtype/web components
-  COMPONENT_INSTANCES: IComponentInstances;
+  COMPONENT_INSTANCES: any;
   COMPONENT_REGISTRY: IComponentRegistry;
 }
 
