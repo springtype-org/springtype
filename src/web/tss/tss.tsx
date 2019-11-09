@@ -1,6 +1,7 @@
 import { st } from "../../core";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { ILifecycle, RenderReason } from "../component/interface/ilifecycle";
+import { ILifecycle } from "../component/interface/ilifecycle";
+import { RenderReason } from "../component/interface/irender-reason";
 
 if (!st.tss) {
   st.tss = {

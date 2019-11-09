@@ -13,5 +13,3 @@ export interface IComponentInternals {
 }
 
 export type RenderStyleFunction = (instance: any, theme?: any) => string;
-
-export const COMPONENT_OPTIONS: any = "COMPONENT_OPTIONS";

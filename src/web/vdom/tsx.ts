@@ -32,6 +32,9 @@ export const transformSlots = (rootNode: IVirtualNode, slots: ISlotChildren): IV
     for (let i = 0; i < node.children.length; i++) {
       if (typeof node.children[i] === "string") continue;
       if (node.children[i] && (node.children[i] as IVirtualNode).type === "slot") {
+
+        console.log('child is a <slot>', node.children[i])
+
         if ((node.children[i] as IVirtualNode).attributes.name) {
           // named slot
           if (
@@ -41,6 +44,11 @@ export const transformSlots = (rootNode: IVirtualNode, slots: ISlotChildren): IV
           ) {
             // @ts-ignore
             node.children[i] = slots[(node.children[i] as IVirtualNode).attributes.name].children;
+          } else {
+
+            // default content of a slot is used but it must unwrap, use children
+            // @ts-ignore
+            node.children[i] = node.children[i].children;
           }
         } else {
           // default slot

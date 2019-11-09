@@ -1,9 +1,8 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { Component } from "../component";
-import { INTERNAL } from "../component/interface";
-import { COMPONENT_OPTIONS } from "../component/interface/icomponent";
 import { GlobalCache } from "./../../core/st/interface/i$st";
+import { IComponentOptions } from "./../component/interface/icomponent-options";
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
 import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
@@ -37,23 +36,20 @@ if (!st.dom) {
       if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
         newEl = document.createElementNS("http://www.w3.org/2000/svg", virtualNode.type as string);
       } else {
-
         if (component) {
-
           // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          virtualNode.type = component[COMPONENT_OPTIONS].tagName;
+          virtualNode.type = component.COMPONENT_OPTIONS.tagName;
         }
         newEl = document.createElement(virtualNode.type as string);
       }
 
       // identified virtual component
       if (component) {
-
         // functional component
-        // @ts-ignore
         if (!component.name) {
-          // @ts-ignore
-          const fn = component as Function;
+          const fn = component as Function & {
+            COMPONENT_OPTIONS: IComponentOptions;
+          };
 
           // TODO: Can it re-use an existing instance?
 
@@ -61,29 +57,25 @@ if (!st.dom) {
           component = new Component();
 
           // assign options
-          // @ts-ignore
-          component[INTERNAL].options = fn[COMPONENT_OPTIONS];
+          component.INTERNAL.options = fn.COMPONENT_OPTIONS;
 
           // execute function and assign render method
           component.render = fn(component);
         } else {
           // class API
           // create instance of component
-          // @ts-ignore
           component = new component();
         }
 
         // reference component logical controller component
-        // @ts-ignore
         (newEl as IElement).component = component;
 
         // set root DOM node ref
-        // @ts-ignore
-        component[INTERNAL].el = newEl;
+        component.INTERNAL.el = newEl;
 
         // assign slot children for rewrite
-        // @ts-ignore
-        component[INTERNAL].slotChildren = virtualNode.slotChildren;
+        console.log('assigning slotChildren', virtualNode.slotChildren);
+        component.INTERNAL.slotChildren = virtualNode.slotChildren;
       }
 
       if (virtualNode.attributes) {
@@ -158,7 +150,7 @@ if (!st.dom) {
 
       // transforms class={['a', 'b']} into class="a b"
       if (name === "class" && Array.isArray(value)) {
-        value = value.join(' ');
+        value = value.join(" ");
       }
 
       if (isSvg && name.startsWith("xlink")) {
@@ -166,12 +158,11 @@ if (!st.dom) {
       } else {
         if (domElement.component) {
           domElement.component.setAttribute(name, value);
-        } else if (name === "style" && typeof value !== 'string') {
-          console.log('set styles', value)
+        } else if (name === "style" && typeof value !== "string") {
+          console.log("set styles", value);
 
           for (let prop in value) {
-
-            console.log('prop',prop, value[prop]);
+            console.log("prop", prop, value[prop]);
             domElement.style[prop as any] = value[prop];
           }
         } else {
@@ -190,10 +181,9 @@ if (!st.dom) {
   if (!st.render) {
     // add render method for awaiting / initial rendering
     st.render = async (node: IVirtualNode) => {
-
       if (!node.type || !node.attributes || !node.children) {
-        st.error('Invalid virutal node: ', JSON.stringify(node));
-        throw new Error('This virtual node does NOT look like one');
+        st.error("Invalid virutal node: ", JSON.stringify(node));
+        throw new Error("This virtual node does NOT look like one");
       }
 
       await st.dom.isReady();

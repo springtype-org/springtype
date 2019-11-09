@@ -1,10 +1,10 @@
 import { st } from "../../../core";
 import { ChangeType } from "../../../core/cd/interface/change-type";
 import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../../../core/cd/prop-change-manager";
-import { IComponent, INTERNAL } from "../interface";
+import { IComponent } from "../interface";
 import { IComponentInternals } from "../interface/icomponent";
-import { RenderReason } from "../interface/ilifecycle";
 import { IStateChange } from "../interface/ion-state-change";
+import { RenderReason } from "../interface/irender-reason";
 
 export const STATE: string = "STATE";
 
@@ -41,7 +41,7 @@ export class StateTrait {
     }
 
     // if the instance never rendered yet, don't call doRender()!
-    if (!(instance[INTERNAL] as IComponentInternals).notInitialRender) return;
+    if (!(instance.INTERNAL as IComponentInternals).notInitialRender) return;
 
     if (
       instance.shouldRender(RenderReason.STATE_CHANGE, {

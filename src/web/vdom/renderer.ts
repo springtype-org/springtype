@@ -1,5 +1,4 @@
 import { st } from "../../core/st/st";
-import { INTERNAL } from "../component/interface";
 import { IElement } from "./interface/ielement";
 import { IVirtualNode } from "./interface/ivirtual-node";
 import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";
@@ -138,10 +137,7 @@ if (!st.renderer) {
 
       if (domElement && domElement.component) {
         // update slot children
-        // @ts-ignore
-        domElement.component[INTERNAL].slotChildren = virtualElement.slotChildren;
-
-        // @ts-ignore
+        domElement.component.INTERNAL.slotChildren = virtualElement.slotChildren;
         domElement.component.doRender();
         return;
       }

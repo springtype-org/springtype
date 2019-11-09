@@ -6,22 +6,23 @@ import { GlobalCache } from "../../core/st/interface/i$st";
 import { newUniqueComponentName, transformSlots, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { IComponentOptions } from "./interface";
-import { COMPONENT_OPTIONS, IComponentInternals } from "./interface/icomponent";
-import { IComponentLifecycle, ILifecycle, RenderReason, RenderReasonMetaData } from "./interface/ilifecycle";
+import { IComponentInternals } from "./interface/icomponent";
+import { IComponentLifecycle, ILifecycle } from "./interface/ilifecycle";
 import { IOnStateChange, IStateChange } from "./interface/ion-state-change";
+import { RenderReason, RenderReasonMetaData } from "./interface/irender-reason";
 import { AttrTrait, AttrType } from "./trait/attr";
 import { StateTrait } from "./trait/state";
 
 export class Component implements IComponentLifecycle, ILifecycle, IOnStateChange {
   // shadow functionallity that shouldn't break userland impl.
-  "INTERNAL": IComponentInternals;
+  INTERNAL: IComponentInternals;
 
   constructor() {
     // internal state initialization
-    this["INTERNAL"] = {
+    this.INTERNAL = {
       notInitialRender: false,
       attributes: {},
-      options: Object.getPrototypeOf(this).constructor[COMPONENT_OPTIONS],
+      options: Object.getPrototypeOf(this).constructor.COMPONENT_OPTIONS,
     } as IComponentInternals;
 
     StateTrait.enableFor(this);
@@ -33,15 +34,15 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   }
 
   getEl(): HTMLElement {
-    return this["INTERNAL"].el;
+    return this.INTERNAL.el;
   }
 
   onBeforeConnect() {}
 
   // internal web component standard method
   connectedCallback() {
-    this["INTERNAL"].isConnected = true;
-    this["INTERNAL"].el.classList.add(Object.getPrototypeOf(this).constructor.name);
+    this.INTERNAL.isConnected = true;
+    this.INTERNAL.el.classList.add(Object.getPrototypeOf(this).constructor.name);
 
     this.onConnect();
 
@@ -53,7 +54,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   onConnect() {}
 
   disconnectedCallback() {
-    this["INTERNAL"].isConnected = false;
+    this.INTERNAL.isConnected = false;
 
     // evict from global instance registry
     // (e.g. doesn't retrigger render on TSS theme change)
@@ -88,7 +89,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
    * allows to take the original attribute value from VDOM (no DOM traversal string typecast)
    */
   setAttribute(name: string, value: any, type?: AttrType): void {
-    const prevValue = this["INTERNAL"].attributes[name];
+    const prevValue = this.INTERNAL.attributes[name];
 
     if (
       prevValue !== value && // ignore if not changed (scalar)
@@ -97,20 +98,20 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
       // store internal attribute state value
 
       // @ts-ignore
-      this["INTERNAL"].attributes[name] = value;
+      this.INTERNAL.attributes[name] = value;
 
       // @ts-ignore
-      if (this["INTERNAL"].el && ((typeof type !== "undefined" && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
+      if (this.INTERNAL.el && ((typeof type !== "undefined" && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
         // reflect to DOM (casts to string)
 
         // @ts-ignore
-        this["INTERNAL"].el.setAttribute(name, value);
+        this.INTERNAL.el.setAttribute(name, value);
       }
 
       if (
         // don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
 
-        this["INTERNAL"].notInitialRender &&
+        this.INTERNAL.notInitialRender &&
         // and don't render if the user land condition denies
         this.shouldRender(RenderReason.ATTRIBUTE_CHANGE, {
           path: DEFAULT_EMPTY_PATH,
@@ -141,7 +142,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
    * allows to fetch the original attribute value from VDOM (no DOM traversal string typecast)
    */
   getAttribute(name: string): any {
-    return this["INTERNAL"].attributes[name];
+    return this.INTERNAL.attributes[name];
   }
 
   // @ts-ignore: Unused variables are valid here
@@ -153,10 +154,10 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   onBeforeRender(tssOnly: boolean = false) {}
 
   render(): IVirtualNode | Array<IVirtualNode> {
-    if (typeof this["INTERNAL"].options.tpl! != "function") {
+    if (typeof this.INTERNAL.options.tpl! != "function") {
       throw new Error(`Custom element (<${this.constructor.name} />) has no render() method nor a valid template (tpl)!`);
     }
-    return this["INTERNAL"].options.tpl!(this);
+    return this.INTERNAL.options.tpl!(this);
   }
 
   // @ts-ignore: Unused variables are valid here
@@ -165,7 +166,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   }
 
   async doRenderStyle(): Promise<IVirtualNode | undefined> {
-    const cssText = this["INTERNAL"].options.tss ? this["INTERNAL"].options.tss!(this, st.tss.currentTheme) : this.renderStyle(st.tss.currentTheme);
+    const cssText = this.INTERNAL.options.tss ? this.INTERNAL.options.tss!(this, st.tss.currentTheme) : this.renderStyle(st.tss.currentTheme);
 
     return <style type="text/css">{cssText}</style>;
   }
@@ -184,27 +185,27 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
     // performance-optimization: only process slots if <template> tags are found (fills slotChildren)
 
-    if (this["INTERNAL"].slotChildren) {
-      vdom = transformSlots(vdom as IVirtualNode, this["INTERNAL"].slotChildren);
+    if (this.INTERNAL.slotChildren) {
+      vdom = transformSlots(vdom as IVirtualNode, this.INTERNAL.slotChildren);
     }
 
-    if (!this["INTERNAL"].notInitialRender) {
+    if (!this.INTERNAL.notInitialRender) {
       // if there isn't a prev. VDOM state, render initially
       st.renderer.renderInitial(
         nodesToRender,
-        (this["INTERNAL"].el as unknown) as IElement,
+        (this.INTERNAL.el as unknown) as IElement,
       );
 
-      this["INTERNAL"].notInitialRender = true;
+      this.INTERNAL.notInitialRender = true;
 
       // call lifecycle method
       this.onAfterInitialRender();
     } else {
       // differential VDOM / DOM rendering algorithm
       st.renderer.patch(
-        (this["INTERNAL"].el as any).childNodes,
+        (this.INTERNAL.el as any).childNodes,
         nodesToRender,
-        (this["INTERNAL"].el as unknown) as IElement,
+        (this.INTERNAL.el as unknown) as IElement,
       );
     }
 
@@ -243,7 +244,7 @@ export const defineComponent = (targetClassOrFunction: any, options: IComponentO
   } 
 
   // assign options to be used in CustomElement derived class constructor
-  targetClassOrFunction[COMPONENT_OPTIONS] = options;
+  targetClassOrFunction.COMPONENT_OPTIONS = options;
 
   // return enhanced class / function
   return targetClassOrFunction;
