@@ -42,6 +42,8 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   // internal web component standard method
   connectedCallback() {
     this.INTERNAL.isConnected = true;
+
+    // TODO: remove this
     this.INTERNAL.el.classList.add(Object.getPrototypeOf(this).constructor.name);
 
     this.onConnect();
@@ -168,8 +170,13 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   async doRenderStyle(): Promise<IVirtualNode | undefined> {
     const cssText = this.INTERNAL.options.tss ? this.INTERNAL.options.tss!(this, st.tss.currentTheme) : this.renderStyle(st.tss.currentTheme);
 
+    // TODO: Don't render a node if there is no cssText; might remove the whole API
     return <style type="text/css">{cssText}</style>;
   }
+
+  // TODO: .el getter/setter
+  // TODO: .parent getter/setter (parent component)
+  // TODO: .parentEl getter/setter
 
   async doRender(tssOnly: boolean = false) {
     this.onBeforeRender(tssOnly);
@@ -188,6 +195,8 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     if (this.INTERNAL.slotChildren) {
       vdom = transformSlots(vdom as IVirtualNode, this.INTERNAL.slotChildren);
     }
+
+    // TODO:
 
     if (!this.INTERNAL.notInitialRender) {
       // if there isn't a prev. VDOM state, render initially

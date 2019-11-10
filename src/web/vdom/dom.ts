@@ -70,7 +70,9 @@ if (!st.dom) {
         // reference component logical controller component
         (newEl as IElement).component = component;
 
-        // set root DOM node ref
+        // set root DOM node ref and parent ref
+        component.INTERNAL.parentEl = parentDomElement;
+        component.INTERNAL.parent = parentDomElement.component;
         component.INTERNAL.el = newEl;
 
         // assign slot children for rewrite
@@ -120,6 +122,10 @@ if (!st.dom) {
     },
 
     setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean) => {
+
+      // don't render debug attributes like __source and __self
+      if (name.indexOf('__') === 0) return;
+
       // stores referenced DOM nodes in a memory efficient WeakMap
       // for access from CustomElements
       if (name === "ref") {
@@ -159,14 +165,16 @@ if (!st.dom) {
         if (domElement.component) {
           domElement.component.setAttribute(name, value);
         } else if (name === "style" && typeof value !== "string") {
-          console.log("set styles", value);
-
           for (let prop in value) {
-            console.log("prop", prop, value[prop]);
+            // TODO: camelCase to kebab-case
             domElement.style[prop as any] = value[prop];
           }
         } else {
-          domElement.setAttribute(name, value);
+          if (typeof value == "boolean") {
+              (domElement as any)[name] = value;
+          } else {
+              domElement.setAttribute(name, value);
+          }
         }
       }
     },
