@@ -4,7 +4,7 @@ import { Component } from "../component";
 import { GlobalCache } from "./../../core/st/interface/i$st";
 import { IComponentOptions } from "./../component/interface/icomponent-options";
 import { IElement } from "./interface/ielement";
-import { IVirtualChild, IVirtualChildren, IVirtualNode } from "./interface/ivirtual-node";
+import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
 import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
 
 if (!st.dom) {
@@ -68,18 +68,17 @@ if (!st.dom) {
         }
 
         // reference component logical controller component
-        (newEl as IElement).component = component;
+        (newEl as IElement).$stComponent = component;
 
         // set root DOM node ref and parent ref
         component.INTERNAL.parentEl = parentDomElement;
-        component.INTERNAL.parent = parentDomElement.component;
+        component.INTERNAL.parent = parentDomElement.$stComponent;
         component.INTERNAL.el = newEl;
 
         // assign slot children for rewrite
         component.INTERNAL.virtualSlotChildren = virtualNode.slotChildren;
 
         // assign virtual children and attributes
-        component.INTERNAL.virtualChildren = virtualNode.children;
         component.INTERNAL.virtualAttributes = virtualNode.attributes;
       }
 
@@ -132,7 +131,7 @@ if (!st.dom) {
       }
     },
 
-    setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean) => {
+    setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {
       // don't render debug attributes like __source and __self
       if (name.indexOf("__") === 0) return;
 
@@ -172,8 +171,8 @@ if (!st.dom) {
       if (isSvg && name.startsWith("xlink")) {
         domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
       } else {
-        if (domElement.component) {
-          domElement.component.setAttribute(name, value);
+        if (domElement.$stComponent && forceNative !== true) {
+          domElement.$stComponent.setAttribute(name, value);
         } else if (name === "style" && typeof value !== "string") {
           for (let prop in value) {
             domElement.style[prop as any] = value[prop];
@@ -188,9 +187,9 @@ if (!st.dom) {
       }
     },
 
-    setAttributes: (attributes: any, domElement: IElement, isSvg?: boolean) => {
+    setAttributes: (attributes: IVirtualNodeAttributes, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {
       for (let name in attributes) {
-        st.dom.setAttribute(name, attributes[name], domElement, isSvg);
+        st.dom.setAttribute(name, attributes[name], domElement, isSvg, forceNative);
       }
     },
   };

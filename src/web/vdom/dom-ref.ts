@@ -13,19 +13,22 @@ export const getDomRef: IGetDomRef = (
 export const setDomRef: ISetDomRef = (
 	refName: string,
 	componentInstance: any,
-	node: Node
+	node: any
 ) => {
 	const index = componentInstance[SET_REF_NAME].indexOf(refName);
+
+	// if we injected a component, reference the component, not the pure DOM node
+	const nodeValue = node.$stComponent ? node.$stComponent : node
 
 	// instance asks for @Ref
 	if (index > -1) {
 		const propName = componentInstance[SET_REF_PROP_NAME][index];
 
 		// set property of instance's value
-		componentInstance[propName] = node;
+		componentInstance[propName] = nodeValue;
 
 		// set value at index for fast index lookup using st.getRef()
-		componentInstance[SET_REF_VALUE][index] = node;
+		componentInstance[SET_REF_VALUE][index] = nodeValue;
 	}
 };
 

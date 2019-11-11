@@ -7,7 +7,6 @@ export interface IVirtualNodeAttributes {
 }
 
 export interface ISlotChildren {
-  // default can be an Array
   [slotName: string]: IVirtualNode|Array<IVirtualNode>
 }
 

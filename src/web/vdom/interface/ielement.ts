@@ -16,7 +16,7 @@ export interface ISpringTypeAttributes {
 	slot?: string | string;
 
 	// virtual component instance reference, available on mounted "root" DOM elements
-	component?: any;
+	$stComponent?: any;
 
 	// array-local unique key to identify element items in a NodeList
 	key?: string;

@@ -15,7 +15,7 @@ export class RouteList extends st.component implements ILifecycle, IRouteList {
   render() {
     // here we take the outside world input like a list of <Route /> and render it
     // .default is made up with all contents that are not wrapped inside a <template>
-    return this.virtualSlotChildren.default;
+    return this.renderChildren();
   }
 
   // <Route /> are all created here, now lets register them

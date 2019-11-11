@@ -7,6 +7,16 @@ export class HomePage extends st.component {
   static ROUTE = "/home";
 
   render() {
+
+    // set classes on this.el
+    this.class = ['foo'];
+
+    // set attributes on this.el
+    this.attrs = {
+      tabindex: 1
+    };
+
+    // construct children for this.el
     return (
       <div>
         HomePage <br />

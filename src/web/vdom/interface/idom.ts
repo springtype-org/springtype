@@ -19,7 +19,7 @@ export interface IDOM {
 
   createChildElements(virtualChildren: IVirtualChildren, parentDomElement: Element, isSvg?: boolean): void;
 
-  setAttribute(name: string, value: any, parentDomElement: Element, isSvg?: boolean): void;
+  setAttribute(name: string, value: any, parentDomElement: Element, isSvg?: boolean, forceNative?: boolean): void;
 
-  setAttributes(attributes: any, parentDomElement: Element, isSvg?: boolean): void;
+  setAttributes(attributes: any, parentDomElement: Element, isSvg?: boolean, forceNative?: boolean): void;
 }

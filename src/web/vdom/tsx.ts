@@ -20,6 +20,7 @@ export const tsxToStandardAttributeName = (tsxAttributeName: string): string => 
 
 // transforms virtual node <slot name="abc"> entries by replacing them with their target <template slot="abc"> children
 // (in case of named <slot>'s) or with their default children (in case of missing <template> wrapping)
+/*
 export const transformSlots = (rootNode: IVirtualNode, slots: ISlotChildren): IVirtualNode => {
   const visit = (node: IVirtualNode) => {
     if (!node.type) return node;
@@ -72,6 +73,7 @@ export const transformSlots = (rootNode: IVirtualNode, slots: ISlotChildren): IV
 
   return transformed;
 };
+*/
 
 // If a JSX comment is written, it looks like: { /* this */ }
 // Therefore, it turns into: {}, which is detected here

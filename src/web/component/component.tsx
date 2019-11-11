@@ -3,9 +3,9 @@ import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
 import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { newUniqueComponentName, transformSlots } from "../vdom";
+import { newUniqueComponentName, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
-import { ISlotChildren, IVirtualChildren, IVirtualNodeAttributes } from "../vdom/interface/ivirtual-node";
+import { IVirtualChild, IVirtualNodeAttributes } from "../vdom/interface/ivirtual-node";
 import { IComponentOptions } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
 import { IComponentLifecycle, ILifecycle } from "./interface/ilifecycle";
@@ -38,6 +38,16 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return this.INTERNAL.el;
   }
 
+  // @ts-ignore: it's fine that the setter allows for string and Array<string>
+  set class(classes: string | Array<string>) {
+    st.dom.setAttribute("class", !Array.isArray(classes) ? [classes] : classes, this.el, false, true);
+  }
+
+  // @ts-ignore: it's fine that the getter always returns an array
+  get class(): Array<string> {
+    return (this.el.getAttribute("class") || '').split(" ");
+  }
+
   get parentEl(): HTMLElement {
     return this.INTERNAL.parentEl;
   }
@@ -46,16 +56,30 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return this.INTERNAL.parent;
   }
 
-  get virtualSlotChildren(): ISlotChildren {
-    return this.INTERNAL.virtualSlotChildren;
-  }
-
-  get virtualAttributes(): IVirtualNodeAttributes {
+  get attrs(): IVirtualNodeAttributes {
     return this.INTERNAL.virtualAttributes;
   }
 
-  get virtualChildren(): IVirtualChildren {
-    return this.INTERNAL.virtualChildren;
+  set attrs(attrs: IVirtualNodeAttributes) {
+    st.dom.setAttributes(attrs, this.el, false, true);
+  }
+
+  get slotChildren(): IVirtualNodeAttributes {
+    return this.INTERNAL.virtualSlotChildren;
+  }
+
+  renderSlot(slotName: string, defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild> {
+    if (this.INTERNAL.virtualSlotChildren[slotName]) {
+      return (this.INTERNAL.virtualSlotChildren[slotName] as IVirtualNode).children;
+    }
+    return defaults || <fragment />;
+  }
+
+  renderChildren(defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualNode | Array<IVirtualNode> {
+    if (this.INTERNAL.virtualSlotChildren.default) {
+      return this.INTERNAL.virtualSlotChildren.default;
+    }
+    return defaults || <fragment />;
   }
 
   onBeforeAttributesSet() {}
@@ -193,9 +217,11 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
     // performance-optimization: only process slots if <template> tags are found (fills slotChildren)
 
+    /* SLOT
     if (this.INTERNAL.virtualSlotChildren) {
       vdom = transformSlots(vdom as IVirtualNode, this.INTERNAL.virtualSlotChildren);
     }
+    */
 
     if (!this.INTERNAL.notInitialRender) {
       // if there isn't a prev. VDOM state, render initially

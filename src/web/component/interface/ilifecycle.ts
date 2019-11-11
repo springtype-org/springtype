@@ -1,7 +1,7 @@
 import { IVirtualNode } from "../../vdom/interface";
-import { ISlotChildren } from "../../vdom/interface/ivirtual-node";
+import { ISlotChildren, IVirtualChild } from "../../vdom/interface/ivirtual-node";
 import { AttrType } from '../trait/attr';
-import { IVirtualChildren, IVirtualNodeAttributes } from './../../vdom/interface/ivirtual-node';
+import { IVirtualNodeAttributes } from './../../vdom/interface/ivirtual-node';
 import { RenderReason, RenderReasonMetaData } from './irender-reason';
 
 export interface ILifecycle {
@@ -9,23 +9,30 @@ export interface ILifecycle {
   // the root HTML/SVG element mounted to a virtual component
   el?: HTMLElement;
 
+  // can be assinged to set one or more CSS classes on this.el
+  class?: string|Array<string>;
+
   // the parent components HTML/SVG root element
   parentEl?: HTMLElement;
 
   // the parent component
   parent?: ILifecycle;
 
-  // the map of slot children passed via <template> from outside
-  // and meant to be transformed and injected in the <slot>
-  // placeholders possibly returned by the render() method
-  virtualSlotChildren?: ISlotChildren;
-
   // the map of attributes meant to be set on the root DOM element (el)
-  virtualAttributes?: IVirtualNodeAttributes;
+  // can also be set as this.attrs = { ...this.attrs, tabindex: 0,  }
+  attrs?: IVirtualNodeAttributes;
 
-  // the array of children provided from the outside
-  // and meant to be rendered and mounted to the root DOM element (el)
-  virtualChildren?: IVirtualChildren;
+  // the map of slot children provided via <template> from outside
+  // and meant to be rendered via this.renderSlot(...)
+  slotChildren?: ISlotChildren;
+
+  // returns the virtual children assigned via <template name={name}> from the outside if provided
+  // or the defaults if provided or <fragement />
+  renderSlot?(name: string, defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild>;
+
+  // returns the children not assigned via <template name={name}> from the outside if provided
+  // or the defaults if provided or <fragement />
+  renderChildren?(defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild>;
 
   // before DOM attributes of are set on the root DOM element (el)
   // you can mutate this.virtualAttributes to filter/map them

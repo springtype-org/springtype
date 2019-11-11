@@ -51,14 +51,14 @@ if (!st.renderer) {
     },
 
     removeElement: (parent: IElement, domElement: IElement) => {
-      if (domElement.component) {
-        domElement.component.onBeforeDisconnect!();
+      if (domElement.$stComponent) {
+        domElement.$stComponent.onBeforeDisconnect!();
       }
 
       parent.removeChild(domElement);
 
-      if (domElement.component) {
-        domElement.component.disconnectedCallback!();
+      if (domElement.$stComponent) {
+        domElement.$stComponent.disconnectedCallback!();
       }
     },
 
@@ -135,10 +135,10 @@ if (!st.renderer) {
 
       // inner should only be patched if it is not a custom element and has no shadow DOM
 
-      if (domElement && domElement.component) {
+      if (domElement && domElement.$stComponent) {
         // update slot children
-        domElement.component.INTERNAL.virtualSlotChildren = virtualElement.slotChildren;
-        domElement.component.doRender();
+        domElement.$stComponent.INTERNAL.virtualSlotChildren = virtualElement.slotChildren;
+        domElement.$stComponent.doRender();
         return;
       }
 
