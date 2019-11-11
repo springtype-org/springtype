@@ -3,8 +3,9 @@ import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
 import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { newUniqueComponentName, transformSlots, tsx } from "../vdom";
+import { newUniqueComponentName, transformSlots } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
+import { ISlotChildren, IVirtualChildren, IVirtualNodeAttributes } from "../vdom/interface/ivirtual-node";
 import { IComponentOptions } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
 import { IComponentLifecycle, ILifecycle } from "./interface/ilifecycle";
@@ -33,18 +34,39 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     st[GlobalCache.COMPONENT_INSTANCES].push(this);
   }
 
-  getEl(): HTMLElement {
+  get el(): HTMLElement {
     return this.INTERNAL.el;
   }
+
+  get parentEl(): HTMLElement {
+    return this.INTERNAL.parentEl;
+  }
+
+  get parent(): ILifecycle {
+    return this.INTERNAL.parent;
+  }
+
+  get virtualSlotChildren(): ISlotChildren {
+    return this.INTERNAL.virtualSlotChildren;
+  }
+
+  get virtualAttributes(): IVirtualNodeAttributes {
+    return this.INTERNAL.virtualAttributes;
+  }
+
+  get virtualChildren(): IVirtualChildren {
+    return this.INTERNAL.virtualChildren;
+  }
+
+  onBeforeAttributesSet() {}
+
+  onBeforeChildrenMount() {}
 
   onBeforeConnect() {}
 
   // internal web component standard method
   connectedCallback() {
     this.INTERNAL.isConnected = true;
-
-    // TODO: remove this
-    this.INTERNAL.el.classList.add(Object.getPrototypeOf(this).constructor.name);
 
     this.onConnect();
 
@@ -99,14 +121,11 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     ) {
       // store internal attribute state value
 
-      // @ts-ignore
       this.INTERNAL.attributes[name] = value;
 
-      // @ts-ignore
       if (this.INTERNAL.el && ((typeof type !== "undefined" && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
         // reflect to DOM (casts to string)
 
-        // @ts-ignore
         this.INTERNAL.el.setAttribute(name, value);
       }
 
@@ -152,8 +171,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return true;
   }
 
-  // @ts-ignore: Unused variables are valid here
-  onBeforeRender(tssOnly: boolean = false) {}
+  onBeforeRender() {}
 
   render(): IVirtualNode | Array<IVirtualNode> {
     if (typeof this.INTERNAL.options.tpl! != "function") {
@@ -162,48 +180,26 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return this.INTERNAL.options.tpl!(this);
   }
 
-  // @ts-ignore: Unused variables are valid here
-  renderStyle(theme?: any): string | undefined {
-    return undefined;
-  }
-
-  async doRenderStyle(): Promise<IVirtualNode | undefined> {
-    const cssText = this.INTERNAL.options.tss ? this.INTERNAL.options.tss!(this, st.tss.currentTheme) : this.renderStyle(st.tss.currentTheme);
-
-    // TODO: Don't render a node if there is no cssText; might remove the whole API
-    return <style type="text/css">{cssText}</style>;
-  }
-
-  // TODO: .el getter/setter
-  // TODO: .parent getter/setter (parent component)
-  // TODO: .parentEl getter/setter
-
-  async doRender(tssOnly: boolean = false) {
-    this.onBeforeRender(tssOnly);
+  async doRender() {
+    this.onBeforeRender();
 
     let vdom: IVirtualNode | Array<IVirtualNode> = this.render();
-    const tss: IVirtualNode | undefined = await this.doRenderStyle();
 
     if (!vdom) {
       throw new Error(`The render() method or the template (tpl) of <${this.constructor.name} /> must return virtual nodes.`);
     }
 
-    const nodesToRender = Array.isArray(vdom) ? [tss as IVirtualNode, ...vdom!] : [tss as IVirtualNode, vdom!];
+    const nodesToRender = Array.isArray(vdom) ? [...vdom!] : [vdom!];
 
     // performance-optimization: only process slots if <template> tags are found (fills slotChildren)
 
-    if (this.INTERNAL.slotChildren) {
-      vdom = transformSlots(vdom as IVirtualNode, this.INTERNAL.slotChildren);
+    if (this.INTERNAL.virtualSlotChildren) {
+      vdom = transformSlots(vdom as IVirtualNode, this.INTERNAL.virtualSlotChildren);
     }
-
-    // TODO:
 
     if (!this.INTERNAL.notInitialRender) {
       // if there isn't a prev. VDOM state, render initially
-      st.renderer.renderInitial(
-        nodesToRender,
-        (this.INTERNAL.el as unknown) as IElement,
-      );
+      st.renderer.renderInitial(nodesToRender, (this.INTERNAL.el as unknown) as IElement);
 
       this.INTERNAL.notInitialRender = true;
 
@@ -211,23 +207,17 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
       this.onAfterInitialRender();
     } else {
       // differential VDOM / DOM rendering algorithm
-      st.renderer.patch(
-        (this.INTERNAL.el as any).childNodes,
-        nodesToRender,
-        (this.INTERNAL.el as unknown) as IElement,
-      );
+      st.renderer.patch((this.INTERNAL.el as any).childNodes, nodesToRender, (this.INTERNAL.el as unknown) as IElement);
     }
 
     // call lifecycle method
-    this.onAfterRender(tssOnly);
+    this.onAfterRender();
   }
 
   onAfterInitialRender() {}
 
-  // @ts-ignore: Unused variables are valid here
-  onAfterRender(tssOnly: boolean = false) {}
+  onAfterRender() {}
 }
-
 
 if (!st.component) {
   st.component = Component;
@@ -250,8 +240,7 @@ export const defineComponent = (targetClassOrFunction: any, options: IComponentO
 
   if (!options.tagName) {
     options.tagName = newUniqueComponentName();
-  } 
-
+  }
   // assign options to be used in CustomElement derived class constructor
   targetClassOrFunction.COMPONENT_OPTIONS = options;
 

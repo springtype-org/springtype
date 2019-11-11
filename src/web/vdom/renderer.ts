@@ -65,7 +65,7 @@ if (!st.renderer) {
     patchElement: (parent: IElement, domElement: IElement, virtualElement: IVirtualNode) => {
       // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
 
-      if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement.hasAttribute("novdom")) return;
+      if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement["novdom"]) return;
 
       let created = false;
       let replaced = false;
@@ -137,7 +137,7 @@ if (!st.renderer) {
 
       if (domElement && domElement.component) {
         // update slot children
-        domElement.component.INTERNAL.slotChildren = virtualElement.slotChildren;
+        domElement.component.INTERNAL.virtualSlotChildren = virtualElement.slotChildren;
         domElement.component.doRender();
         return;
       }

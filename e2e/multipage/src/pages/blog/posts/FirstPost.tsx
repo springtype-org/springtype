@@ -5,12 +5,12 @@ import { HomePage } from "../../home/Home";
 
 @component()
 export class FirstPostPage extends st.component {
-	static ROUTE = "/blog/firstpost/:id/";
+	static ROUTE = "/#/blog/firstpost/:id/";
 
 	render() {
 		return (
 			<div>
-				FirstPostPage, id: {st.router.getParams().id}
+				FirstPostPage, id: {st.router.match.params.id}
 				<br />
 				<a
 					href="javascript:void(0)"

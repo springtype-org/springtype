@@ -1,7 +1,6 @@
 import { IComponentRegistry } from "../../../web/component/interface";
 import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
 import { IRouter } from "../../../web/router/interface";
-import { ITSS } from "../../../web/tss/interface";
 import { IDOM, IGetDomRef, IRenderer, ISetDomRef, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
 import { IOnDeepChangeHandler } from "../../cd/interface";
 import { ChangeType } from "../../cd/interface/change-type";
@@ -61,9 +60,6 @@ export interface I$st {
   CONTEXT: IContextCacheEntries;
 
   // --- web specific
-
-  // TSS stylesheet renderer and theme / <style> template manager
-  tss: ITSS;
 
   // TSX transformator function
   tsx: (

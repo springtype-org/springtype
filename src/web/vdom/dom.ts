@@ -76,12 +76,23 @@ if (!st.dom) {
         component.INTERNAL.el = newEl;
 
         // assign slot children for rewrite
-        console.log('assigning slotChildren', virtualNode.slotChildren);
-        component.INTERNAL.slotChildren = virtualNode.slotChildren;
+        component.INTERNAL.virtualSlotChildren = virtualNode.slotChildren;
+
+        // assign virtual children and attributes
+        component.INTERNAL.virtualChildren = virtualNode.children;
+        component.INTERNAL.virtualAttributes = virtualNode.attributes;
+      }
+
+      if (component) {
+        component.onBeforeAttributesSet!();
       }
 
       if (virtualNode.attributes) {
         st.dom.setAttributes(virtualNode.attributes, newEl, isSvg);
+      }
+
+      if (component) {
+        component.onBeforeChildrenMount!();
       }
 
       if (virtualNode.children) {
@@ -122,9 +133,8 @@ if (!st.dom) {
     },
 
     setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean) => {
-
       // don't render debug attributes like __source and __self
-      if (name.indexOf('__') === 0) return;
+      if (name.indexOf("__") === 0) return;
 
       // stores referenced DOM nodes in a memory efficient WeakMap
       // for access from CustomElements
@@ -166,14 +176,13 @@ if (!st.dom) {
           domElement.component.setAttribute(name, value);
         } else if (name === "style" && typeof value !== "string") {
           for (let prop in value) {
-            // TODO: camelCase to kebab-case
             domElement.style[prop as any] = value[prop];
           }
         } else {
           if (typeof value == "boolean") {
-              (domElement as any)[name] = value;
+            (domElement as any)[name] = value;
           } else {
-              domElement.setAttribute(name, value);
+            domElement.setAttribute(name, value);
           }
         }
       }
@@ -189,6 +198,8 @@ if (!st.dom) {
   if (!st.render) {
     // add render method for awaiting / initial rendering
     st.render = async (node: IVirtualNode) => {
+      (st.render as any)._rendered = true;
+
       if (!node.type || !node.attributes || !node.children) {
         st.error("Invalid virutal node: ", JSON.stringify(node));
         throw new Error("This virtual node does NOT look like one");
@@ -197,5 +208,11 @@ if (!st.dom) {
       await st.dom.isReady();
       st.dom.createElement(node, document.body);
     };
+
+    setTimeout(() => {
+      if (!(st.render as any)._rendered) {
+        st.warn("st.render(<SomeComponent />) as NOT been called in 100ms. Have you forgotten to add this call?");
+      }
+    }, 100);
   }
 }

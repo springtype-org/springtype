@@ -1,15 +1,19 @@
-import { ISlotChildren } from '../../vdom/interface/ivirtual-node';
+import { ISlotChildren, IVirtualChildren, IVirtualNodeAttributes } from '../../vdom/interface/ivirtual-node';
 import { IComponentOptions } from "./icomponent-options";
+import { ILifecycle } from './ilifecycle';
+
 
 export interface IComponentInternals {
   el: HTMLElement;
+  parentEl: HTMLElement;
+  parent: ILifecycle;
   notInitialRender: boolean;
   attributes: {
     [name: string]: string;
   };
   options: IComponentOptions;
   isConnected: boolean;
-  slotChildren: ISlotChildren;
+  virtualSlotChildren: ISlotChildren;
+  virtualAttributes: IVirtualNodeAttributes;
+  virtualChildren: IVirtualChildren;
 }
-
-export type RenderStyleFunction = (instance: any, theme?: any) => string;

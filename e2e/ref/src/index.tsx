@@ -27,14 +27,6 @@ export class RefTest extends st.component implements ILifecycle {
       </div>
     );
   }
-
-  renderStyle() {
-    return css`
-      div {
-        background: #cc0000;
-      }
-    `;
-  }
 }
 
 st.render(<RefTest />);

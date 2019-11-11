@@ -5276,7 +5276,7 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-mini-css-extract-plugin@0.8.0:
+mini-css-extract-plugin@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/mini-css-extract-plugin/-/mini-css-extract-plugin-0.8.0.tgz#81d41ec4fe58c713a96ad7c723cdb2d0bd4d70e1"
   integrity sha512-MNpRGbNA52q6U92i0qbVpQNsgk7LExy41MdAlG84FeytfDOtRIf/mCHdEgG8rpTKOaNKiqUnZdlptF469hxqOw==
@@ -7874,10 +7874,10 @@ ssri@^7.0.0:
     figgy-pudding "^3.5.1"
     minipass "^3.0.0"
 
-st-start@^2.0.0-beta.16:
-  version "2.0.0-beta.16"
-  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-beta.16.tgz#f9dde2326ede1023afcf68bd77580ab15b1a6ef9"
-  integrity sha512-cfgAO6E0ECkjnzeKwzKoVBZ+RYMVN8NPWqeyqjZtfyPw6oXeVsPQFgmYyeNyfEsRO6wC4ILaB7ttMSUkdZkxfg==
+st-start@^2.0.0-beta.21:
+  version "2.0.0-beta.21"
+  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-beta.21.tgz#c0827931938b89f33580bdad9fc6c69d105cf1cc"
+  integrity sha512-QDXMMyqh20b0WXt9G/O/9V1PHthXydA7kYHIWbJwfEg4SllM9/UP5n+sUr9XmC/Qxq056VywLwKesLgEHhGxYA==
   dependencies:
     "@babel/core" "^7.7.2"
     "@babel/helper-create-class-features-plugin" "^7.7.0"
@@ -7912,7 +7912,7 @@ st-start@^2.0.0-beta.16:
     friendly-errors-webpack-plugin "^1.7.0"
     global "^4.4.0"
     html-webpack-plugin "4.0.0-beta.5"
-    mini-css-extract-plugin "0.8.0"
+    mini-css-extract-plugin "^0.8.0"
     optimize-css-assets-webpack-plugin "5.0.3"
     resolve "1.12.0"
     style-loader "1.0.0"

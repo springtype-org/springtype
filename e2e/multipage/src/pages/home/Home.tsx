@@ -4,13 +4,7 @@ import { tsx } from "../../../../../src/web/vdom";
 
 @component()
 export class HomePage extends st.component {
-  static ROUTE = "";
-
-  constructor() {
-    super();
-
-    console.log("new HomePage instance");
-  }
+  static ROUTE = "/home";
 
   render() {
     return (
@@ -20,18 +14,5 @@ export class HomePage extends st.component {
         <a href="/#/blog/">Blog</a>
       </div>
     );
-  }
-
-  onConnect() {
-    console.log("onConnect HomePage");
-  }
-
-  renderStyle() {
-
-    console.log('this', this);
-
-    return `body {
-      background: #ff0000
-    }`
   }
 }

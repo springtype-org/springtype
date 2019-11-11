@@ -6,6 +6,5 @@ import "../../../dist/core/i18n";
 import "../../../dist/core/lang";
 import "../../../dist/web/component";
 import "../../../dist/web/router";
-import "../../../dist/web/tss";
 import "../../../dist/web/vdom";
 

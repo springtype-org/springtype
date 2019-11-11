@@ -1,5 +1,6 @@
 import { st } from "../../../../../src/core";
 import { component } from "../../../../../src/web/component";
+import { Route } from "../../../../../src/web/router";
 import { tsx } from "../../../../../src/web/vdom";
 import { HomePage } from "../home/Home";
 import { FirstPostPage } from "./posts/FirstPost";
@@ -8,17 +9,18 @@ import { FirstPostPage } from "./posts/FirstPost";
 export class BlogPage extends st.component {
   static ROUTE = "/blog";
 
-  nagivateHome = () => {
-    st.router.navigate(HomePage.ROUTE);
-  };
-
   onReRenderClick = () => {
     this.doRender();
   };
 
-  render() {
+  guardFirstPostEntry = async () => {
+    if (Math.random() > 0.5) {
+      return <FirstPostPage />;
+    }
+    return <div>Access denied.</div>;
+  };
 
-    console.log('new random');
+  render() {
     return (
       <div>
         {/* funny comment */}
@@ -26,7 +28,7 @@ export class BlogPage extends st.component {
         {/* funny comment */}
         BlogPage {Math.random()}
         <br />
-        <a href="javascript:void(0)" onClick={this.nagivateHome}>
+        <a href="javascript:void(0)" onClick={() => st.router.navigate(HomePage.ROUTE)}>
           Back Home
         </a>
         <br />
@@ -38,8 +40,10 @@ export class BlogPage extends st.component {
             });
           }}
         >
-          To first post
+          Show first post
         </a>
+        <h3>Blog post:</h3>
+        <Route path={FirstPostPage.ROUTE} guard={this.guardFirstPostEntry} notMatchingComponent={<p>Nothing selected.</p>} />
       </div>
     );
   }

@@ -60,13 +60,6 @@ export class TemplateName extends st.component implements ILifecycle {
       </div>
     );
   }
-
-  // you could also use @component({ tss }) and import a tss style function
-  renderStyle = () => css`
-    body {
-      background: #ddd;
-    }
-  `;
 }
 
 // Tells SpringType to render this component now

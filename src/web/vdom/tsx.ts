@@ -90,7 +90,9 @@ export const filterCommentsAndUndefines = (children: Array<IVirtualNode> | Array
   return children.filter((child: IVirtualChild) => typeof child !== "undefined" && !isJSXComment(child as IVirtualNode));
 };
 
-export const newUniqueComponentName = () => "cmp-" + (Math.random() * 10000000).toString().substring(0, 5);
+export let cmpSequence = 0;
+
+export const newUniqueComponentName = () => "cmp-" + (++cmpSequence);
 
 export const knownComponentsMap: WeakMap<Function, string> = new WeakMap();
 

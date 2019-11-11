@@ -22,11 +22,9 @@ export interface ISpringTypeAttributes {
 	key?: string;
 
 	// children
-	children?: HTMLCollection | any;
+	//children?: HTMLCollection | any;
 
 	class?: string | Array<string>;
-
-	//style?: CSSStyleDeclaration;
 }
 
 export interface IElement extends HTMLElement, ISpringTypeAttributes {

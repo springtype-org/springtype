@@ -1,20 +1,21 @@
 import { st } from "../../../src/core";
-import { route } from "../../../src/web/router";
-import { RouterOutlet } from '../../../src/web/router/router-outlet';
+import { component } from "../../../src/web/component";
+import { PATH_DEFAULT, PATH_WILDCARD, Route, RouteList } from "../../../src/web/router";
 import { tsx } from "../../../src/web/vdom";
 import { BlogPage } from "./pages/blog/Blog";
-import { FirstPostPage } from "./pages/blog/posts/FirstPost";
 import { HomePage } from "./pages/home/Home";
 
-@route(HomePage.ROUTE, HomePage)
-@route(BlogPage.ROUTE, BlogPage)
-@route(FirstPostPage.ROUTE, {
-  component: FirstPostPage,
-  guard: async () => {
-    // reject access randomly
-    return Math.random() > 0.5;
-  },
-})
-export class AppModule {}
+@component()
+export class AppModule extends st.component {
 
-st.render(<RouterOutlet />);
+  render() {
+    return (
+      <RouteList>
+        <Route path={[PATH_DEFAULT, PATH_WILDCARD, HomePage.ROUTE]} component={<HomePage />} />
+        <Route path={BlogPage.ROUTE} component={<BlogPage />} />
+      </RouteList>
+    );
+  }
+}
+
+st.render(<AppModule />);

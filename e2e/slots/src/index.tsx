@@ -1,7 +1,6 @@
 import { st } from "../../../src/core";
 import { component } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
-import { route, RouterOutlet } from "../../../src/web/router";
 import { tsx } from "../../../src/web/vdom";
 import { E2eTemplated, ImplTestCase } from "./components/templated";
 
@@ -32,11 +31,5 @@ export class E2eSlotsIndex extends st.component implements ILifecycle {
   }
 }
 
-
-@route(null, E2eSlotsIndex)
-class IndexModule {
-
-}
-
 // Tells SpringType to render the component now
-st.render(<RouterOutlet />);
+st.render(<E2eSlotsIndex />);

@@ -1,16 +1,13 @@
 import { st } from "../../../core";
 import { defineComponent } from "../component";
-import { RenderStyleFunction } from "../interface/icomponent";
 import { ComponentFunction } from "../interface/icomponent-function";
 import { IComponentOptions } from "../interface/icomponent-options";
 
-export const component = (optionsOrElementFunction?: IComponentOptions | ComponentFunction, renderStyleFunction?: RenderStyleFunction): any => {
+export const component = (optionsOrElementFunction?: IComponentOptions | ComponentFunction): any => {
   // functional use: component((scope) => { ... }, ...)
   if (typeof optionsOrElementFunction == "function") {
     // component(() => <div></div>, () => ({ div: { color: red } }), 'open')
-    return defineComponent(optionsOrElementFunction as ComponentFunction, {
-      tss: renderStyleFunction,
-    });
+    return defineComponent(optionsOrElementFunction as ComponentFunction);
   } else {
     // decorator use on class @component({ ... })
     return (targetClass: any) => {

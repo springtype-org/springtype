@@ -14,17 +14,10 @@ export class StButton extends st.component {
   @evt
   onStClick: IEventListener<StButtonClickEventDetail, MouseEvent> = evt;
 
-  renderStyle() {
-    return `button {
-      background: navy;
-      color: white;
-      font-size: 20px;
-    }`
-  }
 
   // event handlers must always be scope-bound as fat arrow functions
   dispatchStClick = (evt: MouseEvent) => {
-    emit<StButtonClickEventDetail>(this.getEl(), "stclick", {
+    emit<StButtonClickEventDetail>(this.el, "stclick", {
       bubbles: true,
       cancelable: true,
       composed: true,

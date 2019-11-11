@@ -1,2 +1,0 @@
-export { ITSS } from "./itss";
-

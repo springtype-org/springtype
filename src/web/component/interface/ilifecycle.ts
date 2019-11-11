@@ -1,8 +1,40 @@
 import { IVirtualNode } from "../../vdom/interface";
+import { ISlotChildren } from "../../vdom/interface/ivirtual-node";
 import { AttrType } from '../trait/attr';
+import { IVirtualChildren, IVirtualNodeAttributes } from './../../vdom/interface/ivirtual-node';
 import { RenderReason, RenderReasonMetaData } from './irender-reason';
 
 export interface ILifecycle {
+
+  // the root HTML/SVG element mounted to a virtual component
+  el?: HTMLElement;
+
+  // the parent components HTML/SVG root element
+  parentEl?: HTMLElement;
+
+  // the parent component
+  parent?: ILifecycle;
+
+  // the map of slot children passed via <template> from outside
+  // and meant to be transformed and injected in the <slot>
+  // placeholders possibly returned by the render() method
+  virtualSlotChildren?: ISlotChildren;
+
+  // the map of attributes meant to be set on the root DOM element (el)
+  virtualAttributes?: IVirtualNodeAttributes;
+
+  // the array of children provided from the outside
+  // and meant to be rendered and mounted to the root DOM element (el)
+  virtualChildren?: IVirtualChildren;
+
+  // before DOM attributes of are set on the root DOM element (el)
+  // you can mutate this.virtualAttributes to filter/map them
+  onBeforeAttributesSet?(): void;
+
+  // before DOM childNodes are created and mounted to the root DOM element (el)
+  // you can mutate this.virtualChildren and this.virtualSlotChildren to filter/map them
+  onBeforeChildrenMount?(): void;
+
   // before the component gets mounted to the DOM
   onBeforeConnect?(): void;
 
@@ -16,10 +48,10 @@ export interface ILifecycle {
   shouldRender?(reason: RenderReason, meta?: RenderReasonMetaData): boolean;
 
   // before render()
-  onBeforeRender?(tssOnly?: boolean): void;
+  onBeforeRender?(): void;
 
   // after render()
-  onAfterRender?(tssOnly?: boolean): void;
+  onAfterRender?(): void;
 
   // after first render()
   onAfterInitialRender?(): void;
@@ -28,22 +60,13 @@ export interface ILifecycle {
   render?(): IVirtualNode|Array<IVirtualNode>;
 
   // lifecycle method to trigger a VDOM tpl reflow
-  doRender?(tssOnly?: boolean): Promise<void>;
-
-  // lifecycle method to tigger a VDOM tss
-  doRenderStyle?(): Promise<IVirtualNode | undefined>;
-
-  // implement this and return TSS for the markup to be styled
-  renderStyle?(theme?: any): string | undefined;
+  doRender?(): Promise<void>;
 
   // prior to removal from the DOM
   onBeforeDisconnect?(): void;
 
   // after the component has been unmounted from the DOM
   onDisconnect?(): void;
-
-  // returns the root HTML element mounted to a virtual component
-  getEl(): HTMLElement;
 
   setAttribute(name: string, value: any, type?: AttrType): void;
 

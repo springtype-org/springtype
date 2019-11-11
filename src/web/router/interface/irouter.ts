@@ -1,50 +1,38 @@
-import { IComponent } from "../../component/interface";
-import { IVirtualNode } from "../../vdom/interface/ivirtual-node";
-
-export interface IRouteComponent {
-  params: any;
-  element: IVirtualNode;
-}
+import { IRoute } from "./iroute";
+import { IRouteMatch } from "./iroute-match";
 
 export interface IRouter {
-  TOKENIZED_ROUTES: ITokenizedRoutes;
-  ROUTER_OUTLET: any;
-  ROUTE_MAP: IRoutes;
-  CURRENT_PARAMS: any;
-  CURRENT_PATH: string;
-  CURRENT_DECISION: any;
-  getParams(): any;
-  getPath(): string;
-  registerRoutes(routes: IRoutes): void;
+
+  // all paths defined in routes, already tokenized
+  // { '/foo/:bar': ['foo', ':bar'], ... }
+  TOKENIZED_REGISTERED_PATHS: ITokenizedRoutes;
+
+  // routes that match if nothing else matches (by reference)
+  WILDCARD_ROUTES: Array<IRoute>;
+
+  // routes currently entered (by reference)
+  ENTERED_ROUTES: Array<IRoute>;
+
+  // current match state e.g.
+  // { path: '/foo/:bar', url: '/foo/5', params: { bar: 5 }, isExact: true, isPartial: false, routes: [...] }
+  match: IRouteMatch;
+
+  enterRoutes(routes: Array<IRoute>): void;
+  setMatch(urlPath: string, match: IRouteMatch): void;
+  getActualUrlPrefix(): string;
+  getUrlPath(pathnameOrHash: string): string;
+  registerPaths(routes: string | Array<string>, route: IRoute): void;
   onLocationChange(): Promise<void>;
   disable(): void;
   enable(): void;
   navigate(path: string, params?: any): void;
-  registerRouterOutlet(routerOutlet: any): void;
-  refresh(): void;
-  tokenizeRoute(route: string, registration?: boolean): Array<string>;
-  match(realRoute: string): ILocationChangeDecision | null;
-  setParams(params: any): void;
-  decideOnLocationChange(hash: string): Promise<void>;
+  doMatchUrlPath(urlPath: string): void;
+  tokenize(urlPath: string): Array<string>;
 }
 
-export interface IRoutes {
-  [route: string]: IRouteDefinition | IComponent;
-}
 export interface ITokenizedRoutes {
-  [route: string]: Array<string>; // path tokens
-}
-
-export type GuardFunction = (locationChangeDecision?: ILocationChangeDecision) => Promise<boolean>;
-
-export interface IRouteDefinition {
-  component: IComponent;
-  guard?: GuardFunction;
-}
-
-export interface ILocationChangeDecision {
-  guard?: GuardFunction;
-  component: IComponent;
-  params: Object;
-  route: string;
+  [route: string]: {
+    tokens: Array<string>; // path tokens
+    route: IRoute;
+  };
 }

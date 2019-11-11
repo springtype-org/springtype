@@ -1,5 +1,4 @@
-// custom element needs TSS and VDOM
-import "../tss";
+// custom element needs VDOM
 import "../vdom";
 
 export { Component } from "./component";

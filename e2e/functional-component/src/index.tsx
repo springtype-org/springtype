@@ -2,14 +2,6 @@ import { st } from "../../../src/core";
 import { component, Component, render } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 
-interface Theme {
-  primaryColor: string;
-}
-
-st.tss.setTheme({
-  primaryColor: "red",
-});
-
 // define a functional custom element
 const E2EClock = component(
   (scope: Component) => {
@@ -25,11 +17,7 @@ const E2EClock = component(
 
     // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
     return renderFn;
-  },
-  // renderStyle fn
-  (scope: Component, theme: Theme) => `button {
-    background: ${theme.primaryColor};
-  }`,
+  }
 );
 
 // simplified functional element, just renders what comes in

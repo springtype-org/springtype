@@ -4,7 +4,6 @@ import { attr, component } from "../../../src/web/component";
 import { Component } from "../../../src/web/component/component";
 import { tsx } from "../../../src/web/vdom";
 import { tpl } from "./index.tpl";
-import { tss } from "./index.tss";
 
 const attr_ = (scope: Component, name: string, defaultValue?: string, x?: any): string => {
   console.log("register for attribute cd", name);
@@ -12,9 +11,7 @@ const attr_ = (scope: Component, name: string, defaultValue?: string, x?: any): 
   return defaultValue || "";
 };
 
-@component({
-  tss
-})
+@component()
 export class Foo extends st.component {
   @attr()
   some: string = attr_(this, "some", "test");
