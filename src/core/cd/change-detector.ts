@@ -228,6 +228,10 @@ export class ChangeDetector {
       let proxy = proxyCache!.get(value);
 
       if (proxy === undefined) {
+
+        // If Proxy is not supported in your browser, add
+        // https://github.com/GoogleChrome/proxy-polyfill
+        // to your application bundle
         proxy = new Proxy(value, handler);
         proxyCache!.set(value, proxy);
       }

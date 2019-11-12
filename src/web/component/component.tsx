@@ -103,6 +103,8 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   connectedCallback() {
     this.INTERNAL.isConnected = true;
 
+    awaitDisconnect(this);
+
     this.onConnect();
 
     if (this.shouldRender(RenderReason.INITIAL)) {
@@ -127,8 +129,6 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
     this.onDisconnect();
   }
-
-  onBeforeDisconnect() {}
 
   onDisconnect() {}
 
@@ -250,6 +250,12 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   onAfterInitialRender() {}
 
   onAfterRender() {}
+
+  onBeforePatchEl() {}
+
+  onAfterPatchEl() {}
+
+  handleUpdateElAttribute(name: string, value: any) {}
 }
 
 if (!st.component) {
@@ -257,6 +263,25 @@ if (!st.component) {
 }
 
 export const getComponent = (className: string) => st[GlobalCache.COMPONENT_REGISTRY][className] as any;
+
+const awaitDisconnect = (component: Component) => {
+  const onMutation = (mutationsList: Array<MutationRecord>, observer: MutationObserver) => {
+    for (let mutation of mutationsList) {
+      if (Array.prototype.indexOf.call(mutation.removedNodes, component.el) > -1) {
+        component.disconnectedCallback();
+        observer.disconnect();
+      }
+    }
+  };
+
+  if (typeof MutationObserver !== "undefined") {
+    // old browsers might not call .onDisconnect() and lead to memory overhead
+    // but that is a compromise that seems to be sane
+    // if necessary, add: mutationobserver-shim in your application bundle
+    component.INTERNAL.mutationObserver = new MutationObserver(onMutation);
+    component.INTERNAL.mutationObserver.observe(component.parentEl, { attributes: false, childList: true, subtree: false });
+  }
+};
 
 if (!st.getComponent) {
   st.getComponent = getComponent;

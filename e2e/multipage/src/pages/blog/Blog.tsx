@@ -1,13 +1,13 @@
-import { st } from "../../../../../src/core";
-import { component } from "../../../../../src/web/component";
-import { Route } from "../../../../../src/web/router";
-import { tsx } from "../../../../../src/web/vdom";
+import { st } from "../../../../../dist/core";
+import { component } from "../../../../../dist/web/component";
+import { Route } from "../../../../../dist/web/router";
+import { tsx } from "../../../../../dist/web/vdom";
 import { HomePage } from "../home/Home";
 import { FirstPostPage } from "./posts/FirstPost";
 
 @component()
 export class BlogPage extends st.component {
-  static ROUTE = "/blog";
+  static ROUTE = "#/blog";
 
   onReRenderClick = () => {
     this.doRender();

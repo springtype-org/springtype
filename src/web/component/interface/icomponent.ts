@@ -13,4 +13,5 @@ export interface IComponentInternals {
   options: IComponentOptions;
   isConnected: boolean;
   virtualNode: IVirtualNode;
+  mutationObserver: MutationObserver;
 }

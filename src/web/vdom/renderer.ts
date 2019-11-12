@@ -51,21 +51,17 @@ if (!st.renderer) {
     },
 
     removeElement: (parent: IElement, domElement: IElement) => {
-      if (domElement.$stComponent) {
-        domElement.$stComponent.onBeforeDisconnect!();
-      }
-
       parent.removeChild(domElement);
-
-      if (domElement.$stComponent) {
-        domElement.$stComponent.disconnectedCallback!();
-      }
     },
 
     patchElement: (parent: IElement, domElement: IElement, virtualElement: IVirtualNode) => {
       // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
 
       if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement["novdom"]) return;
+
+      if (domElement && domElement.$stComponent) {
+        domElement.$stComponent.onBeforePatchEl();
+      }
 
       let created = false;
       let replaced = false;
@@ -101,8 +97,11 @@ if (!st.renderer) {
 
             if (!attributeName.startsWith("on")) {
               if (!virtualElement.attributes || !virtualElement.attributes[attributeName]) {
-                // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
-                domElement.removeAttribute(attributeName);
+                // ignore cases such as: id, class, style, tabindex
+                if (!(domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName))) {
+                  // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
+                  domElement.removeAttribute(attributeName);
+                }
               } else if (domElement.getAttribute(attributeName) !== virtualElement.attributes[attributeName]) {
                 if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
                   st.renderer.removeElement(parent, domElement);
@@ -110,8 +109,13 @@ if (!st.renderer) {
                   st.dom.createElement(virtualElement, parent);
                   replaced = true;
                 } else {
-                  // DOMElement attribute value differs from VirtualElement attribute: Update
-                  st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
+                  // ignore cases such as: id, class, style, tabindex but inform component
+                  if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
+                    domElement.$stComponent.handleUpdateElAttribute(attributeName, virtualElement.attributes[attributeName]);
+                  } else {
+                    // DOMElement attribute value differs from VirtualElement attribute: Update
+                    st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
+                  }
                 }
               }
             }
@@ -128,6 +132,10 @@ if (!st.renderer) {
               st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
             }
           }
+        }
+
+        if (domElement && domElement.$stComponent) {
+          domElement.$stComponent.onAfterPatchEl();
         }
       }
 

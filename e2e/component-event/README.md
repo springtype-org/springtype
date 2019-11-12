@@ -35,7 +35,6 @@ to design a user interface.
         console.log('');
       }
 
-      onBeforeDisconnect() {} // before `parent.removeChild()`
       onDisconnect() {} // after `parent.removeChild()`
 
       // --- userland impl.

@@ -35,6 +35,18 @@ export interface ILifecycle {
   // allows to tap / mutate this.el after creation
   onAfterElCreate?(el: IElement): void;
 
+  // is called before the .el of the component is patches by the VDOM
+  onBeforePatchEl?(): void;
+
+  // is called after the .el of the component has been patched by the VDOM
+  onAfterPatchEl?(): void;
+
+  // is called when a re-rendering of the VDOM triggers an outer change
+  // of an attribute which is a standard HTML attribute such as: id, class, style, tabindex
+  // because these attributes are not patches by the VDOM the component has
+  // to decide what to do now: It might have been a MERGE or REPLACE intention
+  handleUpdateElAttribute?(name: string, value: any): void;
+
   // before this.el.childNodes are created
   onBeforeElChildrenCreate(): void;
 
@@ -67,9 +79,6 @@ export interface ILifecycle {
 
   // lifecycle method to trigger a VDOM tpl reflow
   doRender?(): Promise<void>;
-
-  // prior to removal from the DOM
-  onBeforeDisconnect?(): void;
 
   // after the component has been unmounted from the DOM
   onDisconnect?(): void;
