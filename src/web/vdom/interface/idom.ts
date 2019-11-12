@@ -11,6 +11,8 @@ export interface IDOM {
 
   isRegisteredComponent(tagName: string): boolean;
 
+  isStandardHTMLAttribute(name: string): boolean;
+
   hasSvgNamespace(type: string): boolean;
 
   createElement(virtualNode: IVirtualNode | undefined, parentDomElement: Element, isSvg?: boolean): Element | undefined;

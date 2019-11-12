@@ -21,6 +21,15 @@ export class StateTrait {
   }
 
   static addState(ctor: any, name: string | symbol, type: ChangeType) {
+
+    if (process.env.NODE_ENV === "development") {
+      if (st.dom.isStandardHTMLAttribute(name as string)) {
+        st.error(
+          `The state ${ctor.name}.${name as string} is a standard HTML element attribute. It's value would be written directly to this.el, hiding away from @attr. Please choose a different name.`,
+        );
+      }
+    }
+
     if (!ctor[STATE]) {
       ctor[STATE] = [];
     }

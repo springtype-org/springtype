@@ -33,7 +33,7 @@ export class StButton extends st.component {
       <button onClick={this.dispatchStClick}>
         |Start|
         {/* default label */}
-        <slot>Unlabled</slot>
+        {this.renderChildren('Unlabled')}
         |End|
       </button>
     );

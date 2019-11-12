@@ -1,7 +1,6 @@
-import { ISlotChildren, IVirtualNodeAttributes } from '../../vdom/interface/ivirtual-node';
+import { IVirtualNode } from "./../../../web/vdom/interface/ivirtual-node";
 import { IComponentOptions } from "./icomponent-options";
-import { ILifecycle } from './ilifecycle';
-
+import { ILifecycle } from "./ilifecycle";
 
 export interface IComponentInternals {
   el: HTMLElement;
@@ -13,6 +12,5 @@ export interface IComponentInternals {
   };
   options: IComponentOptions;
   isConnected: boolean;
-  virtualSlotChildren: ISlotChildren;
-  virtualAttributes: IVirtualNodeAttributes;
+  virtualNode: IVirtualNode;
 }

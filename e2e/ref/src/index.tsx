@@ -9,10 +9,11 @@ export class RefCmpTest extends st.component {
   makeRed = () => {
 
     console.log('makeRed', this.el.style);
-    this.el.style.display = 'block';
-    this.el.style.background = 'red';
 
-
+    this.elStyle = {
+      display: "block",
+      backgroundColor: 'red'
+    }
   }
 
   render() {

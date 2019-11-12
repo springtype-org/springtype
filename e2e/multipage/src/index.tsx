@@ -12,7 +12,7 @@ export class AppModule extends st.component {
     return (
       <RouteList>
         <Route path={[PATH_DEFAULT, PATH_WILDCARD, HomePage.ROUTE]} component={<HomePage />} />
-        <Route path={BlogPage.ROUTE} component={<BlogPage />} />
+        <Route path={BlogPage.ROUTE} component={<BlogPage id="myBlog" />} />
       </RouteList>
     );
   }

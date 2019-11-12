@@ -137,7 +137,7 @@ if (!st.renderer) {
 
       if (domElement && domElement.$stComponent) {
         // update slot children
-        domElement.$stComponent.INTERNAL.virtualSlotChildren = virtualElement.slotChildren;
+        domElement.$stComponent.INTERNAL.virtualNode = virtualElement;
         domElement.$stComponent.doRender();
         return;
       }

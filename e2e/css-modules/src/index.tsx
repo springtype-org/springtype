@@ -2,7 +2,7 @@ import { st } from "../../../src/core";
 import { component, state } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface/ilifecycle";
 import { domRef, tsx } from "../../../src/web/vdom";
-import mdcButton from "./styles.scss";
+import * as mdcButton from "./styles.tss.scss";
 
 @component()
 export class TemplateName extends st.component implements ILifecycle {

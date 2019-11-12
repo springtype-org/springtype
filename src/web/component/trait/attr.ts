@@ -56,6 +56,10 @@ export class AttrTrait {
       if (type === AttrType.DOM_TRANSPARENT && /[ABCDEFGHIJKLMNOPQRSTUVWXYZ]/g.test(name!.toString())) {
         st.warn(`The attribute ${ctor.name}.${name} is DOM_TRANSPARENT and thus has a bad naming. It should be like: ${name.toLowerCase()}`);
       }
+
+      if (st.dom.isStandardHTMLAttribute(name)) {
+        st.error(`The attribute ${ctor.name}.${name} is a standard HTML element attribute. It's value would be written directly to this.el, hiding away from @attr. Please choose a different name.`);
+      }
     }
 
     // init cache

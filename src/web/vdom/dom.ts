@@ -1,6 +1,5 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
-import { Component } from "../component";
 import { GlobalCache } from "./../../core/st/interface/i$st";
 import { IComponentOptions } from "./../component/interface/icomponent-options";
 import { IElement } from "./interface/ielement";
@@ -25,7 +24,8 @@ if (!st.dom) {
 
     createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, isSvg?: boolean): IElement | undefined => {
       let newEl: Element;
-      let component = st.getComponent(virtualNode.type) as any;
+      let componentCtor = st.getComponent(virtualNode.type) as any;
+      let component;
 
       if (typeof isSvg == "undefined") {
         if (virtualNode.type.toUpperCase() == "SVG") {
@@ -33,28 +33,16 @@ if (!st.dom) {
         }
       }
 
-      if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
-        newEl = document.createElementNS("http://www.w3.org/2000/svg", virtualNode.type as string);
-      } else {
-        if (component) {
-          // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          virtualNode.type = component.COMPONENT_OPTIONS.tagName;
-        }
-        newEl = document.createElement(virtualNode.type as string);
-      }
-
       // identified virtual component
-      if (component) {
+      if (componentCtor) {
         // functional component
-        if (!component.name) {
-          const fn = component as Function & {
+        if (!componentCtor.name) {
+          const fn = componentCtor as Function & {
             COMPONENT_OPTIONS: IComponentOptions;
           };
 
-          // TODO: Can it re-use an existing instance?
-
           // create shallow component instance
-          component = new Component();
+          component = new componentCtor();
 
           // assign options
           component.INTERNAL.options = fn.COMPONENT_OPTIONS;
@@ -64,26 +52,38 @@ if (!st.dom) {
         } else {
           // class API
           // create instance of component
-          component = new component();
+          component = new componentCtor();
         }
-
-        // reference component logical controller component
-        (newEl as IElement).$stComponent = component;
 
         // set root DOM node ref and parent ref
         component.INTERNAL.parentEl = parentDomElement;
         component.INTERNAL.parent = parentDomElement.$stComponent;
-        component.INTERNAL.el = newEl;
 
-        // assign slot children for rewrite
-        component.INTERNAL.virtualSlotChildren = virtualNode.slotChildren;
-
-        // assign virtual children and attributes
-        component.INTERNAL.virtualAttributes = virtualNode.attributes;
+        // assign attributes, slotChildren etc.
+        component.INTERNAL.virtualNode = virtualNode;
       }
 
       if (component) {
-        component.onBeforeAttributesSet!();
+        // to analyze, filter and transform before create
+        component.onBeforeElCreate(virtualNode);
+      }
+
+      if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
+        newEl = document.createElementNS("http://www.w3.org/2000/svg", virtualNode.type as string);
+      } else {
+        if (component) {
+          // use <class-name> instead of ClassName which would end up as <classname> in DOM
+          virtualNode.type = componentCtor.COMPONENT_OPTIONS.tagName;
+        }
+        newEl = document.createElement(virtualNode.type as string);
+      }
+
+      if (component) {
+        // set element reference
+        component.INTERNAL.el = newEl;
+
+        // reference component logical controller component
+        (newEl as IElement).$stComponent = component;
       }
 
       if (virtualNode.attributes) {
@@ -91,7 +91,9 @@ if (!st.dom) {
       }
 
       if (component) {
-        component.onBeforeChildrenMount!();
+        // to verify and mutate further
+        component.onAfterElCreate!(newEl);
+        component.onBeforeElChildrenCreate!();
       }
 
       if (virtualNode.children) {
@@ -99,6 +101,7 @@ if (!st.dom) {
       }
 
       if (component) {
+        component.onAfterElChildrenCreate!();
         component.onBeforeConnect!();
       }
 
@@ -171,7 +174,7 @@ if (!st.dom) {
       if (isSvg && name.startsWith("xlink")) {
         domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
       } else {
-        if (domElement.$stComponent && forceNative !== true) {
+        if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
           domElement.$stComponent.setAttribute(name, value);
         } else if (name === "style" && typeof value !== "string") {
           for (let prop in value) {
@@ -185,6 +188,17 @@ if (!st.dom) {
           }
         }
       }
+    },
+
+    isStandardHTMLAttribute: (name: string) => {
+      // these attributes, set on a component (from the outside) will
+      // always directly be set on component.el and the component will
+      // not be notified using lifecycle methods
+      // thus, these attribute names render pointless to be used
+      // but this should be obvious too - just because of thier names nature
+      const standardHTMLAttributes = ["class", "style", "id", "tabindex"];
+
+      return standardHTMLAttributes.indexOf(name.toLowerCase()) > -1;
     },
 
     setAttributes: (attributes: IVirtualNodeAttributes, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {

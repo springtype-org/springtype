@@ -5,7 +5,8 @@ import { removeContextChangeHandlersOfInstance } from "../../core/context/contex
 import { GlobalCache } from "../../core/st/interface/i$st";
 import { newUniqueComponentName, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
-import { IVirtualChild, IVirtualNodeAttributes } from "../vdom/interface/ivirtual-node";
+import { IVirtualChild } from "../vdom/interface/ivirtual-node";
+import { DEFAULT_SLOT_NAME } from "../vdom/tsx";
 import { IComponentOptions } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
 import { IComponentLifecycle, ILifecycle } from "./interface/ilifecycle";
@@ -38,14 +39,28 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return this.INTERNAL.el;
   }
 
-  // @ts-ignore: it's fine that the setter allows for string and Array<string>
-  set class(classes: string | Array<string>) {
+  get elClass(): string | Array<string> {
+    return (this.el.getAttribute("class") || "").split(" ");
+  }
+
+  set elClass(classes: string | Array<string>) {
     st.dom.setAttribute("class", !Array.isArray(classes) ? [classes] : classes, this.el, false, true);
   }
 
-  // @ts-ignore: it's fine that the getter always returns an array
-  get class(): Array<string> {
-    return (this.el.getAttribute("class") || '').split(" ");
+  get elAttributes(): Partial<HTMLElement> {
+    return this.el.attributes as Partial<HTMLElement>;
+  }
+
+  set elAttributes(attributes: Partial<HTMLElement>) {
+    st.dom.setAttributes(attributes, this.el, false, true);
+  }
+
+  get elStyle(): Partial<CSSStyleDeclaration> {
+    return this.el.style;
+  }
+
+  set elStyle(style: Partial<CSSStyleDeclaration>) {
+    st.dom.setAttribute("style", style, this.el, false, true);
   }
 
   get parentEl(): HTMLElement {
@@ -56,35 +71,31 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return this.INTERNAL.parent;
   }
 
-  get attrs(): IVirtualNodeAttributes {
-    return this.INTERNAL.virtualAttributes;
-  }
-
-  set attrs(attrs: IVirtualNodeAttributes) {
-    st.dom.setAttributes(attrs, this.el, false, true);
-  }
-
-  get slotChildren(): IVirtualNodeAttributes {
-    return this.INTERNAL.virtualSlotChildren;
+  get virtualNode(): IVirtualNode {
+    return this.INTERNAL.virtualNode;
   }
 
   renderSlot(slotName: string, defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild> {
-    if (this.INTERNAL.virtualSlotChildren[slotName]) {
-      return (this.INTERNAL.virtualSlotChildren[slotName] as IVirtualNode).children;
+    if (this.virtualNode.slotChildren![slotName]) {
+      return (this.virtualNode.slotChildren![slotName] as IVirtualNode).children;
     }
     return defaults || <fragment />;
   }
 
   renderChildren(defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualNode | Array<IVirtualNode> {
-    if (this.INTERNAL.virtualSlotChildren.default) {
-      return this.INTERNAL.virtualSlotChildren.default;
+    if (this.virtualNode.slotChildren![DEFAULT_SLOT_NAME]) {
+      return this.virtualNode.slotChildren![DEFAULT_SLOT_NAME];
     }
     return defaults || <fragment />;
   }
 
-  onBeforeAttributesSet() {}
+  onBeforeElCreate(virtualNode: IVirtualNode) {}
 
-  onBeforeChildrenMount() {}
+  onAfterElCreate(el: IElement) {}
+
+  onBeforeElChildrenCreate() {}
+
+  onAfterElChildrenCreate() {}
 
   onBeforeConnect() {}
 
@@ -127,7 +138,6 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
    * @param newValue Value to accept or revoke
    * @param oldValue Previous value
    */
-  // @ts-ignore: Unused variables are valid here
   shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
     return true;
   }
@@ -173,13 +183,11 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     }
   }
 
-  // @ts-ignore: Unused variables are valid here
   onStateChange(change: IStateChange) {}
 
   /**
    * Lifecycle method: Implement to get notified when attributes change
    */
-  // @ts-ignore: Unused variables are valid here
   onAttributeChange(name: string, newValue: any, oldValue: any) {}
 
   /**
@@ -190,7 +198,6 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     return this.INTERNAL.attributes[name];
   }
 
-  // @ts-ignore: Unused variables are valid here
   shouldRender(reason: RenderReason, meta?: RenderReasonMetaData): boolean {
     return true;
   }

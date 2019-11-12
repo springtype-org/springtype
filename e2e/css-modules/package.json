@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@material/button": "^4.0.0",
-    "st-start": "2.0.0-beta.17"
+    "st-start": "2.0.0-beta.25"
   },
   "devDependencies": {
     "autoprefixer": "^9.7.1",
