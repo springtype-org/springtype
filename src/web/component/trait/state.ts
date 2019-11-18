@@ -5,6 +5,7 @@ import { IComponent } from "../interface";
 import { IComponentInternals } from "../interface/icomponent";
 import { IStateChange } from "../interface/ion-state-change";
 import { RenderReason } from "../interface/irender-reason";
+import { TYPE_FUNCTION } from "../../../core/lang/type-function";
 
 export const STATE: string = "STATE";
 
@@ -45,7 +46,7 @@ export class StateTrait {
     }
 
     // call handler method if implemented
-    if (typeof instance.onStateChange == "function") {
+    if (typeof instance.onStateChange == TYPE_FUNCTION) {
       instance.onStateChange(change);
     }
 

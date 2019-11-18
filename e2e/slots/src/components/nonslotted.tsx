@@ -3,7 +3,7 @@ import { component } from "../../../../src/web/component";
 import { ILifecycle } from "../../../../src/web/component/interface";
 import { tsx } from "../../../../src/web/vdom";
 
-@component()
+@component
 export class E2eNonSlotted extends st.component implements ILifecycle {
 
   render() {

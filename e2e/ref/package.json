@@ -27,5 +27,8 @@
     "sass-loader": "^8.0.0",
     "st-start": "^2.0.0-beta.16",
     "webpack-bundle-analyzer": "^3.6.0"
+  },
+  "dependencies": {
+    "redux-devtools-extension": "^2.13.8"
   }
 }

@@ -10,22 +10,19 @@ import { tsx } from "../../../../src/web/vdom";
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
 import * as en from "./i18n/en.json";
-import { tss } from "./index.tss";
 
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de", de)
 @translation("en", en)
-@component({
-  tss
-})
+@component
 export class Foo2 extends st.component {
-  @attr()
+  @attr
   foo: string = "Jesus!!!";
 
-  @attr()
+  @attr
   foo2: boolean = false;
 
-  @attr()
+  @attr
   foo3: any = {
     huhu: {
       haha: 345,
@@ -33,7 +30,7 @@ export class Foo2 extends st.component {
   };
 
   @context("foo")
-  foo4: any = st.initContext("foo", {});
+  foo4: any = st.context("foo");
 
   @state
   lala: any = { a: "hase" };
@@ -92,7 +89,7 @@ export class Foo2 extends st.component {
 
       console.log("reading context memory", this.foo4);
       this.foo4 = {};
-      const x: any = st.getContext("foo");
+      const x: any = st.context("foo");
 
       x.asd = true;
 

@@ -4,8 +4,9 @@ import { ILifecycle } from "../../../../src/web/component/interface";
 import { AttrType } from "../../../../src/web/component/trait/attr";
 import { tsx } from "../../../../src/web/vdom";
 
-@component()
+@component
 export class E2eSlotted extends st.component implements ILifecycle {
+
   @attr(AttrType.DOM_TRANSPARENT)
   some: string = "some";
 

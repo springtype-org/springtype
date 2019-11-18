@@ -42,7 +42,9 @@ export class DIE2E {
 
 		if (this.fooFactoryFunction && this.fooFactoryFunction.name == "factory") {
 			console.log("factory function inject OK");
+
 		}
+		console.log(this.fooSingleton, this.fooFactory);
 	}
 }
 

@@ -11,13 +11,13 @@ const attr_ = (scope: Component, name: string, defaultValue?: string, x?: any): 
   return defaultValue || "";
 };
 
-@component()
+@component
 export class Foo extends st.component {
-  @attr()
+  @attr
   some: string = attr_(this, "some", "test");
 
   @context("foo")
-  lolShared: any = st.getContext("foo");
+  lolShared: any = st.context("foo");
 
   onButtonClick = () => {
     this.doRender();
@@ -38,7 +38,7 @@ export class Foo extends st.component {
     st.i18n.setLanguage("en");
 
     setTimeout(() => {
-      st.info("router", st.router, "di", st.di, "i18n", st.i18n, "tss", st.tss);
+      st.info("router", st.router, "di", st.di, "i18n", st.i18n);
     }, 200);
   }
 

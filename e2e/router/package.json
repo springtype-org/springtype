@@ -11,7 +11,7 @@
   "author": "Aron Homberg <info@aron-homberg.de>",
   "license": "MIT",
   "dependencies": {
-    "st-start": "2.0.0-beta.21"
+    "st-start": "2.0.0-beta.26"
   },
   "devDependencies": {
     "autoprefixer": "^9.7.1",

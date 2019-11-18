@@ -4,7 +4,7 @@ import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 import { E2eTemplated, ImplTestCase } from "./components/templated";
 
-@component()
+@component
 export class E2eSlotsIndex extends st.component implements ILifecycle {
 
   onReRenderClick = () => {

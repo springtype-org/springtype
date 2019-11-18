@@ -2,4 +2,4 @@ proseWrap: "preserve"
 trailingComma: "all"
 tabWidth: 2
 useTabs: false
-printWidth: 200
+printWidth: 120

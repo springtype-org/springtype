@@ -1,38 +1,48 @@
 import { st } from "../../../src/core";
-import { component } from "../../../src/web/component";
+import { component, attr } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
-import { domRef, tsx } from "../../../src/web/vdom";
+import { tsx } from "../../../src/web/vdom";
+import { ref } from "../../../src/core/ref/decorator";
 
-@component()
-export class RefCmpTest extends st.component {
+@component
+export class redbox extends st.component {
+  @attr
+  foo: number;
 
   makeRed = () => {
-
-    console.log('makeRed', this.el.style);
+    console.log("makeRed", this.foo, this.el.style);
 
     this.elStyle = {
       display: "block",
-      backgroundColor: 'red'
-    }
-  }
+      backgroundColor: "red",
+    };
+  };
 
   render() {
-    return <div>Works well if I'm becoming red</div>
+    return <div>Works well if I'm becoming red</div>;
   }
 }
 
-@component()
-export class RefTest extends st.component implements ILifecycle {
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      redbox: Partial<redbox>;
+    }
+  }
+}
+
+@component
+export class reftest extends st.component implements ILifecycle {
   time: number = 0;
 
-  @domRef("someDiv")
+  @ref
   someDiv!: HTMLDivElement;
 
-  @domRef("redBox")
-  redBox!: RefCmpTest;
+  @ref
+  redBox!: redbox;
 
   onGetDiv = () => {
-    console.log("get div", st.getDomRef("someDiv", this), this.someDiv);
+    console.log("get div", this.someDiv, this.redBox);
 
     this.time = Date.now();
 
@@ -42,9 +52,11 @@ export class RefTest extends st.component implements ILifecycle {
   };
 
   render() {
+    console.log("rendering reftest...");
+
     return (
       <div>
-        <RefCmpTest ref={{ redBox: this }}/>
+        <redbox style={{ color: "#ffffff" }} foo={345} ref={{ redBox: this }} />
         <button onClick={this.onGetDiv}>Get DIV</button>
         <div ref={{ someDiv: this }}>{this.time}</div>
       </div>
@@ -52,4 +64,42 @@ export class RefTest extends st.component implements ILifecycle {
   }
 }
 
-st.render(<RefTest />);
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      reftest: Partial<reftest>;
+    }
+  }
+}
+
+@component
+export class container extends st.component {
+  showRefTest: boolean = true;
+
+  render() {
+    setTimeout(() => {
+      this.showRefTest = !this.showRefTest;
+      this.doRender();
+    }, 1000);
+
+    if (this.showRefTest) {
+      return (
+        <div>
+          <reftest />
+        </div>
+      );
+    } else {
+      return <div>Refresh test</div>;
+    }
+  }
+}
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      container: Partial<container>;
+    }
+  }
+}
+
+st.render(<container />);

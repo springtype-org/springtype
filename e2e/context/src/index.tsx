@@ -3,6 +3,7 @@ import { context } from "../../../src/core/context";
 import { component } from "../../../src/web/component";
 import { ILifecycle, IStateChange } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
+
 interface LolShared {
   lala: number;
 
@@ -10,15 +11,16 @@ interface LolShared {
 }
 
 const contextName = "foo";
+const initialContextValue = { lala: 123 };
 
-@component()
+@component
 export class E2EContext extends st.component implements ILifecycle {
 
   @context(contextName)
-  lolShared: LolShared = st.initContext<LolShared>(contextName, { lala: 123 });
+  lolShared: LolShared = st.context<LolShared>(contextName, initialContextValue);
 
   @context(contextName)
-  lolSharedMirror: LolShared = st.getContext<LolShared>(contextName);
+  lolSharedMirror: LolShared = st.context<LolShared>(contextName, initialContextValue);
 
   onAfterInitialRender() {
 

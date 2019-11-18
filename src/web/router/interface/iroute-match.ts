@@ -1,11 +1,10 @@
 import { IRoute } from "./iroute";
 
 export interface IRouteParams {
-  [name: string]: string; // name -> value
+  [name: string]: any; // name -> value
 }
 
 export interface IRouteMatch {
-
   // only true when /foo/bar is the route and /foo/bar is where you are
   isExact: boolean;
 

@@ -3,31 +3,23 @@ import { component, Component, render } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 
 // define a functional custom element
-const E2EClock = component(
-  (scope: Component) => {
-    // defined at construction time
-    const updateUnixTime = () => scope.setAttribute("now", Date.now());
+const E2EClock = component((scope: Component) => {
+  // defined at construction time
+  const updateUnixTime = () => scope.setAttribute("now", Date.now());
 
-    const renderFn = () => (
-      <div>
-        <button onClick={updateUnixTime}>Show time</button>
-        <E2ETimeDisplay>{scope.getAttribute("now")}</E2ETimeDisplay>
-      </div>
-    );
-
-    // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
-    return renderFn;
-  }
-);
+  // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
+  return () => (
+    <div unwrap>
+      <button onClick={updateUnixTime}>Show time</button>
+      <E2ETimeDisplay>{scope.getAttribute("now")}</E2ETimeDisplay>
+    </div>
+  );
+});
 
 // simplified functional element, just renders what comes in
 const E2ETimeDisplay = component(
-  render(() => {
-    return (
-      <div>
-        <slot></slot>
-      </div>
-    );
+  render((component: Component) => {
+    return <div>{component.renderChildren()}</div>;
   }),
 );
 

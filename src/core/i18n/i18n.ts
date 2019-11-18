@@ -1,5 +1,6 @@
 import { st } from "../st/st";
 import { Ii18n, ITranslation, ITranslationValues } from "./interface/ii18n";
+import { TYPE_FUNCTION } from "../lang/type-function";
 
 if (!st.i18n) {
   st.i18n = {
@@ -57,7 +58,7 @@ if (!st.i18n) {
             value = values[valueName];
 
             if (formatterName) {
-              if (typeof st.i18n.formatters[formatterName] == "function") {
+              if (typeof st.i18n.formatters[formatterName] == TYPE_FUNCTION) {
                 value = st.i18n.formatters[formatterName](value);
               } else {
                 st.warn(`The formatter ${formatterName} for translation value {{ ${valueName}, ${formatterName} }} wasn't found!`);

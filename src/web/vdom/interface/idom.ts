@@ -1,7 +1,7 @@
 import { IVirtualChildren, IVirtualNode } from "./ivirtual-node";
 
 export interface IDOMRootAttributes {
-  [name: string]: string;
+  //name: string]: string;
 }
 
 export interface IDOM {

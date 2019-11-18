@@ -6,18 +6,48 @@ import { GlobalCache } from "../../core/st/interface/i$st";
 import { newUniqueComponentName, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { IVirtualChild } from "../vdom/interface/ivirtual-node";
-import { DEFAULT_SLOT_NAME } from "../vdom/tsx";
-import { IComponentOptions } from "./interface";
+import { DEFAULT_SLOT_NAME, CLASS_ATTRIBUTE_NAME } from "../vdom/tsx";
+import { IComponentOptions, IComponent } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
 import { IComponentLifecycle, ILifecycle } from "./interface/ilifecycle";
 import { IOnStateChange, IStateChange } from "./interface/ion-state-change";
 import { RenderReason, RenderReasonMetaData } from "./interface/irender-reason";
 import { AttrTrait, AttrType } from "./trait/attr";
 import { StateTrait } from "./trait/state";
+import { TYPE_FUNCTION } from "../../core/lang/type-function";
+import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
+import { IRefAttribute } from "./interface/iref-attribute";
 
-export class Component implements IComponentLifecycle, ILifecycle, IOnStateChange {
+export type DefaultAttributes = {
+  tag?: string;
+  id?: string;
+  key?: string;
+  ref?: IRefAttribute;
+  unwrap?: boolean;
+  tabIndex?: number;
+  style?: Partial<CSSStyleDeclaration>;
+  class?: Array<string>|string;
+}
+
+export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnStateChange {
+
   // shadow functionallity that shouldn't break userland impl.
   INTERNAL: IComponentInternals;
+
+  // typing for JSX.ElementClass @attr's
+  attrs!: A & DefaultAttributes;
+
+  tag!: string;
+  id!: string;
+  key!: string;
+  ref!: IRefAttribute;
+  unwrap!: boolean;
+  tabIndex!: number;
+  style!: Partial<CSSStyleDeclaration>;
+  class!: Array<string>|string;
+
+  // class assignment for import in case of lowercase usage / typed use
+  as!: IComponent;
 
   constructor() {
     // internal state initialization
@@ -40,11 +70,11 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   }
 
   get elClass(): string | Array<string> {
-    return (this.el.getAttribute("class") || "").split(" ");
+    return (this.el.getAttribute(CLASS_ATTRIBUTE_NAME) || "").split(" ");
   }
 
   set elClass(classes: string | Array<string>) {
-    st.dom.setAttribute("class", !Array.isArray(classes) ? [classes] : classes, this.el, false, true);
+    st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, !Array.isArray(classes) ? [classes] : classes, this.el, false, true);
   }
 
   get elAttributes(): Partial<HTMLElement> {
@@ -127,6 +157,11 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
     // remove @context handlers
     removeContextChangeHandlersOfInstance(this);
 
+    // reset ref-references
+    for (let refName in this.ref) {
+      // @ts-ignore
+      this.ref[refName] = null;
+    }
     this.onDisconnect();
   }
 
@@ -157,7 +192,7 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
 
       this.INTERNAL.attributes[name] = value;
 
-      if (this.INTERNAL.el && ((typeof type !== "undefined" && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
+      if (this.INTERNAL.el && ((typeof type !== TYPE_UNDEFINED && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
         // reflect to DOM (casts to string)
 
         this.INTERNAL.el.setAttribute(name, value);
@@ -199,13 +234,16 @@ export class Component implements IComponentLifecycle, ILifecycle, IOnStateChang
   }
 
   shouldRender(reason: RenderReason, meta?: RenderReasonMetaData): boolean {
+
+    // TODO: Implement standard model to prevent render without changes
+    console.log('shouldRender', this);
     return true;
   }
 
   onBeforeRender() {}
 
   render(): IVirtualNode | Array<IVirtualNode> {
-    if (typeof this.INTERNAL.options.tpl! != "function") {
+    if (typeof this.INTERNAL.options.tpl! != TYPE_FUNCTION) {
       throw new Error(`Custom element (<${this.constructor.name} />) has no render() method nor a valid template (tpl)!`);
     }
     return this.INTERNAL.options.tpl!(this);
@@ -264,7 +302,7 @@ if (!st.component) {
 
 export const getComponent = (className: string) => st[GlobalCache.COMPONENT_REGISTRY][className] as any;
 
-const awaitDisconnect = (component: Component) => {
+const awaitDisconnect = (component: Component<any>) => {
   const onMutation = (mutationsList: Array<MutationRecord>, observer: MutationObserver) => {
     for (let mutation of mutationsList) {
       if (Array.prototype.indexOf.call(mutation.removedNodes, component.el) > -1) {
@@ -274,7 +312,7 @@ const awaitDisconnect = (component: Component) => {
     }
   };
 
-  if (typeof MutationObserver !== "undefined") {
+  if (typeof MutationObserver !== TYPE_UNDEFINED) {
     // old browsers might not call .onDisconnect() and lead to memory overhead
     // but that is a compromise that seems to be sane
     // if necessary, add: mutationobserver-shim in your application bundle
@@ -288,17 +326,19 @@ if (!st.getComponent) {
 }
 
 export const defineComponent = (targetClassOrFunction: any, options: IComponentOptions = {}) => {
+
   // register with element registry
   st[GlobalCache.COMPONENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
 
   // defaults the tag name
-  if (!options.tagName) {
-    options.tagName = targetClassOrFunction.name;
+  if (!options.tag) {
+    options.tag = targetClassOrFunction.name;
   }
 
-  if (!options.tagName) {
-    options.tagName = newUniqueComponentName();
+  if (!options.tag) {
+    options.tag = newUniqueComponentName();
   }
+
   // assign options to be used in CustomElement derived class constructor
   targetClassOrFunction.COMPONENT_OPTIONS = options;
 

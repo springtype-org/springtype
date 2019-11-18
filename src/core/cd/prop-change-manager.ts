@@ -4,13 +4,14 @@ import { ChangeDetector } from "./change-detector";
 import { IOnDeepChangeHandler } from "./interface";
 import { ChangeType } from "./interface/change-type";
 import { IOnChangeHandler } from "./interface/ion-change-handler";
+import { TYPE_FUNCTION } from "../lang/type-function";
 
 export const DEFAULT_EMPTY_PATH = "";
 
 export class PropChangeManager {
   static conditionallyApplyDeepChangeDetection(value: any, onDeepChange: IOnDeepChangeHandler): any {
     // only activate deep change detection if there is some function to listen to it
-    if (!isPrimitive(value) && typeof onDeepChange == "function") {
+    if (!isPrimitive(value) && typeof onDeepChange == TYPE_FUNCTION) {
       value = ChangeDetector.onChange(value, onDeepChange);
     }
     return value;

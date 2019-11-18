@@ -1,13 +1,13 @@
-import { st } from "../../../dist/core";
-import { component } from "../../../dist/web/component";
-import { ILifecycle } from "../../../dist/web/component/interface";
-import { Route, RouteList } from "../../../dist/web/router";
-import { tsx } from "../../../dist/web/vdom";
-import { AboutPage } from "./page/about";
-import { HomePage } from "./page/home";
+import { st } from "../../../src/core";
+import { component } from "../../../src/web/component";
+import { ILifecycle } from "../../../src/web/component/interface";
+import { tsx } from "../../../src/web/vdom";
+import { AboutPage } from "./page/aboutpage";
+import { HomePage } from "./page/homepage";
+import { RouteList, Route } from "../../../src/web/router";
 
-@component()
-export class TemplateName extends st.component implements ILifecycle {
+@component
+export class RouterPage extends st.component implements ILifecycle {
   render() {
     return (
       <div unwrap>
@@ -33,11 +33,11 @@ export class TemplateName extends st.component implements ILifecycle {
           />
 
           {/* Renders the AboutPage on /about */}
-          <Route path={["/about/:name"]} component={<AboutPage />}></Route>
+          <Route path={["/about/:name"]} component={<AboutPage />} />
         </RouteList>
       </div>
     );
   }
 }
 
-st.render(<TemplateName />);
+st.render(<RouterPage />);

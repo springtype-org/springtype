@@ -1,5 +1,5 @@
 import { st } from "../../../src/core";
-import { component, emit, evt } from "../../../src/web/component";
+import { component, event } from "../../../src/web/component";
 import { IEvent, IEventListener } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 
@@ -9,15 +9,15 @@ export interface StButtonClickEventDetail {
 
 export interface StButtonClickEvent extends IEvent<StButtonClickEventDetail> {}
 
-@component()
+@component
 export class StButton extends st.component {
-  @evt
-  onStClick: IEventListener<StButtonClickEventDetail, MouseEvent> = evt;
 
+  @event
+  onStClick: IEventListener<StButtonClickEventDetail, MouseEvent>;
 
   // event handlers must always be scope-bound as fat arrow functions
   dispatchStClick = (evt: MouseEvent) => {
-    emit<StButtonClickEventDetail>(this.el, "stclick", {
+    st.event<StButtonClickEventDetail>(this.el, "stclick", {
       bubbles: true,
       cancelable: true,
       composed: true,

@@ -18,13 +18,13 @@ export enum ImplTestCase {
  * A simple example of using <template slot="foo">...</template> and <slot name="foo">Default content</slot>
  * to render elements given by a parent component at the right places in a child component.
  */
-@component()
+@component
 export class E2eTemplated extends st.component implements ILifecycle {
 
-  @attr()
+  @attr
   title: string = "";
 
-  @attr()
+  @attr
   testCase: ImplTestCase = ImplTestCase.ALL_SLOTS_DEFINED;
 
   render() {
@@ -49,6 +49,7 @@ export class E2eTemplated extends st.component implements ILifecycle {
           return this.renderNonSlotted();
     }
   }
+
   renderNonSlotted() {
     return (
       <fragment>

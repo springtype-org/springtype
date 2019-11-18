@@ -1,6 +1,7 @@
 import { st } from "../../core";
 import { IRoute } from "./interface/iroute";
 import { IRouteMatch } from "./interface/iroute-match";
+import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 
 // matches when no route matches (not even partially!), basically like HTTP ERROR 404 NOT FOUND behaviour
 export const PATH_WILDCARD = "*";
@@ -91,7 +92,10 @@ if (!st.router) {
 
         for (let i = 0; i < tokenizedActualPath.length; i++) {
           // allow for "" to be a valid token, but not undefined
-          const pathToken = typeof tokenizedPathCandidate.tokens[i] !== "undefined" ? tokenizedPathCandidate.tokens[i] : PATH_TOKEN_MISSING;
+          const pathToken =
+            typeof tokenizedPathCandidate.tokens[i] !== TYPE_UNDEFINED
+              ? tokenizedPathCandidate.tokens[i]
+              : PATH_TOKEN_MISSING;
 
           // looks like a parameter
           if (pathToken.startsWith(PATH_PARAM_PREFIX)) {
@@ -165,6 +169,9 @@ if (!st.router) {
     },
 
     enterRoutes: async (routes: Array<IRoute>) => {
+
+      console.log('router enterRoutes');
+
       for (let route of st.router.ENTERED_ROUTES) {
         await route.onLeave();
       }
@@ -173,12 +180,17 @@ if (!st.router) {
       st.router.ENTERED_ROUTES = [];
 
       for (let route of routes) {
+
         await route.onEnter(st.router.match!);
+
         st.router.ENTERED_ROUTES.push(route);
       }
     },
 
     setMatch: (urlPath: string, match: IRouteMatch): void => {
+
+      console.log('router setMatch');
+
       // update actual URL (might have changed from /#/ to / or to /# or else)
       match.url = `${st.router.getActualUrlPrefix()}${urlPath}`;
       // set match cache for public API lookup
@@ -216,16 +228,36 @@ if (!st.router) {
       }
     },
 
-    navigate: (route: string, params?: any) => {
-      // we take a route like /blog/:post-id and params like { "post-id": 5 }
-      // and produce /blog/5 to transform it into a navigatable URL again
-      for (let param in params) {
-        if (params.hasOwnProperty(param)) {
-          route = route.replace(PATH_PARAM_PREFIX + param, params[param]);
+    navigate: (route?: string, params?: any): IRouteMatch | undefined => {
+      // should route somewhere
+      if (route) {
+        // we take a route like /blog/:post-id and params like { "post-id": 5 }
+        // and produce /blog/5 to transform it into a navigatable URL again
+        for (let param in params) {
+          if (params.hasOwnProperty(param)) {
+            route = route.replace(PATH_PARAM_PREFIX + param, params[param]);
+          }
         }
+        // actually set the new route
+        window.location.href = route;
+      } else {
+        // wants to fetch the current route information
+        return st.router.match;
       }
-      // actually set the new route
-      window.location.href = route;
     },
+
+    // defined below
+    route: {} as any
   };
+
+  Object.defineProperty(st, 'route', {
+
+    set: (value: IRouteMatch) => {
+      st.router.navigate(value.path, value.params);
+    },
+
+    get: () => {
+      return st.router.match;
+    }
+  });
 }

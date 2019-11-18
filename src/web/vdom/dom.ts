@@ -2,11 +2,16 @@ import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { GlobalCache } from "./../../core/st/interface/i$st";
 import { IComponentOptions } from "./../component/interface/icomponent-options";
+import { Component } from "./../component/component"
 import { IElement } from "./interface/ielement";
 import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
-import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
+import { isJSXComment, tsxToStandardAttributeName, CLASS_ATTRIBUTE_NAME, XLINK_ATTRIBUTE_NAME } from "./tsx";
+import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
+import { TYPE_FUNCTION } from "../../core/lang/type-function";
+import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 
 if (!st.dom) {
+
   // DOM abstraction layer for manipulation
   st.dom = {
     svgContext: false,
@@ -27,7 +32,7 @@ if (!st.dom) {
       let componentCtor = st.getComponent(virtualNode.type) as any;
       let component;
 
-      if (typeof isSvg == "undefined") {
+      if (typeof isSvg == TYPE_UNDEFINED) {
         if (virtualNode.type.toUpperCase() == "SVG") {
           st.dom.svgContext = isSvg = true;
         }
@@ -37,19 +42,22 @@ if (!st.dom) {
       if (componentCtor) {
         // functional component
         if (!componentCtor.name) {
+
           const fn = componentCtor as Function & {
             COMPONENT_OPTIONS: IComponentOptions;
           };
 
           // create shallow component instance
-          component = new componentCtor();
+          component = new Component();
 
           // assign options
           component.INTERNAL.options = fn.COMPONENT_OPTIONS;
 
           // execute function and assign render method
           component.render = fn(component);
+
         } else {
+
           // class API
           // create instance of component
           component = new componentCtor();
@@ -73,8 +81,14 @@ if (!st.dom) {
       } else {
         if (component) {
           // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          virtualNode.type = componentCtor.COMPONENT_OPTIONS.tagName;
+          virtualNode.type = componentCtor.COMPONENT_OPTIONS.tag;
         }
+
+        // support for <component tag="h1"> and <div tag="h2"> cases
+        if (virtualNode.attributes && virtualNode.attributes.tag) {
+          virtualNode.type = virtualNode.attributes.tag;
+        }
+
         newEl = document.createElement(virtualNode.type as string);
       }
 
@@ -136,30 +150,45 @@ if (!st.dom) {
 
     setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {
       // don't render debug attributes like __source and __self
-      if (name.indexOf("__") === 0) return;
+      if (process.env.NODE_ENV !== "development") {
+        if (name.indexOf("__") === 0) return;
+      }
 
       // stores referenced DOM nodes in a memory efficient WeakMap
       // for access from CustomElements
-      if (name === "ref") {
+      if (name === REF_ATTRIBUTE_NAME) {
         const refName = Object.keys(value)[0];
         if (process.env.NODE_ENV === "development") {
-          st.info("dom.ts", "setting", value[refName], `.${refName} = `, domElement);
+          st.info("dom.ts", "@ref-setting", value[refName], `.${refName} = `, domElement);
         }
-        st.setDomRef(refName, value[refName], domElement);
+
+        Object.defineProperty(value[refName], refName, {
+          value: domElement.$stComponent || domElement,
+          configurable: true,
+        });
         return;
       }
 
-      if (name.startsWith("on") && typeof value == "function") {
+      if (name.startsWith("on") && typeof value == TYPE_FUNCTION) {
         let eventName = name.substring(2).toLowerCase();
         const capture = eventName.indexOf("capture");
         const doCapture = capture > -1;
 
+        // onClickCapture={...} support
         if (doCapture) {
           eventName = eventName.substring(0, eventName.indexOf("capture"));
         }
 
         if (process.env.NODE_ENV === "development") {
-          st.info("dom.ts", domElement, `.addEventListener('${eventName}', `, value, ", /* capture */ ", doCapture, `)`);
+          st.info(
+            "dom.ts",
+            domElement,
+            `.addEventListener('${eventName}', `,
+            value,
+            ", /* capture */ ",
+            doCapture,
+            `)`,
+          );
         }
 
         domElement.addEventListener(eventName, value, doCapture);
@@ -167,11 +196,11 @@ if (!st.dom) {
       }
 
       // transforms class={['a', 'b']} into class="a b"
-      if (name === "class" && Array.isArray(value)) {
+      if (name === CLASS_ATTRIBUTE_NAME && Array.isArray(value)) {
         value = value.join(" ");
       }
 
-      if (isSvg && name.startsWith("xlink")) {
+      if (isSvg && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
         domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
       } else {
         if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
@@ -196,12 +225,17 @@ if (!st.dom) {
       // not be notified using lifecycle methods
       // thus, these attribute names render pointless to be used
       // but this should be obvious too - just because of thier names nature
-      const standardHTMLAttributes = ["class", "style", "id", "tabindex"];
+      const standardHTMLAttributes = [CLASS_ATTRIBUTE_NAME, "style", "id", "tabindex"];
 
       return standardHTMLAttributes.indexOf(name.toLowerCase()) > -1;
     },
 
-    setAttributes: (attributes: IVirtualNodeAttributes, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {
+    setAttributes: (
+      attributes: IVirtualNodeAttributes,
+      domElement: IElement,
+      isSvg?: boolean,
+      forceNative?: boolean,
+    ) => {
       for (let name in attributes) {
         st.dom.setAttribute(name, attributes[name], domElement, isSvg, forceNative);
       }
@@ -210,16 +244,17 @@ if (!st.dom) {
 
   if (!st.render) {
     // add render method for awaiting / initial rendering
-    st.render = async (node: IVirtualNode) => {
+    st.render = async (virtualNode: IVirtualNode, domNode: Element = document.body) => {
       (st.render as any)._rendered = true;
 
-      if (!node.type || !node.attributes || !node.children) {
-        st.error("Invalid virutal node: ", JSON.stringify(node));
+      if (!virtualNode.type || !virtualNode.attributes || !virtualNode.children) {
+        st.error("Invalid virutal node: ", JSON.stringify(virtualNode));
         throw new Error("This virtual node does NOT look like one");
       }
 
+      // wait for the DOM to become ready, then render (prevents errors if a novice calls st.render() before <body> exists)
       await st.dom.isReady();
-      st.dom.createElement(node, document.body);
+      st.dom.createElement(virtualNode, domNode);
     };
 
     setTimeout(() => {

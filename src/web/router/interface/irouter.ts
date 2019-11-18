@@ -2,7 +2,6 @@ import { IRoute } from "./iroute";
 import { IRouteMatch } from "./iroute-match";
 
 export interface IRouter {
-
   // all paths defined in routes, already tokenized
   // { '/foo/:bar': ['foo', ':bar'], ... }
   TOKENIZED_REGISTERED_PATHS: ITokenizedRoutes;
@@ -17,6 +16,11 @@ export interface IRouter {
   // { path: '/foo/:bar', url: '/foo/5', params: { bar: 5 }, isExact: true, isPartial: false, routes: [...] }
   match: IRouteMatch;
 
+  // getter/setter to navigate to a target direction
+  // st.route = { path: '/foo/:bar', params: { bar: 123 } }
+  // st.route // { path: '...', params: { ... }, url: '...', ... }
+  route: IRouteMatch;
+
   enterRoutes(routes: Array<IRoute>): void;
   setMatch(urlPath: string, match: IRouteMatch): void;
   getActualUrlPrefix(): string;
@@ -25,7 +29,7 @@ export interface IRouter {
   onLocationChange(): Promise<void>;
   disable(): void;
   enable(): void;
-  navigate(path: string, params?: any): void;
+  navigate(route?: string | undefined, params?: any): IRouteMatch | void;
   doMatchUrlPath(urlPath: string): void;
   tokenize(urlPath: string): Array<string>;
 }

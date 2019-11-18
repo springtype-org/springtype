@@ -45,6 +45,9 @@ export interface ILifecycle {
   // of an attribute which is a standard HTML attribute such as: id, class, style, tabindex
   // because these attributes are not patches by the VDOM the component has
   // to decide what to do now: It might have been a MERGE or REPLACE intention
+
+  // !!!TODO!!!: Always use REPLACE -> outer changes are intentionally OVERRIDES !!!
+  // Remove this lifecylce method and it's impl.
   handleUpdateElAttribute?(name: string, value: any): void;
 
   // before this.el.childNodes are created

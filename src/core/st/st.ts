@@ -34,6 +34,10 @@ if (!_globalThis[ST_KEY]) {
 export const globalThis: any = _globalThis;
 export const st: I$st = _globalThis[ST_KEY];
 
+if (!st.globalThis) {
+  st.globalThis = globalThis;
+}
+
 // set default core options
 if (!st.options) {
   st.options = {

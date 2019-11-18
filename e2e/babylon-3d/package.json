@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "babylonjs": "^4.0.3",
-    "st-start": "2.0.0-beta.21"
+    "st-start": "2.0.0-beta.26"
   },
   "devDependencies": {
     "autoprefixer": "^9.7.1",

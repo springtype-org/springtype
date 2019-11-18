@@ -2,6 +2,9 @@ import { st } from "../../core/st/st";
 import { IElement } from "./interface/ielement";
 import { IVirtualNode } from "./interface/ivirtual-node";
 import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";
+import { NOVDOM_ATTRIBUTE_NAME } from "./interface/iattributes";
+import { TYPE_OBJECT } from "../../core/lang/type-object";
+import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 
 const LIST_KEY_ATTRIBUTE_NAME = "key";
 
@@ -15,7 +18,10 @@ const getReferenceList = (childNodes: NodeListOf<IElement>): IElement[] => {
 
 if (!st.renderer) {
   st.renderer = {
-    renderInitial: (virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>, parentDomElement: IElement) => {
+    renderInitial: (
+      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
+      parentDomElement: IElement,
+    ) => {
       if (Array.isArray(virtualNode) && virtualNode) {
         st.dom.createChildElements(virtualNode, parentDomElement);
       } else if (virtualNode) {
@@ -23,7 +29,11 @@ if (!st.renderer) {
       }
     },
 
-    patch: (domElements: Array<IElement>, virtualElements: Array<IVirtualNode | string | undefined>, parent: IElement) => {
+    patch: (
+      domElements: Array<IElement>,
+      virtualElements: Array<IVirtualNode | string | undefined>,
+      parent: IElement,
+    ) => {
       const refList = getReferenceList((domElements as unknown) as NodeListOf<IElement>);
 
       // comments and undefines can occur at any place dynamically
@@ -42,7 +52,7 @@ if (!st.renderer) {
           break;
         }
 
-        if (typeof virtualElement === "object") {
+        if (typeof virtualElement === TYPE_OBJECT) {
           st.renderer.patchElement(parent, domElement, virtualElement as IVirtualNode);
         } else {
           st.renderer.patchTextNode(parent, domElement, (virtualElement as unknown) as string);
@@ -57,7 +67,7 @@ if (!st.renderer) {
     patchElement: (parent: IElement, domElement: IElement, virtualElement: IVirtualNode) => {
       // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
 
-      if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement["novdom"]) return;
+      if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement[NOVDOM_ATTRIBUTE_NAME]) return;
 
       if (domElement && domElement.$stComponent) {
         domElement.$stComponent.onBeforePatchEl();
@@ -73,7 +83,11 @@ if (!st.renderer) {
         // VirtualElement exists but no DOMElement: Append node
         domElement = st.dom.createElement(virtualElement, parent) as IElement;
         created = true;
-      } else if (virtualElement && domElement && (domElement.tagName || "").toUpperCase() !== virtualElement.type.toUpperCase()) {
+      } else if (
+        virtualElement &&
+        domElement &&
+        (domElement.tagName || "").toUpperCase() !== virtualElement.type.toUpperCase()
+      ) {
         // DOMElement and VirtualElement existing but tagName differs: Replace node
         // also: DOMElement is a TextNode (typeof tagName == 'undefined') but VirtualElement is not
 
@@ -111,7 +125,10 @@ if (!st.renderer) {
                 } else {
                   // ignore cases such as: id, class, style, tabindex but inform component
                   if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
-                    domElement.$stComponent.handleUpdateElAttribute(attributeName, virtualElement.attributes[attributeName]);
+                    domElement.$stComponent.handleUpdateElAttribute(
+                      attributeName,
+                      virtualElement.attributes[attributeName],
+                    );
                   } else {
                     // DOMElement attribute value differs from VirtualElement attribute: Update
                     st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
@@ -127,7 +144,11 @@ if (!st.renderer) {
           for (let attributeName in virtualElement.attributes) {
             attributeName = tsxToStandardAttributeName(attributeName);
 
-            if (virtualElement.attributes.hasOwnProperty(attributeName) && !domElement.hasAttribute(attributeName) && !attributeName.startsWith("on")) {
+            if (
+              virtualElement.attributes.hasOwnProperty(attributeName) &&
+              !domElement.hasAttribute(attributeName) &&
+              !attributeName.startsWith("on")
+            ) {
               // DOMElement attribute value differs from VirtualElement attribute: Set
               st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
             }
@@ -159,17 +180,22 @@ if (!st.renderer) {
           virtualElement &&
           // and at least the existing DOM subtree
           // or the virtual DOM subtree must be given
-          ((domElement.childNodes && domElement.childNodes.length) || (virtualElement.children && virtualElement.children.length))
+          ((domElement.childNodes && domElement.childNodes.length) ||
+            (virtualElement.children && virtualElement.children.length))
         ) {
           // recursive call with childNodes and virtualElement childNodes
-          st.renderer.patch(((domElement.childNodes as unknown) as Array<IElement>) || (([] as unknown) as Array<IElement>), virtualElement.children as any, domElement);
+          st.renderer.patch(
+            ((domElement.childNodes as unknown) as Array<IElement>) || (([] as unknown) as Array<IElement>),
+            virtualElement.children as any,
+            domElement,
+          );
         }
       }
     },
 
     patchTextNode: (parent: IElement, domElement: IElement, virtualElementTextContent: string) => {
       // text node content
-      if (typeof virtualElementTextContent == "undefined" && domElement) {
+      if (typeof virtualElementTextContent == TYPE_UNDEFINED && domElement) {
         // DOMElement existing but no such VirtualElement: Evict zombie node
         parent.removeChild(domElement);
       } else if (virtualElementTextContent && !domElement) {

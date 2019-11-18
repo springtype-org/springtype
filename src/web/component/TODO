@@ -1,0 +1,2 @@
+- fix lifecylce: always REPLACE
+- fix instances: memory leak?

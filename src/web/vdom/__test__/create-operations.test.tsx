@@ -3,30 +3,26 @@ import { st } from "../../../core";
 import { IElement } from "../interface/ielement";
 
 describe("Renderer create operation", () => {
-	let parentDOMElement: IElement;
+  let parentDOMElement: IElement;
 
-	beforeEach(() => {
-		parentDOMElement = (document.createElement("div") as unknown) as IElement;
-	});
+  beforeEach(() => {
+    parentDOMElement = (document.createElement("div") as unknown) as IElement;
+  });
 
-	it("renders a <ul> list (JSX.Element extends IVirtualNode) as a child of a DOM element", () => {
-		const list = (
-			<ul id="123">
-				<li>
-					Foo
-				</li>
-			</ul>
-		);
+  it("renders a <ul> list (JSX.Element extends IVirtualNode) as a child of a DOM element", () => {
+    const list = (
+      <ul id="123">
+        <li>Foo</li>
+      </ul>
+    );
 
-		st.renderer.renderInitial(list, parentDOMElement);
+    st.renderer.renderInitial(list, parentDOMElement);
 
-		expect((parentDOMElement.childNodes[0] as HTMLLIElement).id).toEqual("123");
-		expect(
-			(parentDOMElement.childNodes[0] as HTMLLIElement).childNodes[0].nodeName
-		).toEqual("LI");
-	});
+    expect((parentDOMElement.childNodes[0] as HTMLLIElement).id).toEqual("123");
+    expect((parentDOMElement.childNodes[0] as HTMLLIElement).childNodes[0].nodeName).toEqual("LI");
+  });
 
-	/*
+  /*
 	it("creates a Text element", () => {
 		const innerTextElementVNode = <div>Some text</div>;
 		const textElement = st.dom.createElement(

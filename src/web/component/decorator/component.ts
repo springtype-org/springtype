@@ -2,10 +2,11 @@ import { st } from "../../../core";
 import { defineComponent } from "../component";
 import { ComponentFunction } from "../interface/icomponent-function";
 import { IComponentOptions } from "../interface/icomponent-options";
+import { TYPE_FUNCTION } from "../../../core/lang/type-function";
 
-export const component = (optionsOrElementFunction?: IComponentOptions | ComponentFunction): any => {
+export const component = (optionsOrElementFunction: IComponentOptions | ComponentFunction | any = undefined): any => {
   // functional use: component((scope) => { ... }, ...)
-  if (typeof optionsOrElementFunction == "function") {
+  if (typeof optionsOrElementFunction == TYPE_FUNCTION) {
     // component(() => <div></div>, () => ({ div: { color: red } }), 'open')
     return defineComponent(optionsOrElementFunction as ComponentFunction);
   } else {

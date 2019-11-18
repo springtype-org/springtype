@@ -1,12 +1,24 @@
-import { ArcRotateCamera, Axis, Color4, Effect, Engine, Mesh, Scene, ShaderMaterial, Texture, Vector3 } from "babylonjs";
+import {
+  ArcRotateCamera,
+  Axis,
+  Color4,
+  Effect,
+  Engine,
+  Mesh,
+  Scene,
+  ShaderMaterial,
+  Texture,
+  Vector3,
+} from "babylonjs";
 import { st } from "../../../../../src/core";
+import { ref } from "../../../../../src/core/ref";
 import { component } from "../../../../../src/web/component";
 import { ILifecycle } from "../../../../../src/web/component/interface";
-import { domRef } from "../../../../../src/web/vdom";
 import fragmentShader from "../../shaders/warp.frag";
 import vertexShader from "../../shaders/warp.vert";
 import "./first-scene.scss";
 import tpl from "./first-scene.tpl";
+
 @component({
   tpl,
 })
@@ -15,15 +27,16 @@ export class FirstScene extends st.component implements ILifecycle {
   private scene: Scene;
   private camera: ArcRotateCamera;
 
-  @domRef("iframe")
+  @ref
   private iframe: HTMLIFrameElement;
 
-  @domRef("canvas")
+  @ref
   private canvas: HTMLCanvasElement;
 
   onBeforeRender() {
     this.el.classList.add("FirstScene");
   }
+
   onAfterInitialRender(): void {
     window.addEventListener("resize", () => this.alignVideoDisplay());
 

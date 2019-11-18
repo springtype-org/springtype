@@ -52,4 +52,7 @@ if (!st.di) {
 			return instance;
 		}
 	};
+
+	// assign functional API
+	st.inject = st.di.get;
 }

@@ -1,0 +1,35 @@
+.loginContainer {
+    height: 100%;
+}
+
+.video {
+    position: absolute;
+    z-index: -1;
+}
+
+.loginMask {
+    background-color: #ffffff22;
+    opacity: 0.9;
+}
+
+.loginLogo {
+    margin-top: 1em;
+    text-align: center;
+    padding: 1em;
+}
+
+.loginActions {
+    flex-direction: column;
+}
+
+.input {
+    margin-bottom: 2em;
+}
+
+.layout {
+    margin-top: 4em;
+}
+
+.loginButton {
+    margin-bottom: 2em;
+}
