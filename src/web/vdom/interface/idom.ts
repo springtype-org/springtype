@@ -5,7 +5,6 @@ export interface IDOMRootAttributes {
 }
 
 export interface IDOM {
-  svgContext: boolean;
 
   isReady(): Promise<void>;
 
@@ -13,15 +12,17 @@ export interface IDOM {
 
   isStandardHTMLAttribute(name: string): boolean;
 
-  hasSvgNamespace(type: string): boolean;
+  hasElNamespace(domElement: Element): boolean;
 
-  createElement(virtualNode: IVirtualNode | undefined, parentDomElement: Element, isSvg?: boolean): Element | undefined;
+  hasSvgNamespace(parentElement: Element, type: string): boolean;
+
+  createElement(virtualNode: IVirtualNode | undefined, parentDomElement: Element): Element | undefined;
 
   createTextNode(text: string, parentDomElement: Element): void;
 
-  createChildElements(virtualChildren: IVirtualChildren, parentDomElement: Element, isSvg?: boolean): void;
+  createChildElements(virtualChildren: IVirtualChildren, parentDomElement: Element): void;
 
-  setAttribute(name: string, value: any, parentDomElement: Element, isSvg?: boolean, forceNative?: boolean): void;
+  setAttribute(name: string, value: any, parentDomElement: Element, forceNative?: boolean): void;
 
-  setAttributes(attributes: any, parentDomElement: Element, isSvg?: boolean, forceNative?: boolean): void;
+  setAttributes(attributes: any, parentDomElement: Element, forceNative?: boolean): void;
 }
