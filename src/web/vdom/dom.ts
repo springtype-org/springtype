@@ -8,41 +8,36 @@ import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes }
 import { isJSXComment, tsxToStandardAttributeName, CLASS_ATTRIBUTE_NAME, XLINK_ATTRIBUTE_NAME } from "./tsx";
 import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
-import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { TYPE_STRING } from "../../core/lang/type-string";
 import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
 
 export const LIST_KEY_ATTRIBUTE_NAME = "key";
 export const ATTR_EVENT_LISTENER_PREFIX = "on";
 export const ATTR_DEBUG_PREFIX = "__";
-
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 if (!st.dom) {
 
   // DOM abstraction layer for manipulation
   st.dom = {
-    svgContext: false,
 
     isReady: async (): Promise<void> => {
       if (document.body) Promise.resolve();
       return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
     },
+    hasElNamespace: (domElement: Element): boolean =>{
+      return domElement.namespaceURI === SVG_NAMESPACE;
+    },
 
-    hasSvgNamespace: (type: string): boolean => {
-      return st.dom.svgContext && type !== "STYLE" && type !== "SCRIPT";
+    hasSvgNamespace: (parentElement: Element,type: string): boolean => {
+      return st.dom.hasElNamespace(parentElement) && type !== "STYLE" && type !== "SCRIPT";
     },
 
     isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.COMPONENT_REGISTRY][tagName],
 
-    createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, isSvg?: boolean): IElement | undefined => {
+    createElement: (virtualNode: IVirtualNode, parentDomElement: IElement): IElement | undefined => {
       let newEl: Element;
       let componentCtor = st.getComponent(virtualNode.type) as any;
       let component;
-
-      if (typeof isSvg == TYPE_UNDEFINED) {
-        if (virtualNode.type.toUpperCase() == "SVG") {
-          st.dom.svgContext = isSvg = true;
-        }
-      }
 
       // identified virtual component
       if (componentCtor) {
@@ -90,8 +85,8 @@ if (!st.dom) {
         component.onBeforeElCreate(virtualNode);
       }
 
-      if (st.dom.hasSvgNamespace(virtualNode.type.toUpperCase())) {
-        newEl = document.createElementNS("http://www.w3.org/2000/svg", virtualNode.type as string);
+      if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement,virtualNode.type.toUpperCase())) {
+        newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
       } else {
         if (component) {
           // use <class-name> instead of ClassName which would end up as <classname> in DOM
@@ -121,7 +116,7 @@ if (!st.dom) {
       }
 
       if (virtualNode.attributes) {
-        st.dom.setAttributes(virtualNode.attributes, newEl, isSvg);
+        st.dom.setAttributes(virtualNode.attributes, newEl);
       }
 
       if (component) {
@@ -131,7 +126,7 @@ if (!st.dom) {
       }
 
       if (virtualNode.children) {
-        st.dom.createChildElements(virtualNode.children, newEl, isSvg);
+        st.dom.createChildElements(virtualNode.children, newEl);
       }
 
       if (component) {
@@ -151,7 +146,7 @@ if (!st.dom) {
       domElement.appendChild(document.createTextNode(text));
     },
 
-    createChildElements: (virtualChildren: IVirtualChildren, domElement: IElement, isSvg?: boolean) => {
+    createChildElements: (virtualChildren: IVirtualChildren, domElement: IElement) => {
       for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
         if (isPrimitive(virtualChild)) {
           st.dom.createTextNode((virtualChild || "").toString(), domElement);
@@ -160,15 +155,12 @@ if (!st.dom) {
             continue;
           }
 
-          st.dom.createElement(virtualChild as IVirtualNode, domElement, isSvg);
-
-          // leave SVG context
-          st.dom.svgContext = false;
+          st.dom.createElement(virtualChild as IVirtualNode, domElement);
         }
       }
     },
 
-    setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {
+    setAttribute: (name: string, value: any, domElement: IElement, forceNative?: boolean) => {
       // don't render debug attributes like __source and __self
       if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
 
@@ -223,7 +215,7 @@ if (!st.dom) {
         value = value.join(" ");
       }
 
-      if (isSvg && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
+      if (st.dom.hasElNamespace(domElement) && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
         domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
       } else {
         if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
@@ -256,11 +248,10 @@ if (!st.dom) {
     setAttributes: (
       attributes: IVirtualNodeAttributes,
       domElement: IElement,
-      isSvg?: boolean,
       forceNative?: boolean,
     ) => {
       for (let name in attributes) {
-        st.dom.setAttribute(name, attributes[name], domElement, isSvg, forceNative);
+        st.dom.setAttribute(name, attributes[name], domElement, forceNative);
       }
     },
   };

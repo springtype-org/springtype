@@ -76,7 +76,7 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   }
 
   set elClass(classes: string | Array<string>) {
-    st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, !Array.isArray(classes) ? [classes] : classes, this.el, false, true);
+    st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, !Array.isArray(classes) ? [classes] : classes, this.el,  true);
   }
 
   get elAttributes(): Partial<HTMLElement> {
@@ -84,7 +84,7 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   }
 
   set elAttributes(attributes: Partial<HTMLElement>) {
-    st.dom.setAttributes(attributes, this.el, false, true);
+    st.dom.setAttributes(attributes, this.el,true);
   }
 
   get elStyle(): Partial<CSSStyleDeclaration> {
@@ -92,7 +92,7 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   }
 
   set elStyle(style: Partial<CSSStyleDeclaration>) {
-    st.dom.setAttribute("style", style, this.el, false, true);
+    st.dom.setAttribute("style", style, this.el, true);
   }
 
   get parentEl(): HTMLElement {
