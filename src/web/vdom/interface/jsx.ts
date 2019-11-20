@@ -4,30 +4,33 @@ declare global {
   namespace JSX {
 
     interface ElementAttributesProperty {
-      attrs: {
-        tag?: string;
-        class?: string|Array<string>;
-      };
+      attrs: {};
     }
+
+    /*
+    interface ElementChildrenAttribute {
+      children: {};
+    }
+    */
 
     export interface SVGAttributes extends HTMLAttributes {
       accentHeight?: number | string;
       accumulate?: "none" | "sum";
       additive?: "replace" | "sum";
       alignmentBaseline?:
-        | "auto"
-        | "baseline"
-        | "before-edge"
-        | "text-before-edge"
-        | "middle"
-        | "central"
-        | "after-edge"
-        | "text-after-edge"
-        | "ideographic"
-        | "alphabetic"
-        | "hanging"
-        | "mathematical"
-        | "inherit";
+      | "auto"
+      | "baseline"
+      | "before-edge"
+      | "text-before-edge"
+      | "middle"
+      | "central"
+      | "after-edge"
+      | "text-after-edge"
+      | "ideographic"
+      | "alphabetic"
+      | "hanging"
+      | "mathematical"
+      | "inherit";
       allowReorder?: "no" | "yes";
       alphabetic?: number | string;
       amplitude?: number | string;
@@ -503,6 +506,7 @@ declare global {
       class?: string | Array<string>;
       className?: string | Array<string>;
       cols?: number;
+      children?: any;
       colSpan?: number;
       content?: string;
       contentEditable?: boolean;
@@ -745,9 +749,9 @@ declare global {
       ul: HTMLAttributes;
       var: HTMLAttributes;
       video: HTMLAttributes & Partial<{
-				autoplay: boolean
-			}>;
-			wbr: HTMLAttributes;
+        autoplay: boolean
+      }>;
+      wbr: HTMLAttributes;
 
       //SVG
       svg: SVGAttributes;

@@ -11,6 +11,7 @@ import { IlogFunction } from "../../log/interface";
 import { IComponent } from "./../../../web/component/interface";
 import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
 import { ICoreOptions } from "./icore-options";
+import { IBus } from "../../bus/interface/ibus";
 
 export interface IOptions {
   core: ICoreOptions;
@@ -44,6 +45,9 @@ export interface I$st {
   // internationalization (i18n): translate text using JSON based translation files and formatting functions
   i18n: Ii18n;
   t: It;
+
+  // event bus
+  bus: IBus;
 
   // change detection: events/listeners for changes on objects (state)
 

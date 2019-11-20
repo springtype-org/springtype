@@ -2,10 +2,10 @@ import { st } from "../../../src/core";
 import { attr, component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 
-@component()
+@component
 export class E2eChildren extends st.component {
 
-  @attr()
+  @attr
   mapofnames = ["Rene"];
 
   constructor() {

@@ -18,16 +18,18 @@ import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { IRefAttribute } from "./interface/iref-attribute";
 
-export type DefaultAttributes = {
-  tag?: string;
+export type DefaultComponentAttributes = {
+  tag?: string; // allows to set .el's tag
+  key?: string; // DOM intransparent primary key for list-like DOM structures
+  ref?: IRefAttribute; // references DOM elements in component properties
+  unwrap?: boolean; // a DOM node tagged like that will disappear and it's child node(s) take it's place
+
+  // the following attributes are just passed down to .el automatically
   id?: string;
-  key?: string;
-  ref?: IRefAttribute;
-  unwrap?: boolean;
   tabIndex?: number;
   style?: Partial<CSSStyleDeclaration>;
-  class?: Array<string>|string;
-}
+  class?: Array<string> | string;
+} & JSX.DOMAttributes /* like onClick, ... -- passed down to .el automatically */;
 
 export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnStateChange {
 
@@ -35,7 +37,7 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   INTERNAL: IComponentInternals;
 
   // typing for JSX.ElementClass @attr's
-  attrs!: A & DefaultAttributes;
+  attrs!: A & DefaultComponentAttributes;
 
   tag!: string;
   id!: string;
@@ -44,7 +46,7 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   unwrap!: boolean;
   tabIndex!: number;
   style!: Partial<CSSStyleDeclaration>;
-  class!: Array<string>|string;
+  class!: Array<string> | string;
 
   // class assignment for import in case of lowercase usage / typed use
   as!: IComponent;
@@ -119,15 +121,15 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     return defaults || <fragment />;
   }
 
-  onBeforeElCreate(virtualNode: IVirtualNode) {}
+  onBeforeElCreate(virtualNode: IVirtualNode) { }
 
-  onAfterElCreate(el: IElement) {}
+  onAfterElCreate(el: IElement) { }
 
-  onBeforeElChildrenCreate() {}
+  onBeforeElChildrenCreate() { }
 
-  onAfterElChildrenCreate() {}
+  onAfterElChildrenCreate() { }
 
-  onBeforeConnect() {}
+  onBeforeConnect() { }
 
   // internal web component standard method
   connectedCallback() {
@@ -142,30 +144,8 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     }
   }
 
-  onConnect() {}
-
-  disconnectedCallback() {
-    this.INTERNAL.isConnected = false;
-
-    // evict from global instance registry
-    // (e.g. doesn't retrigger render on TSS theme change)
-    let index = st[GlobalCache.COMPONENT_INSTANCES].indexOf(this);
-    if (index > -1) {
-      st[GlobalCache.COMPONENT_INSTANCES].splice(index, 1);
-    }
-
-    // remove @context handlers
-    removeContextChangeHandlersOfInstance(this);
-
-    // reset ref-references
-    for (let refName in this.ref) {
-      // @ts-ignore
-      this.ref[refName] = null;
-    }
-    this.onDisconnect();
-  }
-
-  onDisconnect() {}
+  onConnect() { }
+  onDisconnect() { }
 
   /**
    * Lifecycle method: Implement this method to dynamically accept or revoke attribute changes
@@ -218,12 +198,12 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     }
   }
 
-  onStateChange(change: IStateChange) {}
+  onStateChange(change: IStateChange) { }
 
   /**
    * Lifecycle method: Implement to get notified when attributes change
    */
-  onAttributeChange(name: string, newValue: any, oldValue: any) {}
+  onAttributeChange(name: string, newValue: any, oldValue: any) { }
 
   /**
    * Overriding this method and not calling the super method
@@ -234,13 +214,10 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   }
 
   shouldRender(reason: RenderReason, meta?: RenderReasonMetaData): boolean {
-
-    // TODO: Implement standard model to prevent render without changes
-    console.log('shouldRender', this);
     return true;
   }
 
-  onBeforeRender() {}
+  onBeforeRender() { }
 
   render(): IVirtualNode | Array<IVirtualNode> {
     if (typeof this.INTERNAL.options.tpl! != TYPE_FUNCTION) {
@@ -252,7 +229,10 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   async doRender() {
     this.onBeforeRender();
 
-    let vdom: IVirtualNode | Array<IVirtualNode> = this.render();
+    // reset
+    this.INTERNAL.hasDOMChanged = false;
+
+    const vdom: IVirtualNode | Array<IVirtualNode> = this.render();
 
     if (!vdom) {
       throw new Error(`The render() method or the template (tpl) of <${this.constructor.name} /> must return virtual nodes.`);
@@ -260,40 +240,75 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
 
     const nodesToRender = Array.isArray(vdom) ? [...vdom!] : [vdom!];
 
-    // performance-optimization: only process slots if <template> tags are found (fills slotChildren)
-
-    /* SLOT
-    if (this.INTERNAL.virtualSlotChildren) {
-      vdom = transformSlots(vdom as IVirtualNode, this.INTERNAL.virtualSlotChildren);
-    }
-    */
-
     if (!this.INTERNAL.notInitialRender) {
       // if there isn't a prev. VDOM state, render initially
       st.renderer.renderInitial(nodesToRender, (this.INTERNAL.el as unknown) as IElement);
 
+      this.INTERNAL.hasDOMChanged = true;
       this.INTERNAL.notInitialRender = true;
 
       // call lifecycle method
       this.onAfterInitialRender();
     } else {
+
       // differential VDOM / DOM rendering algorithm
+
+      // algorithm will decide for this.INTERNAL.hasDOMChanged internally
       st.renderer.patch((this.INTERNAL.el as any).childNodes, nodesToRender, (this.INTERNAL.el as unknown) as IElement);
     }
 
     // call lifecycle method
-    this.onAfterRender();
+    this.onAfterRender(this.INTERNAL.hasDOMChanged);
   }
 
-  onAfterInitialRender() {}
+  onAfterInitialRender() { }
 
-  onAfterRender() {}
+  onAfterRender(hasDOMChanged: boolean) { }
 
-  onBeforePatchEl() {}
+  onBeforePatchEl() { }
 
-  onAfterPatchEl() {}
+  onAfterPatchEl() { }
 
-  handleUpdateElAttribute(name: string, value: any) {}
+  handleUpdateElAttribute(name: string, value: any) { }
+
+  disconnectedCallback() {
+
+    this.INTERNAL.isConnected = false;
+
+    this.onDisconnect();
+
+    // purge from global instance registry
+    // (e.g. doesn't retrigger render on TSS theme change)
+    const index = st[GlobalCache.COMPONENT_INSTANCES].indexOf(this);
+    if (index > -1) {
+      st[GlobalCache.COMPONENT_INSTANCES].splice(index, 1);
+    }
+
+    // remove @context handlers
+    removeContextChangeHandlersOfInstance(this);
+
+    if (this.INTERNAL.refs) {
+      // reset @ref references
+      for (let refName of this.INTERNAL.refs) {
+        // @ts-ignore
+        if (this[refName] && this[refName].INTERNAL) {
+          // @ts-ignore
+          disconnectComponent(this[refName]);
+        }
+        // @ts-ignore
+        delete this[refName];
+      }
+    }
+
+    // @ts-ignore
+    this.INTERNAL.el.$stComponent = null;
+    // @ts-ignore
+    this.INTERNAL.el.$stComponentRef = null;
+
+    this.INTERNAL.mutationObserver.disconnect();
+
+    delete this.INTERNAL;
+  }
 }
 
 if (!st.component) {
@@ -302,12 +317,26 @@ if (!st.component) {
 
 export const getComponent = (className: string) => st[GlobalCache.COMPONENT_REGISTRY][className] as any;
 
+const disconnectComponent = (component: Component<any>) => {
+
+  component.INTERNAL.mutationObserver.disconnect();
+
+  if (component.INTERNAL.childComponents) {
+    for (let childComponent of component.INTERNAL.childComponents) {
+      disconnectComponent(childComponent as Component);
+    }
+  }
+  component.disconnectedCallback();
+}
+
 const awaitDisconnect = (component: Component<any>) => {
-  const onMutation = (mutationsList: Array<MutationRecord>, observer: MutationObserver) => {
+
+  const onMutation = (mutationsList: Array<MutationRecord>) => {
     for (let mutation of mutationsList) {
-      if (Array.prototype.indexOf.call(mutation.removedNodes, component.el) > -1) {
-        component.disconnectedCallback();
-        observer.disconnect();
+      if (!component.INTERNAL || !component.INTERNAL.el) continue;
+
+      if (Array.prototype.indexOf.call(mutation.removedNodes, component.INTERNAL.el) > -1) {
+        disconnectComponent(component);
       }
     }
   };

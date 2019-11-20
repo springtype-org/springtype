@@ -20,8 +20,12 @@ export interface IAttributes {
   // to name a target slot
   slot?: string | string;
 
-  // virtual component instance reference, available on mounted "root" DOM elements
+  // direct virtual component instance reference, available on mounted "root" DOM elements
   $stComponent?: any;
+
+  // virtual component instance this node belongs/references to (passed down to any sub-node)
+  // basically the nearest parent $stComponent in the parent tree
+  $stComponentRef?: any;
 
   // array-local unique key to identify element items in a NodeList
   key?: string;

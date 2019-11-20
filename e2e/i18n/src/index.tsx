@@ -8,7 +8,7 @@ import en from "./i18n/en.json";
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de_DE", de)
 @translation("en_US", en) // default locale
-@component()
+@component
 export class E2Ei18n extends st.component {
   setGerman = () => {
     st.i18n.setLanguage("de_DE");
@@ -32,14 +32,6 @@ export class E2Ei18n extends st.component {
         </button>
       </div>
     );
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      E2Ei18n: Partial<E2Ei18n>;
-    }
   }
 }
 

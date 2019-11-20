@@ -34,7 +34,7 @@ export class FirstScene extends st.component implements ILifecycle {
   private canvas: HTMLCanvasElement;
 
   onBeforeRender() {
-    this.el.classList.add("FirstScene");
+    this.elClass = "FirstScene";
   }
 
   onAfterInitialRender(): void {

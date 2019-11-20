@@ -7810,33 +7810,17 @@ ssri@^7.0.0:
     figgy-pudding "^3.5.1"
     minipass "^3.0.0"
 
-st-cp@^2.0.0-alpha.4:
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/st-cp/-/st-cp-2.0.0-alpha.4.tgz#5681c536168fbaf5257aff07020004eabd79b2d2"
-  integrity sha512-MwQWv5+6iqjSPCaYUl326B2pKfRsXx2SOddL6/odWNvIIYY4pT5wul+LIJaFwNdwRRAUHmfbpTpfqh0Qyq6k7A==
+st-mkdir@^1.0.0-alpha.5:
+  version "1.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/st-mkdir/-/st-mkdir-1.0.0-alpha.5.tgz#d77782cfa427331534d0ee8451acaea471303d1b"
+  integrity sha512-aNDHjce2VovCoqQXfb4SUGUmeq9wY7k6vojHjTD3eXYzVe+2EHa0UdXHT9syEM4liI8SYmbY4QIRHo5xGIivLA==
   dependencies:
     chalk "^2.4.2"
 
-st-mkdir@^1.0.0-alpha.4:
-  version "1.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/st-mkdir/-/st-mkdir-1.0.0-alpha.4.tgz#11b8857c307cbd6c20761adaf3d70a688b8ed4f9"
-  integrity sha512-P2044vhpmTcbycONBbzazjvlrVUtWPIRQaLJRofmR9NSe9INgArWoZSD4/WBiw16lVxP0GOAryZA1zCTeOsPgg==
-  dependencies:
-    chalk "^2.4.2"
-    st-cp "^2.0.0-alpha.4"
-    st-rm-rf "^2.0.0-alpha.8"
-
-st-rm-rf@^2.0.0-alpha.8:
-  version "2.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/st-rm-rf/-/st-rm-rf-2.0.0-alpha.8.tgz#4aa761378d4d7bae2dd6fe19516401cddd4c6c50"
-  integrity sha512-gIdb2lZdsHjtZ9nBMrAYnfiuyO1QEqwdH3QBc8jR2QCq92AOxFdhESt3u5TDWIRuwxA/T+oFmS2x3HPUQaeuqA==
-  dependencies:
-    chalk "^2.4.2"
-
-st-start@^2.0.0-beta.26:
-  version "2.0.0-beta.26"
-  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-beta.26.tgz#f6a4bff053753db92a037b4611188ace73c3514e"
-  integrity sha512-JxvFcD2/BL0XXzYGQlZKQqWxxrH+Qwvyrx5hq9QF5Ds89N8VETSgxwgoLx7hDk8s9dUq9F8dcU8KeNOfGgaZlA==
+st-start@^2.0.0-beta.27:
+  version "2.0.0-beta.27"
+  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-beta.27.tgz#f5995c5bc56ce442e8af294a0256844435e81e2a"
+  integrity sha512-RZhr0UsLRrzmyj3rlyYM9b0fsrK75IT9k4KIczhQ94GSjUtmfD52p0QVJaLXZ1OVvlNbxpBRHKTAlt4XMDTaEA==
   dependencies:
     "@babel/core" "^7.7.2"
     "@babel/helper-create-class-features-plugin" "^7.7.0"
@@ -7873,7 +7857,7 @@ st-start@^2.0.0-beta.26:
     optimize-css-assets-webpack-plugin "5.0.3"
     react-dev-utils "^9.1.0"
     resolve "1.12.0"
-    st-mkdir "^1.0.0-alpha.4"
+    st-mkdir "^1.0.0-alpha.5"
     style-loader "1.0.0"
     terser-webpack-plugin "2.2.1"
     webpack "4.41.2"

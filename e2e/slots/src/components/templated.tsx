@@ -14,18 +14,27 @@ export enum ImplTestCase {
   NON_SLOTTED,
 }
 
+export interface IE2eTemplatesAttrs {
+  title?: string;
+  testCase?: ImplTestCase;
+  random?: number;
+}
+
 /**
  * A simple example of using <template slot="foo">...</template> and <slot name="foo">Default content</slot>
  * to render elements given by a parent component at the right places in a child component.
  */
 @component
-export class E2eTemplated extends st.component implements ILifecycle {
+export class E2eTemplated extends st.component<IE2eTemplatesAttrs> implements ILifecycle {
 
   @attr
   title: string = "";
 
   @attr
   testCase: ImplTestCase = ImplTestCase.ALL_SLOTS_DEFINED;
+
+  @attr
+  random!: number;
 
   render() {
 
@@ -241,7 +250,6 @@ export class E2eTemplated extends st.component implements ILifecycle {
   }
 
   renderAllSoltsDefined() {
-    let random = Math.random();
     return (
       <fragment>
         <h2>Slot test: {this.title}</h2>
@@ -259,7 +267,7 @@ export class E2eTemplated extends st.component implements ILifecycle {
               Before E2ESlotted
               <E2eSlotted some="some more">
                 <template slot="header">
-                  <h3>Here might be a page title {random}</h3>
+                  <h3>Here might be a page title {this.random}</h3>
                 </template>
 
                 <p>A paragraph for the main content.</p>
@@ -279,7 +287,7 @@ export class E2eTemplated extends st.component implements ILifecycle {
                   Begin
                   <div>
                     Header
-                    <h3>Here might be a page title {random}</h3>
+                    <h3>Here might be a page title {this.random}</h3>
                   </div>
                   <p>A paragraph for the main content.</p>
                   <p>And another one.</p>
@@ -303,7 +311,6 @@ export class E2eTemplated extends st.component implements ILifecycle {
 
   renderHeaderWithDefaultValues() {
 
-    let random = Math.random();
     return (
       <fragment>
         <h2>Slot test: {this.title}</h2>
@@ -325,7 +332,7 @@ export class E2eTemplated extends st.component implements ILifecycle {
                 <p>And another one.</p>
 
                 <template slot="footer">
-                  <p>Here's some contact info {random}</p>
+                  <p>Here's some contact info {this.random}</p>
                 </template>
               </E2eSlotted>
               After E2ESlotted
@@ -344,7 +351,7 @@ export class E2eTemplated extends st.component implements ILifecycle {
                   <div>
                     <div>
                       Footer
-                      <p>Here's some contact info {random}</p>
+                      <p>Here's some contact info {this.random}</p>
                     </div>
                   </div>
                   End
@@ -358,12 +365,3 @@ export class E2eTemplated extends st.component implements ILifecycle {
     );
   }
 }
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "E2ETemplated": Partial<E2eTemplated>;
-    }
-  }
-}
-

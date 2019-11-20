@@ -10,7 +10,7 @@ export class PageContent extends st.component {
   render() {
     return (
       <div>
-        FirstPostPage, id: {st.router.match.params.id}
+        FirstPostPage, id: {st.route.params!.id}
         <br />
         <a
           href="javascript:void(0)"

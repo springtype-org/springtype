@@ -11,8 +11,12 @@ const attr_ = (scope: Component, name: string, defaultValue?: string, x?: any): 
   return defaultValue || "";
 };
 
+export interface IFooAttrs {
+  some?: string;
+}
+
 @component
-export class Foo extends st.component {
+export class Foo extends st.component<IFooAttrs> {
   @attr
   some: string = attr_(this, "some", "test");
 
@@ -63,14 +67,6 @@ export class Foo extends st.component {
       console.log("FINAL1", this.lolShared);
     }, 5000);
     return true;
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "Foo": Partial<Foo>;
-    }
   }
 }
 

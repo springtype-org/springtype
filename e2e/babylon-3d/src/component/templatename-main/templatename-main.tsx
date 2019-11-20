@@ -9,14 +9,6 @@ import tpl from "./templatename-main.tpl";
 })
 export class TemplateNameMain extends st.component implements ILifecycle {
   onBeforeRender() {
-    this.el.classList.add("TemplateNameMain");
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      TemplateNameMain: Partial<TemplateNameMain>;
-    }
+    this.elClass = "TemplateNameMain";
   }
 }

@@ -23,13 +23,5 @@ const E2ETimeDisplay = component(
   }),
 );
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      E2ETimeDisplay: Partial<HTMLElement>;
-    }
-  }
-}
-
 // append element to <body> (as root app element)
 st.render(<E2EClock />);

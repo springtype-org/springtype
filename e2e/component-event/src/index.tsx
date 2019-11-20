@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") {
   st.options.core.logLevel = LogLevel.INFO;
 }
 
-@component()
+@component
 export class MyIndex extends st.component implements ILifecycle {
   // using a @state() decoration enables change detection and auto-rerendering
   // whenever the reference changes (like this.eventDetails = $somethingElse)
@@ -39,14 +39,6 @@ export class MyIndex extends st.component implements ILifecycle {
         <div>{this.evtDetail && this.evtDetail.specialStEvent ? "Yes" : "No"}</div>
       </fragment>
     );
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "MyIndex": Partial<MyIndex>;
-    }
   }
 }
 

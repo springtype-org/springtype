@@ -9,6 +9,12 @@ import { isJSXComment, tsxToStandardAttributeName, CLASS_ATTRIBUTE_NAME, XLINK_A
 import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
+import { TYPE_STRING } from "../../core/lang/type-string";
+import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
+
+export const LIST_KEY_ATTRIBUTE_NAME = "key";
+export const ATTR_EVENT_LISTENER_PREFIX = "on";
+export const ATTR_DEBUG_PREFIX = "__";
 
 if (!st.dom) {
 
@@ -65,13 +71,21 @@ if (!st.dom) {
 
         // set root DOM node ref and parent ref
         component.INTERNAL.parentEl = parentDomElement;
-        component.INTERNAL.parent = parentDomElement.$stComponent;
+        component.INTERNAL.parent = parentDomElement.$stComponentRef;
 
         // assign attributes, slotChildren etc.
         component.INTERNAL.virtualNode = virtualNode;
       }
 
       if (component) {
+
+        if (component.INTERNAL.parent) {
+          if (!component.INTERNAL.parent.INTERNAL.childComponents) {
+            component.INTERNAL.parent.INTERNAL.childComponents = [];
+          }
+          component.INTERNAL.parent.INTERNAL.childComponents.push(component);
+        }
+
         // to analyze, filter and transform before create
         component.onBeforeElCreate(virtualNode);
       }
@@ -96,8 +110,14 @@ if (!st.dom) {
         // set element reference
         component.INTERNAL.el = newEl;
 
+        //console.log('set .el', component)
+
         // reference component logical controller component
         (newEl as IElement).$stComponent = component;
+        (newEl as IElement).$stComponentRef = component;
+      } else {
+        // passing down parent component reference
+        (newEl as IElement).$stComponentRef = parentDomElement.$stComponentRef;
       }
 
       if (virtualNode.attributes) {
@@ -150,9 +170,7 @@ if (!st.dom) {
 
     setAttribute: (name: string, value: any, domElement: IElement, isSvg?: boolean, forceNative?: boolean) => {
       // don't render debug attributes like __source and __self
-      if (process.env.NODE_ENV !== "development") {
-        if (name.indexOf("__") === 0) return;
-      }
+      if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
 
       // stores referenced DOM nodes in a memory efficient WeakMap
       // for access from CustomElements
@@ -162,6 +180,11 @@ if (!st.dom) {
           st.info("dom.ts", "@ref-setting", value[refName], `.${refName} = `, domElement);
         }
 
+        if (!domElement.$stComponentRef.INTERNAL.refs) {
+          domElement.$stComponentRef.INTERNAL.refs = [];
+        }
+        domElement.$stComponentRef.INTERNAL.refs.push(refName);
+
         Object.defineProperty(value[refName], refName, {
           value: domElement.$stComponent || domElement,
           configurable: true,
@@ -169,14 +192,14 @@ if (!st.dom) {
         return;
       }
 
-      if (name.startsWith("on") && typeof value == TYPE_FUNCTION) {
+      if (name.startsWith(ATTR_EVENT_LISTENER_PREFIX) && typeof value == TYPE_FUNCTION) {
         let eventName = name.substring(2).toLowerCase();
-        const capture = eventName.indexOf("capture");
-        const doCapture = capture > -1;
+        const capturePos = eventName.indexOf("capture");
+        const doCapture = capturePos > -1;
 
         // onClickCapture={...} support
         if (doCapture) {
-          eventName = eventName.substring(0, eventName.indexOf("capture"));
+          eventName = eventName.substring(0, capturePos);
         }
 
         if (process.env.NODE_ENV === "development") {
@@ -205,12 +228,12 @@ if (!st.dom) {
       } else {
         if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
           domElement.$stComponent.setAttribute(name, value);
-        } else if (name === "style" && typeof value !== "string") {
+        } else if (name === "style" && typeof value !== TYPE_STRING) {
           for (let prop in value) {
             domElement.style[prop as any] = value[prop];
           }
         } else {
-          if (typeof value == "boolean") {
+          if (typeof value == TYPE_BOOLEAN) {
             (domElement as any)[name] = value;
           } else {
             domElement.setAttribute(name, value);
@@ -259,7 +282,7 @@ if (!st.dom) {
 
     setTimeout(() => {
       if (!(st.render as any)._rendered) {
-        st.warn("st.render(<SomeComponent />) as NOT been called in 100ms. Have you forgotten to add this call?");
+        st.warn("st.render(<SomeComponent />) has NOT been called in 100ms. Have you forgotten to add this call?");
       }
     }, 100);
   }

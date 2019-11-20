@@ -4,8 +4,12 @@ import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 import { ref } from "../../../src/core/ref/decorator";
 
+export interface IRedBoxAttrs {
+  foo?: number;
+}
+
 @component
-export class redbox extends st.component {
+export class RedBox extends st.component<IRedBoxAttrs> {
   @attr
   foo: number;
 
@@ -23,23 +27,21 @@ export class redbox extends st.component {
   }
 }
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      redbox: Partial<redbox>;
-    }
-  }
+export interface IRefTestAttrs {
+  someDiv?: HTMLDivElement;
+  redBox?: RedBox;
 }
 
 @component
-export class reftest extends st.component implements ILifecycle {
-  time: number = 0;
+export class RefTest extends st.component<IRefTestAttrs> implements ILifecycle {
+
+  protected time: number = 0;
 
   @ref
   someDiv!: HTMLDivElement;
 
   @ref
-  redBox!: redbox;
+  redBox!: RedBox;
 
   onGetDiv = () => {
     console.log("get div", this.someDiv, this.redBox);
@@ -56,7 +58,7 @@ export class reftest extends st.component implements ILifecycle {
 
     return (
       <div>
-        <redbox style={{ color: "#ffffff" }} foo={345} ref={{ redBox: this }} />
+        <RedBox style={{ color: "#ffffff" }} foo={345} ref={{ redBox: this }} />
         <button onClick={this.onGetDiv}>Get DIV</button>
         <div ref={{ someDiv: this }}>{this.time}</div>
       </div>
@@ -64,16 +66,8 @@ export class reftest extends st.component implements ILifecycle {
   }
 }
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      reftest: Partial<reftest>;
-    }
-  }
-}
-
 @component
-export class container extends st.component {
+export class Ref extends st.component {
   showRefTest: boolean = true;
 
   render() {
@@ -84,9 +78,7 @@ export class container extends st.component {
 
     if (this.showRefTest) {
       return (
-        <div>
-          <reftest />
-        </div>
+        <RefTest />
       );
     } else {
       return <div>Refresh test</div>;
@@ -94,12 +86,4 @@ export class container extends st.component {
   }
 }
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      container: Partial<container>;
-    }
-  }
-}
-
-st.render(<container />);
+st.render(<Ref />);

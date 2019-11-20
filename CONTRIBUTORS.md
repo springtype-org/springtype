@@ -1,6 +1,6 @@
 ## Maintainers
 
-Idea, conception, architecture and initial implementation:
+SpringType is brought to you by:
 
 <table>
   <tbody>

@@ -10,8 +10,11 @@ export interface IComponentInternals {
   attributes: {
     [name: string]: string;
   };
+  refs: Array<string>;
   options: IComponentOptions;
   isConnected: boolean;
   virtualNode: IVirtualNode;
   mutationObserver: MutationObserver;
+  hasDOMChanged: boolean;
+  childComponents: Array<ILifecycle>;
 }

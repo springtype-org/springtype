@@ -14,7 +14,7 @@ export class BlogPage extends st.component<BlogPageAttributes> implements BlogPa
   static ROUTE = "#/blog";
 
   @attr
-  blogPageId: number;
+  blogPageId!: number;
 
   onReRenderClick = () => {
     this.doRender();

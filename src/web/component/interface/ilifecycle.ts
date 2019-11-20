@@ -72,7 +72,7 @@ export interface ILifecycle {
   onBeforeRender?(): void;
 
   // after render()
-  onAfterRender?(): void;
+  onAfterRender?(hasDOMChanged: boolean): void;
 
   // after first render()
   onAfterInitialRender?(): void;

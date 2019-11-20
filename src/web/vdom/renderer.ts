@@ -5,19 +5,12 @@ import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";
 import { NOVDOM_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_OBJECT } from "../../core/lang/type-object";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
-
-const LIST_KEY_ATTRIBUTE_NAME = "key";
-
-const getReferenceList = (childNodes: NodeListOf<IElement>): IElement[] => {
-  const referenceList: IElement[] = [];
-  for (let child of (childNodes as unknown) as Array<IElement>) {
-    referenceList.push(child);
-  }
-  return referenceList;
-};
+import { ATTR_EVENT_LISTENER_PREFIX, LIST_KEY_ATTRIBUTE_NAME, ATTR_DEBUG_PREFIX } from "./dom";
 
 if (!st.renderer) {
+
   st.renderer = {
+
     renderInitial: (
       virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
       parentDomElement: IElement,
@@ -34,19 +27,18 @@ if (!st.renderer) {
       virtualElements: Array<IVirtualNode | string | undefined>,
       parent: IElement,
     ) => {
-      const refList = getReferenceList((domElements as unknown) as NodeListOf<IElement>);
 
       // comments and undefines can occur at any place dynamically
       virtualElements = filterCommentsAndUndefines(virtualElements) as Array<IVirtualNode>;
 
       // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
-      let maxLength = domElements.length > virtualElements.length ? refList.length : virtualElements.length;
+      const maxLength = domElements.length > virtualElements.length ? domElements.length : virtualElements.length;
 
       // walk through max. possible  differences on this level of the subtree
       for (let i = 0; i < maxLength; i++) {
         // removeChild() called before and end of similarities is logically reached
-        let domElement = refList[i];
-        let virtualElement = virtualElements[i];
+        const domElement = domElements[i];
+        const virtualElement = virtualElements[i];
 
         if (!virtualElement && !domElement) {
           break;
@@ -75,10 +67,13 @@ if (!st.renderer) {
 
       let created = false;
       let replaced = false;
+      let removed = false;
+      let changedAttribute = false;
 
       if (!virtualElement && domElement) {
         // DOMElement existing but no such VirtualElement: Evict zombie node
         st.renderer.removeElement(parent, domElement);
+        removed = true;
       } else if (virtualElement && !domElement) {
         // VirtualElement exists but no DOMElement: Append node
         domElement = st.dom.createElement(virtualElement, parent) as IElement;
@@ -96,6 +91,7 @@ if (!st.renderer) {
 
         domElement = st.dom.createElement(virtualElement, parent) as IElement;
         created = true;
+
       } else {
         // DOMElement and VirtualElement are the same on index and tagName
         // but attributes might differ: May update attributes
@@ -109,22 +105,25 @@ if (!st.renderer) {
           for (let a = 0; a < attributes.length; a++) {
             const attributeName = tsxToStandardAttributeName(attributes[a].name);
 
-            if (!attributeName.startsWith("on")) {
+            if (!attributeName.startsWith(ATTR_EVENT_LISTENER_PREFIX)) {
               if (!virtualElement.attributes || !virtualElement.attributes[attributeName]) {
                 // ignore cases such as: id, class, style, tabindex
                 if (!(domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName))) {
                   // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
                   domElement.removeAttribute(attributeName);
+                  changedAttribute = true;
                 }
-              } else if (domElement.getAttribute(attributeName) !== virtualElement.attributes[attributeName]) {
+              } else if (domElement.getAttribute(attributeName) != virtualElement.attributes[attributeName]) {
                 if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
                   st.renderer.removeElement(parent, domElement);
 
-                  st.dom.createElement(virtualElement, parent);
+                  domElement = st.dom.createElement(virtualElement, parent) as IElement;
                   replaced = true;
                 } else {
                   // ignore cases such as: id, class, style, tabindex but inform component
                   if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
+
+                    // TODO: Implement merge algorithm
                     domElement.$stComponent.handleUpdateElAttribute(
                       attributeName,
                       virtualElement.attributes[attributeName],
@@ -132,12 +131,14 @@ if (!st.renderer) {
                   } else {
                     // DOMElement attribute value differs from VirtualElement attribute: Update
                     st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
+                    changedAttribute = true;
                   }
                 }
               }
             }
           }
         }
+
         // VirtualElement might have additional attributes, DOMElement doesn't have atm
         if (!replaced && virtualElement.attributes) {
           // update attributes
@@ -145,12 +146,14 @@ if (!st.renderer) {
             attributeName = tsxToStandardAttributeName(attributeName);
 
             if (
+              !attributeName.startsWith(ATTR_DEBUG_PREFIX) &&
+              !attributeName.startsWith(ATTR_EVENT_LISTENER_PREFIX) &&
               virtualElement.attributes.hasOwnProperty(attributeName) &&
-              !domElement.hasAttribute(attributeName) &&
-              !attributeName.startsWith("on")
+              !domElement.hasAttribute(attributeName)
             ) {
               // DOMElement attribute value differs from VirtualElement attribute: Set
               st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
+              changedAttribute = true;
             }
           }
         }
@@ -159,6 +162,8 @@ if (!st.renderer) {
           domElement.$stComponent.onAfterPatchEl();
         }
       }
+
+      const hasChanged = created || removed || replaced || changedAttribute;
 
       // process children (recursion)
 
@@ -169,6 +174,12 @@ if (!st.renderer) {
         domElement.$stComponent.INTERNAL.virtualNode = virtualElement;
         domElement.$stComponent.doRender();
         return;
+      } else {
+        // must be a child or sub-child of a node with an $stComponent
+        if (hasChanged) {
+          // @ts-ignore
+          domElement.$stComponentRef.INTERNAL.hasDOMChanged = true;
+        }
       }
 
       // optimization: If freshly created, all children are already perfectly rendered
@@ -194,10 +205,17 @@ if (!st.renderer) {
     },
 
     patchTextNode: (parent: IElement, domElement: IElement, virtualElementTextContent: string) => {
+
+      let created = false;
+      let replaced = false;
+      let removed = false;
+      let updated = false;
+
       // text node content
       if (typeof virtualElementTextContent == TYPE_UNDEFINED && domElement) {
         // DOMElement existing but no such VirtualElement: Evict zombie node
         parent.removeChild(domElement);
+        removed = true;
       } else if (virtualElementTextContent && !domElement) {
         // VirtualElement exists but no DOMElement: Append node
         if (parent.nodeType === Node.TEXT_NODE) {
@@ -205,6 +223,7 @@ if (!st.renderer) {
         } else {
           st.dom.createTextNode(virtualElementTextContent, parent);
         }
+        created = true;
       } else if (virtualElementTextContent && domElement) {
         // TextNode is present on both sides but content might differ
         // update innerText
@@ -212,14 +231,21 @@ if (!st.renderer) {
         if (domElement.nodeType === Node.TEXT_NODE) {
           // DOMElement remains being a TextNode
           // ...but has changed: Reflect the change
-          if (domElement.textContent !== virtualElementTextContent) {
+          if (domElement.textContent != virtualElementTextContent) {
             domElement.textContent = virtualElementTextContent;
+            updated = true;
           }
         } else {
           // VirtualElement is a TextNode now but DOMElement is not: remove and replace
           parent.removeChild(domElement);
           st.dom.createTextNode(virtualElementTextContent, parent);
+          replaced = true;
         }
+      }
+
+      if (created || replaced || removed || updated) {
+        // @ts-ignore
+        parent.$stComponentRef.INTERNAL.hasDOMChanged = true;
       }
     },
   };
