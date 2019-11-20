@@ -52,7 +52,6 @@ export class DashboardPage extends st.component implements ILifecycle {
   drawerAndTopBarFixed: boolean = true;
 
   onLogoutClick = () => {
-    this.loginGuard.firebaseService.isLoggedIn = false;
     st.router.navigate(LoginPage.ROUTE);
   };
 
@@ -84,7 +83,7 @@ export class DashboardPage extends st.component implements ILifecycle {
               }}
             >
               <MwcDrawerTitle>
-                <img src="https://www.vimp.com/files/vimp_layout/logo/vimp_logo.png" />
+                COMPANY<br /><br />
               </MwcDrawerTitle>
               <MwcDrawerSubtitle>Backend</MwcDrawerSubtitle>
               {/*

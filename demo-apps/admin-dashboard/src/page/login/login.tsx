@@ -4,7 +4,6 @@ import { inject } from "../../../../../src/core/di";
 import { component } from "../../../../../src/web/component";
 import { ILifecycle } from "../../../../../src/web/component/interface/ilifecycle";
 import { tsx } from "../../../../../src/web/vdom";
-import { FirebaseService } from "../../service/firebase";
 import {
   MwcButton,
   MwcLayoutGrid,
@@ -17,16 +16,12 @@ import {
 import * as loginPageStyle from "./login.tss.scss";
 import { LoadingIndicator } from "../../component/loading-indicator/loading-indicator";
 import { ErrorMessage } from "../../component/error-message/error-message";
-import { MwcButtonVariant } from "st-material/component/mwc-button/mwc-button-variant-type";
 import { DashboardPage } from "../dashboard/dashboard";
 import { MwcTextFieldVariant } from "st-material/component/mwc-text-field/mwc-text-field-variant";
 
 @component
 export class LoginPage extends st.component implements ILifecycle {
   static ROUTE = "#/login";
-
-  @inject(FirebaseService)
-  firebaseService: FirebaseService;
 
   @ref
   username: MwcTextField;
@@ -42,13 +37,7 @@ export class LoginPage extends st.component implements ILifecycle {
 
   onLoginClick = async () => {
     this.loadingIndicator.open = true;
-
-    try {
-      await this.firebaseService.login(this.username.value, this.password.value);
-      st.router.navigate(DashboardPage.ROUTE);
-    } catch (e) {
-      this.errorMessage.message = e.message;
-    }
+    st.router.navigate(DashboardPage.ROUTE);
     this.loadingIndicator.open = false;
   };
 
@@ -64,9 +53,6 @@ export class LoginPage extends st.component implements ILifecycle {
 
         <LoadingIndicator ref={{ loadingIndicator: this }} />
 
-        <video autoplay muted loop class={loginPageStyle.video}>
-          <source src="https://www.vimp.com/files/videos/mtz_elevator_v3_1920.mp4" type="video/mp4" />
-        </video>
         <MwcLayoutGrid>
           <MwcLayoutGridCell columns={4}></MwcLayoutGridCell>
           <MwcLayoutGridCell columns={4} class={[loginPageStyle.loginMask, loginPageStyle.layout]}>
@@ -77,9 +63,7 @@ export class LoginPage extends st.component implements ILifecycle {
               actionsClass={loginPageStyle.loginActions}
             >
               <template slot={MwcCard.SLOT_NAME_PRIMARY}>
-                <a href="https://www.vimp.com" target="_blank">
-                  <img src="https://www.vimp.com/files/vimp_layout/logo/vimp_logo.png" />
-                </a>
+                COMPANY<br />
                 <MwcOverlineText>Backend / SpringType / 2019</MwcOverlineText>
               </template>
 
@@ -89,7 +73,7 @@ export class LoginPage extends st.component implements ILifecycle {
                   onKeyUp={this.onPasswordFieldKeyUp}
                   variant={MwcTextFieldVariant.OUTLINED}
                   class={loginPageStyle.input}
-                  value="info@aron-homberg.de"
+                  value=""
                   ref={{ username: this }}
                   label="Benutzername"
                 >
@@ -102,7 +86,7 @@ export class LoginPage extends st.component implements ILifecycle {
                   variant={MwcTextFieldVariant.OUTLINED}
                   class={loginPageStyle.input}
                   ref={{ password: this }}
-                  value="aroninc"
+                  value=""
                   type="password"
                   label="Passwort"
                 >
@@ -114,7 +98,7 @@ export class LoginPage extends st.component implements ILifecycle {
                 <ErrorMessage ref={{ errorMessage: this }} />
 
                 <MwcButton
-                  variant={MwcButtonVariant.OUTLINED}
+                  variant="outlined"
                   label="Login!"
                   onClick={this.onLoginClick}
                   class={loginPageStyle.loginButton}

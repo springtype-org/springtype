@@ -10659,7 +10659,7 @@ split-string@^3.0.1, split-string@^3.0.2:
     extend-shallow "^3.0.0"
 
 springtype@../../dist:
-  version "2.0.0-beta.4"
+  version "2.0.0-beta.9"
   dependencies:
     global "^4.4.0"
     st-cp "^2.0.0-alpha.4"
@@ -10707,10 +10707,10 @@ st-cp@^2.0.0-alpha.4:
   dependencies:
     chalk "^2.4.2"
 
-st-material@^2.0.0-beta.11:
-  version "2.0.0-beta.11"
-  resolved "https://registry.yarnpkg.com/st-material/-/st-material-2.0.0-beta.11.tgz#44014ebb53513a1ae28445cc7cb5b1498f42142b"
-  integrity sha512-XGmPYrIsfetVajMeyMpCvm2MbSCEdoasAoTxwY9DKbDhYaBrPt6oniYyxW63i099IH8l19pKeg75M5buvm/91g==
+st-material@^2.0.0-beta.12:
+  version "2.0.0-beta.12"
+  resolved "https://registry.yarnpkg.com/st-material/-/st-material-2.0.0-beta.12.tgz#323fb76d6b56e14a18cdd05ca38e16d8fcb945c0"
+  integrity sha512-s08VMzArc9JOtnnIe/9RnxOsLF0jyA6WU+IfKv3IdirglQEhefxjMgxS5beR6ypdg2AMQaFwYjW5tCM7r6/tTw==
   dependencies:
     "@material/dialog" "^4.0.0"
     "@material/drawer" "^4.0.0"

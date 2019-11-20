@@ -7,8 +7,12 @@ import * as uploadDialogStyle from "./upload-dialog.tss.scss";
 import { UploadDialog } from "./upload-dialog";
 import * as dropTargetStyle from "./drop-target.tss.scss";
 
+export interface IDropTargetAttrs {
+  opener?: UploadDialog;
+}
+
 @component
-export class DropTarget extends st.component {
+export class DropTarget extends st.component<IDropTargetAttrs> {
   @ref
   progress: MwcLinearProgress;
 

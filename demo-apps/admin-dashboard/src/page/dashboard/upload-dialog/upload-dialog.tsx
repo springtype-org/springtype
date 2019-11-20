@@ -3,15 +3,18 @@ import { ref } from "../../../../../../src/core/ref";
 import { component, attr } from "../../../../../../src/web/component";
 import { tsx } from "../../../../../../src/web/vdom";
 import { MwcDialog, MwcButton } from "st-material";
-import { MwcButtonVariant } from "st-material/component/mwc-button/mwc-button-variant-type";
 import { DropTarget } from "./drop-target";
 import { Store } from "../../../model/Store";
 import { MetadataForm } from "./metadata-form";
 import { DashboardPage } from "../dashboard";
 import { videoContext, VIDEO_UPLOAD_CONTEXT } from "../../../config/context";
 
+export interface IUploadDialogAttrs {
+  opener: DashboardPage;
+}
+
 @component
-export class UploadDialog extends st.component {
+export class UploadDialog extends st.component<IUploadDialogAttrs> {
   static UPLOAD_SUCCESSFUL = "UPLOAD_SUCCESSFUL";
   static ENTER_METADATA = "ENTER_METADATA";
   static INITIAL = "INITIAL";
@@ -67,6 +70,9 @@ export class UploadDialog extends st.component {
   };
 
   render() {
+
+    console.log('dialog render')
+
     return (
       <MwcDialog ref={{ dialog: this }} title="Video hochladen">
         <template slot={MwcDialog.SLOT_NAME_CONTENT}>
@@ -79,14 +85,14 @@ export class UploadDialog extends st.component {
             style={{ marginLeft: "1em" }}
             ref={{ nextButton: this }}
             onClick={this.onShowMetaDataForm}
-            variant={MwcButtonVariant.RAISED}
+            variant="raised"
             label="Weiter"
           ></MwcButton>
           <MwcButton
             style={{ marginLeft: "1em" }}
             ref={{ saveButton: this }}
             onClick={this.onSaveAndClose}
-            variant={MwcButtonVariant.RAISED}
+            variant="raised"
             label="Speichern"
           ></MwcButton>
         </template>

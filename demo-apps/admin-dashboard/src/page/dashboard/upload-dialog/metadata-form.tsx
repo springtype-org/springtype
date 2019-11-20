@@ -7,8 +7,12 @@ import { UploadDialog } from "./upload-dialog";
 import { MwcTextFieldVariant } from "st-material/component/mwc-text-field/mwc-text-field-variant";
 import * as metaDataFormStyle from "./metadata-form.tss.scss";
 
+export interface IMetadataFormAttrs {
+  opener?: UploadDialog;
+}
+
 @component
-export class MetadataForm extends st.component {
+export class MetadataForm extends st.component<IMetadataFormAttrs> {
   @attr
   opener: UploadDialog;
 
