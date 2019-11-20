@@ -1,5 +1,5 @@
 export interface IEvent<D> {
-  detail: D;
+  detail?: D;
 }
 
-export type IEventListener<D, E> = (evt: IEvent<D> & E) => void | boolean;
+export type IEventListener<D> = (evt: IEvent<D> & Event) => void | boolean;
