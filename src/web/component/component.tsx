@@ -79,11 +79,11 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, !Array.isArray(classes) ? [classes] : classes, this.el,  true);
   }
 
-  get elAttributes(): Partial<HTMLElement> {
-    return this.el.attributes as Partial<HTMLElement>;
+  get elAttributes(): Partial<JSX.HTMLAttributes> {
+    return this.el.attributes as Partial<JSX.HTMLAttributes>;
   }
 
-  set elAttributes(attributes: Partial<HTMLElement>) {
+  set elAttributes(attributes: Partial<JSX.HTMLAttributes>) {
     st.dom.setAttributes(attributes, this.el,true);
   }
 

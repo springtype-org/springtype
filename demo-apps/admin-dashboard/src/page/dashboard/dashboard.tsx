@@ -76,7 +76,7 @@ export class DashboardPage extends st.component implements ILifecycle {
         <MwcDrawer ref={{ drawer: this }} variant={"modal"} fixed={this.drawerAndTopBarFixed}>
           <MwcDrawerHeader>
             {/*
-              // @ts-ignore */}
+               // @ts-ignore */}
             <center
               style={{
                 paddingTop: "20px",

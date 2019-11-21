@@ -9,7 +9,7 @@ export interface ILifecycle {
   el?: HTMLElement;
 
   // can be assigned to set one or more attributes on this.el
-  elAttributes?: Partial<HTMLElement>;
+  elAttributes?: Partial<JSX.HTMLAttributes>;
 
   // can be assinged to set one or more CSS classes on this.el.class (className) mutation
   elClass?: string|Array<string>;

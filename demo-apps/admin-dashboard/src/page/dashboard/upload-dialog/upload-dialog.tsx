@@ -87,14 +87,14 @@ export class UploadDialog extends st.component<IUploadDialogAttrs> {
             onClick={this.onShowMetaDataForm}
             variant="raised"
             label="Weiter"
-          ></MwcButton>
+          />
           <MwcButton
             style={{ marginLeft: "1em" }}
             ref={{ saveButton: this }}
             onClick={this.onSaveAndClose}
             variant="raised"
             label="Speichern"
-          ></MwcButton>
+          />
         </template>
       </MwcDialog>
     );
