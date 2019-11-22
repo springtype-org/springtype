@@ -1,2 +1,4 @@
+import { RefFn } from "../interface";
+
 // decorator to mark props as referenced
-export const ref: any = (): any => {};
+export const ref: RefFn = (): any => { };

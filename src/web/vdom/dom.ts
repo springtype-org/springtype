@@ -90,7 +90,7 @@ if (!st.dom) {
       } else {
         if (component) {
           // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          virtualNode.type = componentCtor.COMPONENT_OPTIONS.tag;
+          virtualNode.type = component.tag || componentCtor.COMPONENT_OPTIONS.tag;
         }
 
         // support for <component tag="h1"> and <div tag="h2"> cases
