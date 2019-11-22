@@ -64,17 +64,26 @@ export class RefTest extends st.component<IRefTestAttrs> implements ILifecycle {
       </div>
     );
   }
+
+  onAfterInitialRender() {
+    console.log('onAfterInitialRender', this.redBox)
+  }
+
+  onAfterRefChange(refName: string, refValue: any) {
+    console.log('onAfterRefChange', refName, refValue);
+  }
 }
 
 @component
 export class Ref extends st.component {
+
+  @attr
   showRefTest: boolean = true;
 
   render() {
     setTimeout(() => {
       this.showRefTest = !this.showRefTest;
-      this.doRender();
-    }, 1000);
+    }, 10000);
 
     if (this.showRefTest) {
       return (

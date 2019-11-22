@@ -24,11 +24,11 @@ if (!st.dom) {
       if (document.body) Promise.resolve();
       return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
     },
-    hasElNamespace: (domElement: Element): boolean =>{
+    hasElNamespace: (domElement: Element): boolean => {
       return domElement.namespaceURI === SVG_NAMESPACE;
     },
 
-    hasSvgNamespace: (parentElement: Element,type: string): boolean => {
+    hasSvgNamespace: (parentElement: Element, type: string): boolean => {
       return st.dom.hasElNamespace(parentElement) && type !== "STYLE" && type !== "SCRIPT";
     },
 
@@ -85,7 +85,7 @@ if (!st.dom) {
         component.onBeforeElCreate(virtualNode);
       }
 
-      if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement,virtualNode.type.toUpperCase())) {
+      if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase())) {
         newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
       } else {
         if (component) {
@@ -177,10 +177,21 @@ if (!st.dom) {
         }
         domElement.$stComponentRef.INTERNAL.refs.push(refName);
 
+        const refValue = domElement.$stComponent || domElement;
+        let refMutation = false;
+
+        if (value[refName][refName]) {
+          refMutation = true;
+        }
+
         Object.defineProperty(value[refName], refName, {
-          value: domElement.$stComponent || domElement,
+          value: refValue,
           configurable: true,
         });
+
+        if (refMutation) {
+          value[refName].onAfterRefChange(refName, refValue);
+        }
         return;
       }
 

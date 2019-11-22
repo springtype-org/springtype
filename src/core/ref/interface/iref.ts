@@ -1,1 +1,1 @@
-export type RefFn = () => any;
+export type RefFn = (...args: any) => any;

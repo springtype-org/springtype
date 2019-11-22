@@ -56,6 +56,9 @@ export interface ILifecycle {
   // after this.el.childNodes have been created
   onAfterElChildrenCreate(): void;
 
+  // after @ref references change
+  onAfterRefChange(refName: string, refValue: any): void;
+
   // before the component gets mounted to the DOM
   onBeforeConnect?(): void;
 

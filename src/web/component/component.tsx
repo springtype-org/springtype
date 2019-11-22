@@ -269,6 +269,8 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
 
   onAfterPatchEl() { }
 
+  onAfterRefChange(refName: string, refValue: any) { }
+
   handleUpdateElAttribute(name: string, value: any) { }
 
   disconnectedCallback() {
