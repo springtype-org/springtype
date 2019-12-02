@@ -33,6 +33,7 @@ export const combineReducers = <S = {}>(reducerMap: IReducerMap<S>) => {
 export const createStore = <S = {}>(reducer: Reducer<S>, preloadedState?: S, enhancer?: MiddlewareFunction<S>) => {
   let listeners: Array<Function> = [];
   let currentState = reducer(preloadedState!, { type: INIT_ACTION });
+  // @ts-ignore
   let devTools = window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__ : undefined;
 
   if (devTools) {
