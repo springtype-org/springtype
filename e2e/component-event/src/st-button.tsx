@@ -13,11 +13,11 @@ export interface StButtonClickEvent extends IEvent<StButtonClickEventDetail> {}
 export class StButton extends st.component {
 
   @event
-  onStClick: IEventListener<StButtonClickEventDetail, MouseEvent>;
+  onStClick!: IEventListener<MouseEvent>;
 
   // event handlers must always be scope-bound as fat arrow functions
   dispatchStClick = (evt: MouseEvent) => {
-    st.event<StButtonClickEventDetail>(this.el, "stclick", {
+    this.dispatchEvent<StButtonClickEventDetail>("stclick", {
       bubbles: true,
       cancelable: true,
       composed: true,
@@ -37,13 +37,5 @@ export class StButton extends st.component {
         |End|
       </button>
     );
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "StButton": Partial<StButton>;
-    }
   }
 }

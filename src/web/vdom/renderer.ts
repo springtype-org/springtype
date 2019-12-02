@@ -5,7 +5,10 @@ import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";
 import { NOVDOM_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_OBJECT } from "../../core/lang/type-object";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
-import { ATTR_EVENT_LISTENER_PREFIX, LIST_KEY_ATTRIBUTE_NAME, ATTR_DEBUG_PREFIX } from "./dom";
+import { ATTR_EVENT_LISTENER_PREFIX, LIST_KEY_ATTRIBUTE_NAME, ATTR_DEBUG_PREFIX, CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME } from "./dom";
+import { mergeArrays } from "../../core/lang/merge-arrays";
+import { mergeObjects } from "../../core/lang/merge-objects";
+import { RenderReason } from "../component/interface/irender-reason";
 
 if (!st.renderer) {
 
@@ -14,12 +17,8 @@ if (!st.renderer) {
     renderInitial: (
       virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
       parentDomElement: IElement,
-    ) => {
-      if (Array.isArray(virtualNode) && virtualNode) {
-        st.dom.createChildElements(virtualNode, parentDomElement);
-      } else if (virtualNode) {
-        st.dom.createElement(virtualNode as IVirtualNode | undefined, parentDomElement);
-      }
+    ): Array<IElement | Text | undefined> | IElement | undefined => {
+      return st.dom.createElementOrElements(virtualNode, parentDomElement);
     },
 
     patch: (
@@ -58,7 +57,6 @@ if (!st.renderer) {
 
     patchElement: (parent: IElement, domElement: IElement, virtualElement: IVirtualNode) => {
       // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
-
       if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement[NOVDOM_ATTRIBUTE_NAME]) return;
 
       if (domElement && domElement.$stComponent) {
@@ -79,10 +77,12 @@ if (!st.renderer) {
         domElement = st.dom.createElement(virtualElement, parent) as IElement;
         created = true;
       } else if (
-        virtualElement &&
-        domElement &&
-        (domElement.tagName || "").toUpperCase() !== virtualElement.type.toUpperCase()
+        virtualElement.attributes.doRender || (
+          virtualElement &&
+          domElement &&
+          (domElement.tagName || "").toUpperCase() !== virtualElement.type.toUpperCase())
       ) {
+
         // DOMElement and VirtualElement existing but tagName differs: Replace node
         // also: DOMElement is a TextNode (typeof tagName == 'undefined') but VirtualElement is not
 
@@ -123,11 +123,14 @@ if (!st.renderer) {
                   // ignore cases such as: id, class, style, tabindex but inform component
                   if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
 
-                    // TODO: Implement merge algorithm
-                    domElement.$stComponent.handleUpdateElAttribute(
-                      attributeName,
-                      virtualElement.attributes[attributeName],
-                    );
+                    if (attributeName === CLASS_ATTRIBUTE_NAME) {
+                      st.dom.setAttribute(attributeName, mergeArrays(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]), domElement);
+                    } else if (attributeName === STYLE_ATTRIBUTE_NAME) {
+                      st.dom.setAttribute(attributeName, mergeObjects(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]), domElement);
+                    } else {
+                      st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName] || domElement.$stComponent.INTERNAL[attributeName], domElement);
+                    }
+
                   } else {
                     // DOMElement attribute value differs from VirtualElement attribute: Update
                     st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName], domElement);
@@ -141,6 +144,7 @@ if (!st.renderer) {
 
         // VirtualElement might have additional attributes, DOMElement doesn't have atm
         if (!replaced && virtualElement.attributes) {
+
           // update attributes
           for (let attributeName in virtualElement.attributes) {
             attributeName = tsxToStandardAttributeName(attributeName);
@@ -168,11 +172,14 @@ if (!st.renderer) {
       // process children (recursion)
 
       // inner should only be patched if it is not a custom element and has no shadow DOM
-
       if (domElement && domElement.$stComponent) {
+
         // update slot children
-        domElement.$stComponent.INTERNAL.virtualNode = virtualElement;
-        domElement.$stComponent.doRender();
+        domElement.$stComponent.virtualNode = virtualElement;
+
+        if (domElement.$stComponent.shouldRender(RenderReason.CHILDREN_UPDATE)) {
+          domElement.$stComponent.doRender();
+        }
         return;
       } else {
         // must be a child or sub-child of a node with an $stComponent
@@ -194,6 +201,7 @@ if (!st.renderer) {
           ((domElement.childNodes && domElement.childNodes.length) ||
             (virtualElement.children && virtualElement.children.length))
         ) {
+
           // recursive call with childNodes and virtualElement childNodes
           st.renderer.patch(
             ((domElement.childNodes as unknown) as Array<IElement>) || (([] as unknown) as Array<IElement>),
@@ -249,4 +257,43 @@ if (!st.renderer) {
       }
     },
   };
+
+  if (!st.render) {
+    // add render method for awaiting / initial rendering
+    st.render = async (virtualNode: IVirtualNode, domNode: Element = document.body) => {
+
+      if (process.env.NDOE_ENV == 'development') {
+
+        // timeout warning flag
+        (st.render as any)._rendered = true;
+
+        if (!virtualNode.type || !virtualNode.attributes || !virtualNode.children) {
+          st.error("Invalid virutal node: ", JSON.stringify(virtualNode));
+          throw new Error("This virtual node does NOT look like one");
+        }
+      }
+
+      // wait for the DOM to become ready, then render (prevents errors if a novice calls st.render() before <body> exists)
+      await st.dom.isReady();
+
+      // render root element
+      st.renderer.renderInitial(virtualNode, domNode as IElement);
+
+      if (st.router) {
+
+        // all <Route>'s and <RouteList>'s are instantiated by now,
+        // start rendering routes
+        st.router.enable();
+      }
+    };
+
+    if (process.env.NDOE_ENV == 'development') {
+      setTimeout(() => {
+        if (!(st.render as any)._rendered) {
+          st.warn("st.render(<SomeComponent />) has NOT been called in 100ms. Have you forgotten to add this call?");
+        }
+      }, 100);
+    }
+  }
 }
+

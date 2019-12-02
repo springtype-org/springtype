@@ -1,8 +1,5 @@
 import { IVirtualChildren, IVirtualNode } from "./ivirtual-node";
-
-export interface IDOMRootAttributes {
-  //name: string]: string;
-}
+import { IElement } from "./ielement";
 
 export interface IDOM {
 
@@ -16,11 +13,30 @@ export interface IDOM {
 
   hasSvgNamespace(parentElement: Element, type: string): boolean;
 
-  createElement(virtualNode: IVirtualNode | undefined, parentDomElement: Element): Element | undefined;
+  createComponentInstance(virtualNode: IVirtualNode, parentDomElement: IElement): any;
 
-  createTextNode(text: string, parentDomElement: Element): void;
+  createElementOrElements(
+    virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
+    parentDomElement: Element,
+    detached?: boolean
+  ): Array<IElement | Text | undefined> | IElement | undefined;
 
-  createChildElements(virtualChildren: IVirtualChildren, parentDomElement: Element): void;
+  createElement(
+    virtualNode: IVirtualNode | undefined,
+    parentDomElement: Element,
+    detached?: boolean): IElement | undefined;
+
+  createTextNode(
+    text: string,
+    parentDomElement: Element,
+    detached?: boolean
+  ): Text;
+
+  createChildElements(
+    virtualChildren: IVirtualChildren,
+    parentDomElement: Element,
+    detached?: boolean
+  ): Array<IElement | Text | undefined>;
 
   setAttribute(name: string, value: any, parentDomElement: Element, forceNative?: boolean): void;
 

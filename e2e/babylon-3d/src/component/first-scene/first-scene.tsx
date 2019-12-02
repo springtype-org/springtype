@@ -23,19 +23,18 @@ import tpl from "./first-scene.tpl";
   tpl,
 })
 export class FirstScene extends st.component implements ILifecycle {
-  private engine: Engine;
-  private scene: Scene;
-  private camera: ArcRotateCamera;
+
+  class = "FirstScene";
+
+  private engine!: Engine;
+  private scene!: Scene;
+  private camera!: ArcRotateCamera;
 
   @ref
-  private iframe: HTMLIFrameElement;
+  private iframe!: HTMLIFrameElement;
 
   @ref
-  private canvas: HTMLCanvasElement;
-
-  onBeforeRender() {
-    this.elClass = "FirstScene";
-  }
+  private canvas!: HTMLCanvasElement;
 
   onAfterInitialRender(): void {
     window.addEventListener("resize", () => this.alignVideoDisplay());
@@ -57,8 +56,6 @@ export class FirstScene extends st.component implements ILifecycle {
 
   private alignVideoDisplay() {
     const halfWidth = this.el.clientWidth / 2;
-
-    console.log("this.iframe", this.iframe, this.el);
 
     if (this.iframe) {
       const videoDisplayHeight = this.el.clientWidth / 3.555;
@@ -130,13 +127,5 @@ export class FirstScene extends st.component implements ILifecycle {
 
       shaderMaterial.setVector3("cameraPosition", this.scene.activeCamera!.position);
     });
-  }
-}
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      FirstScene: Partial<FirstScene>;
-    }
   }
 }

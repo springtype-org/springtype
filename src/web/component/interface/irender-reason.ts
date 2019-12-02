@@ -5,6 +5,7 @@ export enum RenderReason {
   STATE_CHANGE = "STATE_CHANGE",
   ATTRIBUTE_CHANGE = "ATTRIBUTE_CHANGE",
   THEME_CHANGE = "THEME_CHANGE",
+  CHILDREN_UPDATE = "CHILDREN_UPDATE"
 }
 
 export interface RenderReasonMetaData {

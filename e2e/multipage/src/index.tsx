@@ -1,28 +1,55 @@
 import { st } from "../../../src/core";
 import { component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
-import { BlogPage } from "./pages/blog/blogpage";
+import { RouteList, Route, PATH_START, PATH_WILDCARD } from "../../../src/web/router";
 import { HomePage } from "./pages/homepage";
-import { Route, RouteList, PATH_DEFAULT, PATH_WILDCARD } from "../../../src/web/router";
+import { BlogPage } from "./pages/blog/blogpage";
 
-@component({ tag: "div" })
+@component({
+  tag: 'div'
+})
 export class App extends st.component {
-  render() {
-    console.log("new routelist and homepage");
 
-    const newHomePage = (
+  rerenderTest = false;
+
+  render() {
+
+    console.log('App render');
+
+    let newHomePage = (
       <HomePage
-        class={["lol"]}
+        id="home_456"
+        tabIndex={2}
+        class="lol"
         style={{
-          background: "green",
+          backgroundColor: "green",
         }}
       />
     );
 
+    if (this.rerenderTest) {
+      newHomePage = (
+        <HomePage
+          id="home_456re"
+          tabIndex={2}
+          class="lolre"
+          style={{
+            backgroundColor: "magenta",
+          }}
+        />
+      );
+      console.log('re-render', newHomePage)
+    }
+
+
     const routeList = (
-      <RouteList>
-        <Route path={[PATH_DEFAULT, PATH_WILDCARD, HomePage.ROUTE]} component={newHomePage} />
-        <Route path={BlogPage.ROUTE} component={<BlogPage tag="span" blogPageId={9} />} />
+      <RouteList doRender>
+        <Route path={[HomePage.ROUTE, PATH_START, PATH_WILDCARD]} >
+          {newHomePage}
+        </Route>
+        <Route path={BlogPage.ROUTE}>
+          <BlogPage tag="span" blogPageId={9} />
+        </Route>
       </RouteList>
     );
 
@@ -31,9 +58,11 @@ export class App extends st.component {
 
   onAfterInitialRender() {
     setTimeout(() => {
-      console.log("re-render app, isssue with");
-      //this.doRender();
-    }, 500);
+      console.log("re-render app, isssue?");
+      this.rerenderTest = true;
+
+      this.doRender();
+    }, 1500);
   }
 }
 

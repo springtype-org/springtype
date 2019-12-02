@@ -1,4 +1,3 @@
-import { LogLevel } from "../log/interface";
 import { GlobalCache, I$st } from "./interface/i$st";
 
 /**
@@ -25,9 +24,11 @@ const _globalThis: any = new Function("return this")();
 if (!_globalThis[ST_KEY]) {
   // register scoped global as an instance of this class
   _globalThis[ST_KEY] = {
+    enable: (...implReferences: any) => {implReferences},
     [GlobalCache.COMPONENT_INSTANCES]: [],
     [GlobalCache.CONTEXT]: {},
     [GlobalCache.COMPONENT_REGISTRY]: {},
+    [GlobalCache.COMPONENT_WEAKMAP]: new WeakMap(),
   };
 }
 
@@ -36,13 +37,4 @@ export const st: I$st = _globalThis[ST_KEY];
 
 if (!st.globalThis) {
   st.globalThis = globalThis;
-}
-
-// set default core options
-if (!st.options) {
-  st.options = {
-    core: {
-      logLevel: LogLevel.WARN,
-    },
-  };
 }

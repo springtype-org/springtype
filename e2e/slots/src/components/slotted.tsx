@@ -11,7 +11,7 @@ export class E2eSlotted extends st.component implements ILifecycle {
   some: string = "some";
 
   onAfterRender(hasDOMChanged: boolean) {
-    //console.log('hasDOMChanged?', hasDOMChanged)
+    console.log('hasDOMChanged?', hasDOMChanged)
   }
 
   render() {

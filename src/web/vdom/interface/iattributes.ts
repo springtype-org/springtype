@@ -1,9 +1,12 @@
+import { IRefs } from "../../../core/ref/interface/iref";
+
 export const REF_ATTRIBUTE_NAME = "ref";
 export const UNWRAP_ATTRIBUTE_NAME = "unwrap";
 export const NOVDOM_ATTRIBUTE_NAME = "novdom";
 export const SLOT_ATTRIBUTE_NAME = "slot";
 
 export interface IAttributes {
+
   // to tell the VDOM to ignore this element and all it's children and subtrees
   novdom?: boolean;
 
@@ -11,11 +14,7 @@ export interface IAttributes {
   unwrap?: boolean;
 
   // to set a DOM reference for VDOM/component instance binding
-  ref?:
-    | {
-        [key: string]: any;
-      }
-    | any;
+  ref?: IRefs;
 
   // to name a target slot
   slot?: string | string;
@@ -27,6 +26,9 @@ export interface IAttributes {
   // basically the nearest parent $stComponent in the parent tree
   $stComponentRef?: any;
 
+  // forces a re-render
+  doRender?: boolean;
+
   // array-local unique key to identify element items in a NodeList
   key?: string;
 
@@ -34,5 +36,5 @@ export interface IAttributes {
 	class?: string | Array<string>;
 
 	// allows to override the DOM tag name
-	tag?: string;
+  tag?: string;
 }

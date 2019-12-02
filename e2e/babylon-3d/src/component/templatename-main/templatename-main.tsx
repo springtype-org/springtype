@@ -8,7 +8,5 @@ import tpl from "./templatename-main.tpl";
   tpl,
 })
 export class TemplateNameMain extends st.component implements ILifecycle {
-  onBeforeRender() {
-    this.elClass = "TemplateNameMain";
-  }
+  class = "TemplateNameMain";
 }

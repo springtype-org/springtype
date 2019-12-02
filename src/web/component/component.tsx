@@ -6,22 +6,21 @@ import { GlobalCache } from "../../core/st/interface/i$st";
 import { newUniqueComponentName, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { IVirtualChild } from "../vdom/interface/ivirtual-node";
-import { DEFAULT_SLOT_NAME, CLASS_ATTRIBUTE_NAME } from "../vdom/tsx";
-import { IComponentOptions, IComponent } from "./interface";
+import { IComponentOptions, ILifecycle } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
-import { IComponentLifecycle, ILifecycle } from "./interface/ilifecycle";
-import { IOnStateChange, IStateChange } from "./interface/ion-state-change";
+import { IStateChange } from "./interface/ion-state-change";
 import { RenderReason, RenderReasonMetaData } from "./interface/irender-reason";
 import { AttrTrait, AttrType } from "./trait/attr";
 import { StateTrait } from "./trait/state";
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { IRefAttribute } from "./interface/iref-attribute";
+import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME } from "../vdom/dom";
 
 export type DefaultComponentAttributes = {
-  tag?: string; // allows to set .el's tag
+  tag?: string; // allows to set a custom .el tag
   key?: string; // DOM intransparent primary key for list-like DOM structures
-  ref?: IRefAttribute; // references DOM elements in component properties
+  ref?: IRefAttribute; // references DOM elements in component properties (@ref)
   unwrap?: boolean; // a DOM node tagged like that will disappear and it's child node(s) take it's place
 
   // the following attributes are just passed down to .el automatically
@@ -31,7 +30,7 @@ export type DefaultComponentAttributes = {
   class?: Array<string> | string;
 } & JSX.DOMAttributes /* like onClick, ... -- passed down to .el automatically */;
 
-export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnStateChange {
+export class Component<A = {}> implements ILifecycle {
 
   // shadow functionallity that shouldn't break userland impl.
   INTERNAL: IComponentInternals;
@@ -39,17 +38,17 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   // typing for JSX.ElementClass @attr's
   attrs!: A & DefaultComponentAttributes;
 
+  el!: HTMLElement;
+  parent!: ILifecycle;
+  virtualNode!: IVirtualNode;
+  childComponents!: Array<ILifecycle>;
+  mutationObserver!: MutationObserver;
+
   tag!: string;
-  id!: string;
   key!: string;
   ref!: IRefAttribute;
   unwrap!: boolean;
-  tabIndex!: number;
-  style!: Partial<CSSStyleDeclaration>;
-  class!: Array<string> | string;
-
-  // class assignment for import in case of lowercase usage / typed use
-  as!: IComponent;
+  tabIndex!: number | string;
 
   constructor() {
     // internal state initialization
@@ -67,44 +66,34 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     st[GlobalCache.COMPONENT_INSTANCES].push(this);
   }
 
-  get el(): HTMLElement {
-    return this.INTERNAL.el;
+  // --- standard HTML attributes (pass-thru)
+
+  get class(): string | Array<string> {
+    return this.INTERNAL[CLASS_ATTRIBUTE_NAME] || [];
   }
 
-  get elClass(): string | Array<string> {
-    return (this.el.getAttribute(CLASS_ATTRIBUTE_NAME) || "").split(" ");
+  set class(classes: string | Array<string>) {
+    classes = !Array.isArray(classes) ? [classes] : classes;
+    this.el ? st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, classes, this.el, true) : this.INTERNAL[CLASS_ATTRIBUTE_NAME] = classes;
   }
 
-  set elClass(classes: string | Array<string>) {
-    st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, !Array.isArray(classes) ? [classes] : classes, this.el,  true);
+  get style(): Partial<CSSStyleDeclaration> {
+    return this.INTERNAL[STYLE_ATTRIBUTE_NAME] || {};
   }
 
-  get elAttributes(): Partial<JSX.HTMLAttributes> {
-    return this.el.attributes as Partial<JSX.HTMLAttributes>;
+  set style(style: Partial<CSSStyleDeclaration>) {
+    this.INTERNAL[STYLE_ATTRIBUTE_NAME] = style;
+    if (this.el) {
+      st.dom.setAttribute(STYLE_ATTRIBUTE_NAME, style, this.el, true)
+    }
   }
 
-  set elAttributes(attributes: Partial<JSX.HTMLAttributes>) {
-    st.dom.setAttributes(attributes, this.el,true);
+  get id(): string | null {
+    return this.INTERNAL[ID_ATTRIBUTE_NAME];
   }
 
-  get elStyle(): Partial<CSSStyleDeclaration> {
-    return this.el.style;
-  }
-
-  set elStyle(style: Partial<CSSStyleDeclaration>) {
-    st.dom.setAttribute("style", style, this.el, true);
-  }
-
-  get parentEl(): HTMLElement {
-    return this.INTERNAL.parentEl;
-  }
-
-  get parent(): ILifecycle {
-    return this.INTERNAL.parent;
-  }
-
-  get virtualNode(): IVirtualNode {
-    return this.INTERNAL.virtualNode;
+  set id(id: string | null) {
+    this.el ? st.dom.setAttribute(ID_ATTRIBUTE_NAME, id, this.el, true) : this.INTERNAL[ID_ATTRIBUTE_NAME] = id;
   }
 
   renderSlot(slotName: string, defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild> {
@@ -159,23 +148,43 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
 
   /**
    * Overriding this method and not calling the super method
+   * allows to fetch the original attribute value from VDOM (no DOM traversal string typecast)
+   */
+  getAttribute(name: string, type?: AttrType): any {
+
+    // in case of DOM transparency and post-render time, the truth is the DOM
+    if (type === AttrType.DOM_TRANSPARENT && this.el) {
+      return this.el.getAttribute(name);
+    }
+    return this.INTERNAL.attributes[name];
+  }
+
+  /**
+   * Overriding this method and not calling the super method
    * allows to take the original attribute value from VDOM (no DOM traversal string typecast)
    */
   setAttribute(name: string, value: any, type?: AttrType): void {
-    const prevValue = this.INTERNAL.attributes[name];
+    const prevValue = this.getAttribute(name, type);
+    const hasAttributeOnEl = this.el ? this.el.hasAttribute(name) : false;
 
     if (
-      prevValue !== value && // ignore if not changed (scalar)
+      prevValue !== value || !hasAttributeOnEl && // ignore if not changed (scalar)
       this.shouldAttributeChange(name, value, prevValue)
     ) {
-      // store internal attribute state value
 
+      // store internal attribute state value
       this.INTERNAL.attributes[name] = value;
 
-      if (this.INTERNAL.el && ((typeof type !== TYPE_UNDEFINED && type === AttrType.DOM_TRANSPARENT) || AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
-        // reflect to DOM (casts to string)
-
-        this.INTERNAL.el.setAttribute(name, value);
+      if (this.el) {
+        // standard HTML attribute as per definition
+        if ((st.dom.isStandardHTMLAttribute(name) ||
+          // type set on call of setAttribute as AttrType.DOM_TRANSPARENT
+          (typeof type !== TYPE_UNDEFINED && type === AttrType.DOM_TRANSPARENT) ||
+          // @attr(AttrType.DOM_TRANSPARENT)
+          AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
+          // reflect to DOM (casts to string)
+          this.el.setAttribute(name, value);
+        }
       }
 
       if (
@@ -198,26 +207,19 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     }
   }
 
-  onStateChange(change: IStateChange) { }
+  onStateChange(name: string, change: IStateChange) { }
 
   /**
    * Lifecycle method: Implement to get notified when attributes change
    */
   onAttributeChange(name: string, newValue: any, oldValue: any) { }
 
-  /**
-   * Overriding this method and not calling the super method
-   * allows to fetch the original attribute value from VDOM (no DOM traversal string typecast)
-   */
-  getAttribute(name: string): any {
-    return this.INTERNAL.attributes[name];
-  }
 
   shouldRender(reason: RenderReason, meta?: RenderReasonMetaData): boolean {
     return true;
   }
 
-  onBeforeRender() { }
+  onBeforeRender() {}
 
   render(): IVirtualNode | Array<IVirtualNode> {
     if (typeof this.INTERNAL.options.tpl! != TYPE_FUNCTION) {
@@ -227,6 +229,12 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
   }
 
   async doRender() {
+
+    if (!this.INTERNAL) {
+      this.disconnectedCallback();
+      return;
+    }
+
     this.onBeforeRender();
 
     // reset
@@ -241,11 +249,12 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     const nodesToRender = Array.isArray(vdom) ? [...vdom!] : [vdom!];
 
     if (!this.INTERNAL.notInitialRender) {
-      // if there isn't a prev. VDOM state, render initially
-      st.renderer.renderInitial(nodesToRender, (this.INTERNAL.el as unknown) as IElement);
 
       this.INTERNAL.hasDOMChanged = true;
       this.INTERNAL.notInitialRender = true;
+
+      // if there isn't a prev. VDOM state, render initially
+      st.renderer.renderInitial(nodesToRender, (this.el as unknown) as IElement);
 
       // call lifecycle method
       this.onAfterInitialRender();
@@ -254,7 +263,7 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
       // differential VDOM / DOM rendering algorithm
 
       // algorithm will decide for this.INTERNAL.hasDOMChanged internally
-      st.renderer.patch((this.INTERNAL.el as any).childNodes, nodesToRender, (this.INTERNAL.el as unknown) as IElement);
+      st.renderer.patch((this.el as any).childNodes, nodesToRender, (this.el as unknown) as IElement);
     }
 
     // call lifecycle method
@@ -271,11 +280,15 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
 
   onAfterRefChange(refName: string, refValue: any) { }
 
-  handleUpdateElAttribute(name: string, value: any) { }
+  dispatchEvent<D>(eventName: string, init?: CustomEventInit<any> & { detail: D }) {
+    this.el.dispatchEvent(new CustomEvent(eventName.toLowerCase(), init));
+  }
 
   disconnectedCallback() {
 
-    this.INTERNAL.isConnected = false;
+    if (this.INTERNAL) {
+      this.INTERNAL.isConnected = false;
+    }
 
     this.onDisconnect();
 
@@ -289,66 +302,98 @@ export class Component<A = {}> implements IComponentLifecycle, ILifecycle, IOnSt
     // remove @context handlers
     removeContextChangeHandlersOfInstance(this);
 
-    if (this.INTERNAL.refs) {
+    if (this.INTERNAL && this.INTERNAL.refs) {
       // reset @ref references
-      for (let refName of this.INTERNAL.refs) {
+      for (let refName in this.INTERNAL.refs) {
+
         // @ts-ignore
-        if (this[refName] && this[refName].INTERNAL) {
+        if (this.INTERNAL.refs[refName]) {
+
+          // sub-component GC
           // @ts-ignore
-          disconnectComponent(this[refName]);
+          disconnectComponent(this.INTERNAL.refs[refName]);
+          // GC
+          // @ts-ignore
+          delete this.INTERNAL.refs[refName];
         }
-        // @ts-ignore
-        delete this[refName];
       }
     }
 
-    // @ts-ignore
-    this.INTERNAL.el.$stComponent = null;
-    // @ts-ignore
-    this.INTERNAL.el.$stComponentRef = null;
+    // GC
 
-    this.INTERNAL.mutationObserver.disconnect();
+    if (this.el) {
+      // @ts-ignore
+      delete this.el.$stComponent;
+      // @ts-ignore
+      delete this.el.$stComponentRef;
+      delete this.el;
+    }
 
+    delete this.mutationObserver;
+
+    delete this.virtualNode;
+    delete this.parent;
+    delete this.childComponents;
     delete this.INTERNAL;
   }
 }
 
+
 if (!st.component) {
   st.component = Component;
+} else {
+  if (process.env.NODE_ENV === 'development') {
+    st.warn('Module component is loaded twice. Check for duplicate famework import!');
+  }
 }
 
 export const getComponent = (className: string) => st[GlobalCache.COMPONENT_REGISTRY][className] as any;
 
-const disconnectComponent = (component: Component<any>) => {
+export const disconnectComponent = (component: Component<any>) => {
 
-  component.INTERNAL.mutationObserver.disconnect();
+  if (component.INTERNAL) {
 
-  if (component.INTERNAL.childComponents) {
-    for (let childComponent of component.INTERNAL.childComponents) {
-      disconnectComponent(childComponent as Component);
+    if (component.mutationObserver) {
+      component.mutationObserver.disconnect();
     }
+
+    if (component.childComponents) {
+      for (let childComponent of component.childComponents) {
+        disconnectComponent(childComponent as Component);
+      }
+    }
+    component.disconnectedCallback();
   }
-  component.disconnectedCallback();
 }
 
 const awaitDisconnect = (component: Component<any>) => {
 
   const onMutation = (mutationsList: Array<MutationRecord>) => {
     for (let mutation of mutationsList) {
-      if (!component.INTERNAL || !component.INTERNAL.el) continue;
+      if (!component.INTERNAL || !component.el) continue;
 
-      if (Array.prototype.indexOf.call(mutation.removedNodes, component.INTERNAL.el) > -1) {
+      if (Array.prototype.indexOf.call(mutation.removedNodes, component.el) > -1) {
         disconnectComponent(component);
       }
     }
   };
 
   if (typeof MutationObserver !== TYPE_UNDEFINED) {
-    // old browsers might not call .onDisconnect() and lead to memory overhead
-    // but that is a compromise that seems to be sane
-    // if necessary, add: mutationobserver-shim in your application bundle
-    component.INTERNAL.mutationObserver = new MutationObserver(onMutation);
-    component.INTERNAL.mutationObserver.observe(component.parentEl, { attributes: false, childList: true, subtree: false });
+
+    // attached component
+    if (component.el.parentNode) {
+
+      // old browsers might not call .onDisconnect() and lead to memory overhead
+      // but that is a compromise that seems to be sane
+      // if necessary, add: mutationobserver-shim in your application bundle
+      component.mutationObserver = new MutationObserver(onMutation);
+      component.mutationObserver.observe(component.el.parentNode!, { attributes: false, childList: true, subtree: false });
+    } else {
+
+      // some intermediate disconnection state
+      // make sure, GC is running
+      disconnectComponent(component);
+    }
   }
 };
 
@@ -358,17 +403,11 @@ if (!st.getComponent) {
 
 export const defineComponent = (targetClassOrFunction: any, options: IComponentOptions = {}) => {
 
+  const componentIdent = targetClassOrFunction.name || newUniqueComponentName();
+
   // register with element registry
-  st[GlobalCache.COMPONENT_REGISTRY][targetClassOrFunction.name] = targetClassOrFunction;
-
-  // defaults the tag name
-  if (!options.tag) {
-    options.tag = targetClassOrFunction.name;
-  }
-
-  if (!options.tag) {
-    options.tag = newUniqueComponentName();
-  }
+  st[GlobalCache.COMPONENT_REGISTRY][componentIdent] = targetClassOrFunction;
+  st[GlobalCache.COMPONENT_WEAKMAP].set(targetClassOrFunction, componentIdent);
 
   // assign options to be used in CustomElement derived class constructor
   targetClassOrFunction.COMPONENT_OPTIONS = options;

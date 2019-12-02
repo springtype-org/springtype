@@ -1,7 +1,6 @@
 import { st } from "../../../../../src/core";
 import { component, attr } from "../../../../../src/web/component";
 import { tsx } from "../../../../../src/web/vdom";
-import { HomePage } from "../homepage";
 import { PageContent } from "./posts/pagecontent";
 import { Route } from "../../../../../src/web/router";
 
@@ -11,7 +10,7 @@ export interface BlogPageAttributes {
 
 @component
 export class BlogPage extends st.component<BlogPageAttributes> implements BlogPageAttributes {
-  static ROUTE = "#/blog";
+  static ROUTE = "blog";
 
   @attr
   blogPageId!: number;
@@ -21,7 +20,9 @@ export class BlogPage extends st.component<BlogPageAttributes> implements BlogPa
   };
 
   guardFirstPostEntry = async () => {
+    console.log('called guard')
     if (Math.random() > 0.5) {
+      console.log('trigger PageContent render')
       return <PageContent />;
     }
     return <div>Access denied.</div>;
@@ -37,7 +38,7 @@ export class BlogPage extends st.component<BlogPageAttributes> implements BlogPa
           href="javascript:void(0)"
           onClick={() =>
             (st.route = {
-              path: HomePage.ROUTE,
+              path: "home",
             })
           }
         >
@@ -61,7 +62,6 @@ export class BlogPage extends st.component<BlogPageAttributes> implements BlogPa
         <Route
           path={PageContent.ROUTE}
           guard={this.guardFirstPostEntry}
-          notMatchingComponent={<p>Nothing selected.</p>}
         />
       </div>
     );

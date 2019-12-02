@@ -1,35 +1,37 @@
 import { IComponentRegistry } from "../../../web/component/interface";
 import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
-import { IRouter, IRouteMatch } from "../../../web/router/interface";
 import { IDOM, IRenderer, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
 import { IOnDeepChangeHandler } from "../../cd/interface";
 import { ChangeType } from "../../cd/interface/change-type";
 import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
 import { IDI } from "../../di/interface";
-import { Ii18n, It } from "../../i18n/interface";
 import { IlogFunction } from "../../log/interface";
 import { IComponent } from "./../../../web/component/interface";
 import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
-import { ICoreOptions } from "./icore-options";
-import { IBus } from "../../bus/interface/ibus";
-
-export interface IOptions {
-  core: ICoreOptions;
-}
+import { IRouter, IRouteMatch } from "../../../web/router/interface";
+import { IFormatter } from "../../formatter/interface/iformatter";
+import { IFormat } from "../../formatter/interface/iformat";
+import { IAddFomratter } from "../../formatter/interface/iadd-formatter";
+import { IAddTranslation } from "../../i18n/interface/iadd-translation";
+import { ISetLanguage } from "../../i18n/interface/iset-language";
+import { Ii18n } from "../../i18n/interface/ii18n";
+import { It } from "../../i18n/interface/it";
+import { IPubSub } from "../../pubsub/interface";
+import { IPublish } from "../../pubsub/interface/ipublish";
+import { ISubscribe } from "../../pubsub/interface/isubscribe";
+import { IStore } from "../../store/interface/istore";
 
 /**
  * public $st and internal st API
  */
 export interface I$st {
 
+  // nop function, only to import modules
+  enable: (...implReferences: any) => void;
+
   // --- platform global reference
   // node: global, browser: window
   globalThis: any;
-
-  // --- core specific
-
-  // define framework behaviour like: enable/disable trace mode (internal framework log messages)
-  options: IOptions;
 
   // logging: print to the console
   info: IlogFunction;
@@ -42,12 +44,16 @@ export interface I$st {
   di: IDI;
   inject: (targetClass: any) => any;
 
+  // formatter
+  formatter: IFormatter;
+  format: IFormat;
+  addFormatter: IAddFomratter;
+
   // internationalization (i18n): translate text using JSON based translation files and formatting functions
   i18n: Ii18n;
   t: It;
-
-  // event bus
-  bus: IBus;
+  addTranslation: IAddTranslation;
+	setLanguage: ISetLanguage;
 
   // change detection: events/listeners for changes on objects (state)
 
@@ -64,7 +70,6 @@ export interface I$st {
   context<S = {}>(contextName: string, initialValue?: S, onChange?: IOnStateChangeHandler, instance?: any): S;
   addContextChangeHandler: (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => void;
   removeContextChangeHandler: (contextName: string, onChange?: IOnStateChangeHandler) => void;
-
 
   // --- web specific
 
@@ -100,13 +105,23 @@ export interface I$st {
   component: IComponent;
   getComponent: (className: string) => IComponent;
 
+  // bus / publish / subscribe
+  pubsub: IPubSub;
+  publish: IPublish<any>;
+  subscribe: ISubscribe<any>;
+
+  // store
+  store: IStore;
+
   // components are @springtype/web components
   COMPONENT_INSTANCES: any;
   COMPONENT_REGISTRY: IComponentRegistry;
+  COMPONENT_WEAKMAP: WeakMap<Function, string>;
 }
 
 export enum GlobalCache {
   COMPONENT_INSTANCES = "COMPONENT_INSTANCES",
   CONTEXT = "CONTEXT",
   COMPONENT_REGISTRY = "COMPONENT_REGISTRY",
+  COMPONENT_WEAKMAP = "COMPONENT_WEAKMAP"
 }

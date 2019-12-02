@@ -4,6 +4,9 @@ import { IInjectionStrategyConfig } from "./interface/iinjection-strategy-config
 
 export const INJECTION_STRATEGY = "INJECTION_STRATEGY";
 
+// for st.enable(di, ...)
+export const di = null;
+
 if (!st.di) {
 	st.di = {
 		singletonInstanceRegistry: {},
@@ -55,4 +58,8 @@ if (!st.di) {
 
 	// assign functional API
 	st.inject = st.di.get;
+} else {
+  if (process.env.NODE_ENV === 'development') {
+    st.warn('Module di is loaded twice. Check for duplicate famework import!');
+  }
 }

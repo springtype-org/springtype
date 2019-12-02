@@ -6,12 +6,6 @@ import { ILifecycle } from "../../../src/web/component/interface/ilifecycle";
 import { tsx } from "../../../src/web/vdom";
 import { StButton, StButtonClickEvent, StButtonClickEventDetail } from "./st-button";
 
-if (process.env.NODE_ENV === "development") {
-
-  // enable framework internal logging
-  st.options.core.logLevel = LogLevel.INFO;
-}
-
 @component
 export class MyIndex extends st.component implements ILifecycle {
   // using a @state() decoration enables change detection and auto-rerendering

@@ -1,42 +1,46 @@
-import { IRoute } from "./iroute";
 import { IRouteMatch } from "./iroute-match";
 
 export interface IRouter {
-  // all paths defined in routes, already tokenized
-  // { '/foo/:bar': ['foo', ':bar'], ... }
-  TOKENIZED_REGISTERED_PATHS: ITokenizedRoutes;
 
-  // routes that match if nothing else matches (by reference)
-  WILDCARD_ROUTES: Array<IRoute>;
+  // memoized location change handlers (e.g. internal primary change observer and each <Link />)
+  ON_LOCATION_CHANGE_HANDLERS: Array<Function>;
+  ON_AFTER_MATCH_HANDLERS: Array<Function>;
 
-  // routes currently entered (by reference)
-  ENTERED_ROUTES: Array<IRoute>;
+  // cached tokenized path
+  tokenizedActualPath: Array<string>;
+
+  // true, if already enabled
+  enabled: boolean;
+
+  // cache flag used to determine calls for onRouteParamsChanged() on component instances
+  paramsChanged: boolean;
 
   // current match state e.g.
   // { path: '/foo/:bar', url: '/foo/5', params: { bar: 5 }, isExact: true, isPartial: false, routes: [...] }
-  match: IRouteMatch;
+  match?: Partial<IRouteMatch>;
 
-  // getter/setter to navigate to a target direction
-  // st.route = { path: '/foo/:bar', params: { bar: 123 } }
-  // st.route // { path: '...', params: { ... }, url: '...', ... }
-  route: IRouteMatch;
+  // defaults to: #/ for "/#/" SPA routing
+  prefix: string;
 
-  enterRoutes(routes: Array<IRoute>): void;
-  setMatch(urlPath: string, match: IRouteMatch): void;
-  getActualUrlPrefix(): string;
+  materialize(route: string, params?: any): string;
   getUrlPath(pathnameOrHash: string): string;
-  registerPaths(routes: string | Array<string>, route: IRoute): void;
-  onLocationChange(): Promise<void>;
-  disable(): void;
+  removeTrailingSep(url: string): string;
+  createMatcher(
+    matchPath: string | Array<string>,
+    onMatch: (path: string, match: IRouteMatch) => void,
+    onMismatch: (path: string) => void): Function;
   enable(): void;
+  initMatch(): void;
+  updateMatch(match: IRouteMatch, nonTokenizedPaths: Array<string>): void;
   navigate(route?: string | undefined, params?: any): IRouteMatch | void;
-  doMatchUrlPath(urlPath: string): void;
+  doMatch(tokenizedMatchPath: Array<string>, path: string): IRouteMatch | undefined;
   tokenize(urlPath: string): Array<string>;
-}
-
-export interface ITokenizedRoutes {
-  [route: string]: {
-    tokens: Array<string>; // path tokens
-    route: IRoute;
-  };
+  addOnLocationChangeHandler(handler: Function): void;
+  addOnAfterMatchHandler(handler: Function): void;
+  removeOnLocationChangeHandler(handler: Function): void;
+  removeOnAfterMatchHandler(handler: Function): void;
+  callOnLocationChangeHandlers(): void;
+  callOnAfterMatchHandlers(): void;
+  tokenizeActualPath(): void;
+  onLocationChange(): void;
 }

@@ -1,205 +1,135 @@
 import { st } from "../../core";
-import { IRoute } from "./interface/iroute";
 import { IRouteMatch } from "./interface/iroute-match";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
+import { TYPE_FUNCTION } from "../../core/lang/type-function";
+import { castIntrinsic } from "../../core/lang/cast-intrinsic";
+import { GlobalCache } from "../../core/st/interface/i$st";
 
 // matches when no route matches (not even partially!), basically like HTTP ERROR 404 NOT FOUND behaviour
 export const PATH_WILDCARD = "*";
 
 // matches when no path is given, like: /, /#, /#/
-export const PATH_DEFAULT = "";
+export const PATH_START = "";
 
 if (!st.router) {
+
   const PATH_SEP = "/";
   const PATH_PARAM_PREFIX = ":";
-  const PATH_HASH = "#";
   const PATH_TOKEN_MISSING = "TOKEN_MISSING:ACTUAL_PATH_LONGER";
 
   st.router = {
-    TOKENIZED_REGISTERED_PATHS: {},
-    WILDCARD_ROUTES: [],
-    ENTERED_ROUTES: [],
 
-    match: {
-      isExact: false,
-      isPartial: false,
-      paramsChanged: false,
-      params: {},
-      path: "",
-      url: "",
-      routes: [],
-      maxMatchPathLength: 0,
+    // necessary for operations to act on location change
+    ON_LOCATION_CHANGE_HANDLERS: [],
+
+    // necessary for operations that belong to .match being validated already
+    ON_AFTER_MATCH_HANDLERS: [],
+
+    tokenizedActualPath: [],
+    prefix: '#/',
+    enabled: false,
+    paramsChanged: false,
+
+    addOnAfterMatchHandler: (handler: Function) => {
+      st.router.ON_AFTER_MATCH_HANDLERS.push(handler);
+    },
+
+    removeOnAfterMatchHandler: (handler: Function) => {
+      const index = st.router.ON_AFTER_MATCH_HANDLERS.indexOf(handler);
+      if (index > -1) {
+        st.router.ON_AFTER_MATCH_HANDLERS.splice(index, 1);
+      }
+    },
+
+    callOnAfterMatchHandlers: () => {
+      for (let handler of st.router.ON_AFTER_MATCH_HANDLERS) {
+        handler();
+      }
+
+      if (st.router.paramsChanged) {
+        for (let cmp of st[GlobalCache.COMPONENT_INSTANCES]) {
+          if (typeof cmp.onRouteParamsChanged === TYPE_FUNCTION) {
+            cmp.onRouteParamsChanged(st.router.match!.params);
+          }
+        }
+      }
+    },
+
+    addOnLocationChangeHandler: (handler: Function) => {
+      st.router.ON_LOCATION_CHANGE_HANDLERS.push(handler);
+    },
+
+    removeOnLocationChangeHandler: (handler: Function) => {
+      const index = st.router.ON_LOCATION_CHANGE_HANDLERS.indexOf(handler);
+      if (index > -1) {
+        st.router.ON_LOCATION_CHANGE_HANDLERS.splice(index, 1);
+      }
+    },
+
+    callOnLocationChangeHandlers: () => {
+      for (let handler of st.router.ON_LOCATION_CHANGE_HANDLERS) {
+        handler();
+      }
     },
 
     tokenize: (urlPath: string): Array<string> => {
-      // strip leading /#/, #/, /# and /
-      urlPath = urlPath.replace(/^(\/#\/|#\/|\/#|\/)/g, "");
-
-      // strip trailing /
-      urlPath = urlPath.replace(/\/$/g, "");
-
       return urlPath.split(PATH_SEP);
     },
 
-    registerPaths: (paths: string | Array<string>, route: IRoute) => {
-      if (!Array.isArray(paths)) {
-        paths = [paths];
-      }
+    doMatch: (tokenizedMatchPath: Array<string>, path: string): IRouteMatch | undefined => {
 
-      for (let path of paths) {
-        // remember wildcard routes
-        if (path === PATH_WILDCARD) {
-          st.router.WILDCARD_ROUTES.push(route);
-        }
-
-        // remember paths assigned to routes
-        st.router.TOKENIZED_REGISTERED_PATHS[path] = {
-          tokens: st.router.tokenize(st.router.getUrlPath(path)),
-          route,
-        };
-      }
-    },
-
-    // constructs: /, /# or /#/ prefix for the url depending on the actual URL
-    getActualUrlPrefix: () => {
-      // case: /
-      if (document.location.href.indexOf(PATH_HASH) === -1) {
-        return PATH_SEP;
-      }
-      return document.location.hash[1] === PATH_SEP ? PATH_SEP + PATH_HASH + PATH_SEP : PATH_SEP + PATH_HASH;
-    },
-
-    doMatchUrlPath: async (urlPath: string) => {
-      const tokenizedActualPath = st.router.tokenize(urlPath);
-      let paramCount = 0;
-
-      let foundAnyMatch = false;
-
-      const match: Partial<IRouteMatch> = {
+      // local temp. match
+      const match: IRouteMatch = {
         isExact: true,
-        paramsChanged: false,
+        isPartial: false,
         params: {},
-        routes: [],
-        maxMatchPathLength: 0,
+        paths: [],
+        path
       };
 
-      for (let registeredPath in st.router.TOKENIZED_REGISTERED_PATHS) {
-        const tokenizedPathCandidate = st.router.TOKENIZED_REGISTERED_PATHS[registeredPath];
+      const maxLength = tokenizedMatchPath.length > st.router.tokenizedActualPath.length ?
+        tokenizedMatchPath.length : st.router.tokenizedActualPath.length;
 
-        // reset for possible exact match for this candidate
-        match.isExact = true;
-        match.isPartial = false;
+      for (let i = 0; i < maxLength; i++) {
 
-        for (let i = 0; i < tokenizedActualPath.length; i++) {
-          // allow for "" to be a valid token, but not undefined
-          const pathToken =
-            typeof tokenizedPathCandidate.tokens[i] !== TYPE_UNDEFINED
-              ? tokenizedPathCandidate.tokens[i]
-              : PATH_TOKEN_MISSING;
+        // allow for "" to be a valid token, but not undefined
+        const pathToken = typeof tokenizedMatchPath[i] !== TYPE_UNDEFINED ?
+          tokenizedMatchPath[i] : PATH_TOKEN_MISSING;
 
-          // looks like a parameter
-          if (pathToken.startsWith(PATH_PARAM_PREFIX)) {
-            const paramName = pathToken.replace(PATH_PARAM_PREFIX, "");
-            // assign the parameter
-            match.params![paramName] = tokenizedActualPath[i];
+        // looks like a parameter because it starts with ":"
+        if (pathToken.startsWith(PATH_PARAM_PREFIX)) {
+          // cut away first char (":")
+          const paramName = pathToken.substring(1);
 
-            if (st.router.match.params[paramName] !== match.params![paramName]) {
-              match.paramsChanged = true;
-            }
-            paramCount++;
+          if (match.params![paramName] !== st.router.tokenizedActualPath[i]) {
+            st.router.paramsChanged = true;
+            // casts intrinsically based on the string syntax ("0.012" -> float number, "true" -> true etc.)
+            match.params![paramName] = castIntrinsic(st.router.tokenizedActualPath[i]);
+          }
+        } else if (!st.router.tokenizedActualPath[i] && tokenizedMatchPath[i]) {
+
+          match.isExact = false;
+          match.isPartial = false;
+          // e.g. match path: "blog/page/9" vs. actual path: "blog"
+          break;
+
+        } else {
+          // match the actual path token with the candidates token at the same position
+          if (typeof st.router.tokenizedActualPath[i] != TYPE_UNDEFINED &&
+            pathToken === st.router.tokenizedActualPath[i]) {
+
+            match.isPartial = true;
+
           } else {
-            // match the actual path token with the candidates token at the same position
-            if (pathToken && tokenizedActualPath[i] && pathToken === tokenizedActualPath[i]) {
-              match.isPartial = true;
-            } else {
-              // can't be an exact match anymore, because one position didn't match
-              match.isExact = false;
-            }
-          }
-        }
-
-        // once we have a single partial match, inform all handlers
-        // the handlers may decide what to do based on their configuration
-        if (match.isPartial || match.isExact) {
-          // definitely found some match
-          foundAnyMatch = true;
-
-          // remember the path
-          match.path = registeredPath;
-
-          const matchPathLength = tokenizedPathCandidate.tokens.length - paramCount;
-
-          if (matchPathLength > match.maxMatchPathLength!) {
-            match.maxMatchPathLength = matchPathLength;
-          }
-
-          st.router.setMatch(urlPath, match as IRouteMatch);
-
-          // adding matching routes
-          match.routes!.push(tokenizedPathCandidate.route);
-        }
-      }
-
-      // activate the wildcard match, e.g. show a default <Route /> or 404,
-      // depends on the app implementation
-      if (!foundAnyMatch) {
-        match.isExact = true;
-        match.path = PATH_WILDCARD;
-        match.routes = st.router.WILDCARD_ROUTES;
-
-        st.router.setMatch(urlPath, match as IRouteMatch);
-      }
-
-      if (match.routes && match.routes.length) {
-        await st.router.enterRoutes(match.routes!);
-
-        if (match.path !== PATH_WILDCARD && match.path !== PATH_DEFAULT) {
-          const actualRouteLength = tokenizedActualPath.length - paramCount;
-
-          // support for initial deep-linking: if the route is initially set like /blog/post/1
-          // but the initial match only knows a relative route like /blog because
-          // further/deeper <Route />s are not rendered on the first page,
-          // we detect the length mismatch here and go recursive until
-          // all levels are rendered or we hit the wildcard end
-          if (actualRouteLength > match.maxMatchPathLength!) {
-            st.router.doMatchUrlPath(urlPath);
+            // can't be an exact match anymore, because one position didn't match
+            match.isExact = false;
           }
         }
       }
-    },
 
-    enterRoutes: async (routes: Array<IRoute>) => {
-
-      console.log('router enterRoutes');
-
-      for (let route of st.router.ENTERED_ROUTES) {
-        await route.onLeave();
+      if (match.isPartial || match.isExact) {
+        return match;
       }
-
-      // remember routes entered, so we can leave them on next enter
-      st.router.ENTERED_ROUTES = [];
-
-      for (let route of routes) {
-
-        await route.onEnter(st.router.match!);
-
-        st.router.ENTERED_ROUTES.push(route);
-      }
-    },
-
-    setMatch: (urlPath: string, match: IRouteMatch): void => {
-
-      console.log('router setMatch');
-
-      // update actual URL (might have changed from /#/ to / or to /# or else)
-      match.url = `${st.router.getActualUrlPrefix()}${urlPath}`;
-      // set match cache for public API lookup
-      st.router.match = match;
-    },
-
-    disable: (): void => {
-      // numb callback
-      window.onpopstate = null;
     },
 
     // for: /#/home/foo, #home/foo, /home/foo
@@ -212,44 +142,143 @@ if (!st.router) {
       if (urlPath.indexOf(PATH_SEP) === 0) {
         urlPath = urlPath.substring(1);
       }
+
+      // strip leading /
+      urlPath = st.router.removeTrailingSep(urlPath);
       return urlPath;
     },
 
-    onLocationChange: async (): Promise<void> => {
-      await st.router.doMatchUrlPath(st.router.getUrlPath(window.location.hash || window.location.pathname));
+    removeTrailingSep: (url: string): string => {
+      return url[url.length - 1] === PATH_SEP ? url.substring(0, url.length - 1) : url;
     },
 
-    enable: async (): Promise<void> => {
-      if (!window.onpopstate) {
-        window.onpopstate = async () => {
-          await st.router.onLocationChange();
-        };
-        await st.router.onLocationChange();
+    createMatcher: (
+      matchPath: string | Array<string>,
+      onMatch: (path: string, match: IRouteMatch) => void,
+      onMismatch: (path: string) => void): Function => {
+
+      // one-time closure cache, tokenizes the path 1x
+      const tokenizedPaths: Array<Array<string>> = [];
+      const nonTokenizedPaths: Array<string> = [];
+
+      if (!Array.isArray(matchPath)) {
+        matchPath = [matchPath];
       }
-    },
 
-    navigate: (route?: string, params?: any): IRouteMatch | undefined => {
-      // should route somewhere
-      if (route) {
-        // we take a route like /blog/:post-id and params like { "post-id": 5 }
-        // and produce /blog/5 to transform it into a navigatable URL again
-        for (let param in params) {
-          if (params.hasOwnProperty(param)) {
-            route = route.replace(PATH_PARAM_PREFIX + param, params[param]);
+      for (let path of matchPath) {
+        tokenizedPaths.push(st.router.tokenize(st.router.removeTrailingSep(path)))
+        nonTokenizedPaths.push(path);
+      }
+
+      const matchAndNotify = (tokenizedPath: Array<Array<string>>, nonTokenizedPath: Array<string>) => {
+
+        st.router.initMatch();
+
+        for (let i = 0; i < tokenizedPath.length; i++) {
+          const match = st.router.doMatch(tokenizedPath[i], nonTokenizedPath[i]);
+          if (match) {
+            st.router.updateMatch(match, nonTokenizedPaths);
+            onMatch(nonTokenizedPath[i], match);
+          } else {
+            onMismatch(nonTokenizedPath[i]);
           }
         }
-        // actually set the new route
-        window.location.href = route;
-      } else {
-        // wants to fetch the current route information
-        return st.router.match;
+      };
+
+      return () => {
+        matchAndNotify(tokenizedPaths, nonTokenizedPaths);
       }
     },
 
-    // defined below
-    route: {} as any
+    updateMatch: (match: IRouteMatch, nonTokenizedPaths: Array<string>) => {
+      // merge in match params globally
+      for (let key in match.params) {
+        st.router.match!.params![key] = match.params[key];
+      }
+      st.router.match!.paths = nonTokenizedPaths;
+
+      // primary path should be the first one in the list
+      st.router.match!.path = nonTokenizedPaths[0];
+    },
+
+    initMatch: () => {
+      if (!st.router.match) {
+        st.router.match = {
+          params: {},
+          paths: []
+        }
+      }
+    },
+
+    tokenizeActualPath: () => {
+
+      // cache tokenized actual path
+      st.router.tokenizedActualPath = st.router.tokenize(
+        st.router.getUrlPath(window.location.hash || window.location.pathname)
+      );
+    },
+
+    onLocationChange: () => {
+      // called initially AND when location changes
+
+      // reset match
+      delete st.router.match;
+      st.router.paramsChanged = false;
+
+      st.router.tokenizeActualPath();
+
+      // run matchers
+      st.router.callOnLocationChangeHandlers();
+      st.router.callOnAfterMatchHandlers();
+
+      if (!st.router.match!.paths!.length) {
+
+        st.router.tokenizedActualPath = [PATH_WILDCARD];
+        st.router.callOnLocationChangeHandlers();
+        st.router.callOnAfterMatchHandlers();
+
+        if (!st.router.match) {
+
+          if (process.env.NODE_ENV === 'development') {
+            st.error('Not a single route provided via <Route> or <RouteList> did match.');
+          }
+        }
+      }
+    },
+
+    enable: (): void => {
+
+      if (!st.router.enabled) {
+
+        st.router.enabled = true;
+
+        st.router.onLocationChange();
+
+        if (!window.onpopstate) {
+          window.onpopstate = st.router.onLocationChange;
+        }
+      }
+    },
+
+    materialize: (route: string, params?: any): string => {
+
+      if (!params) return route;
+
+      // we take a route like /blog/:post-id and params like { "post-id": 5 }
+      // and produce /blog/5 to transform it into a navigatable URL again
+      for (let param in params) {
+        route = route.replace(PATH_PARAM_PREFIX + param, params[param]);
+      }
+      return route;
+    },
+
+    navigate: (route: string, params?: any): void => {
+      window.location.href = st.router.prefix + st.router.materialize(route, params);
+    },
   };
 
+  // allows st.route = { ... } to actually change the route
+  // and st.route to actually return the latest match
   Object.defineProperty(st, 'route', {
 
     set: (value: IRouteMatch) => {
@@ -260,4 +289,9 @@ if (!st.router) {
       return st.router.match;
     }
   });
+
+} else {
+  if (process.env.NODE_ENV === 'development') {
+    st.warn('Module router is loaded twice. Check for duplicate famework import!');
+  }
 }

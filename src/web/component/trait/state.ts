@@ -14,6 +14,7 @@ export interface IState {
   type: ChangeType;
 }
 export class StateTrait {
+
   static enableFor(instance: any) {
     const states = Object.getPrototypeOf(instance).constructor[STATE] || [];
     for (let i = 0; i < states.length; i++) {
@@ -41,13 +42,10 @@ export class StateTrait {
   }
 
   static handleCustomElementStateChange(instance: any, change: IStateChange) {
-    if (process.env.NODE_ENV === "development") {
-      st.info("@state()", change.name, "change detected on", instance, change);
-    }
 
     // call handler method if implemented
     if (typeof instance.onStateChange == TYPE_FUNCTION) {
-      instance.onStateChange(change);
+      instance.onStateChange(change.name, change);
     }
 
     // if the instance never rendered yet, don't call doRender()!

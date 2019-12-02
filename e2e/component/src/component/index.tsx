@@ -2,7 +2,7 @@
 import { st } from "../../../../src/core";
 import { ChangeDetector } from "../../../../src/core/cd";
 import { context } from "../../../../src/core/context";
-import { formatter, translation } from "../../../../src/core/i18n";
+import { translation } from "../../../../src/core/i18n";
 import { attr, component, state } from "../../../../src/web/component";
 import { IStateChange } from "../../../../src/web/component/interface";
 import { tsx } from "../../../../src/web/vdom";
@@ -10,6 +10,7 @@ import { tsx } from "../../../../src/web/vdom";
 import * as de from "./i18n/de.json";
 // @ts-ignore JSON module import activated in bundler config
 import * as en from "./i18n/en.json";
+import { formatter } from "../../../../src/core/formatter";
 
 @formatter("uppercase", value => value.toUpperCase())
 @translation("de", de)
@@ -35,8 +36,8 @@ export class Foo2 extends st.component {
   @state
   lala: any = { a: "hase" };
 
-  onStateChange(change: IStateChange) {
-    console.log("state change", change);
+  onStateChange(name: string, change: IStateChange) {
+    console.log(name, "state change", change);
   }
 
   onAttributeChange(name: string, value: any, prevValue: any) {

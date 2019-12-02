@@ -46,8 +46,8 @@ export class Foo extends st.component<IFooAttrs> {
     }, 200);
   }
 
-  onStateChange(change: any) {
-    console.log("1PROP change", change);
+  onStateChange(name: string, change: any) {
+    console.log(name, "1PROP change", change);
   }
 
   onConnect(): boolean {

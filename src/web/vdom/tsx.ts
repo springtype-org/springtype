@@ -11,18 +11,12 @@ import { UNWRAP_ATTRIBUTE_NAME, SLOT_ATTRIBUTE_NAME } from "./interface/iattribu
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_OBJECT } from "../../core/lang/type-object";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
-
-export const TEMPLATE_ELEMENT_NAME = "template";
-export const DEFAULT_SLOT_NAME = "default";
-export const FRAGMENT_ELEMENT_NAME = "fragment";
-export const CLASS_ATTRIBUTE_NAME = "class";
-export const CLASS_NAME_ATTRIBUTE_NAME = "className";
-export const XLINK_ATTRIBUTE_NAME = "xlink";
+import { XLINK_ATTRIBUTE_NAME, CLASS_NAME_ATTRIBUTE_NAME, CLASS_ATTRIBUTE_NAME, FRAGMENT_ELEMENT_NAME, TEMPLATE_ELEMENT_NAME, DEFAULT_SLOT_NAME } from "./dom";
 
 export const tsxToStandardAttributeName = (tsxAttributeName: string): string => {
   // support for SVG xlink:*
   if (tsxAttributeName.startsWith(XLINK_ATTRIBUTE_NAME)) {
-    return XLINK_ATTRIBUTE_NAME + ":" + tsxAttributeName.replace(XLINK_ATTRIBUTE_NAME, "").toLowerCase();
+    return `${XLINK_ATTRIBUTE_NAME}:${tsxAttributeName.replace(XLINK_ATTRIBUTE_NAME, "")}`.toLowerCase();
   }
 
   switch (tsxAttributeName) {
@@ -54,16 +48,14 @@ export const filterCommentsAndUndefines = (children: Array<IVirtualNode> | Array
 
 export let cmpSequence = 0;
 
-export const newUniqueComponentName = () => "cmp-" + ++cmpSequence;
-
-export const knownComponentsMap: WeakMap<Function, string> = new WeakMap();
+export const newUniqueComponentName = () => "fnc-" + ++cmpSequence;
 
 export const tsx = (st.tsx = (
   // if it is a function, it is a component
   type: IVirtualNodeType | Function,
   attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null,
   ...children: Array<IVirtualChildren> | IVirtualChildren
-): Array<IVirtualNode> | IVirtualNode | undefined => {
+): Array<IVirtualNode> | IVirtualNode => {
   children = filterCommentsAndUndefines(toFlatNodeList(children));
 
   // clone attributes as well
@@ -78,26 +70,13 @@ export const tsx = (st.tsx = (
 
   // it's a component, divide and conquer children
   if (typeof type === TYPE_FUNCTION) {
-    const fn = type;
-    type = (type as Function).name;
+
+    // try to infer type via function name
+    type = st[GlobalCache.COMPONENT_WEAKMAP].get(type as Function) as string;
 
     if (process.env.NODE_ENV === "development") {
-
-      // assign debug flag
+      // assign debug className flag
       attributes.__className = type;
-    }
-
-    // generate name in case of class name obfuscation or functional components
-    if (!knownComponentsMap.has(fn as Function)) {
-      if (!type || type.startsWith(CLASS_ATTRIBUTE_NAME)) {
-        type = newUniqueComponentName();
-      }
-      knownComponentsMap.set(fn as Function, type);
-      // assign global component by type reference
-      st[GlobalCache.COMPONENT_REGISTRY][type] = fn as any;
-    } else if (!type) {
-      // @ts-ignore
-      type = knownComponentsMap.get(fn);
     }
 
     // <template> elements are to be moved inside slotChildren
@@ -122,7 +101,8 @@ export const tsx = (st.tsx = (
     children = [];
   }
 
-  // @ts-ignore
+  // @ts-ignore as type allows for Function here, but internally we wouldn't
+  // want to deal with Function, only "string". However, in this method it is indeed possible
   return {
     type,
     attributes,

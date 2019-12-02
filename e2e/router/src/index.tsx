@@ -2,38 +2,36 @@ import { st } from "../../../src/core";
 import { component } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
-import { AboutPage } from "./page/aboutpage";
 import { HomePage } from "./page/homepage";
-import { RouteList, Route } from "../../../src/web/router";
+import { RouteList, Route, PATH_START, PATH_WILDCARD } from "../../../src/web/router";
+import { PageHeader } from "./header";
+import { ROUTE_HOME, ROUTE_ABOUT } from "./routes";
+import "./index.css";
 
 @component
 export class RouterPage extends st.component implements ILifecycle {
   render() {
     return (
       <div unwrap>
-        <ul>
-          <li>
-            <a href="/#/home">Home</a>
-          </li>
-          <li>
-            <a href="/#/about/foo">About</a>
-          </li>
-        </ul>
+        <PageHeader />
 
         <RouteList>
           {/* shows the HomePage when no route is given, nothing matches and on /#/home, /home and /#home */}
           <Route
-            path={["", "*", "/home"]}
+            path={[ROUTE_HOME, PATH_START, PATH_WILDCARD]}
             loadingComponent={<div>Loading (simulating long-running request)...</div>}
             guard={async () => {
+
               // simulating to run an async request against a server and only resolve to a component when
               // the response is processed and it turns out to render this component dynamically
               return new Promise(resolve => setTimeout(() => resolve(<HomePage />), 2000));
             }}
           />
 
-          {/* Renders the AboutPage on /about */}
-          <Route path={["/about/:name"]} component={<AboutPage />} />
+          {/* Renders the AboutPage on /about after async import */}
+          <Route path={ROUTE_ABOUT}>
+            {() => import("./page/aboutpage")}
+          </Route>
         </RouteList>
       </div>
     );

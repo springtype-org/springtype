@@ -2,23 +2,12 @@ import { IElement } from "../../vdom/interface";
 import { IVirtualChild, IVirtualNode } from "../../vdom/interface/ivirtual-node";
 import { AttrType } from '../trait/attr';
 import { RenderReason, RenderReasonMetaData } from './irender-reason';
+import { IStateChange } from "./ion-state-change";
 
 export interface ILifecycle {
 
   // the root HTML/SVG element mounted to a virtual component
   el?: HTMLElement;
-
-  // can be assigned to set one or more attributes on this.el
-  elAttributes?: Partial<JSX.HTMLAttributes>;
-
-  // can be assinged to set one or more CSS classes on this.el.class (className) mutation
-  elClass?: string|Array<string>;
-
-  // can be assinged to set one or more styles: this.el.style mutation
-  elStyle?: Partial<CSSStyleDeclaration>;
-
-  // the parent components HTML/SVG root element
-  parentEl?: HTMLElement;
 
   // the parent component
   parent?: ILifecycle;
@@ -27,6 +16,15 @@ export interface ILifecycle {
   // in onBeforeElCreate() this object can be mutated
   // { attributes: IVirtualNodeAttributes, slotChildren: ISlotChildren, children: IChildNodes }
   virtualNode?: IVirtualNode;
+
+  // gives access to child components
+  childComponents?: Array<ILifecycle>;
+
+  // gives access to the mutation observer used for destructuring
+  mutationObserver?: MutationObserver;
+
+  // called when a @state property changes
+  onStateChange?(name: string, change: IStateChange): void;
 
   // allows to filer/transform the virtual node (and it's children and slotChildren)
   // before it's created and assigned as this.el
@@ -45,10 +43,6 @@ export interface ILifecycle {
   // of an attribute which is a standard HTML attribute such as: id, class, style, tabindex
   // because these attributes are not patches by the VDOM the component has
   // to decide what to do now: It might have been a MERGE or REPLACE intention
-
-  // !!!TODO!!!: Always use REPLACE -> outer changes are intentionally OVERRIDES !!!
-  // Remove this lifecylce method and it's impl.
-  handleUpdateElAttribute?(name: string, value: any): void;
 
   // before this.el.childNodes are created
   onBeforeElChildrenCreate(): void;
@@ -81,13 +75,22 @@ export interface ILifecycle {
   onAfterInitialRender?(): void;
 
   // implement this and return TSX to be rendered
-  render?(): IVirtualNode|Array<IVirtualNode>;
+  render?(): IVirtualNode | Array<IVirtualNode>;
 
   // lifecycle method to trigger a VDOM tpl reflow
   doRender?(): Promise<void>;
 
   // after the component has been unmounted from the DOM
   onDisconnect?(): void;
+
+  // called when DOM router is used and the route matched
+  onRouteEnter?(): void;
+
+  // called when DOM router is used and the route doesn't match anymore
+  onRouteLeave?(): void;
+
+  // called when DOM router is used and the routes parameters change (like /user/:id from #/user/1 to #/user/2)
+  onRouteParamsChanged?(params: any): void;
 
   // before attribute changes get accepted
   shouldAttributeChange(name: string, value: any, prevValue: any): boolean;
@@ -102,9 +105,8 @@ export interface ILifecycle {
   // returns the children not assigned via <template name={name}> from the outside if provided
   // or the defaults if provided or <fragement />
   renderChildren?(defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild>;
-}
 
-export interface IComponentLifecycle extends ILifecycle {
+  // for internal use
   connectedCallback(): void;
   disconnectedCallback(): void;
 }

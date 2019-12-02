@@ -1,20 +1,36 @@
-import { IVirtualNode } from "./../../../web/vdom/interface/ivirtual-node";
 import { IComponentOptions } from "./icomponent-options";
-import { ILifecycle } from "./ilifecycle";
+import { IRefs } from "../../../core/ref/interface/iref";
+
+export interface IComponentAttributes {
+  [name: string]: string;
+}
 
 export interface IComponentInternals {
-  el: HTMLElement;
-  parentEl: HTMLElement;
-  parent: ILifecycle;
-  notInitialRender: boolean;
-  attributes: {
-    [name: string]: string;
-  };
-  refs: Array<string>;
+
+  // storage of attributes set when changing an @attr
+  // or calling this.setAttribute(...)
+  attributes: IComponentAttributes;
+
+  // what goes into @component(...)
   options: IComponentOptions;
+
+  // @ref storage
+  refs: IRefs;
+
+  // storage for pre-rendered stage class and style settings
+  class: string | Array<string>;
+
+  // the backing cache for this.style = { ... }
+  style: Partial<CSSStyleDeclaration>;
+
+  // the backing cache for this.id = "foo123"
+  id: string | null;
+
+  // the backing cache for this.tabIndex = "2"
+  tabIndex: number;
+
+  // runtime flags
+  notInitialRender: boolean;
   isConnected: boolean;
-  virtualNode: IVirtualNode;
-  mutationObserver: MutationObserver;
   hasDOMChanged: boolean;
-  childComponents: Array<ILifecycle>;
 }

@@ -1,20 +1,59 @@
-export interface IAction<D = {}, M = {}> { type: string; data?: D; meta?: M; }
-export type MiddlewareFunction<S> = (state: S) => S;
-export type Reducer<S, A = IAction> = (currentState: S, action: A) => S;
+import { MiddlewareFunction } from "./interface/imiddleware-function";
+import { IAction } from "./interface/iaction";
+import { Reducer } from "./interface/ireducer";
+
 export const INIT_ACTION = "@@store/INIT";
+
+// for st.enable(store, ...)
+export let store: any = null;
+
+// TODO: check
+export const applyMiddleware = <S = {}>(...middlewares: Array<MiddlewareFunction<S>>) => {
+  return (state: S) => {
+    for (let middleware of middlewares) {
+      state = middleware(state);
+    }
+    return state;
+  };
+};
+
+export interface IReducerMap<S> {
+  [key: string]: Reducer<S>
+}
+
+export const combineReducers = <S = {}>(reducerMap: IReducerMap<S>) => {
+  return (state: S, action: IAction) => {
+    for (let key in reducerMap) {
+      (state as any)[key]= reducerMap[key]((state as any)[key], action);
+    }
+    return state;
+  };
+}
 
 export const createStore = <S = {}>(reducer: Reducer<S>, preloadedState?: S, enhancer?: MiddlewareFunction<S>) => {
   let listeners: Array<Function> = [];
   let currentState = reducer(preloadedState!, { type: INIT_ACTION });
+  let devTools = window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__ : undefined;
 
-  return {
+  if (devTools) {
+    // TODO: change impl. for redux / composeEnhancer
+    devTools.connect();
+  }
+
+  return (store = {
+    devTools,
     getState: () => currentState,
     dispatch: (action: IAction) => {
+
       if (enhancer) {
+        // TODO: check
         currentState = enhancer(reducer(currentState, action));
       } else {
         currentState = reducer(currentState, action);
       }
+
+      devTools.send(action.type, currentState);
+
       for (let listener of listeners) {
         listener();
       }
@@ -24,78 +63,11 @@ export const createStore = <S = {}>(reducer: Reducer<S>, preloadedState?: S, enh
 
       // return the unsubscribe function
       return () => {
-        // TODO: unshift instead
-        listeners = listeners.filter(l => l !== listener);
+        const index = listeners.indexOf(listener);
+        if (index > -1) {
+          listeners.splice(index, 1);
+        }
       };
     },
-  };
+  });
 };
-
-export const applyMiddleware = <S>(...middlewares: Array<MiddlewareFunction<S>>) => {
-  return (state: S) => {
-    for (let middleware of middlewares) {
-      state = middleware(state);
-    }
-    return state;
-  };
-};
-
-
-/*
-/// --- USAGE
-
-interface State {
-  count: number;
-}
-
-// Redux architecture pieces
-const initialState: State = { count: 0 };
-
-const actions = {
-  increment: { type: "INCREMENT" },
-  decrement: { type: "DECREMENT" },
-};
-
-const countReducer = (state: State = initialState, action: IAction) => {
-  switch (action.type) {
-    case actions.increment.type:
-      return {
-        count: state.count + 1,
-      };
-
-    case actions.decrement.type:
-      return {
-        count: state.count - 1,
-      };
-
-    default:
-      return state;
-  }
-};
-
-const store = createStore(countReducer);
-
-// DOM elements
-const incrementButton = document.querySelector(".increment");
-const decrementButton = document.querySelector(".decrement");
-
-// Wire click events to actions
-incrementButton.addEventListener("click", () => {
-  store.dispatch(actions.increment);
-});
-
-decrementButton.addEventListener("click", () => {
-  store.dispatch(actions.decrement);
-});
-
-// Initialize UI display
-const counterDisplay = document.querySelector("h1");
-counterDisplay.innerHTML = parseInt(initialState.count);
-
-// Update UI when an action fires
-store.subscribe(() => {
-  const state = store.getState();
-
-  console.log("count: ", parseInt(state.count));
-});
-*/

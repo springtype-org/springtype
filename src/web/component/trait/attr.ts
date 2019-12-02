@@ -3,8 +3,8 @@ import { st } from "../../../core";
 export const ATTRS: string = "ATTRS";
 
 export enum AttrType {
-  DOM_TRANSPARENT,
-  DOM_INTRANSPARENT,
+  DOM_TRANSPARENT = 'DOM_TRANSPARENT',
+  DOM_INTRANSPARENT = 'DOM_INTRANSPARENT',
 }
 
 export const DEFAULT_ATTR_TYPE = AttrType.DOM_INTRANSPARENT;
@@ -12,17 +12,6 @@ export const DEFAULT_ATTR_TYPE = AttrType.DOM_INTRANSPARENT;
 export interface IInternalAttrEntry {
   name: string;
   type: AttrType;
-}
-
-
-const dp = Object.defineProperty;
-Object.defineProperty = (a: any, b: any, c: any) =>{
-
-  if (b === 'name2') {
-    console.log('redefine name2', c);
-  }
-
-  dp(a,b,c);
 }
 
 export class AttrTrait {

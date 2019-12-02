@@ -1,12 +1,13 @@
 import { st } from "../st/st";
-import { Ii18n, ITranslation, ITranslationValues } from "./interface/ii18n";
-import { TYPE_FUNCTION } from "../lang/type-function";
+import { Ii18n } from "./interface/ii18n";
+import { ITranslation } from "./interface/itranslation";
+import { ITranslationValues } from "./interface/itranslation-values";
+
+// for st.enable(i18n, ...)
+export const i18n = null;
 
 if (!st.i18n) {
   st.i18n = {
-    valueInterpolationRegexp: /{{(.+?)}}/g,
-
-    formatters: {},
 
     translations: {},
 
@@ -28,7 +29,10 @@ if (!st.i18n) {
 
         if (translation && i == splits.length - 1) {
           if (typeof translation != "string") {
-            st.warn(`The translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage} is an object not a string!`);
+
+            if (process.env.NODE_ENV === 'development') {
+              st.warn(`The translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage} is an object not a string!`);
+            }
             return `t(${st.i18n.currentLanguage}/${key}) object ❓`;
           }
           return translation;
@@ -37,41 +41,6 @@ if (!st.i18n) {
         }
       };
       return walk(translationJSON, 0);
-    },
-
-    applyValuesAndFormatters: (translation: string, values: ITranslationValues): string => {
-      const matches: Array<string> | null = translation.match(st.i18n.valueInterpolationRegexp);
-
-      if (matches) {
-        for (let i = 0; i < matches.length; i++) {
-          const match = matches[i];
-          const valueNameAndFormatterName = match
-            .replace("{{", "")
-            .replace("}}", "")
-            .replace(/ /g, "")
-            .split(",");
-          const valueName = valueNameAndFormatterName[0];
-          const formatterName = valueNameAndFormatterName[1];
-          let value;
-
-          if (valueName && values[valueName]) {
-            value = values[valueName];
-
-            if (formatterName) {
-              if (typeof st.i18n.formatters[formatterName] == TYPE_FUNCTION) {
-                value = st.i18n.formatters[formatterName](value);
-              } else {
-                st.warn(`The formatter ${formatterName} for translation value {{ ${valueName}, ${formatterName} }} wasn't found!`);
-              }
-            }
-          } else {
-            st.warn(`The translation value {{ ${valueName} }} is not set in translation values!`);
-            value = `? ${valueName} ?`;
-          }
-          translation = translation.replace(match, value);
-        }
-      }
-      return translation;
     },
 
     /**
@@ -83,15 +52,16 @@ if (!st.i18n) {
      * @param [values] An optional object of data values to replace wildcards with
      */
     t: (key: string, values?: ITranslationValues): string => {
-      // TODO: Parse key for :, call formatter functions
-      // TODO: Apply all values
       let translation = st.i18n.resolve(key, st.i18n.translations[st.i18n.currentLanguage]);
 
       if (!translation) {
-        st.warn(`No translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage}!`);
+
+        if (process.env.NODE_ENV === 'development') {
+          st.warn(`No translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage}!`);
+        }
         return `? t(${st.i18n.currentLanguage}/${key}) ?`;
       } else {
-        return st.i18n.applyValuesAndFormatters(translation, values || {});
+        return st.format(translation, values || {});
       }
     },
 
@@ -115,12 +85,16 @@ if (!st.i18n) {
       st.i18n.initLanguage(language);
       st.i18n.currentLanguage = language;
       return st.i18n;
-    },
-
-    addFormatter: (identifier: string, formatter: Function): Ii18n => {
-      st.i18n.formatters[identifier] = formatter;
-      return st.i18n;
-    },
+    }
   };
+
+  // functional API
   st.t = st.i18n.t;
+  st.setLanguage = st.i18n.setLanguage;
+  st.addTranslation = st.i18n.addTranslation;
+
+} else {
+  if (process.env.NODE_ENV === 'development') {
+    st.warn('Module i18n is loaded twice. Check for duplicate famework import!');
+  }
 }

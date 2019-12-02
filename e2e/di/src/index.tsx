@@ -4,7 +4,7 @@ import { InjectionStrategy } from "../../../src/core/di/enum";
 
 // test injectable classes
 
-@injectable()
+@injectable
 class FooSingleton {
 	isSingleton: boolean = true;
 }
@@ -33,18 +33,18 @@ export class DIE2E {
 
 		// @ts-ignore: way to keep the TS compiler friendly
 		if (this.fooSingleton === st.di.get(FooSingleton)) {
-			console.log("singleton inject OK");
+			st.log("singleton inject OK");
 		}
 
 		if (this.fooFactory && !this.fooFactory.name) {
-			console.log("factory inject OK");
+			st.log("factory inject OK");
 		}
 
 		if (this.fooFactoryFunction && this.fooFactoryFunction.name == "factory") {
-			console.log("factory function inject OK");
+			st.log("factory function inject OK");
 
 		}
-		console.log(this.fooSingleton, this.fooFactory);
+		st.log(this.fooSingleton, this.fooFactory);
 	}
 }
 

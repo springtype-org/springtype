@@ -290,7 +290,13 @@ declare global {
     export type GenericEventHandler = EventHandler<Event>;
     export type PointerEventHandler = EventHandler<PointerEvent>;
 
-    export interface DOMAttributes extends IAttributes {
+    export interface DOMAttributeEventHandlersLowerCase {
+
+      // TODO Michi: put all lower case here
+      onclick?: MouseEventHandler;
+    }
+
+    export interface DOMAttributes extends IAttributes, DOMAttributeEventHandlersLowerCase {
       // Image Events
       onLoad?: GenericEventHandler;
       onLoadCapture?: GenericEventHandler;
@@ -480,7 +486,13 @@ declare global {
       onTransitionEndCapture?: TransitionEventHandler;
     }
 
-    export interface HTMLAttributes extends DOMAttributes {
+    export interface HTMLAttributesLowerCase {
+
+      // TODO Michi: put all lower case here
+      tabindex?: number|string;
+    }
+
+    export interface HTMLAttributes extends HTMLAttributesLowerCase, DOMAttributes {
       // Standard HTML Attributes
       accept?: string;
       acceptCharset?: string;
@@ -602,7 +614,7 @@ declare global {
       step?: number | string;
       style?: string | Partial<CSSStyleDeclaration>;
       summary?: string;
-      tabIndex?: number;
+      tabIndex?: number|string;
       target?: string;
       title?: string;
       type?: string;

@@ -20,4 +20,9 @@ if (!st.info) {
       console.error("💣", ...args);
     }
   };
+} else {
+  if (process.env.NODE_ENV === 'development') {
+    st.warn('Module log is loaded twice. Check for duplicate famework import!');
+  }
 }
+

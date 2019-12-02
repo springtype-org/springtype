@@ -2,10 +2,11 @@ import { IElement } from "./ielement";
 import { IVirtualNode } from "./ivirtual-node";
 
 export interface IRenderer {
+
   renderInitial(
     virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
     parentDomElement: IElement,
-  ): void;
+  ): Array<IElement | Text | undefined> | IElement | undefined;
 
   patch(
     domElements: Array<IElement>,
