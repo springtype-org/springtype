@@ -165,11 +165,9 @@ export class Component<A = {}> implements ILifecycle {
    */
   setAttribute(name: string, value: any, type?: AttrType): void {
     const prevValue = this.getAttribute(name, type);
-    const hasAttributeOnEl = this.el ? this.el.hasAttribute(name) : false;
 
     if (
-      prevValue !== value || !hasAttributeOnEl && // ignore if not changed (scalar)
-      this.shouldAttributeChange(name, value, prevValue)
+        prevValue !== value && this.shouldAttributeChange(name, value, prevValue)
     ) {
 
       // store internal attribute state value
