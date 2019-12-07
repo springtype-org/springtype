@@ -26,6 +26,7 @@ SpringType is the result of 35 web developer years of suffering 😅 But now, im
 - [x] Simple and dynamic DOM router for client-side routing (`<Route path=["home", "", "*"]><p>Home!</p></Route>`, `<RouteList>`)
 - [x] Modular i18n, supporting JSON translations and custom formatter (`t('hello-world')`)
 - [x] Environment-aware logging (`st.log`, `st.warn`, `st.error`)
+- [x] RxJS-like Functional reactive programming for solving issues regarding time-complexities (`stream()`)
 - [x] Dependency Injection using decorators (`@inject`)
 - [x] Deep change detection and automatic re-rendering, circuit-breakable (`@state`)
 
@@ -57,7 +58,6 @@ Like with any architecture, there are pro's and con's.
 We're keen to improve this implementation until we feel really comfortable with it. Right now this lacks:
 
 - [ ] Redux based state machine with an intuitive API and optional immutability + local/session storage persistence
-- [ ] RxJS-like Functional reactive programming for solving issues regarding time-complexities
 - [ ] SSR, server side rendering, static page rendering and VDOM re-hydration (once SpringType server landed)
 
 <h2 align="center">Backers</h2>

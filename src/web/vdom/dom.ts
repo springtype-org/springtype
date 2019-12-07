@@ -137,15 +137,17 @@ if (!st.dom) {
         }
       }
 
+      // internal class: 'foo' or outer class="foo" handling
       if (component.INTERNAL[CLASS_ATTRIBUTE_NAME] || outerAttributes[CLASS_ATTRIBUTE_NAME]) {
         virtualNode.attributes[CLASS_ATTRIBUTE_NAME] = mergeArrays(component.INTERNAL[CLASS_ATTRIBUTE_NAME], outerAttributes[CLASS_ATTRIBUTE_NAME]);
       }
 
+      // internal style: { border: '1px' } or outer style={{ border: '1px' }} handling
       if (component.INTERNAL[STYLE_ATTRIBUTE_NAME] || outerAttributes[STYLE_ATTRIBUTE_NAME]) {
         virtualNode.attributes[STYLE_ATTRIBUTE_NAME] = mergeObjects(component.INTERNAL[STYLE_ATTRIBUTE_NAME], outerAttributes[STYLE_ATTRIBUTE_NAME]);
       }
 
-      // @attr(AttrType.DOM_TRANSPARENT) foo = 123; initially defined attributes
+      // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
       for (let attrName in component.INTERNAL.attributes) {
 
         if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
@@ -204,10 +206,14 @@ if (!st.dom) {
         // reference component logical controller component
         (newEl as IElement).$stComponent = component;
         (newEl as IElement).$stComponentRef = component;
+        (newEl as IElement).getComponent = function() { return this.$stComponent || this.$stComponentRef };
       } else {
         // passing down parent component reference
         (newEl as IElement).$stComponentRef = parentDomElement.$stComponentRef;
+        (newEl as IElement).getComponent = function() { return this.$stComponentRef };
       }
+
+
 
       if (virtualNode.attributes) {
         st.dom.setAttributes(virtualNode.attributes, newEl);
