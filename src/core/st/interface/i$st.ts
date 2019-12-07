@@ -19,7 +19,6 @@ import { It } from "../../i18n/interface/it";
 import { IPubSub } from "../../pubsub/interface";
 import { IPublish } from "../../pubsub/interface/ipublish";
 import { ISubscribe } from "../../pubsub/interface/isubscribe";
-import { IStore } from "../../store/interface/istore";
 
 /**
  * public $st and internal st API
@@ -109,9 +108,6 @@ export interface I$st {
   pubsub: IPubSub;
   publish: IPublish<any>;
   subscribe: ISubscribe<any>;
-
-  // store
-  store: IStore;
 
   // components are @springtype/web components
   COMPONENT_INSTANCES: any;

@@ -62,10 +62,6 @@ export class Component<A = {}> implements ILifecycle {
     AttrTrait.enableFor(this);
     ContextTrait.enableFor(this);
 
-    if (st.store) {
-      console.log('st.store is loaded');
-    }
-
     // register with global instance registry
     st[GlobalCache.COMPONENT_INSTANCES].push(this);
   }
