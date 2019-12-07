@@ -7,5 +7,5 @@ export const mergeArrays = (a: any, b: any) => {
   if (b) {
     normalizedB = Array.isArray(b) ? b : [b];
   }
-    return [...normalizedA, ...normalizedB];
+  return [...normalizedA, ...normalizedB];
 };

@@ -11,6 +11,7 @@
   "author": "Aron Homberg <info@aron-homberg.de>",
   "license": "MIT",
   "dependencies": {
+    "redux": "^4.0.4",
     "st-start": "2.0.0-beta.27"
   },
   "devDependencies": {

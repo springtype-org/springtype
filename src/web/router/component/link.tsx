@@ -67,15 +67,13 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
 
   updateActiveClass = () => {
 
-    if (!st.route) return;
-
     const activeClassName = this.activeClass || LINK_ACTIVE_CLASS;
 
     if (!Array.isArray(this.class)) {
       this.class = [this.class];
     }
 
-    if (st.route.paths!.indexOf(this.path) > -1) {
+    if (st.route && st.route.paths!.indexOf(this.path) > -1) {
       this.class = [...this.class, activeClassName];
     } else {
       this.class = this.class.filter((className: string) => className !== activeClassName);

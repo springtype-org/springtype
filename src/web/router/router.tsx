@@ -219,6 +219,10 @@ if (!st.router) {
     },
 
     onLocationChange: () => {
+
+      // early return if there are no registered location change handlers
+      if (!st.router.ON_LOCATION_CHANGE_HANDLERS.length) return;
+
       // called initially AND when location changes
 
       // reset match

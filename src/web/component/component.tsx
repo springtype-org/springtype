@@ -74,7 +74,10 @@ export class Component<A = {}> implements ILifecycle {
 
   set class(classes: string | Array<string>) {
     classes = !Array.isArray(classes) ? [classes] : classes;
-    this.el ? st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, classes, this.el, true) : this.INTERNAL[CLASS_ATTRIBUTE_NAME] = classes;
+    this.INTERNAL[CLASS_ATTRIBUTE_NAME] = classes;
+    if (this.el) {
+      st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, classes, this.el, true)
+    }
   }
 
   get style(): Partial<CSSStyleDeclaration> {
@@ -93,7 +96,10 @@ export class Component<A = {}> implements ILifecycle {
   }
 
   set id(id: string | null) {
-    this.el ? st.dom.setAttribute(ID_ATTRIBUTE_NAME, id, this.el, true) : this.INTERNAL[ID_ATTRIBUTE_NAME] = id;
+    this.INTERNAL[ID_ATTRIBUTE_NAME] = id;
+    if (this.el) {
+      st.dom.setAttribute(ID_ATTRIBUTE_NAME, id, this.el, true)
+    }
   }
 
   renderSlot(slotName: string, defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild> {
@@ -151,7 +157,6 @@ export class Component<A = {}> implements ILifecycle {
    * allows to fetch the original attribute value from VDOM (no DOM traversal string typecast)
    */
   getAttribute(name: string, type?: AttrType): any {
-
     // in case of DOM transparency and post-render time, the truth is the DOM
     if (type === AttrType.DOM_TRANSPARENT && this.el) {
       return this.el.getAttribute(name);
@@ -167,7 +172,7 @@ export class Component<A = {}> implements ILifecycle {
     const prevValue = this.getAttribute(name, type);
 
     if (
-        prevValue !== value && this.shouldAttributeChange(name, value, prevValue)
+      prevValue !== value && this.shouldAttributeChange(name, value, prevValue)
     ) {
 
       // store internal attribute state value
@@ -217,7 +222,7 @@ export class Component<A = {}> implements ILifecycle {
     return true;
   }
 
-  onBeforeRender() {}
+  onBeforeRender() { }
 
   render(): IVirtualNode | Array<IVirtualNode> {
     if (typeof this.INTERNAL.options.tpl! != TYPE_FUNCTION) {

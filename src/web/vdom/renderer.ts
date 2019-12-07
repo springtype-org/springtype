@@ -124,10 +124,15 @@ if (!st.renderer) {
                   // ignore cases such as: id, class, style, tabindex but inform component
                   if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
 
+                    // TODO: Still needed?
                     if (attributeName === CLASS_ATTRIBUTE_NAME) {
-                      st.dom.setAttribute(attributeName, mergeArrays(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]), domElement);
+                      const mergeResult = mergeArrays(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]);
+                      console.log('diff re-render CLASS', mergeResult, virtualElement.attributes[attributeName]);
+                      st.dom.setAttribute(attributeName, mergeResult, domElement);
                     } else if (attributeName === STYLE_ATTRIBUTE_NAME) {
-                      st.dom.setAttribute(attributeName, mergeObjects(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]), domElement);
+                      const mergeResult = mergeObjects(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]);
+                      console.log('diff re-render STYLE', mergeResult, virtualElement.attributes[attributeName]);
+                      st.dom.setAttribute(attributeName, mergeResult, domElement);
                     } else {
                       st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName] || domElement.$stComponent.INTERNAL[attributeName], domElement);
                     }

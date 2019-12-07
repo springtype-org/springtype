@@ -140,11 +140,17 @@ if (!st.dom) {
       // internal class: 'foo' or outer class="foo" handling
       if (component.INTERNAL[CLASS_ATTRIBUTE_NAME] || outerAttributes[CLASS_ATTRIBUTE_NAME]) {
         virtualNode.attributes[CLASS_ATTRIBUTE_NAME] = mergeArrays(component.INTERNAL[CLASS_ATTRIBUTE_NAME], outerAttributes[CLASS_ATTRIBUTE_NAME]);
+
+        // update class internally as a merge of outer style and internal style
+        component.INTERNAL[CLASS_ATTRIBUTE_NAME] = virtualNode.attributes[CLASS_ATTRIBUTE_NAME];
       }
 
       // internal style: { border: '1px' } or outer style={{ border: '1px' }} handling
       if (component.INTERNAL[STYLE_ATTRIBUTE_NAME] || outerAttributes[STYLE_ATTRIBUTE_NAME]) {
         virtualNode.attributes[STYLE_ATTRIBUTE_NAME] = mergeObjects(component.INTERNAL[STYLE_ATTRIBUTE_NAME], outerAttributes[STYLE_ATTRIBUTE_NAME]);
+
+        // update style internally as a merge of outer and internal
+        component.INTERNAL[STYLE_ATTRIBUTE_NAME] = virtualNode.attributes[STYLE_ATTRIBUTE_NAME];
       }
 
       // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
@@ -153,17 +159,27 @@ if (!st.dom) {
         if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
           const value = outerAttributes[attrName] || component.INTERNAL.attributes[attrName];
           virtualNode.attributes[attrName] = value;
+
+          // update as a decision
+          component.INTERNAL.attributes[attrName] = value;
         }
       }
 
       const id = outerAttributes[ID_ATTRIBUTE_NAME] || component.INTERNAL[ID_ATTRIBUTE_NAME];
+
       if (id) {
         virtualNode.attributes[ID_ATTRIBUTE_NAME] = id;
+
+        // update as a decision
+        component.INTERNAL[ID_ATTRIBUTE_NAME] = id;
       }
 
       const tabIndex = outerAttributes[TABINDEX_ATTRIBUTE_NAME] || component.INTERNAL[TABINDEX_ATTRIBUTE_NAME];
       if (tabIndex) {
         virtualNode.attributes[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
+
+        // update as a decision
+        component.INTERNAL[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
       }
 
       // to analyze, filter and transform before create

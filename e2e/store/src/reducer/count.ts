@@ -1,8 +1,7 @@
 import { AppState, initialState } from "../state";
-import { IAction } from "../../../../src/core/store/interface/iaction";
 import { actions } from "../actions";
 
-export const countReducer = (state: AppState = initialState, action: IAction) => {
+export const countReducer = (state: AppState = initialState, action: any) => {
   switch (action.type) {
     case actions.increment.type:
       return {

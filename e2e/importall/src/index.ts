@@ -5,6 +5,7 @@ import "../../../dist/core/context";
 import "../../../dist/core/di";
 import "../../../dist/core/formatter";
 import "../../../dist/core/i18n";
+import "../../../dist/core/stream";
 import "../../../dist/web/component";
 import "../../../dist/web/router";
 import "../../../dist/web/vdom";
