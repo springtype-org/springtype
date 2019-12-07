@@ -138,10 +138,8 @@ if (!st.dom) {
       }
 
       // internal class: 'foo' or outer class="foo" handling
-      console.log('dom',component.INTERNAL[CLASS_ATTRIBUTE_NAME] , outerAttributes[CLASS_ATTRIBUTE_NAME]);
       if (component.INTERNAL[CLASS_ATTRIBUTE_NAME] || outerAttributes[CLASS_ATTRIBUTE_NAME]) {
         virtualNode.attributes[CLASS_ATTRIBUTE_NAME] = mergeArrays(component.INTERNAL[CLASS_ATTRIBUTE_NAME], outerAttributes[CLASS_ATTRIBUTE_NAME]);
-        console.log('dom',virtualNode.attributes[CLASS_ATTRIBUTE_NAME]);
       }
 
       // internal style: { border: '1px' } or outer style={{ border: '1px' }} handling
@@ -215,10 +213,7 @@ if (!st.dom) {
         (newEl as IElement).getComponent = function() { return this.$stComponentRef };
       }
 
-
-
       if (virtualNode.attributes) {
-        console.log('set attr', virtualNode.attributes, newEl.classList)
         st.dom.setAttributes(virtualNode.attributes, newEl);
       }
 
