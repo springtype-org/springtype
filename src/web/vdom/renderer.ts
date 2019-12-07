@@ -120,6 +120,7 @@ if (!st.renderer) {
                   domElement = st.dom.createElement(virtualElement, parent) as IElement;
                   replaced = true;
                 } else {
+
                   // ignore cases such as: id, class, style, tabindex but inform component
                   if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
 

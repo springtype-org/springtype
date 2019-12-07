@@ -73,6 +73,7 @@ export class Component<A = {}> implements ILifecycle {
   }
 
   set class(classes: string | Array<string>) {
+    console.log('set class', classes);
     classes = !Array.isArray(classes) ? [classes] : classes;
     this.el ? st.dom.setAttribute(CLASS_ATTRIBUTE_NAME, classes, this.el, true) : this.INTERNAL[CLASS_ATTRIBUTE_NAME] = classes;
   }
@@ -164,12 +165,11 @@ export class Component<A = {}> implements ILifecycle {
    * allows to take the original attribute value from VDOM (no DOM traversal string typecast)
    */
   setAttribute(name: string, value: any, type?: AttrType): void {
+    console.log('set attribute', name, value);
     const prevValue = this.getAttribute(name, type);
-    const hasAttributeOnEl = this.el ? this.el.hasAttribute(name) : false;
 
     if (
-      prevValue !== value || !hasAttributeOnEl && // ignore if not changed (scalar)
-      this.shouldAttributeChange(name, value, prevValue)
+        prevValue !== value && this.shouldAttributeChange(name, value, prevValue)
     ) {
 
       // store internal attribute state value

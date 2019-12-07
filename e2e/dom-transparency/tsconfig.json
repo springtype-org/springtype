@@ -1,12 +1,17 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "jsx": "react",
-      "jsxFactory": "tsx",
-      "experimentalDecorators": true,
-      "sourceMap": true,
-      "resolveJsonModule": true
+    "module": "commonjs",
+    "jsx": "react",
+    "jsxFactory": "tsx",
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "emitDeclarationOnly": true
   },
-  "exclude": ["node_modules"],
-  "include": ["src"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "src"
+  ]
 }
