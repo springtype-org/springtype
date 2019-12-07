@@ -1,17 +1,15 @@
 import {component} from "../../../src/web/component";
 import {st} from "../../../src/core/st";
-import {tsx} from "../../../src/web/vdom";
 import {ILifecycle} from "../../../src/web/component/interface";
 import './nestedclass.css'
+
 @component
 export class Nested extends st.component implements ILifecycle {
 
-
-    onAfterElCreate() {
-        this.class = [...this.class, 'nested']
-    }
+    class = ['nested'];
 
     render() {
+        console.log('Nested render');
         return this.renderChildren();
     }
 }
