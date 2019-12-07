@@ -1,0 +1,6 @@
+.nested{
+    background-color: red;
+}
+.outer.nested{
+    background-color: green;
+}

@@ -3,6 +3,7 @@ import { component, attr } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 import { AttrType } from "../../../src/web/component/trait/attr";
+import {Nested} from "./nested";
 
 @component
 export class E2EDomTransparencyTest extends st.component implements ILifecycle {
@@ -28,8 +29,8 @@ export class E2EDomTransparencyTest extends st.component implements ILifecycle {
     // and they change reactively, no matter the time
     this.id = '123transparent';
     console.log('rerender');
-    return this.renderChildren();
+    return <Nested class="outer">Attributes are DOM transparent and applied internally</Nested>;
   }
 }
 
-st.render(<E2EDomTransparencyTest>Attributes are DOM transparent and applied internally</E2EDomTransparencyTest>);
+st.render(<E2EDomTransparencyTest/>);
