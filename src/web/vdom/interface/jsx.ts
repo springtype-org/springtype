@@ -515,7 +515,7 @@ declare global {
       cellSpacing?: number | string;
       charSet?: string;
       challenge?: string;
-      checked?: boolean;
+      checked?: boolean | string;
       class?: string | Array<string>;
       className?: string | Array<string>;
       cols?: number;
@@ -541,6 +541,7 @@ declare global {
       formAction?: string;
       formEncType?: string;
       formMethod?: string;
+      novalidate?: boolean | string;
       formNoValidate?: boolean;
       formTarget?: string;
       frameBorder?: number | string;
