@@ -492,6 +492,7 @@ declare global {
       tabindex?: number|string;
     }
 
+    // TODO: All should allow for string (full HTML support)
     export interface HTMLAttributes extends HTMLAttributesLowerCase, DOMAttributes {
       // Standard HTML Attributes
       accept?: string;
@@ -506,7 +507,7 @@ declare global {
       autoComplete?: string;
       autocorrect?: string;
       autoCorrect?: string;
-      autofocus?: boolean;
+      autofocus?: boolean | string;
       autoFocus?: boolean;
       autoPlay?: boolean;
       capture?: boolean;
@@ -589,7 +590,7 @@ declare global {
       radioGroup?: string;
       readOnly?: boolean;
       rel?: string;
-      required?: boolean;
+      required?: boolean | string;
       role?: string;
       rows?: number;
       rowSpan?: number;
