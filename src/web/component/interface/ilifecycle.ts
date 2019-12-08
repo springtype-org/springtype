@@ -71,11 +71,14 @@ export interface ILifecycle {
   // after render()
   onAfterRender?(hasDOMChanged: boolean): void;
 
+  // before first render()
+  onBeforeInitialRender?(): void;
+
   // after first render()
   onAfterInitialRender?(): void;
 
   // implement this and return TSX to be rendered
-  render?(): IVirtualNode | Array<IVirtualNode>;
+  render?(): IVirtualNode | Array<IVirtualNode> | string;
 
   // lifecycle method to trigger a VDOM tpl reflow
   doRender?(): Promise<void>;

@@ -5,12 +5,13 @@ import { isPrimitive } from "../lang/is-primitive";
 import { GlobalCache } from "../st/interface/i$st";
 import { st } from "../st/st";
 import { TYPE_FUNCTION } from "../lang/type-function";
+import { context as contextDecorator } from "./decorator/context";
 
 const HANDLER_OWNING_INSTANCE: any = "HANDLER_OWNING_INSTANCE";
 const DEFAULT_CONTEXT_VALUE = {};
 
 // for st.enable(context, ...)
-export const context = null;
+export const context = contextDecorator;
 
 if (!st.context) {
 

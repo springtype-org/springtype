@@ -53,7 +53,7 @@ if (!st.dom) {
     isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.COMPONENT_REGISTRY][tagName],
 
     createElementOrElements: (
-      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
+      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
       parentDomElement: IElement,
       detached: boolean = false
     ): Array<IElement | Text | undefined> | IElement | undefined => {
@@ -92,9 +92,16 @@ if (!st.dom) {
 
       } else {
 
+
         // class API
         // create instance of component
         component = new componentCtor();
+
+        if (process.env.NODE_ENV == 'development') {
+          if (!(component instanceof st.component)) {
+            st.error(`Class ${componentCtor.name} does not extend from st.component!`);
+          }
+        }
       }
 
       // set root DOM node ref and parent ref
@@ -138,6 +145,18 @@ if (!st.dom) {
         }
       }
 
+      // to analyze, filter and transform before create
+      component.onBeforeElCreate(virtualNode);
+
+      return {
+        component,
+        componentCtor,
+        outerAttributes
+      }
+    },
+
+    updateComponentAttributes: (component: any, outerAttributes: any, virtualNode: IVirtualNode) => {
+
       // internal class: 'foo' or outer class="foo" handling
       if (component.INTERNAL[CLASS_ATTRIBUTE_NAME] || outerAttributes[CLASS_ATTRIBUTE_NAME]) {
         virtualNode.attributes[CLASS_ATTRIBUTE_NAME] = mergeArrays(component.INTERNAL[CLASS_ATTRIBUTE_NAME], outerAttributes[CLASS_ATTRIBUTE_NAME]);
@@ -159,6 +178,7 @@ if (!st.dom) {
 
         if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
           const value = outerAttributes[attrName] || component.INTERNAL.attributes[attrName];
+
           virtualNode.attributes[attrName] = value;
 
           // update as a decision
@@ -191,37 +211,29 @@ if (!st.dom) {
         // update as a decision
         component.INTERNAL[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
       }
-
-      // to analyze, filter and transform before create
-      component.onBeforeElCreate(virtualNode);
-
-      return {
-        component,
-        componentCtor
-      }
     },
 
     getTagToUse: (component: ILifecycle, virtualNode: IVirtualNode): string => {
-      let tagToUse = virtualNode.type;
+
       if (component) {
         const componentCtor = Object.getPrototypeOf(component).constructor;
-        if ((component as any).tag || componentCtor.COMPONENT_OPTIONS.tag) {
+        if ((component as any).tag || componentCtor.COMPONENT_OPTIONS && componentCtor.COMPONENT_OPTIONS.tag) {
           // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          tagToUse = (component as any).tag || componentCtor.COMPONENT_OPTIONS.tag;
+          return (component as any).tag || componentCtor.COMPONENT_OPTIONS.tag;
         }
       }
 
       // support for <component tag="h1"> and <div tag="h2"> cases
       if (virtualNode.attributes && virtualNode.attributes.tag) {
-        tagToUse = virtualNode.attributes.tag;
+        return virtualNode.attributes.tag;
       }
-      return tagToUse;
+      return virtualNode.type;
     },
 
     createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, detached: boolean = false): IElement | undefined => {
       let newEl: Element;
 
-      const { component } = st.dom.createComponentInstance(virtualNode, parentDomElement);
+      const { component, outerAttributes } = st.dom.createComponentInstance(virtualNode, parentDomElement);
 
       if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase())) {
         newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
@@ -238,8 +250,11 @@ if (!st.dom) {
         (newEl as IElement).$stComponent = component;
         (newEl as IElement).$stComponentRef = component;
         (newEl as IElement).getComponent = function () { return this.$stComponent || this.$stComponentRef };
+
+        st.dom.updateComponentAttributes(component, outerAttributes, virtualNode);
+
       } else {
-        // passing down parent component reference
+        // passing down parent component reference (it's a pure DOM element in this case)
         (newEl as IElement).$stComponentRef = parentDomElement.$stComponentRef;
         (newEl as IElement).getComponent = function () { return this.$stComponentRef };
       }
@@ -271,6 +286,16 @@ if (!st.dom) {
         }
       }
       return newEl as IElement;
+    },
+
+    replaceElement: (
+      virtualNode: IVirtualNode | undefined,
+      parentDomElement: Element,
+      oldDomChildElement: Element
+    ): IElement => {
+      const domElement = st.dom.createElement(virtualNode, parentDomElement, true) as IElement;
+      parentDomElement.replaceChild(domElement, oldDomChildElement);
+      return domElement;
     },
 
     createTextNode: (text: string, domElement: IElement, detached: boolean = false): Text => {

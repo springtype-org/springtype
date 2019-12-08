@@ -7,6 +7,8 @@ export enum AttrType {
   DOM_INTRANSPARENT = 'DOM_INTRANSPARENT',
 }
 
+export type AttrTypeList = AttrType.DOM_TRANSPARENT | AttrType.DOM_INTRANSPARENT;
+
 export const DEFAULT_ATTR_TYPE = AttrType.DOM_INTRANSPARENT;
 
 export interface IInternalAttrEntry {

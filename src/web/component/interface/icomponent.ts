@@ -21,7 +21,7 @@ export interface IComponentInternals {
   class: string | Array<string>;
 
   // the backing cache for this.style = { ... }
-  style: Partial<CSSStyleDeclaration>;
+  style: Partial<JSX.CSSStyleDeclaration>;
 
   // the backing cache for this.id = "foo123"
   id: string | null;

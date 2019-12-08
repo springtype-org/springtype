@@ -15,7 +15,7 @@ import { StateTrait } from "./trait/state";
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { IRefAttribute } from "./interface/iref-attribute";
-import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, LIST_KEY_ATTRIBUTE_NAME } from "../vdom/dom";
+import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME } from "../vdom/dom";
 
 export type DefaultComponentAttributes = {
   tag?: string; // allows to set a custom .el tag
@@ -26,7 +26,7 @@ export type DefaultComponentAttributes = {
   // the following attributes are just passed down to .el automatically
   id?: string;
   tabIndex?: number;
-  style?: Partial<CSSStyleDeclaration>;
+  style?: Partial<JSX.CSSStyleDeclaration>;
   class?: Array<string> | string;
 } & JSX.DOMAttributes /* like onClick, ... -- passed down to .el automatically */;
 
@@ -79,36 +79,14 @@ export class Component<A = {}> implements ILifecycle {
     }
   }
 
-  get style(): Partial<CSSStyleDeclaration> {
+  get style(): Partial<JSX.CSSStyleDeclaration> {
     return this.INTERNAL[STYLE_ATTRIBUTE_NAME] || {};
   }
 
-  set style(style: Partial<CSSStyleDeclaration>) {
+  set style(style: Partial<JSX.CSSStyleDeclaration>) {
     this.INTERNAL[STYLE_ATTRIBUTE_NAME] = style;
     if (this.el) {
       st.dom.setAttribute(STYLE_ATTRIBUTE_NAME, style, this.el, true)
-    }
-  }
-
-  get key(): string | null {
-    return this.INTERNAL[LIST_KEY_ATTRIBUTE_NAME];
-  }
-
-  set key(key: string | null) {
-    this.INTERNAL[LIST_KEY_ATTRIBUTE_NAME] = key;
-    if (this.el) {
-      st.dom.setAttribute(LIST_KEY_ATTRIBUTE_NAME, key, this.el, true)
-    }
-  }
-
-  get id(): string | null {
-    return this.INTERNAL[ID_ATTRIBUTE_NAME];
-  }
-
-  set id(id: string | null) {
-    this.INTERNAL[ID_ATTRIBUTE_NAME] = id;
-    if (this.el) {
-      st.dom.setAttribute(ID_ATTRIBUTE_NAME, id, this.el, true)
     }
   }
 
@@ -174,6 +152,7 @@ export class Component<A = {}> implements ILifecycle {
     return this.INTERNAL.attributes[name];
   }
 
+
   /**
    * Overriding this method and not calling the super method
    * allows to take the original attribute value from VDOM (no DOM traversal string typecast)
@@ -182,7 +161,7 @@ export class Component<A = {}> implements ILifecycle {
     const prevValue = this.getAttribute(name, type);
 
     if (
-      prevValue !== value && this.shouldAttributeChange(name, value, prevValue)
+      this.shouldAttributeChange(name, value, prevValue)
     ) {
 
       // store internal attribute state value
@@ -195,8 +174,12 @@ export class Component<A = {}> implements ILifecycle {
           (typeof type !== TYPE_UNDEFINED && type === AttrType.DOM_TRANSPARENT) ||
           // @attr(AttrType.DOM_TRANSPARENT)
           AttrTrait.getType(this, name) === AttrType.DOM_TRANSPARENT)) {
+
           // reflect to DOM (casts to string)
           this.el.setAttribute(name, value);
+
+          // persist for re-renderings???
+          this.virtualNode.attributes[name] = value;
         }
       }
 
@@ -234,9 +217,9 @@ export class Component<A = {}> implements ILifecycle {
 
   onBeforeRender() { }
 
-  render(): IVirtualNode | Array<IVirtualNode> {
+  render(): IVirtualNode | Array<IVirtualNode> | string {
     if (typeof this.INTERNAL.options.tpl! != TYPE_FUNCTION) {
-      throw new Error(`Custom element (<${this.constructor.name} />) has no render() method nor a valid template (tpl)!`);
+      return <fragment />;
     }
     return this.INTERNAL.options.tpl!(this);
   }
@@ -253,7 +236,12 @@ export class Component<A = {}> implements ILifecycle {
     // reset
     this.INTERNAL.hasDOMChanged = false;
 
-    const vdom: IVirtualNode | Array<IVirtualNode> = this.render();
+    if (!this.INTERNAL.notInitialRender) {
+      // call lifecycle method
+      this.onBeforeInitialRender();
+    }
+
+    const vdom: IVirtualNode | Array<IVirtualNode> | string = this.render();
 
     if (!vdom) {
       throw new Error(`The render() method or the template (tpl) of <${this.constructor.name} /> must return virtual nodes.`);
@@ -262,6 +250,7 @@ export class Component<A = {}> implements ILifecycle {
     const nodesToRender = Array.isArray(vdom) ? [...vdom!] : [vdom!];
 
     if (!this.INTERNAL.notInitialRender) {
+
 
       this.INTERNAL.hasDOMChanged = true;
       this.INTERNAL.notInitialRender = true;
@@ -282,6 +271,8 @@ export class Component<A = {}> implements ILifecycle {
     // call lifecycle method
     this.onAfterRender(this.INTERNAL.hasDOMChanged);
   }
+
+  onBeforeInitialRender() { }
 
   onAfterInitialRender() { }
 

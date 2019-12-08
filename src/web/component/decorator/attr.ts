@@ -1,9 +1,9 @@
 import { ILifecycle } from "../interface/ilifecycle";
-import { AttrTrait, AttrType, DEFAULT_ATTR_TYPE } from "../trait/attr";
+import { AttrTrait, AttrType, DEFAULT_ATTR_TYPE, AttrTypeList } from "../trait/attr";
 import { TYPE_OBJECT } from "../../../core/lang/type-object";
 
 export const attr = (
-  typeOrPrototype: AttrType | ILifecycle = DEFAULT_ATTR_TYPE,
+  typeOrPrototype: AttrType | AttrTypeList| ILifecycle = DEFAULT_ATTR_TYPE,
   propName: string | undefined = undefined,
 ): any => {
   if (typeof typeOrPrototype !== TYPE_OBJECT) {

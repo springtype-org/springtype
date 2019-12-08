@@ -9,13 +9,14 @@ import { ATTR_EVENT_LISTENER_PREFIX, LIST_KEY_ATTRIBUTE_NAME, ATTR_DEBUG_PREFIX,
 import { mergeArrays } from "../../core/lang/merge-arrays";
 import { mergeObjects } from "../../core/lang/merge-objects";
 import { RenderReason } from "../component/interface/irender-reason";
+import { AttrTrait, AttrType } from "../component/trait/attr";
 
 if (!st.renderer) {
 
   st.renderer = {
 
     renderInitial: (
-      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined>,
+      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
       parentDomElement: IElement,
     ): Array<IElement | Text | undefined> | IElement | undefined => {
       return st.dom.createElementOrElements(virtualNode, parentDomElement);
@@ -82,15 +83,10 @@ if (!st.renderer) {
           domElement &&
           (domElement.tagName || "").toUpperCase() !== st.dom.getTagToUse(domElement.$stComponent, virtualElement).toUpperCase())
       ) {
-
         // DOMElement and VirtualElement existing but tagName differs: Replace node
         // also: DOMElement is a TextNode (typeof tagName == 'undefined') but VirtualElement is not
-
-        // tag name differs, replace node
-        st.renderer.removeElement(parent, domElement);
-
-        domElement = st.dom.createElement(virtualElement, parent) as IElement;
-        created = true;
+        domElement = st.dom.replaceElement(virtualElement, parent, domElement) as IElement;
+        replaced = true;
 
       } else {
         // DOMElement and VirtualElement are the same on index and tagName
@@ -107,32 +103,33 @@ if (!st.renderer) {
 
             if (!attributeName.startsWith(ATTR_EVENT_LISTENER_PREFIX)) {
               if (!virtualElement.attributes || !virtualElement.attributes[attributeName]) {
-                // ignore cases such as: id, class, style, tabindex
-                if (!(domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName))) {
+                // ignore cases such as: id, class, style, tabindex or DOM transparent attributes
+                if (!(domElement.$stComponent && (st.dom.isStandardHTMLAttribute(attributeName) || AttrTrait.getType(domElement.$stComponent, attributeName) === AttrType.DOM_TRANSPARENT))) {
                   // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
                   domElement.removeAttribute(attributeName);
                   changedAttribute = true;
                 }
               } else if (domElement.getAttribute(attributeName) != virtualElement.attributes[attributeName]) {
                 if (attributeName === LIST_KEY_ATTRIBUTE_NAME) {
-                  st.renderer.removeElement(parent, domElement);
-
-                  domElement = st.dom.createElement(virtualElement, parent) as IElement;
+                  domElement = st.dom.replaceElement(virtualElement, parent, domElement) as IElement;
                   replaced = true;
                 } else {
 
-                  // ignore cases such as: id, class, style, tabindex but inform component
+                  // case: a component re-renders and it's values for standard HTML attributes did change
+                  // such as style, class etc. - the new values need to be merged in to reflect the state change in DOM
                   if (domElement.$stComponent && st.dom.isStandardHTMLAttribute(attributeName)) {
 
-                    // TODO: Still needed?
                     if (attributeName === CLASS_ATTRIBUTE_NAME) {
                       const mergeResult = mergeArrays(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]);
                       st.dom.setAttribute(attributeName, mergeResult, domElement);
+                      changedAttribute = true;
                     } else if (attributeName === STYLE_ATTRIBUTE_NAME) {
                       const mergeResult = mergeObjects(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]);
                       st.dom.setAttribute(attributeName, mergeResult, domElement);
+                      changedAttribute = true;
                     } else {
                       st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName] || domElement.$stComponent.INTERNAL[attributeName], domElement);
+                      changedAttribute = true;
                     }
 
                   } else {
