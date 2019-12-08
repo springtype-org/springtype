@@ -205,9 +205,9 @@ if (!st.dom) {
       let tagToUse = virtualNode.type;
       if (component) {
         const componentCtor = Object.getPrototypeOf(component).constructor;
-        if (component.tag || componentCtor.COMPONENT_OPTIONS.tag) {
+        if ((component as any).tag || componentCtor.COMPONENT_OPTIONS.tag) {
           // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          tagToUse = component.tag || componentCtor.COMPONENT_OPTIONS.tag;
+          tagToUse = (component as any).tag || componentCtor.COMPONENT_OPTIONS.tag;
         }
       }
 
