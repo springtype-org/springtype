@@ -51,7 +51,15 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     // register callback for future route changes
     st.router.addOnAfterMatchHandler(this.updateActiveClass);
 
-    if (this.tag.toLowerCase() === A_ELEMENT_TAG) {
+    this.updateAttributes();
+  }
+
+  onAfterPatchEl() {
+    this.updateAttributes();
+  }
+
+  updateAttributes() {
+    if (st.dom.getTagToUse(this, this.virtualNode).toLowerCase() === A_ELEMENT_TAG) {
       if (this.target) {
         this.setAttribute('target', this.target, AttrType.DOM_TRANSPARENT);
       }
@@ -72,12 +80,12 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     if (!Array.isArray(this.class)) {
       this.class = [this.class];
     }
+    const filteredClasses = this.class.filter((className: string) => className !== activeClassName);
 
     if (st.route && st.route.paths!.indexOf(this.path) > -1) {
-      this.class = [...this.class, activeClassName];
-    } else {
-      this.class = this.class.filter((className: string) => className !== activeClassName);
+      filteredClasses.push(activeClassName);
     }
+    this.class = filteredClasses;
   }
 
   render() {

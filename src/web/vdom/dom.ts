@@ -15,6 +15,7 @@ import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { mergeObjects } from "../../core/lang/merge-objects";
 import { mergeArrays } from "../../core/lang/merge-arrays";
 import { AttrTrait, AttrType } from "../component/trait/attr";
+import { ILifecycle } from "../component/interface";
 
 export const TEMPLATE_ELEMENT_NAME = "template";
 export const DEFAULT_SLOT_NAME = "default";
@@ -30,7 +31,7 @@ export const ATTR_EVENT_LISTENER_PREFIX = "on";
 export const ATTR_DEBUG_PREFIX = "__";
 
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-const STANDARD_HTML_PASS_ATTRIBUTES = [CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, TABINDEX_ATTRIBUTE_NAME];
+const STANDARD_HTML_PASS_ATTRIBUTES = [CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, TABINDEX_ATTRIBUTE_NAME, LIST_KEY_ATTRIBUTE_NAME];
 
 if (!st.dom) {
 
@@ -174,6 +175,15 @@ if (!st.dom) {
         component.INTERNAL[ID_ATTRIBUTE_NAME] = id;
       }
 
+      const key = outerAttributes[LIST_KEY_ATTRIBUTE_NAME] || component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME];
+
+      if (key) {
+        virtualNode.attributes[LIST_KEY_ATTRIBUTE_NAME] = key;
+
+        // update as a decision
+        component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME] = key;
+      }
+
       const tabIndex = outerAttributes[TABINDEX_ATTRIBUTE_NAME] || component.INTERNAL[TABINDEX_ATTRIBUTE_NAME];
       if (tabIndex) {
         virtualNode.attributes[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
@@ -191,27 +201,32 @@ if (!st.dom) {
       }
     },
 
+    getTagToUse: (component: ILifecycle, virtualNode: IVirtualNode): string => {
+      let tagToUse = virtualNode.type;
+      if (component) {
+        const componentCtor = Object.getPrototypeOf(component).constructor;
+        if (component.tag || componentCtor.COMPONENT_OPTIONS.tag) {
+          // use <class-name> instead of ClassName which would end up as <classname> in DOM
+          tagToUse = component.tag || componentCtor.COMPONENT_OPTIONS.tag;
+        }
+      }
+
+      // support for <component tag="h1"> and <div tag="h2"> cases
+      if (virtualNode.attributes && virtualNode.attributes.tag) {
+        tagToUse = virtualNode.attributes.tag;
+      }
+      return tagToUse;
+    },
+
     createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, detached: boolean = false): IElement | undefined => {
       let newEl: Element;
 
-      const { component, componentCtor } = st.dom.createComponentInstance(virtualNode, parentDomElement);
+      const { component } = st.dom.createComponentInstance(virtualNode, parentDomElement);
 
       if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase())) {
         newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
       } else {
-
-        let tagToUse = virtualNode.type;
-
-        if (component && (component.tag || componentCtor.COMPONENT_OPTIONS.tag)) {
-          // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          tagToUse = component.tag || componentCtor.COMPONENT_OPTIONS.tag;
-        }
-
-        // support for <component tag="h1"> and <div tag="h2"> cases
-        if (virtualNode.attributes && virtualNode.attributes.tag) {
-          tagToUse = virtualNode.attributes.tag;
-        }
-        newEl = document.createElement(tagToUse as string);
+        newEl = document.createElement(st.dom.getTagToUse(component as ILifecycle, virtualNode) as string);
       }
 
       if (component) {
@@ -222,11 +237,11 @@ if (!st.dom) {
         // reference component logical controller component
         (newEl as IElement).$stComponent = component;
         (newEl as IElement).$stComponentRef = component;
-        (newEl as IElement).getComponent = function() { return this.$stComponent || this.$stComponentRef };
+        (newEl as IElement).getComponent = function () { return this.$stComponent || this.$stComponentRef };
       } else {
         // passing down parent component reference
         (newEl as IElement).$stComponentRef = parentDomElement.$stComponentRef;
-        (newEl as IElement).getComponent = function() { return this.$stComponentRef };
+        (newEl as IElement).getComponent = function () { return this.$stComponentRef };
       }
 
       if (virtualNode.attributes) {

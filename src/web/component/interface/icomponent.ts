@@ -26,6 +26,9 @@ export interface IComponentInternals {
   // the backing cache for this.id = "foo123"
   id: string | null;
 
+  // the backing cache for this.key (useful for unique element identification in lists)
+  key: string | null;
+
   // the backing cache for this.tabIndex = "2"
   tabIndex: number;
 

@@ -1,5 +1,6 @@
 import { IVirtualChildren, IVirtualNode } from "./ivirtual-node";
 import { IElement } from "./ielement";
+import { ILifecycle } from "../../component/interface";
 
 export interface IDOM {
 
@@ -8,6 +9,8 @@ export interface IDOM {
   isRegisteredComponent(tagName: string): boolean;
 
   isStandardHTMLAttribute(name: string): boolean;
+
+  getTagToUse(component: ILifecycle, virtualNode: IVirtualNode): string;
 
   hasElNamespace(domElement: Element): boolean;
 

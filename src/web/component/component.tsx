@@ -15,7 +15,7 @@ import { StateTrait } from "./trait/state";
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { IRefAttribute } from "./interface/iref-attribute";
-import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME } from "../vdom/dom";
+import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, LIST_KEY_ATTRIBUTE_NAME } from "../vdom/dom";
 
 export type DefaultComponentAttributes = {
   tag?: string; // allows to set a custom .el tag
@@ -45,7 +45,6 @@ export class Component<A = {}> implements ILifecycle {
   mutationObserver!: MutationObserver;
 
   tag!: string;
-  key!: string;
   ref!: IRefAttribute;
   unwrap!: boolean;
   tabIndex!: number | string;
@@ -88,6 +87,17 @@ export class Component<A = {}> implements ILifecycle {
     this.INTERNAL[STYLE_ATTRIBUTE_NAME] = style;
     if (this.el) {
       st.dom.setAttribute(STYLE_ATTRIBUTE_NAME, style, this.el, true)
+    }
+  }
+
+  get key(): string | null {
+    return this.INTERNAL[LIST_KEY_ATTRIBUTE_NAME];
+  }
+
+  set key(key: string | null) {
+    this.INTERNAL[LIST_KEY_ATTRIBUTE_NAME] = key;
+    if (this.el) {
+      st.dom.setAttribute(LIST_KEY_ATTRIBUTE_NAME, key, this.el, true)
     }
   }
 

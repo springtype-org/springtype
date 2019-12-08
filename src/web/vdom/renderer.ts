@@ -80,7 +80,7 @@ if (!st.renderer) {
         virtualElement.attributes.doRender || (
           virtualElement &&
           domElement &&
-          (domElement.tagName || "").toUpperCase() !== virtualElement.type.toUpperCase())
+          (domElement.tagName || "").toUpperCase() !== st.dom.getTagToUse(domElement.$stComponent, virtualElement).toUpperCase())
       ) {
 
         // DOMElement and VirtualElement existing but tagName differs: Replace node
@@ -127,11 +127,9 @@ if (!st.renderer) {
                     // TODO: Still needed?
                     if (attributeName === CLASS_ATTRIBUTE_NAME) {
                       const mergeResult = mergeArrays(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]);
-                      console.log('diff re-render CLASS', mergeResult, virtualElement.attributes[attributeName]);
                       st.dom.setAttribute(attributeName, mergeResult, domElement);
                     } else if (attributeName === STYLE_ATTRIBUTE_NAME) {
                       const mergeResult = mergeObjects(domElement.$stComponent.INTERNAL[attributeName], virtualElement.attributes[attributeName]);
-                      console.log('diff re-render STYLE', mergeResult, virtualElement.attributes[attributeName]);
                       st.dom.setAttribute(attributeName, mergeResult, domElement);
                     } else {
                       st.dom.setAttribute(attributeName, virtualElement.attributes[attributeName] || domElement.$stComponent.INTERNAL[attributeName], domElement);
