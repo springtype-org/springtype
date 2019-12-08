@@ -5,6 +5,7 @@ import { AttrType } from "../../../src/web/component/trait/attr";
 import "./index.css";
 import { ILifecycle } from "../../../src/web/component/interface";
 import { context } from "../../../src/core/context/context";
+import { ref } from "../../../src/core/ref";
 
 const Duplicate = component(() => {
   const id = Date.now() + Math.random() * 1000;
@@ -129,10 +130,15 @@ export class E2eChildren extends st.component {
   @state
   mapofnames = ["Rene"];
 
+  @ref
+  h4Ref!: HTMLElement;
+
   onAfterInitialRender() {
     setTimeout(() => {
       this.mapofnames = ["Michael", "Aron", "Daniel", "Bernd", "Holger"];
     }, 500);
+
+    this.h4Ref.setAttribute('foobar', "12323");
   }
 
   rerender = () => {
@@ -142,7 +148,7 @@ export class E2eChildren extends st.component {
   render() {
     return (
       <fragment>
-        <h4>DragDrop</h4>
+        <h4 ref={{h4Ref: this}}>DragDrop</h4>
         <Draggable ident="1" />
         <Draggable ident="2" />
         <Draggable ident="3" />
@@ -168,5 +174,7 @@ export class E2eChildren extends st.component {
     );
   }
 }
+
+st.renderer.setIgnoredAttributes(['foobar']);
 
 st.render(<E2eChildren />);

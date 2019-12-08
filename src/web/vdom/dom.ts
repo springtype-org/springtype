@@ -39,7 +39,7 @@ if (!st.dom) {
   st.dom = {
 
     isReady: async (): Promise<void> => {
-      if (document.body) Promise.resolve();
+      if (document.body) return Promise.resolve();
       return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
     },
     hasElNamespace: (domElement: Element): boolean => {

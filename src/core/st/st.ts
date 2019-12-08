@@ -24,7 +24,10 @@ const _globalThis: any = new Function("return this")();
 if (!_globalThis[ST_KEY]) {
   // register scoped global as an instance of this class
   _globalThis[ST_KEY] = {
-    enable: (...implReferences: any) => {implReferences},
+    run: async (fn: Function) => {
+      return fn();
+    },
+    enable: (...implReferences: any) => { implReferences },
     [GlobalCache.COMPONENT_INSTANCES]: [],
     [GlobalCache.CONTEXT]: {},
     [GlobalCache.COMPONENT_REGISTRY]: {},

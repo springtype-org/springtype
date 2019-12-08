@@ -28,6 +28,9 @@ export interface I$st {
   // nop function, only to import modules
   enable: (...implReferences: any) => void;
 
+  // runs async micro-tasks
+  run: (fn: Function) => Promise<void>;
+
   // --- platform global reference
   // node: global, browser: window
   globalThis: any;

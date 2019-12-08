@@ -3,6 +3,8 @@ import { IVirtualNode } from "./ivirtual-node";
 
 export interface IRenderer {
 
+  IGNORED_ATTRIBUTES: Array<string>;
+
   renderInitial(
     virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
     parentDomElement: IElement,
@@ -19,4 +21,6 @@ export interface IRenderer {
   patchTextNode(parent: IElement, domElement: IElement, virtualElementTextContent: string): void;
 
   removeElement(parent: IElement, domElement: IElement): void;
+
+  setIgnoredAttributes(attributeNames: Array<string>): void;
 }

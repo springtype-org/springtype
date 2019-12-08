@@ -15,6 +15,8 @@ if (!st.renderer) {
 
   st.renderer = {
 
+    IGNORED_ATTRIBUTES: [],
+
     renderInitial: (
       virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
       parentDomElement: IElement,
@@ -101,8 +103,12 @@ if (!st.renderer) {
           for (let a = 0; a < attributes.length; a++) {
             const attributeName = tsxToStandardAttributeName(attributes[a].name);
 
+            // ignored attributes
+            if (st.renderer.IGNORED_ATTRIBUTES.indexOf(attributeName) > -1) continue;
+
             if (!attributeName.startsWith(ATTR_EVENT_LISTENER_PREFIX)) {
               if (!virtualElement.attributes || !virtualElement.attributes[attributeName]) {
+
                 // ignore cases such as: id, class, style, tabindex or DOM transparent attributes
                 if (!(domElement.$stComponent && (st.dom.isStandardHTMLAttribute(attributeName) || AttrTrait.getType(domElement.$stComponent, attributeName) === AttrType.DOM_TRANSPARENT))) {
                   // DOMElement has an attribute that doesn't exist on VirtualElement attributes anymore
@@ -257,7 +263,13 @@ if (!st.renderer) {
         parent.$stComponentRef.INTERNAL.hasDOMChanged = true;
       }
     },
+
+    setIgnoredAttributes: (attributeNames: Array<string>) => {
+      st.renderer.IGNORED_ATTRIBUTES.push(...attributeNames);
+    }
   };
+
+
 
   if (!st.render) {
     // add render method for awaiting / initial rendering
