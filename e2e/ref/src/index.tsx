@@ -35,7 +35,7 @@ export interface IRefTestAttrs {
 @component
 export class RefTest extends st.component<IRefTestAttrs> implements ILifecycle {
 
-  protected time: number;
+  protected time!: number;
 
   @ref
   someDiv!: HTMLDivElement;
