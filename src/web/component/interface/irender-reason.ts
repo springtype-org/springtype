@@ -3,6 +3,7 @@ import { ChangeType } from './../../../core/cd/interface/change-type';
 export enum RenderReason {
   INITIAL = "INITIAL",
   STATE_CHANGE = "STATE_CHANGE",
+  STORE_CHANGE = "STORE_CHANGE",
   ATTRIBUTE_CHANGE = "ATTRIBUTE_CHANGE",
   THEME_CHANGE = "THEME_CHANGE",
   CHILDREN_UPDATE = "CHILDREN_UPDATE"

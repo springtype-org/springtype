@@ -42,6 +42,7 @@ if (!st.dom) {
       if (document.body) return Promise.resolve();
       return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
     },
+
     hasElNamespace: (domElement: Element): boolean => {
       return domElement.namespaceURI === SVG_NAMESPACE;
     },
@@ -57,9 +58,9 @@ if (!st.dom) {
       parentDomElement: IElement,
       detached: boolean = false
     ): Array<IElement | Text | undefined> | IElement | undefined => {
-      if (Array.isArray(virtualNode) && virtualNode) {
+      if (Array.isArray(virtualNode)) {
         return st.dom.createChildElements(virtualNode, parentDomElement, detached);
-      } else if (virtualNode) {
+      } else if (typeof virtualNode != TYPE_UNDEFINED) {
         return st.dom.createElement(virtualNode as IVirtualNode | undefined, parentDomElement, detached);
       }
     },
@@ -298,8 +299,18 @@ if (!st.dom) {
       return domElement;
     },
 
+    replaceTextNode: (
+      virtualElementTextContent: string,
+      parentDomElement: Element,
+      oldDomChildElement: Element): Text => {
+      const domElement = st.dom.createTextNode(virtualElementTextContent, parentDomElement, true);
+      parentDomElement.replaceChild(domElement, oldDomChildElement);
+      return domElement;
+    },
+
     createTextNode: (text: string, domElement: IElement, detached: boolean = false): Text => {
-      const node = document.createTextNode(text);
+
+      const node = document.createTextNode(text.toString());
 
       if (!detached) {
         domElement.appendChild(node);
@@ -316,7 +327,7 @@ if (!st.dom) {
 
       for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
         if (isPrimitive(virtualChild)) {
-          children.push(st.dom.createTextNode((virtualChild || "").toString(), domElement, detached));
+          children.push(st.dom.createTextNode(((typeof virtualChild == TYPE_UNDEFINED || virtualChild === null) ? "" : virtualChild!).toString(), domElement, detached));
         } else {
           if (isJSXComment(virtualChild as IVirtualNode)) {
             continue;

@@ -1,4 +1,3 @@
-import { ITranslation } from "./itranslation";
 import { ITranslations } from "./itranslations";
 import { It } from "./it";
 import { IAddTranslation } from "./iadd-translation";
@@ -11,5 +10,4 @@ export interface Ii18n {
 	addTranslation: IAddTranslation;
 	t: It;
 	setLanguage: ISetLanguage;
-	resolve: (key: string, translationJSON: ITranslation) => string;
 }

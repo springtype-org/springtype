@@ -32,6 +32,9 @@ export interface IComponentInternals {
   // the backing cache for this.tabIndex = "2"
   tabIndex: number;
 
+  // runtime callback for async/await on await initiallyRendered();
+  resolveOnInitiallyRendered: any;
+
   // runtime flags
   notInitialRender: boolean;
   isConnected: boolean;

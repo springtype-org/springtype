@@ -23,6 +23,11 @@ export interface ILifecycle {
   // gives access to the mutation observer used for destructuring
   mutationObserver?: MutationObserver;
 
+  // allows for async/await operations until the initial rendering has happened
+  initiallyRendered?(): void;
+
+  onStoreChange?(propName: string, value: any): void;
+
   // called when a @state property changes
   onStateChange?(name: string, change: IStateChange): void;
 

@@ -128,14 +128,14 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
 export class E2eChildren extends st.component {
 
   @state
-  mapofnames = ["Rene"];
+  mapofnames = ["Rene", 2];
 
   @ref
   h4Ref!: HTMLElement;
 
   onAfterInitialRender() {
     setTimeout(() => {
-      this.mapofnames = ["Michael", "Aron", "Daniel", "Bernd", "Holger"];
+      this.mapofnames = ["Michael", "Aron", "Daniel", "Bernd", "Holger", 0, 4];
     }, 500);
 
     this.h4Ref.setAttribute('foobar', "12323");

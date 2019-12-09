@@ -2,6 +2,7 @@ import { st } from "../st/st";
 import { Ii18n } from "./interface/ii18n";
 import { ITranslation } from "./interface/itranslation";
 import { ITranslationValues } from "./interface/itranslation-values";
+import { resolvePathInObject } from "../lang/resolve-path-in-object";
 
 // for st.enable(i18n, ...)
 export const i18n = null;
@@ -14,36 +15,6 @@ if (!st.i18n) {
     currentLanguage: "en_US",
 
     /**
-     * Resolves a translation key deep in a translation object
-     * @param key Translation key such as: "module_a.foo"
-     * @param translationJSON Translation JSON object data like: { "module_a": { "foo": "Foo!"} }
-     */
-    resolve: (key: string, translationJSON: ITranslation): string => {
-      const splits = key.split(".");
-      let translation;
-
-      const walk = (translationJSONSubTree: any, i: number): any => {
-        if (!translationJSONSubTree) return;
-
-        translation = translationJSONSubTree[splits[i]];
-
-        if (translation && i == splits.length - 1) {
-          if (typeof translation != "string") {
-
-            if (process.env.NODE_ENV === 'development') {
-              st.warn(`The translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage} is an object not a string!`);
-            }
-            return `t(${st.i18n.currentLanguage}/${key}) object ❓`;
-          }
-          return translation;
-        } else {
-          return walk(translation, ++i);
-        }
-      };
-      return walk(translationJSON, 0);
-    },
-
-    /**
      * Translates a key to the translation by:
      * 1. resolving the translation value in the translation JSON data for the currently active language
      * 2. Applying translation values for wildcards
@@ -52,7 +23,7 @@ if (!st.i18n) {
      * @param [values] An optional object of data values to replace wildcards with
      */
     t: (key: string, values?: ITranslationValues): string => {
-      let translation = st.i18n.resolve(key, st.i18n.translations[st.i18n.currentLanguage]);
+      const translation = resolvePathInObject(key, st.i18n.translations[st.i18n.currentLanguage]);
 
       if (!translation) {
 
@@ -60,6 +31,12 @@ if (!st.i18n) {
           st.warn(`No translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage}!`);
         }
         return `? t(${st.i18n.currentLanguage}/${key}) ?`;
+      } else if (typeof translation != "string") {
+
+        if (process.env.NODE_ENV === 'development') {
+          st.warn(`The translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage} is an object not a string!`);
+        }
+        return `t(${st.i18n.currentLanguage}/${key}) object ❓`;
       } else {
         return st.format(translation, values || {});
       }

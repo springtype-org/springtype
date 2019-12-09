@@ -1,6 +1,8 @@
 <h1 align="center">SpringType</h1>
 
-> A re-invention of React, Angular and Vue. *Faster* than your cat and as small as our favourite cat meme ;-) (it's 16K all-in, including DOM routing, i18n, Redux store, DI, event bus)
+> A re-invention of the union feature-set of [React, Angular, Vue].
+> A simplified, fastified, minified apporach to modern web development.
+> It's < 20K (gzip) all-in, including VDOM, DOM router, components, DI, state management, i18n, Redux store, event bus, streaming API. Tree-shaking makes sure that usual build sizes are < than our favourite cat meme :-)
 
 <img src="catmeme.gif" />
 
@@ -21,6 +23,7 @@ SpringType is the result of 35 web developer years of suffering 😅 But now, im
 - [x] Headache-free DOM element to VDOM binding (`@ref modalDiv`, `<div ref={modalDiv: this}>e.g. a Bootstrap modal</div>`)
 - [x] Modern API's and ECMAScript language features (WeakMap, Proxy, Symbol, Decorators, ...)
 - [x] TSX (typed JSX) based templating (compile-time, no runtime overhead) (`st.render(<MyComponent iAmTyped={"yes"}><SoEasy /></MyComponent>)`)
+- [x] Redux store integration out-of-the-box
 - [x] Shared memory for hassle-free component inter-linking (no Provider/Context headache)
 - [x] Simple & effective high-performance event bus (internal app components event-driven communication) (`st.publish(...)`, `st.subscribe(...)`)
 - [x] Simple and dynamic DOM router for client-side routing (`<Route path=["home", "", "*"]><p>Home!</p></Route>`, `<RouteList>`)
@@ -57,7 +60,6 @@ Like with any architecture, there are pro's and con's.
 
 We're keen to improve this implementation until we feel really comfortable with it. Right now this lacks:
 
-- [ ] Redux based state machine with an intuitive API and optional immutability + local/session storage persistence
 - [ ] SSR, server side rendering, static page rendering and VDOM re-hydration (once SpringType server landed)
 
 <h2 align="center">Backers</h2>

@@ -1,6 +1,6 @@
 {
   "name": "springtype",
-  "version": "2.0.0-beta.21",
+  "version": "2.0.0-beta.22",
   "publishConfig": {
     "access": "public"
   },
@@ -30,10 +30,7 @@
     "testcafe": "^1.6.1",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
-    "typescript": "^3.7.2"
-  },
-  "dependencies": {
-    "global": "^4.4.0",
+    "typescript": "^3.7.2",
     "st-cp": "^2.0.0-alpha.4",
     "st-rm-rf": "^2.0.0-alpha.8"
   }

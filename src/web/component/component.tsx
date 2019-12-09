@@ -16,6 +16,7 @@ import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { IRefAttribute } from "./interface/iref-attribute";
 import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME } from "../vdom/dom";
+import { StoreTrait } from "./trait/store";
 
 export type DefaultComponentAttributes = {
   tag?: string; // allows to set a custom .el tag
@@ -55,11 +56,13 @@ export class Component<A = {}> implements ILifecycle {
       notInitialRender: false,
       attributes: {},
       options: Object.getPrototypeOf(this).constructor.COMPONENT_OPTIONS,
+      resolveOnInitiallyRendered: () => {},
     } as IComponentInternals;
 
     StateTrait.enableFor(this);
     AttrTrait.enableFor(this);
     ContextTrait.enableFor(this);
+    StoreTrait.enableFor(this);
 
     // register with global instance registry
     st[GlobalCache.COMPONENT_INSTANCES].push(this);
@@ -258,6 +261,9 @@ export class Component<A = {}> implements ILifecycle {
       // if there isn't a prev. VDOM state, render initially
       st.renderer.renderInitial(nodesToRender, (this.el as unknown) as IElement);
 
+      // resolve promises for calls on this.initiallyRendered()
+      this.INTERNAL.resolveOnInitiallyRendered();
+
       // call lifecycle method
       this.onAfterInitialRender();
     } else {
@@ -286,6 +292,13 @@ export class Component<A = {}> implements ILifecycle {
 
   dispatchEvent<D>(eventName: string, init?: CustomEventInit<any> & { detail: D }) {
     this.el.dispatchEvent(new CustomEvent(eventName.toLowerCase(), init));
+  }
+
+  async initiallyRendered(): Promise<void>{
+    if (this.el) return Promise.resolve();
+    return new Promise((resolve: Function) => {
+      this.INTERNAL.resolveOnInitiallyRendered = resolve;
+    });
   }
 
   disconnectedCallback() {

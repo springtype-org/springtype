@@ -1,22 +1,22 @@
 import { st } from "../../../src/core";
-import { component, state } from "../../../src/web/component";
+import { component } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
-import { appStore } from "./state";
-import { actions } from "./actions";
+import { store } from "../../../src/web/component/decorator/store";
+import { appStore, actions } from "./store";
 
 @component
 export class E2EStoreTest extends st.component implements ILifecycle {
 
-  @state
-  counter!: number;
+  @store('count')
+  count!: number;
 
   increment = () => {
-    appStore.dispatch(actions.increment);
+    st.getStore().dispatch(actions.increment);
   }
 
   decrement = () => {
-    appStore.dispatch(actions.decrement);
+    st.getStore().dispatch(actions.decrement);
   }
 
   render() {
@@ -28,20 +28,17 @@ export class E2EStoreTest extends st.component implements ILifecycle {
         <button onClick={this.decrement}>Decrement</button>
 
         <p>
-          Counter: {this.counter}
+          Counter: {this.count}
         </p>
       </div>
     );
   }
 
-  onAfterInitialRender() {
-
-    // trivial map; TODO: @store
-    appStore.subscribe(() => {
-      const state = appStore.getState();
-      this.counter = state.count;
-    });
+  onStoreChange(name: string, value: any) {
+    console.log('Store change', '@store("count") prop name', name, 'value', value, ' === ', this.count)
   }
 }
+
+st.setStore(appStore);
 
 st.render(<E2EStoreTest />);

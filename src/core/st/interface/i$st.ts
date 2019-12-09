@@ -19,6 +19,8 @@ import { It } from "../../i18n/interface/it";
 import { IPubSub } from "../../pubsub/interface";
 import { IPublish } from "../../pubsub/interface/ipublish";
 import { ISubscribe } from "../../pubsub/interface/isubscribe";
+import { Store } from "../../redux/interface/store";
+import { Action, AnyAction } from "../../redux/interface/actions";
 
 /**
  * public $st and internal st API
@@ -111,6 +113,10 @@ export interface I$st {
   pubsub: IPubSub;
   publish: IPublish<any>;
   subscribe: ISubscribe<any>;
+
+  // redux redux support using @redux
+  getStore: <S=any, A extends Action<any> = AnyAction>() => Store<S, A>;
+  setStore: <S=any, A extends Action<any> = AnyAction>(store: Store<S, A>) => void;
 
   // components are @springtype/web components
   COMPONENT_INSTANCES: any;

@@ -43,6 +43,12 @@ export interface IDOM {
     oldDomChildElement: Element
   ): IElement;
 
+  replaceTextNode(
+    virtualElementTextContent: string,
+    parentDomElement: Element,
+    oldDomChildElement: Element
+  ): Text;
+
   createChildElements(
     virtualChildren: IVirtualChildren,
     parentDomElement: Element,
