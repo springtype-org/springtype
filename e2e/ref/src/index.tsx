@@ -11,19 +11,19 @@ export interface IRedBoxAttrs {
 @component
 export class RedBox extends st.component<IRedBoxAttrs> {
   @attr
-  foo: number;
+  foo!: number;
 
   makeRed = () => {
     console.log("makeRed", this.foo, this.el.style);
 
-    this.elStyle = {
+    this.style = {
       display: "block",
       backgroundColor: "red",
     };
   };
 
   render() {
-    return <div>Works well if I'm becoming red</div>;
+    return <div>Works well if by background becomes red on click</div>;
   }
 }
 
@@ -58,7 +58,7 @@ export class RefTest extends st.component<IRefTestAttrs> implements ILifecycle {
 
     return (
       <div>
-        <RedBox style={{ color: "#ffffff" }} foo={345} ref={{ redBox: this }} />
+        <RedBox style={{ color: "#0000ff" }} foo={345} ref={{ redBox: this }} />
         <button onClick={this.onGetDiv}>Get DIV</button>
         <div ref={{ someDiv: this }}>{this.time}</div>
       </div>
