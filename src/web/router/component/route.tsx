@@ -176,8 +176,10 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
       this.matchVertical(stComponent);
     } else if (stComponent) {
 
-      // re-render on route change
-      stComponent.doRender();
+      if (stComponent.shouldRender()) {
+        // re-render on route change
+        stComponent.doRender();
+      }
     }
 
     if (stComponent && typeof stComponent.onRouteEnter == TYPE_FUNCTION) {
