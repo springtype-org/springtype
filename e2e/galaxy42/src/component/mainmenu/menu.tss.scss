@@ -1,0 +1,15 @@
+.menu {
+  display: flex;
+  padding: 0;
+  margin: 0 auto;
+  margin-top: 10%;
+  width: 50%;
+  height: 200px;
+  justify-content: center;
+}
+
+.title {
+  color: #fff;
+  font-size: 2em;
+  transform: perspective(200px) rotateX(-15deg);
+}

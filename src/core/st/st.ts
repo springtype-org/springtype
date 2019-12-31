@@ -22,15 +22,29 @@ const _globalThis: any = new Function("return this")();
 // makes sure the global storage is not re-initialized
 // and overwritten on subsequent calls / file imports
 if (!_globalThis[ST_KEY]) {
+
   // register scoped global as an instance of this class
   _globalThis[ST_KEY] = {
+
+    // runs micro-tasks asynchonuously
     run: async (fn: Function) => {
       return fn();
     },
+
+    // enables features by giving a reason to import them
+    // and not get tree-shaked (st.enable(pubsub)) leads to an import statement
     enable: (...implReferences: any) => { implReferences },
+
+    // global component instance registry
     [GlobalCache.COMPONENT_INSTANCES]: [],
+
+    // global context state
     [GlobalCache.CONTEXT]: {},
+
+    // global component class constructor registry
     [GlobalCache.COMPONENT_REGISTRY]: {},
+
+    // global component
     [GlobalCache.COMPONENT_WEAKMAP]: new WeakMap(),
   };
 }

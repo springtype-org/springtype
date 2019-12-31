@@ -102,6 +102,7 @@ export class Stream<T = {}> {
     return this;
   }
 
+  // TODO: onThrow
   onError(errorCb: Function) {
     this._onError = errorCb;
     return this;
