@@ -1,7 +1,7 @@
 import { IValidator } from "../interface/ivalidator";
 import { VALIDATOR_DEFAULT, VALIDATION_DECORATOR_METADATA_KEY } from "..";
 import { registerValidation } from "../function/register-validation";
-import { TYPE_FUNCTION } from "../../../../dist/core/lang/type-function";
+import { TYPE_FUNCTION } from "../../../../src/core/lang/type-function";
 
 export const validation = (validator: IValidator = VALIDATOR_DEFAULT) =>
     <T extends { new(...args: any[]): {} }>(ctor: T) => {
