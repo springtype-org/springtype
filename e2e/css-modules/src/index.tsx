@@ -16,6 +16,18 @@ export class TemplateName extends st.component implements ILifecycle {
 
   changeName = (evt: MouseEvent) => {
     this.label = "Click me again!";
+
+    st.style('bgtheme', `body {
+      background-color: #333;
+    }`);
+
+    setTimeout(() => {
+
+      st.style('bgtheme', `body {
+        background-color: #eee;
+      }`);
+
+    }, 1000);
   };
 
   render() {

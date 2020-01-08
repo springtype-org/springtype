@@ -57,7 +57,7 @@ export interface I$st {
   i18n: Ii18n;
   t: It;
   addTranslation: IAddTranslation;
-	setLanguage: ISetLanguage;
+  setLanguage: ISetLanguage;
 
   // change detection: events/listeners for changes on objects (state)
 
@@ -84,6 +84,9 @@ export interface I$st {
     ...children: Array<IVirtualChildren>
   ) => Array<IVirtualNode> | IVirtualNode | undefined;
 
+  // adds/replaces a global <style> element for dynamic CSS injection
+  style: (name: string, definition: string) => HTMLStyleElement;
+
   // DOM mutation abstraction
   dom: IDOM;
 
@@ -103,7 +106,7 @@ export interface I$st {
   // referencing
 
   // set and get reference and their data on any object, specifically on VDOM elements
-	ref: (refName: string, componentInstance: any, data?: any) => any;
+  ref: (refName: string, componentInstance: any, data?: any) => any;
 
   // virtual component base class implemenetation to inherit from
   component: IComponent;
@@ -115,8 +118,8 @@ export interface I$st {
   subscribe: ISubscribe<any>;
 
   // redux redux support using @redux
-  getStore: <S=any, A extends Action<any> = AnyAction>() => Store<S, A>;
-  setStore: <S=any, A extends Action<any> = AnyAction>(store: Store<S, A>) => void;
+  getStore: <S = any, A extends Action<any> = AnyAction>() => Store<S, A>;
+  setStore: <S = any, A extends Action<any> = AnyAction>(store: Store<S, A>) => void;
 
   // components are @springtype/web components
   COMPONENT_INSTANCES: any;
