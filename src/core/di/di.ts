@@ -14,8 +14,8 @@ if (!st.di) {
 		/**
 		 * Instantiates a class while taking care of DI configuration
 		 */
-		newInstance: (factoryFn: any, injectionStrategy: InjectionStrategy) => {
-			const newInstance = factoryFn();
+		newInstance: (factoryFn: any, injectionStrategy: InjectionStrategy, constructorArgument?: any) => {
+			const newInstance = factoryFn(constructorArgument);
 
 			if (injectionStrategy == InjectionStrategy.SINGLETON) {
 				st.di.singletonInstanceRegistry[
@@ -25,13 +25,14 @@ if (!st.di) {
 			return newInstance;
 		},
 
-		defaultFactoryFn: (ctor: any) => () => new ctor(),
+		defaultFactoryFn: (ctor: any, constructorArgument?: any) => () => new ctor(constructorArgument),
 
 		/**
 		 * Returns an instance as SINGLETON or FACTORY
 		 * @param originalCtor Constructor of the class to inject
+		 * @param constructorArgument Arbitrary first constructor argument for instantiation
 		 */
-		get: (originalCtor: any) => {
+		get: (originalCtor: any, constructorArgument?: any) => {
 			if (!originalCtor || !originalCtor[INJECTION_STRATEGY]) return;
 
 			const {
@@ -48,8 +49,9 @@ if (!st.di) {
 				instance = st.di.singletonInstanceRegistry[originalCtor.name];
 			} else {
 				instance = st.di.newInstance(
-					factoryFn || st.di.defaultFactoryFn(originalCtor),
-					injectionStrategy
+					factoryFn || st.di.defaultFactoryFn(originalCtor, constructorArgument),
+					injectionStrategy,
+					constructorArgument
 				);
 			}
 			return instance;

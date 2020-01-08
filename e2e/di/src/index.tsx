@@ -26,6 +26,9 @@ export class DIE2E {
 	@inject(FooFactory)
 	fooFactory!: FooFactory;
 
+	@inject(FooFactory, "firstCtorArgumentProvided")
+	fooFactoryCtorArg!: FooFactory;
+
 	@inject(FooFactoryFunction)
 	fooFactoryFunction!: FooFactoryFunction;
 
@@ -42,9 +45,12 @@ export class DIE2E {
 
 		if (this.fooFactoryFunction && this.fooFactoryFunction.name == "factory") {
 			st.log("factory function inject OK");
-
 		}
-		st.log(this.fooSingleton, this.fooFactory);
+
+		if (this.fooFactoryCtorArg && this.fooFactoryCtorArg.name == "firstCtorArgumentProvided") {
+			st.log("factory function constructor argument passing OK");
+		}
+		st.log(this.fooSingleton, this.fooFactory, this.fooFactoryCtorArg);
 	}
 }
 
