@@ -17,8 +17,8 @@ if (!st.context) {
 
   /* internal API */
   const callChangeHandlers = (onChangeHandlers: Array<IOnStateChangeHandler>, name: string, type: ChangeType, value: any, prevValue: any, path: string = DEFAULT_EMPTY_PATH) => {
-    for (let onChnageHandler of onChangeHandlers) {
-      onChnageHandler({
+    for (let onChangeHandler of onChangeHandlers) {
+      onChangeHandler({
         name,
         type,
         path,
@@ -50,7 +50,11 @@ if (!st.context) {
           callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, ChangeType.REFERENCE, value, prevValue);
         },
         (path: string, value: any, prevValue: any) => {
-          callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, ChangeType.DEEP, value, prevValue, path);
+
+          // prevent proxy on proxy change handler recursions
+          if (!path.startsWith('Symbol')) {
+            callChangeHandlers(st[GlobalCache.CONTEXT][contextName].onChangeHandlers, contextName, ChangeType.DEEP, value, prevValue, path);
+          }
         },
       );
     }
