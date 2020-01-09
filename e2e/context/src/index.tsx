@@ -1,7 +1,7 @@
 import { st } from "../../../src/core";
 import { injectable, inject } from "../../../src/core/di";
 import { context } from "../../../src/core/context";
-import { component } from "../../../src/web/component";
+import { component, contextState } from "../../../src/web/component";
 import { ILifecycle, IStateChange } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 
@@ -31,10 +31,10 @@ export class E2EContext extends st.component implements ILifecycle {
   @inject(ServiceDemo)
   serviceDemo: ServiceDemo;
 
-  @context(contextName)
+  @contextState(contextName)
   lolShared: LolShared = st.context<LolShared>(contextName, initialContextValue);
 
-  @context(contextName)
+  @contextState(contextName)
   lolSharedMirror: LolShared = st.context<LolShared>(contextName, initialContextValue);
 
   @context('iterative')
@@ -43,15 +43,6 @@ export class E2EContext extends st.component implements ILifecycle {
   onAfterInitialRender() {
 
     console.log('onAfterInitialRender');
-
-    st.addContextChangeHandler(contextName, (change: IStateChange) => {
-
-      st.info('context change per additional handler, change:');
-      st.info(change);
-
-      // manually re-render on context change (not activated by default)
-      this.doRender();
-    });
 
     st.addContextChangeHandler('iterative', (change: IStateChange) => {
 

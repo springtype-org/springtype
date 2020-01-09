@@ -16,6 +16,7 @@ import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { IRefAttribute } from "./interface/iref-attribute";
 import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME } from "../vdom/dom";
+import { ContextStateTrait } from "./trait/context-state";
 import { StoreTrait } from "./trait/store";
 
 export type DefaultComponentAttributes = {
@@ -56,12 +57,19 @@ export class Component<A = {}> implements ILifecycle {
       notInitialRender: false,
       attributes: {},
       options: Object.getPrototypeOf(this).constructor.COMPONENT_OPTIONS,
-      resolveOnInitiallyRendered: () => {},
+      resolveOnInitiallyRendered: () => { },
     } as IComponentInternals;
 
+    // @state impl.
     StateTrait.enableFor(this);
+
+    // @attr impl.
     AttrTrait.enableFor(this);
+
+    // @context impl.
     ContextTrait.enableFor(this);
+
+    // @store
     StoreTrait.enableFor(this);
 
     // register with global instance registry
@@ -254,7 +262,6 @@ export class Component<A = {}> implements ILifecycle {
 
     if (!this.INTERNAL.notInitialRender) {
 
-
       this.INTERNAL.hasDOMChanged = true;
       this.INTERNAL.notInitialRender = true;
 
@@ -263,6 +270,9 @@ export class Component<A = {}> implements ILifecycle {
 
       // resolve promises for calls on this.initiallyRendered()
       this.INTERNAL.resolveOnInitiallyRendered();
+
+      // @contextState impl.
+      ContextStateTrait.enableFor(this);
 
       // call lifecycle method
       this.onAfterInitialRender();
@@ -294,7 +304,7 @@ export class Component<A = {}> implements ILifecycle {
     this.el.dispatchEvent(new CustomEvent(eventName.toLowerCase(), init));
   }
 
-  async initiallyRendered(): Promise<void>{
+  async initiallyRendered(): Promise<void> {
     if (this.el) return Promise.resolve();
     return new Promise((resolve: Function) => {
       this.INTERNAL.resolveOnInitiallyRendered = resolve;
