@@ -13,6 +13,7 @@ export interface IState {
   name: string;
   type: ChangeType;
 }
+
 export class StateTrait {
 
   static enableFor(instance: any) {
