@@ -110,6 +110,7 @@ export interface I$st {
 
   // virtual component base class implemenetation to inherit from
   component: IComponent;
+  staticComponent: IComponent;
   getComponent: (className: string) => IComponent;
 
   // bus / publish / subscribe

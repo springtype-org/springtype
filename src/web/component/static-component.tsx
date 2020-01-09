@@ -1,5 +1,6 @@
 import { Component } from "./component";
 import { ILifecycle } from "./interface/ilifecycle";
+import { st } from "../../core";
 
 export class StaticComponent<A = {}> extends Component<A> implements ILifecycle {
 
@@ -10,3 +11,5 @@ export class StaticComponent<A = {}> extends Component<A> implements ILifecycle 
     return !this.INTERNAL.notInitialRender;
   }
 }
+
+st.staticComponent = StaticComponent;
