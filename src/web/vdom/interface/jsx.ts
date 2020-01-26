@@ -292,8 +292,193 @@ declare global {
 
     export interface DOMAttributeEventHandlersLowerCase {
 
-      // TODO Michi: put all lower case here
+      // Image Events
+      onload?: GenericEventHandler;
+      onloadcapture?: GenericEventHandler;
+      onerror?: GenericEventHandler;
+      onerrorcapture?: GenericEventHandler;
+
+      // Clipboard Events
+      oncopy?: ClipboardEventHandler;
+      oncopycapture?: ClipboardEventHandler;
+      oncut?: ClipboardEventHandler;
+      oncutcapture?: ClipboardEventHandler;
+      onpaste?: ClipboardEventHandler;
+      onpastecapture?: ClipboardEventHandler;
+
+      // Composition Events
+      oncompositionend?: CompositionEventHandler;
+      oncompositionendcapture?: CompositionEventHandler;
+      oncompositionstart?: CompositionEventHandler;
+      oncompositionstartcapture?: CompositionEventHandler;
+      oncompositionupdate?: CompositionEventHandler;
+      oncompositionupdatecapture?: CompositionEventHandler;
+
+      // Focus Events
+      onfocus?: FocusEventHandler;
+      onfocuscapture?: FocusEventHandler;
+      onblur?: FocusEventHandler;
+      onblurcapture?: FocusEventHandler;
+
+      // Form Events
+      onchange?: GenericEventHandler;
+      onchangecapture?: GenericEventHandler;
+      oninput?: GenericEventHandler;
+      oninputcapture?: GenericEventHandler;
+      onsearch?: GenericEventHandler;
+      onsearchcapture?: GenericEventHandler;
+      onsubmit?: GenericEventHandler;
+      onsubmitcapture?: GenericEventHandler;
+      oninvalid?: GenericEventHandler;
+      oninvalidcapture?: GenericEventHandler;
+
+      // Keyboard Events
+      onkeydown?: KeyboardEventHandler;
+      onkeydowncapture?: KeyboardEventHandler;
+      onkeypress?: KeyboardEventHandler;
+      onkeypresscapture?: KeyboardEventHandler;
+      onkeyup?: KeyboardEventHandler;
+      onkeyupcapture?: KeyboardEventHandler;
+
+      // Media Events
+      onabort?: GenericEventHandler;
+      onabortcapture?: GenericEventHandler;
+      oncanplay?: GenericEventHandler;
+      oncanplaycapture?: GenericEventHandler;
+      oncanplaythrough?: GenericEventHandler;
+      oncanplaythroughcapture?: GenericEventHandler;
+      ondurationchange?: GenericEventHandler;
+      ondurationchangecapture?: GenericEventHandler;
+      onemptied?: GenericEventHandler;
+      onemptiedcapture?: GenericEventHandler;
+      onencrypted?: GenericEventHandler;
+      onencryptedcapture?: GenericEventHandler;
+      onended?: GenericEventHandler;
+      onendedcapture?: GenericEventHandler;
+      onloadeddata?: GenericEventHandler;
+      onloadeddatacapture?: GenericEventHandler;
+      onloadedmetadata?: GenericEventHandler;
+      onloadedmetadatacapture?: GenericEventHandler;
+      onloadstart?: GenericEventHandler;
+      onloadstartcapture?: GenericEventHandler;
+      onpause?: GenericEventHandler;
+      onpausecapture?: GenericEventHandler;
+      onplay?: GenericEventHandler;
+      onplaycapture?: GenericEventHandler;
+      onplaying?: GenericEventHandler;
+      onplayingcapture?: GenericEventHandler;
+      onprogress?: GenericEventHandler;
+      onprogresscapture?: GenericEventHandler;
+      onratechange?: GenericEventHandler;
+      onratechangecapture?: GenericEventHandler;
+      onseeked?: GenericEventHandler;
+      onseekedcapture?: GenericEventHandler;
+      onseeking?: GenericEventHandler;
+      onseekingcapture?: GenericEventHandler;
+      onstalled?: GenericEventHandler;
+      onstalledcapture?: GenericEventHandler;
+      onsuspend?: GenericEventHandler;
+      onsuspendcapture?: GenericEventHandler;
+      ontimeupdate?: GenericEventHandler;
+      ontimeupdatecapture?: GenericEventHandler;
+      onvolumechange?: GenericEventHandler;
+      onvolumechangecapture?: GenericEventHandler;
+      onwaiting?: GenericEventHandler;
+      onwaitingcapture?: GenericEventHandler;
+
+      // MouseEvents
       onclick?: MouseEventHandler;
+      onclickcapture?: MouseEventHandler;
+      oncontextmenu?: MouseEventHandler;
+      oncontextmenucapture?: MouseEventHandler;
+      ondblclick?: MouseEventHandler;
+      ondblclickcapture?: MouseEventHandler;
+      ondrag?: DragEventHandler;
+      ondragcapture?: DragEventHandler;
+      ondragend?: DragEventHandler;
+      ondragendcapture?: DragEventHandler;
+      ondragenter?: DragEventHandler;
+      ondragentercapture?: DragEventHandler;
+      ondragexit?: DragEventHandler;
+      ondragexitcapture?: DragEventHandler;
+      ondragleave?: DragEventHandler;
+      ondragleavecapture?: DragEventHandler;
+      ondragover?: DragEventHandler;
+      ondragovercapture?: DragEventHandler;
+      ondragstart?: DragEventHandler;
+      ondragstartcapture?: DragEventHandler;
+      ondrop?: DragEventHandler;
+      ondropcapture?: DragEventHandler;
+      onmousedown?: MouseEventHandler;
+      onmousedowncapture?: MouseEventHandler;
+      onmouseenter?: MouseEventHandler;
+      onmouseentercapture?: MouseEventHandler;
+      onmouseleave?: MouseEventHandler;
+      onmouseleavecapture?: MouseEventHandler;
+      onmousemove?: MouseEventHandler;
+      onmousemovecapture?: MouseEventHandler;
+      onmouseout?: MouseEventHandler;
+      onmouseoutcapture?: MouseEventHandler;
+      onmouseover?: MouseEventHandler;
+      onmouseovercapture?: MouseEventHandler;
+      onmouseup?: MouseEventHandler;
+      onmouseupcapture?: MouseEventHandler;
+
+      // Selection Events
+      onselect?: GenericEventHandler;
+      onselectcapture?: GenericEventHandler;
+
+      // Touch Events
+      ontouchcancel?: TouchEventHandler;
+      ontouchcancelcapture?: TouchEventHandler;
+      ontouchend?: TouchEventHandler;
+      ontouchendcapture?: TouchEventHandler;
+      ontouchmove?: TouchEventHandler;
+      ontouchmovecapture?: TouchEventHandler;
+      ontouchstart?: TouchEventHandler;
+      ontouchstartcapture?: TouchEventHandler;
+
+      // Pointer Events
+      onpointerover?: PointerEventHandler;
+      onpointerovercapture?: PointerEventHandler;
+      onpointerenter?: PointerEventHandler;
+      onpointerentercapture?: PointerEventHandler;
+      onpointerdown?: PointerEventHandler;
+      onpointerdowncapture?: PointerEventHandler;
+      onpointermove?: PointerEventHandler;
+      onpointermovecapture?: PointerEventHandler;
+      onpointerup?: PointerEventHandler;
+      onpointerupcapture?: PointerEventHandler;
+      onpointercancel?: PointerEventHandler;
+      onpointercancelcapture?: PointerEventHandler;
+      onpointerout?: PointerEventHandler;
+      onpointeroutcapture?: PointerEventHandler;
+      onpointerleave?: PointerEventHandler;
+      onpointerleavecapture?: PointerEventHandler;
+      ongotpointercapture?: PointerEventHandler;
+      ongotpointercapturecapture?: PointerEventHandler;
+      onlostpointercapture?: PointerEventHandler;
+      onlostpointercapturecapture?: PointerEventHandler;
+
+      // UI Events
+      onscroll?: UIEventHandler;
+      onscrollcapture?: UIEventHandler;
+
+      // Wheel Events
+      onwheel?: WheelEventHandler;
+      onwheelcapture?: WheelEventHandler;
+
+      // Animation Events
+      onanimationstart?: AnimationEventHandler;
+      onanimationstartcapture?: AnimationEventHandler;
+      onanimationend?: AnimationEventHandler;
+      onanimationendcapture?: AnimationEventHandler;
+      onanimationiteration?: AnimationEventHandler;
+      onanimationiterationcapture?: AnimationEventHandler;
+
+      // Transition Events
+      ontransitionend?: TransitionEventHandler;
+      ontransitionendcapture?: TransitionEventHandler;
     }
 
     export interface DOMAttributes extends IAttributes, DOMAttributeEventHandlersLowerCase {
@@ -487,9 +672,149 @@ declare global {
     }
 
     export interface HTMLAttributesLowerCase {
-
-      // TODO Michi: put all lower case here
+      // Standard HTML Attributes
+      accept?: string;
+      acceptcharset?: string;
+      accesskey?: string;
+      action?: string;
+      allowfullscreen?: boolean;
+      allowtransparency?: boolean;
+      alt?: string;
+      async?: boolean;
+      autocomplete?: string;
+      autocorrect?: string;
+      autofocus?: boolean | string;
+      autoplay?: boolean;
+      capture?: boolean;
+      cellpadding?: number | string;
+      cellspacing?: number | string;
+      charset?: string;
+      challenge?: string;
+      checked?: boolean | string;
+      class?: string | Array<string>;
+      classname?: string | Array<string>;
+      cols?: number;
+      children?: any;
+      colspan?: number;
+      content?: string;
+      contenteditable?: boolean;
+      contextmenu?: string;
+      controls?: boolean;
+      controlslist?: string;
+      coords?: string;
+      crossorigin?: string;
+      data?: string;
+      datetime?: string;
+      default?: boolean;
+      defer?: boolean;
+      dir?: string;
+      disabled?: boolean;
+      download?: any;
+      draggable?: boolean;
+      enctype?: string;
+      form?: string;
+      formaction?: string;
+      formenctype?: string;
+      formmethod?: string;
+      novalidate?: boolean | string;
+      formnovalidate?: boolean;
+      formtarget?: string;
+      frameborder?: number | string;
+      headers?: string;
+      height?: number | string;
+      hidden?: boolean;
+      high?: number;
+      href?: string;
+      hreflang?: string;
+      for?: string;
+      htmlfor?: string;
+      httpequiv?: string;
+      icon?: string;
+      id?: string;
+      inputmode?: string;
+      integrity?: string;
+      is?: string;
+      keyparams?: string;
+      keytype?: string;
+      kind?: string;
+      label?: string;
+      lang?: string;
+      list?: string;
+      loop?: boolean;
+      low?: number;
+      manifest?: string;
+      marginheight?: number;
+      marginwidth?: number;
+      max?: number | string;
+      maxlength?: number;
+      media?: string;
+      mediagroup?: string;
+      method?: string;
+      min?: number | string;
+      minlength?: number;
+      multiple?: boolean;
+      muted?: boolean;
+      name?: string;
+      open?: boolean;
+      optimum?: number;
+      pattern?: string;
+      placeholder?: string;
+      playsinline?: boolean;
+      poster?: string;
+      preload?: string;
+      radiogroup?: string;
+      readonly?: boolean;
+      rel?: string;
+      required?: boolean | string;
+      role?: string;
+      rows?: number;
+      rowspan?: number;
+      sandbox?: string;
+      scope?: string;
+      scoped?: boolean;
+      scrolling?: string;
+      seamless?: boolean;
+      selected?: boolean;
+      shape?: string;
+      size?: number;
+      sizes?: string;
+      slot?: string;
+      span?: number;
+      spellcheck?: boolean;
+      src?: string;
+      srcset?: string;
+      srcdoc?: string;
+      srclang?: string;
+      start?: number;
+      step?: number | string;
+      style?: string | Partial<CSSStyleDeclaration>;
+      summary?: string;
       tabindex?: number|string;
+      target?: string;
+      title?: string;
+      type?: string;
+      usemap?: string;
+      value?: string | string[] | number;
+      width?: number | string;
+      wmode?: string;
+      wrap?: string;
+
+      // RDFa Attributes
+      about?: string;
+      datatype?: string;
+      inlist?: any;
+      prefix?: string;
+      property?: string;
+      resource?: string;
+      typeof?: string;
+      vocab?: string;
+
+      // Microdata Attributes
+      itemprop?: string;
+      itemscope?: boolean;
+      itemtype?: string;
+      itemid?: string;
+      itemref?: string;
     }
 
     // TODO: All should allow for string (full HTML support)
@@ -503,9 +828,7 @@ declare global {
       allowTransparency?: boolean;
       alt?: string;
       async?: boolean;
-      autocomplete?: string;
       autoComplete?: string;
-      autocorrect?: string;
       autoCorrect?: string;
       autofocus?: boolean | string;
       autoFocus?: boolean;
@@ -541,7 +864,6 @@ declare global {
       formAction?: string;
       formEncType?: string;
       formMethod?: string;
-      novalidate?: boolean | string;
       formNoValidate?: boolean;
       formTarget?: string;
       frameBorder?: number | string;
@@ -580,7 +902,6 @@ declare global {
       multiple?: boolean;
       muted?: boolean;
       name?: string;
-      noValidate?: boolean;
       open?: boolean;
       optimum?: number;
       pattern?: string;
@@ -608,7 +929,6 @@ declare global {
       span?: number;
       spellcheck?: boolean;
       src?: string;
-      srcset?: string;
       srcDoc?: string;
       srcLang?: string;
       srcSet?: string;
