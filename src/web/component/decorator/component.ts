@@ -13,7 +13,7 @@ export const component = (optionsOrElementFunction: IComponentOptions | Componen
     // decorator use on class @component({ ... })
     return (targetClass: any) => {
       if (process.env.NODE_ENV === "development") {
-        if (Object.getPrototypeOf(targetClass) !== st.component) {
+        if (!(new (Object.getPrototypeOf(targetClass).prototype.constructor) instanceof st.component)) {
           throw new Error(
             `@component class ${targetClass.name} doesn't extend base class st.component. Make sure to write: class ${targetClass.name} extends st.component implements ILifecycle { ... your implementation ... }`,
           );
