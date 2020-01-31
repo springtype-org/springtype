@@ -4,6 +4,7 @@ import { IPubSubObserver } from "./interface/ipubsub-observer";
 import { IPubSubEventHandler } from "./interface/ipubsub-event-handler";
 
 export const PUBSUB_INIT_NAME = "$st__pubSub";
+export const PUBSUB_TOPIC_WILDCARD = '*';
 
 // for st.enable(pubsub, ...)
 export const pubsub = null;
@@ -24,8 +25,8 @@ if (!st.pubsub) {
       st.pubsub.initEventing(instance);
 
       for (let observer of (instance as IPubSubTarget)[PUBSUB_INIT_NAME].listeners) {
-        if (observer.topic === topic) {
-          observer.fn(data);
+        if (observer && (observer.topic === topic || observer.topic === PUBSUB_TOPIC_WILDCARD)) {
+          observer.fn(data, topic);
         }
       }
     },
@@ -37,11 +38,27 @@ if (!st.pubsub) {
         topic,
         fn
       } as IPubSubObserver);
+    },
+
+    unsubscribe: <D>(topic: string, fn: IPubSubEventHandler<D>, instance: any = st) => {
+
+      if (!(instance as IPubSubTarget)[PUBSUB_INIT_NAME]) return;
+
+      for (let i = 0; i < (instance as IPubSubTarget)[PUBSUB_INIT_NAME].listeners.length; i++) {
+
+        console.log('(instance as IPubSubTarget)[PUBSUB_INIT_NAME]', (instance as IPubSubTarget)[PUBSUB_INIT_NAME])
+        const observer = (instance as IPubSubTarget)[PUBSUB_INIT_NAME].listeners[i];
+
+        if (fn && fn === observer && (observer.topic === topic || topic === '*')) {
+          delete (instance as IPubSubTarget)[PUBSUB_INIT_NAME].listeners[i];
+        }
+      }
     }
   }
 
   st.publish = st.pubsub.publish;
   st.subscribe = st.pubsub.subscribe;
+  st.unsubscribe = st.pubsub.unsubscribe;
 
 } else {
   if (process.env.NODE_ENV === 'development') {

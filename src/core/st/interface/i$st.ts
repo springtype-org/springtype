@@ -117,6 +117,8 @@ export interface I$st {
   pubsub: IPubSub;
   publish: IPublish<any>;
   subscribe: ISubscribe<any>;
+  // same interface as subscribe, reverse logic
+  unsubscribe: ISubscribe<any>;
 
   // redux redux support using @redux
   getStore: <S = any, A extends Action<any> = AnyAction>() => Store<S, A>;

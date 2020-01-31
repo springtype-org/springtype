@@ -57,11 +57,15 @@ if (!st.dom) {
       virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
       parentDomElement: IElement,
       detached: boolean = false
-    ): Array<IElement | Text | undefined> | IElement | undefined => {
+    ): Array<IElement | Text | undefined> | IElement | Text | undefined => {
+
       if (Array.isArray(virtualNode)) {
         return st.dom.createChildElements(virtualNode, parentDomElement, detached);
       } else if (typeof virtualNode != TYPE_UNDEFINED) {
         return st.dom.createElement(virtualNode as IVirtualNode | undefined, parentDomElement, detached);
+      } else {
+        // undefined virtualNode -> e.g. when a tsx variable is used in markup which is undefined
+        return st.dom.createTextNode("", parentDomElement, detached);
       }
     },
 

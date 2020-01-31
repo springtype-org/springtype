@@ -8,7 +8,7 @@ export interface IRenderer {
   renderInitial(
     virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
     parentDomElement: IElement,
-  ): Array<IElement | Text | undefined> | IElement | undefined;
+  ): Array<IElement | Text | undefined> | IElement | Text | undefined;
 
   patch(
     domElements: Array<IElement>,

@@ -103,6 +103,12 @@ export interface ILifecycle {
   // before attribute changes get accepted
   shouldAttributeChange(name: string, value: any, prevValue: any): boolean;
 
+  // receive and filter messages
+  onMessage?(topic: string, value: any): void;
+
+  // broadcasts a message for other components to listen to
+  sendMessage(topic: string, value: any): void;
+
   // set an attribute and follow the @attr behaviour (e.g. DOM_INTRANSPARENT)
   setAttribute(name: string, value: any, type?: AttrType): void;
 

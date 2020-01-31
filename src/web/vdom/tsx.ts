@@ -10,7 +10,6 @@ import {
 import { UNWRAP_ATTRIBUTE_NAME, SLOT_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_FUNCTION } from "../../core/lang/type-function";
 import { TYPE_OBJECT } from "../../core/lang/type-object";
-import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { XLINK_ATTRIBUTE_NAME, CLASS_NAME_ATTRIBUTE_NAME, CLASS_ATTRIBUTE_NAME, FRAGMENT_ELEMENT_NAME, TEMPLATE_ELEMENT_NAME, DEFAULT_SLOT_NAME } from "./dom";
 
 export const tsxToStandardAttributeName = (tsxAttributeName: string): string => {
@@ -39,10 +38,10 @@ export const toFlatNodeList = (children: Array<IVirtualChild>): Array<IVirtualCh
   return ([] as Array<IVirtualChildren>).concat.apply([], children as any) as Array<IVirtualChildren>;
 };
 
-// Filters comments and undefines like: [undefined, 'a', 'b', false, {}] to: ['a', 'b', false]
-export const filterCommentsAndUndefines = (children: Array<IVirtualNode> | Array<IVirtualChild>) => {
+// Filters comments and undefines like: ['a', 'b', false, {}] to: ['a', 'b', false]
+export const filterComments = (children: Array<IVirtualNode> | Array<IVirtualChild>) => {
   return children.filter(
-    (child: IVirtualChild) => typeof child !== TYPE_UNDEFINED && !isJSXComment(child as IVirtualNode),
+    (child: IVirtualChild) => !isJSXComment(child as IVirtualNode),
   );
 };
 
@@ -56,14 +55,14 @@ export const tsx = (st.tsx = (
   attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null,
   ...children: Array<IVirtualChildren> | IVirtualChildren
 ): Array<IVirtualNode> | IVirtualNode => {
-  children = filterCommentsAndUndefines(toFlatNodeList(children));
+  children = filterComments(toFlatNodeList(children));
 
   // clone attributes as well
   attributes = { ...attributes };
 
   // effectively unwrap by directly returning the children
   if (type === FRAGMENT_ELEMENT_NAME || attributes[UNWRAP_ATTRIBUTE_NAME]) {
-    return filterCommentsAndUndefines(children) as Array<IVirtualNode>;
+    return filterComments(children) as Array<IVirtualNode>;
   }
 
   const slotChildren: ISlotChildren = {};

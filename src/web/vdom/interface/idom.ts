@@ -24,7 +24,7 @@ export interface IDOM {
     virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
     parentDomElement: Element,
     detached?: boolean
-  ): Array<IElement | Text | undefined> | IElement | undefined;
+  ): Array<IElement | Text | undefined> | IElement | Text | undefined;
 
   createElement(
     virtualNode: IVirtualNode | undefined,

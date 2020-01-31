@@ -18,6 +18,7 @@ import { IRefAttribute } from "./interface/iref-attribute";
 import { CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME } from "../vdom/dom";
 import { ContextStateTrait } from "./trait/context-state";
 import { StoreTrait } from "./trait/store";
+import { MessageTrait } from "./trait/message";
 
 export type DefaultComponentAttributes = {
   tag?: string; // allows to set a custom .el tag
@@ -72,6 +73,9 @@ export class Component<A = {}> implements ILifecycle {
     // @store
     StoreTrait.enableFor(this);
 
+    // .onMessage / .sendMessage()
+    MessageTrait.enableFor(this);
+
     // register with global instance registry
     st[GlobalCache.COMPONENT_INSTANCES].push(this);
   }
@@ -124,6 +128,12 @@ export class Component<A = {}> implements ILifecycle {
   onAfterElChildrenCreate() { }
 
   onBeforeConnect() { }
+
+  onMessage(topic: string, value: any) {}
+
+  sendMessage(topic: string, value: any): void {
+    st.publish(topic, value);
+  }
 
   // internal web component standard method
   connectedCallback() {
@@ -318,6 +328,9 @@ export class Component<A = {}> implements ILifecycle {
     }
 
     this.onDisconnect();
+
+    console.log('disable messaging in disconnect')
+    MessageTrait.disableFor(this);
 
     // purge from global instance registry
     // (e.g. doesn't retrigger render on TSS theme change)

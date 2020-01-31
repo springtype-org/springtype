@@ -1,7 +1,7 @@
 import { st } from "../../core/st/st";
 import { IElement } from "./interface/ielement";
 import { IVirtualNode } from "./interface/ivirtual-node";
-import { filterCommentsAndUndefines, tsxToStandardAttributeName } from "./tsx";
+import { filterComments, tsxToStandardAttributeName } from "./tsx";
 import { NOVDOM_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_OBJECT } from "../../core/lang/type-object";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
@@ -20,7 +20,7 @@ if (!st.renderer) {
     renderInitial: (
       virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
       parentDomElement: IElement,
-    ): Array<IElement | Text | undefined> | IElement | undefined => {
+    ): Array<IElement | Text | undefined> | IElement | Text | undefined => {
       return st.dom.createElementOrElements(virtualNode, parentDomElement);
     },
 
@@ -31,7 +31,7 @@ if (!st.renderer) {
     ) => {
 
       // comments and undefines can occur at any place dynamically
-      virtualElements = filterCommentsAndUndefines(virtualElements) as Array<IVirtualNode>;
+      virtualElements = filterComments(virtualElements) as Array<IVirtualNode>;
 
       // length to walk is the bigger number of both lists (reality in DOM vs. virtual DOM)
       const maxLength = domElements.length > virtualElements.length ? domElements.length : virtualElements.length;
@@ -49,6 +49,7 @@ if (!st.renderer) {
         if (typeof virtualElement === TYPE_OBJECT) {
           st.renderer.patchElement(parent, domElement, virtualElement as IVirtualNode);
         } else {
+
           st.renderer.patchTextNode(parent, domElement, (virtualElement as unknown) as string);
         }
       }
