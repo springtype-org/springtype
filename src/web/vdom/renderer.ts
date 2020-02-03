@@ -63,6 +63,7 @@ if (!st.renderer) {
       // ignore this element and it's while sub-tree (allows for manually changed DOM sub-trees to be retained)
       if (domElement && domElement.nodeType != 3 /* not Text*/ && domElement[NOVDOM_ATTRIBUTE_NAME]) return;
       // ignore on component level
+      if (parent && parent.$stComponent && parent.$stComponent.INTERNAL.attributes[NOVDOM_ATTRIBUTE_NAME]) return;
       if (domElement && domElement.$stComponent && domElement.$stComponent.INTERNAL.attributes[NOVDOM_ATTRIBUTE_NAME]) return;
 
       if (domElement && domElement.$stComponent) {
