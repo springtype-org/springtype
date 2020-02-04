@@ -1,6 +1,5 @@
 import { st } from "../../../core";
 import { pubsub } from "../../../core/pubsub";
-import { ILifecycle } from "../interface";
 
 export class MessageTrait {
 
