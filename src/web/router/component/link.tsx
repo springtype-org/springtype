@@ -40,7 +40,7 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
 
   onClick = () => {
 
-    st.route = {
+      st.route = {
       path: this.path,
       params: this.params
     }
