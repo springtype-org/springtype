@@ -1,14 +1,14 @@
-import {attr, component} from "../component";
-import {IValidationSate} from "./interface/ivalidation-sate";
-import {tsx} from "../vdom";
+import {attr, component} from "../../component";
+import {IValidationSate} from "../interface/ivalidation-sate";
+import {tsx} from "../../vdom";
 import {BaseInputComponent, IAttrBaseInputComponent} from "./base-input-component";
-import {AttrType} from "../component/trait/attr";
+import {AttrType} from "../../component/trait/attr";
 
 export interface IAttrInputComponent extends IAttrBaseInputComponent, Partial<HTMLInputElement> {
 }
 
 @component({tag: 'input'})
-export class InputComponent extends BaseInputComponent<IAttrInputComponent> {
+export class Input extends BaseInputComponent<IAttrInputComponent> {
 
     @attr(AttrType.DOM_TRANSPARENT)
     value: string = '';

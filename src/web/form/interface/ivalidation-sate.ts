@@ -1,4 +1,4 @@
-import {BaseComponent} from "../base-component";
+import {BaseComponent} from "../component/base-component";
 import {IFormValidationStateValue} from "./iform-validation-state-value";
 
 export interface IValidationSate {

@@ -1,7 +1,7 @@
-import {ILifecycle} from "../component/interface";
-import {attr} from "../component";
+import {ILifecycle} from "../../component/interface";
+import {attr} from "../../component";
 import {BaseComponent} from "./base-component";
-import {IValidationSate} from "./interface/ivalidation-sate";
+import {IValidationSate} from "../interface/ivalidation-sate";
 
 
 const DEFAULT_VALIDATION_DEBOUNCE_TIME_IN_MS = 250;

@@ -1,13 +1,13 @@
-import {attr, component} from "../component";
-import {IValidationSate} from "./interface/ivalidation-sate";
-import {st} from "../../core/st";
+import {attr, component} from "../../component";
+import {IValidationSate} from "../interface/ivalidation-sate";
+import {st} from "../../../core/st";
 import {BaseInputComponent, IAttrBaseInputComponent} from "./base-input-component";
 
 interface IAttrSelectComponent extends IAttrBaseInputComponent, Partial<HTMLSelectElement> {
 }
 
 @component({tag: 'select'})
-export class SelectComponent extends BaseInputComponent<IAttrSelectComponent> {
+export class Select extends BaseInputComponent<IAttrSelectComponent> {
 
     @attr
     multiple: boolean = false;

@@ -4,7 +4,7 @@ import * as M from "materialize-css/dist/js/materialize.js"
 import {st} from "../../../src/core";
 import {component} from "../../../src/web/component";
 import {tsx} from "../../../src/web/vdom";
-import {FromComponent, InputComponent, SelectComponent} from "../../../src/web/form";
+import {From, Input, Select} from "../../../src/web/form";
 
 const VALIDATOR_NAME = "ST_VALIDATOR_NAME";
 const validatorFactory = (fun: (value: string) => Promise<boolean>, validatorName: string) => {
@@ -35,43 +35,42 @@ export class Foo extends st.staticComponent {
         console.log('validator name', required[VALIDATOR_NAME])
         return <fragment>
             <div class="parallax-container">
-                <div class="parallax"><img src="assets/images/parallax1.jpg"/></div>
+                <div class="parallax"><img src="../assets/images/parallax1.jpg"/></div>
             </div>
             <div class="container">
                 <div class="row">
-
                     <div class="col s12 m8 offset-m1 xl7 offset-xl2">
-                        <FromComponent>
-                            <FromComponent name="input">
+                        <From>
+                            <From name="input">
                                 <div class="row">
                                     <div class="input-field col s6">
-                                        <InputComponent placeholder="Placeholder" id="first_name" name="first_name"
-                                                        type="text" class="validate"/>
+                                        <Input placeholder="Placeholder" id="first_name" name="first_name"
+                                               type="text" class="validate"/>
                                         <label for="first_name" class="active">First Name</label>
                                     </div>
                                     <div class="input-field col s6">
-                                        <InputComponent id="last_name" name="last_name" type="text"/>
+                                        <Input id="last_name" name="last_name" type="text"/>
                                         <label for="last_name">Last Name</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <InputComponent disabled={true} value="I am not editable" id="disabled"
-                                                        name="disabled" type="text"
-                                                        class="validate"/>
+                                        <Input disabled={true} value="I am not editable" id="disabled"
+                                               name="disabled" type="text"
+                                               class="validate"/>
                                         <label for="disabled" class="active">Disabled</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <InputComponent id="password" name="password" type="password" class="validate"/>
+                                        <Input id="password" name="password" type="password" class="validate"/>
                                         <label for="password">Password</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <InputComponent name="email" id="email" type="email"
-                                                        validators={[required, length]}/>
+                                        <Input name="email" id="email" type="email"
+                                               validators={[required, length]}/>
                                         <label for="email">Email</label>
                                         <span class="helper-text" data-error="wrong"
                                               data-success="right">Helper text</span>
@@ -81,41 +80,41 @@ export class Foo extends st.staticComponent {
                                     <div class="col s12">
                                         This is an inline input field:
                                         <div class="input-field inline">
-                                            <InputComponent id="email_inline" name="email_inline"
-                                                            type="email"
-                                                            class="validate"/>
+                                            <Input id="email_inline" name="email_inline"
+                                                   type="email"
+                                                   class="validate"/>
                                             <label for="email_inline">Email</label>
                                             <span class="helper-text" data-error="wrong" data-success="right"/>
                                         </div>
                                     </div>
                                 </div>
-                            </FromComponent>
-                            <FromComponent name="radio-buttons">
+                            </From>
+                            <From name="radio-buttons">
                                 <p>
                                     <label>
-                                        <InputComponent name="group1" type="radio" value="red" checked={true}/>
+                                        <Input name="group1" type="radio" value="red" checked={true}/>
                                         <span>Red</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent name="group1" type="radio" value="yellow"/>
+                                        <Input name="group1" type="radio" value="yellow"/>
                                         <span>Yellow</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent class="with-gap" name="group1" type="radio" value="green"/>
+                                        <Input class="with-gap" name="group1" type="radio" value="green"/>
                                         <span>Green</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent name="group1" type="radio" disabled={true} value="brown"/>
+                                        <Input name="group1" type="radio" disabled={true} value="brown"/>
                                         <span>Brown</span>
                                     </label>
                                 </p>
-                            </FromComponent>
+                            </From>
                             <div class="row">
                                 <div class="col s12">
                                     <ul class="tabs">
@@ -131,47 +130,47 @@ export class Foo extends st.staticComponent {
                                 <div id="test4" class="col s12">Test 4</div>
                             </div>
 
-                            <FromComponent>
+                            <From>
 
                                 <p>
                                     <label>
-                                        <InputComponent type="checkbox"/>
+                                        <Input type="checkbox"/>
                                         <span>Red</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent type="checkbox" checked={true}/>
+                                        <Input type="checkbox" checked={true}/>
                                         <span>Yellow</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent type="checkbox" class="filled-in" checked={true}/>
+                                        <Input type="checkbox" class="filled-in" checked={true}/>
                                         <span>Filled in</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent id="indeterminate-checkbox" type="checkbox"/>
+                                        <Input id="indeterminate-checkbox" type="checkbox"/>
                                         <span>Indeterminate Style</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent type="checkbox" checked={true} disabled={true}/>
+                                        <Input type="checkbox" checked={true} disabled={true}/>
                                         <span>Green</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <InputComponent type="checkbox" disabled={true}/>
+                                        <Input type="checkbox" disabled={true}/>
                                         <span>Brown</span>
                                     </label>
                                 </p>
-                            </FromComponent>
+                            </From>
                             <div class="chip">
-                                <img src="assets/images/yuna.jpg" alt="Contact Person"/>
+                                <img src="../assets/images/yuna.jpg" alt="Contact Person"/>
                                 Jane Doe
                             </div>
                             <div class="chip">
@@ -179,19 +178,19 @@ export class Foo extends st.staticComponent {
                                 <i class="close material-icons">close</i>
                             </div>
 
-                            <FromComponent name="datepicker">
-                                <InputComponent name="date" type="text" class="datepicker"/>
-                            </FromComponent>
-                            <FromComponent name="range">
+                            <From name="datepicker">
+                                <Input name="date" type="text" class="datepicker"/>
+                            </From>
+                            <From name="range">
                                 <p class="range-field">
                                     <input name="html5" type="range" id="test5" min="0" max="100"/>
                                 </p>
-                            </FromComponent>
-                            <FromComponent name="switches">
+                            </From>
+                            <From name="switches">
                                 <div class="switch">
                                     <label>
                                         Off
-                                        <InputComponent name="switch" type="checkbox"/>
+                                        <Input name="switch" type="checkbox"/>
                                         <span class="lever"/>
                                         On
                                     </label>
@@ -199,35 +198,35 @@ export class Foo extends st.staticComponent {
                                 <div class="switch">
                                     <label>
                                         Off
-                                        <InputComponent name="switch-disabled" disabled={true} type="checkbox"/>
+                                        <Input name="switch-disabled" disabled={true} type="checkbox"/>
                                         <span class="lever"/>
                                         On
                                     </label>
                                 </div>
-                            </FromComponent>
-                            <FromComponent name="selects">
+                            </From>
+                            <From name="selects">
                                 <div class="input-field col s12">
-                                    <SelectComponent name="select">
+                                    <Select name="select">
                                         <option value="" disabled selected>Choose your option</option>
                                         <option value="1">Option 1</option>
                                         <option value="2">Option 2</option>
                                         <option value="3">Option 3</option>
-                                    </SelectComponent>
+                                    </Select>
                                     <label>Materialize Select</label>
                                 </div>
 
                                 <div class="input-field col s12">
-                                    <SelectComponent name="multiple-select" multiple>
+                                    <Select name="multiple-select" multiple>
                                         <option value="" disabled selected>Choose your option</option>
                                         <option value="1">Option 1</option>
                                         <option value="2">Option 2</option>
                                         <option value="3">Option 3</option>
-                                    </SelectComponent>
+                                    </Select>
                                     <label>Materialize Multiple Select</label>
                                 </div>
 
                                 <div class="input-field col s12">
-                                    <SelectComponent name="option-group-select">
+                                    <Select name="option-group-select">
                                         <optgroup label="team 1">
                                             <option value="1">Option 1</option>
                                             <option value="2">Option 2</option>
@@ -236,21 +235,21 @@ export class Foo extends st.staticComponent {
                                             <option value="3">Option 3</option>
                                             <option value="4">Option 4</option>
                                         </optgroup>
-                                    </SelectComponent>
+                                    </Select>
                                     <label>Optgroups</label>
                                 </div>
 
                                 <div class="input-field col s12 m6">
-                                    <SelectComponent name="image-select-1" class="icons">
+                                    <Select name="image-select-1" class="icons">
                                         <option value="" disabled selected>Choose your option</option>
                                         <option value="" data-icon="assets/images/sample-1.jpg">example 1</option>
                                         <option value="" data-icon="assets/images/office.jpg">example 2</option>
                                         <option value="" data-icon="assets/images/yuna.jpg">example 3</option>
-                                    </SelectComponent>
+                                    </Select>
                                     <label>Images in select</label>
                                 </div>
                                 <div class="input-field col s12 m6">
-                                    <SelectComponent name="image-select-2" class="icons">
+                                    <Select name="image-select-2" class="icons">
                                         <option value="" disabled selected>Choose your option</option>
                                         <option value="" data-icon="assets/images/sample-1.jpg" class="left">example 1
                                         </option>
@@ -258,25 +257,25 @@ export class Foo extends st.staticComponent {
                                         </option>
                                         <option value="" data-icon="assets/images/yuna.jpg" class="left">example 3
                                         </option>
-                                    </SelectComponent>
+                                    </Select>
                                     <label>Images in select</label>
                                 </div>
 
                                 <label>Browser Select</label>
-                                <SelectComponent name="browser-default" class="browser-default">
+                                <Select name="browser-default" class="browser-default">
                                     <option value="" disabled selected>Choose your option</option>
                                     <option value="1">Option 1</option>
                                     <option value="2">Option 2</option>
                                     <option value="3">Option 3</option>
-                                </SelectComponent>
-                            </FromComponent>
+                                </Select>
+                            </From>
                             <div class="carousel">
-                                <a class="carousel-item" href="#one!"><img src="assets/images/ca1.jpg"/></a>
-                                <a class="carousel-item" href="#two!"><img src="assets/images/ca2.jpg"/></a>
-                                <a class="carousel-item" href="#three!"><img src="assets/images/ca3.jpg"/></a>
-                                <a class="carousel-item" href="#four!"><img src="assets/images/ca4.jpg"/></a>
-                                <a class="carousel-item" href="#five!"><img src="assets/images/ca5.png"/></a>
-                                <a class="carousel-item" href="#five!"><img src="assets/images/ca6.jpg"/></a>
+                                <a class="carousel-item" href="#one!"><img src="../assets/images/ca1.jpg"/></a>
+                                <a class="carousel-item" href="#two!"><img src="../assets/images/ca2.jpg"/></a>
+                                <a class="carousel-item" href="#three!"><img src="../assets/images/ca3.jpg"/></a>
+                                <a class="carousel-item" href="#four!"><img src="../assets/images/ca4.jpg"/></a>
+                                <a class="carousel-item" href="#five!"><img src="../assets/images/ca5.png"/></a>
+                                <a class="carousel-item" href="#five!"><img src="../assets/images/ca6.jpg"/></a>
                             </div>
 
                             <ul class="collapsible">
@@ -307,7 +306,7 @@ export class Foo extends st.staticComponent {
 
                             <div class="card">
                                 <div class="card-image waves-effect waves-block waves-light">
-                                    <img class="activator" src="assets/images/office.jpg"/>
+                                    <img class="activator" src="../assets/images/office.jpg"/>
                                 </div>
                                 <div class="card-content">
                                     <span class="card-title activator grey-text text-darken-4">Card Title<i class="material-icons right">more_vert</i></span>
@@ -327,7 +326,7 @@ export class Foo extends st.staticComponent {
                                 <li class="waves-effect"><a href="#!">5</a></li>
                                 <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
                             </ul>
-                        </FromComponent>
+                        </From>
                     </div>
                 </div>
 

@@ -1,12 +1,12 @@
 import {BaseComponent} from "./base-component";
-import {IFormValidationSate, IValidationSate} from "./interface/ivalidation-sate";
-import {component} from "../component";
+import {IFormValidationSate, IValidationSate} from "../interface/ivalidation-sate";
+import {component} from "../../component";
 
 export interface IAttrFromComponent extends Partial<HTMLFormElement> {
 }
 
 @component({tag: 'form'})
-export class FromComponent extends BaseComponent<IAttrFromComponent> {
+export class From extends BaseComponent<IAttrFromComponent> {
 
     state: IFormValidationSate = Object.freeze({
         valid: false,

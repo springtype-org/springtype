@@ -1,11 +1,11 @@
-import {st} from "../../core/st";
-import {ILifecycle} from "../component/interface";
-import {attr} from "../component";
-import {getUniqueId} from "./function/get-unique-id";
-import {FromComponent} from "./from-component";
-import {IValidationSate} from "./interface/ivalidation-sate";
-import {IFormValidationStateValue} from "./interface/iform-validation-state-value";
-import {AttrType} from "../component/trait/attr";
+import {st} from "../../../core/st";
+import {ILifecycle} from "../../component/interface";
+import {attr} from "../../component";
+import {getUniqueId} from "../function/get-unique-id";
+import {From} from "./from-component";
+import {IValidationSate} from "../interface/ivalidation-sate";
+import {IFormValidationStateValue} from "../interface/iform-validation-state-value";
+import {AttrType} from "../../component/trait/attr";
 
 export abstract class BaseComponent<A> extends st.component<A> implements ILifecycle {
 
@@ -18,7 +18,7 @@ export abstract class BaseComponent<A> extends st.component<A> implements ILifec
     @attr
     disabled: boolean = false;
 
-    parentForm!: FromComponent;
+    parentForm!: From;
 
     onAfterInitialRender() {
         this.findForm(this.parent);
@@ -42,8 +42,8 @@ export abstract class BaseComponent<A> extends st.component<A> implements ILifec
         if (parent) {
             st.debug('this', this);
             st.debug('parent', parent);
-            if (parent instanceof FromComponent) {
-                this.parentForm = parent as FromComponent
+            if (parent instanceof From) {
+                this.parentForm = parent as From
             } else {
                 //check component parent
                 this.findForm(parent.parent);
