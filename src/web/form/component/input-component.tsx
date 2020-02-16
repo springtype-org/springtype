@@ -1,51 +1,89 @@
 import {attr, component} from "../../component";
-import {IValidationSate} from "../interface/ivalidation-sate";
+import {IValidationSate} from "../interface/i-validation-sate";
 import {tsx} from "../../vdom";
-import {BaseInputComponent, IAttrBaseInputComponent} from "./base-input-component";
+import {DEFAULT_VALIDATION_STATE, ValidationComponent} from "./validation-component";
 import {AttrType} from "../../component/trait/attr";
+import {IAttrInputComponent} from "../interface/i-attr-input-component";
 
-export interface IAttrInputComponent extends IAttrBaseInputComponent, Partial<HTMLInputElement> {
-}
 
 @component({tag: 'input'})
-export class Input extends BaseInputComponent<IAttrInputComponent> {
+export class Input extends ValidationComponent<IAttrInputComponent> {
 
-    @attr(AttrType.DOM_TRANSPARENT)
-    value: string = '';
+    @attr
+    checked!: boolean;
+
+    @attr
+    hidden!: boolean;
+
+    @attr
+    defaultValue!: string;
+
+    @attr
+    defaultChecked!: boolean;
 
     @attr(AttrType.DOM_TRANSPARENT)
     type: string = 'text';
 
-    @attr
-    checked: boolean = false;
+    state: IValidationSate = Object.freeze(DEFAULT_VALIDATION_STATE);
 
-    state: IValidationSate = Object.freeze({
-        value: this.value,
-        valid: false,
-        cmp: this
-    });
-
-    onAfterInitialRender() {
-        super.onAfterInitialRender();
-        if(this.checked){
-            this.setAttribute('checked',true);
-        }
-    }
 
     render() {
         return <fragment/>;
+    }
+
+    onAttributeChange(name: string, newValue: string) {
+        super.onAttributeChange(name, newValue);
+        if (this.INTERNAL.notInitialRender) {
+            if (name == 'checked') {
+                if (this.disabled) {
+                    this.el.setAttribute('checked', '');
+                } else {
+                    this.el.removeAttribute('checked');
+                }
+            }
+            if (name == 'hidden') {
+                if (this.disabled) {
+                    this.el.setAttribute('hidden', '');
+                } else {
+                    this.el.removeAttribute('hidden');
+                }
+            }
+            if (name == 'type') {
+                this.el.setAttribute('type', this.type);
+            }
+        }
+    }
+
+    onAfterElCreate() {
+        super.onAfterElCreate();
+        const htmlInput = this.el as HTMLInputElement;
+        if (this.defaultValue) {
+            htmlInput.defaultValue = this.defaultValue;
+        }
+        if (this.defaultValue) {
+            htmlInput.defaultChecked = this.defaultChecked;
+        }
+        if (this.checked) {
+            htmlInput.setAttribute('checked', '');
+        }
+        if (this.hidden) {
+            htmlInput.setAttribute('hidden', '');
+        }
+    }
+
+    updateValidationState(validationState: IValidationSate): void {
+        this.state = Object.freeze(validationState);
     }
 
     getState(): IValidationSate {
         return this.state;
     }
 
-    getValueFromEvent(evt: Event): string {
-        const inputTarget = evt.target as HTMLInputElement;
-        return inputTarget.value;
-    }
-
-    updateState(valid: boolean, value: string): IValidationSate {
-        return this.state = Object.freeze({...this.state, valid, value});
+    getValue(): string {
+        if (this.type == "checkbox" || this.type == "radio") {
+            return (this.el as any).checked;
+        } else {
+            return (this.el as any).value;
+        }
     }
 }

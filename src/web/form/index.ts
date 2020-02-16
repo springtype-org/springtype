@@ -1,4 +1,4 @@
-export {From} from './component/from-component'
+export {Form} from './component/form-component'
 export {Input} from './component/input-component'
 export {Select} from './component/select-component'
 

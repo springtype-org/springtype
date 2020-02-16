@@ -1,0 +1,12 @@
+[type="checkbox"].invalid + span:not(.lever):after {
+    border: 2px solid #F44336 !important;
+}
+
+.switch [type="checkbox"].invalid + span {
+    background-color: #F44336 !important;
+}
+
+[type="radio"]:not(:checked).invalid + span:before,
+[type="radio"]:not(:checked).invalid + span:after {
+    border: 2px solid #F44336 !important;
+}

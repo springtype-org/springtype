@@ -1,70 +1,45 @@
 import {attr, component} from "../../component";
-import {IValidationSate} from "../interface/ivalidation-sate";
-import {st} from "../../../core/st";
-import {BaseInputComponent, IAttrBaseInputComponent} from "./base-input-component";
+import {IValidationSate} from "../interface/i-validation-sate";
+import {DEFAULT_VALIDATION_STATE, ValidationComponent} from "./validation-component";
+import {IAttrSelectComponent} from "../interface/i-attr-select-component";
 
-interface IAttrSelectComponent extends IAttrBaseInputComponent, Partial<HTMLSelectElement> {
-}
 
 @component({tag: 'select'})
-export class Select extends BaseInputComponent<IAttrSelectComponent> {
+export class Select extends ValidationComponent<IAttrSelectComponent> {
 
     @attr
-    multiple: boolean = false;
+    multiple!: boolean;
 
-    state: IValidationSate = Object.freeze({
-        value: [],
-        valid: false,
-        cmp: this
-    });
+    state: IValidationSate = Object.freeze(DEFAULT_VALIDATION_STATE);
 
     constructor() {
         super();
-        console.log('select constructor',this);
     }
-
+    onAfterElCreate() {
+        super.onAfterElCreate();
+    }
     render() {
         return this.renderChildren()
     }
 
-    onAfterInitialRender() {
-        super.onAfterInitialRender();
-        st.debug('select', this.el);
-        this.state = Object.freeze({
-            ...this.state,
-            value: this.getSelectedValues(this.el as HTMLSelectElement),
-        });
-        if (this.multiple) {
-            this.el.setAttribute('multiple', 'true');
-        }
+    updateValidationState(validationState: IValidationSate): void {
+        this.state = Object.freeze(validationState);
     }
 
     getState(): IValidationSate {
         return this.state;
     }
 
-    getSelectedValues(selectEl: HTMLSelectElement): Array<string> {
-        const value = [];
-        if (selectEl.selectedOptions) {
-            for (const option of selectEl.selectedOptions) {
-                value.push(option.value);
-            }
+    getValue(): string {
+        const values: Array<string> = [];
+        for (const option of (this.el as any).selectedOptions) {
+            values.push(option.value);
         }
+        const value = values.join(',');
+
+      this.value = value;
+        (this.el as any).value = value;
         return value;
     }
-
-    getValueFromEvent(evt: Event): Array<string> {
-        this.state = Object.freeze({
-            ...this.state,
-            value: this.getSelectedValues(evt.target as HTMLSelectElement),
-        });
-        return this.state.value as Array<string>;
-    }
-
-
-    updateState(valid: boolean, value: string): IValidationSate {
-        return this.state = Object.freeze({...this.state, valid, value});
-    }
-
 
 }
