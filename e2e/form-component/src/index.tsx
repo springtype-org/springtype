@@ -213,14 +213,6 @@ export class Foo extends st.staticComponent {
                                         </label>
                                     </p>
                                 </Form>
-                                <div class="chip">
-                                    <img src="../assets/images/yuna.jpg" alt="Contact Person"/>
-                                    Jane Doe
-                                </div>
-                                <div class="chip">
-                                    Tag
-                                    <i class="close material-icons">close</i>
-                                </div>
                                 <Form name="range">
                                     <p class="range-field">
                                         <input name="html5" type="range" id="test5" min="0" max="100"/>
