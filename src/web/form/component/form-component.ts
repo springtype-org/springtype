@@ -2,27 +2,17 @@ import {attr, component} from "../../component";
 import {st} from "../../../core/st";
 import {ValidationComponent} from "./validation-component";
 import {IAttrFormComponent} from "../interface/i-attr-form-component";
-import {ILifecycle} from "../../component/interface";
 import {IFormState} from "../interface/i-form-state";
-
+import {BaseComponent} from "./base-component";
 
 @component({tag: 'form'})
-export class Form extends st.component<IAttrFormComponent> {
+export class Form extends BaseComponent<IAttrFormComponent> {
 
     @attr
     name: string = "form";
 
     @attr
     action!: string;
-
-    @attr
-    activeLabelClasses!: Array<string>;
-
-    @attr
-    invalidClasses!: Array<string>;
-
-    @attr
-    validClasses!: Array<string>;
 
     render() {
         return this.renderChildren();
@@ -37,29 +27,31 @@ export class Form extends st.component<IAttrFormComponent> {
         //ignore on submit validate forms async
         form.onsubmit = () => false;
         this.el.addEventListener('submit', async () => {
-            const validatorPromises = [this.validate()];
-            //added
-            for (const subForm of this.getSubForms()) {
-                validatorPromises.push(subForm.validate());
-            }
-            const results = await Promise.all(validatorPromises);
-            console.log(results);
-            if (results.filter(v => !v).length == 0) {
+            if (await this.validate()) {
                 form.submit();
             }
         })
-
     }
 
     async validate(): Promise<boolean> {
-        return new Promise(async (resolve) => {
-            const results = await Promise.all(this.getElements().map(value => value.validate().then(v => v.valid)));
-            if (results.filter(v => v === false || v === 'none').length !== 0) {
-                (this.el as HTMLFormElement).checkValidity();
-                resolve(false);
-            } else {
-                resolve(true);
+        return new Promise<boolean>(async (resolve) => {
+            let result = true;
+            const elementResults: Array<Promise<boolean>> = [];
+            for (const element of this.getElements()) {
+                elementResults.push(element.validate().then(v => !(v.valid === false || v.valid === 'none')));
             }
+            const formResults: Array<Promise<boolean>> = [];
+            for (const subForm of this.getSubForms()) {
+                formResults.push(subForm.validate())
+            }
+            if ((await Promise.all(elementResults)).filter(v => !v).length > 0) {
+                (this.el as HTMLFormElement).checkValidity();
+                result = false;
+            }
+            if ((await Promise.all(formResults)).filter(v => !v).length > 0) {
+                result = false;
+            }
+            resolve(result);
         });
     }
 
@@ -105,24 +97,10 @@ export class Form extends st.component<IAttrFormComponent> {
             formState[radioGroupName] = radios[radioGroupName].value;
         }
         const subFoms = this.getSubForms();
-        for(const form of subFoms){
-            console.log('found subFrom', form, form.name);
+        for (const form of subFoms) {
             formState[form.name] = form.getState();
         }
         return formState;
-    }
-
-    getParentForm() {
-        const parent = (cmp: ILifecycle): Form | undefined => {
-            if (cmp.parent) {
-                if (cmp.parent instanceof Form) {
-                    return cmp.parent as Form;
-                } else {
-                    return parent(cmp.parent);
-                }
-            }
-        };
-        return parent(this)
     }
 
     getSubForms(): Array<Form> {
@@ -139,4 +117,6 @@ export class Form extends st.component<IAttrFormComponent> {
         });
         return forms;
     }
+
+
 }

@@ -1,4 +1,6 @@
 export interface IAttrBaseComponent {
-    name: string;
     disabled?: boolean;
+    activeLabelClasses?: Array<string>;
+    invalidClasses?: Array<string>;
+    validClasses?: Array<string>;
 }

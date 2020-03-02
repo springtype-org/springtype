@@ -4,6 +4,7 @@ import {IAttrValidationComponent} from "./i-attr-validation-component";
 export interface IAttrInputComponent extends IAttrValidationComponent, Partial<HTMLInputElement> {
     checked?: boolean;
     hidden?: boolean;
-    value?: string;
     type?: string;
+    defaultValue?: string;
+    defaultChecked?: boolean;
 }

@@ -80,10 +80,71 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
     }
 
     getValue(): string {
-        if (this.type == "checkbox" || this.type == "radio") {
+        if (this.type == "checkbox") {
             return (this.el as any).checked;
-        } else {
-            return (this.el as any).value;
+        } else if (this.type == "radio") {
+            const form = (this.el as HTMLInputElement).form;
+            if (form &&
+                form.elements &&
+                form.elements.namedItem(this.name) &&
+                form.elements.namedItem(this.name) instanceof RadioNodeList) {
+                return (form.elements.namedItem(this.name) as RadioNodeList).value;
+            }
         }
+        return (this.el as any).value;
+    }
+
+    async doRadioValidation(value: string): Promise<IValidationSate> {
+        let valid = true;
+        const errors: Array<string> = [];
+        let parent = (this.el as HTMLInputElement).form;
+        if (parent) {
+            const elements = (parent as HTMLFormElement).elements;
+            if (elements.namedItem(this.name) instanceof RadioNodeList) {
+                const radioList = elements.namedItem(this.name) as RadioNodeList;
+                for (const radioInput of radioList) {
+                    if ((radioInput as any).$stComponent) {
+                        // const component = (radioInput as any).$stComponent;
+                        const validators = (radioInput as any).$stComponent.validators;
+                        if (validators.length > 0) {
+                            for (const validator of validators) {
+                                if (!await validator(value)) {
+                                    valid = false;
+                                    errors.push((validator as any)['VALIDATOR_NAME']);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                for (const radioInput of radioList) {
+                    if ((radioInput as any).$stComponent) {
+                        const component = (radioInput as any).$stComponent as Input;
+                        component.setCustomError(!valid);
+                        component.updateValidationState({valid, errors});
+                    }
+                }
+
+
+            }
+
+        }
+        return {valid, errors}
+    }
+
+    async doValidation(value: string): Promise<IValidationSate> {
+        let valid = true;
+        const errors: Array<string> = [];
+        if (this.type == "radio") {
+            return this.doRadioValidation(value);
+        }
+
+        for (const validator of this.validators) {
+            if (!await validator(value)) {
+                valid = false;
+                errors.push((validator as any)['VALIDATOR_NAME']);
+            }
+        }
+        return {valid, errors}
     }
 }

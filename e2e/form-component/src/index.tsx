@@ -7,6 +7,7 @@ import {tsx} from "../../../src/web/vdom";
 import {Form, Input, Select} from "../../../src/web/form";
 
 const VALIDATOR_NAME = "VALIDATOR_NAME";
+
 const validatorFactory = (fun: (value: string) => Promise<boolean>, validatorName: string) => {
     fun[VALIDATOR_NAME] = validatorName;
     return fun;
@@ -32,66 +33,64 @@ const length = validatorFactory(async (value: string): Promise<boolean> => {
 export class Foo extends st.staticComponent {
 
     render() {
-        console.log('validator name', required[VALIDATOR_NAME])
         return <fragment>
             <div class="container">
                 <div class="row">
                     <div class="col s12 m8 offset-m1 xl7 offset-xl2">
-                        <Form activeLabelClasses={['active']} invalidClasses={['invalid']}>
-                            <fragment>
+                        <Form name="form" activeLabelClasses={['active']} invalidClasses={['invalid']}>
                                 <button type="submit">submit</button>
-                                <Form name="input" activeLabelClasses={['active']} invalidClasses={['invalid']} >
-                                    <fragment>
-                                        <button type="submit">submit</button>
-                                        <div class="row">
-                                            <div class="input-field col s6">
-                                                <Input placeholder="Placeholder" id="first_name" name="first_name"
-                                                       type="text" validators={[required]}/>
-                                                <label for="first_name">First Name</label>
-                                            </div>
-                                            <div class="input-field col s6">
-                                                <Input id="last_name" name="last_name" type="text"/>
-                                                <label for="last_name">Last Name</label>
-                                            </div>
+                                <Form name="input">
+                                    <button type="submit">submit</button>
+                                    <div class="row">
+                                        <div class="input-field col s6">
+                                            <Input placeholder="Placeholder" id="first_name" name="first_name"
+                                                   type="text" validators={[required]}/>
+                                            <label for="first_name">First Name</label>
                                         </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <Input disabled={true} value="I m" id="disabled"
-                                                       validators={[required,length]}
-                                                       name="disabled" type="text"
+                                        <div class="input-field col s6">
+                                            <Input id="last_name" name="last_name" type="text"/>
+                                            <label for="last_name">Last Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <Input disabled={true} value="I m" id="disabled"
+                                                   validators={[required, length]}
+                                                   name="disabled" type="text"
+                                            />
+                                            <label for="disabled">Disabled</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <Input id="password" name="password" type="password"/>
+                                            <label for="password">Password</label>
+                                            <span class="helper-text" data-error="wrong"
+                                                  data-success="right">Helper text</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="input-field col s12">
+                                            <Input name="email" id="email" validators={[required, length]}/>
+                                            <label for="email">required and length</label>
+                                            <span class="helper-text" data-error="wrong"
+                                                  data-success="right">Helper text</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            This is an inline input field:
+                                            <div class="input-field inline">
+                                                <Input id="email_inline" name="email_inline"
+                                                       type="email"
                                                 />
-                                                <label for="disabled">Disabled</label>
+                                                <label for="email_inline">Email</label>
+                                                <span class="helper-text" data-error="wrong" data-success="right"/>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <Input id="password" name="password" type="password"/>
-                                                <label for="password">Password</label>
-                                                <span class="helper-text" data-error="wrong" data-success="right">Helper text</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <Input name="email" id="email" validators={[required, length]}/>
-                                                <label for="email">required and length</label>
-                                                <span class="helper-text" data-error="wrong" data-success="right">Helper text</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col s12">
-                                                This is an inline input field:
-                                                <div class="input-field inline">
-                                                    <Input id="email_inline" name="email_inline"
-                                                           type="email"
-                                                    />
-                                                    <label for="email_inline">Email</label>
-                                                    <span class="helper-text" data-error="wrong" data-success="right"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fragment>
-                                </Form >
-                                <Form name="input2" activeLabelClasses={['active']} invalidClasses={['invalid']}>
+                                    </div>
+                                </Form>
+                                <Form name="input2">
                                     <fragment>
                                         <button type="submit">submit</button>
                                         <div class="row">
@@ -142,13 +141,11 @@ export class Foo extends st.staticComponent {
                                         </div>
                                     </fragment>
                                 </Form>
-                                <Form name="group" activeLabelClasses={['active']} invalidClasses={['invalid']}>
-                                        <button type ="submit">submit</button>
-                                    <Form name="radio-buttons" activeLabelClasses={['active']}
-                                          invalidClasses={['invalid']}>
+                                <Form name="group">
+                                    <Form name="radio-buttons">
+                                        <button type="submit">submit</button>
                                         <p>
                                             <label>
-
                                                 <Input name="group1" type="radio" value="red"/>
                                                 <span>Red</span>
                                             </label>
@@ -168,7 +165,7 @@ export class Foo extends st.staticComponent {
                                         </p>
                                         <p>
                                             <label>
-                                                <Input name="group1" type="radio" disabled={true} value="brown"/>
+                                                <Input name="group1" type="radio" value="brown"/>
                                                 <span>Brown</span>
                                             </label>
                                         </p>
@@ -218,7 +215,7 @@ export class Foo extends st.staticComponent {
                                         <input name="html5" type="range" id="test5" min="0" max="100"/>
                                     </p>
                                 </Form>
-                                <Form name="switches" activeLabelClasses={['active']} invalidClasses={['invalid']}>
+                                <Form name="switches">
                                     <div class="switch">
                                         <label>
                                             Off
@@ -229,18 +226,17 @@ export class Foo extends st.staticComponent {
                                     </div>
                                     <p>
 
-                                    <div class="switch">
-                                        <label>
-                                            Off
-                                            <Input name="switch-disabled" disabled={true} type="checkbox"/>
-                                            <span class="lever"/>
-                                            On
-                                        </label>
-                                    </div>
+                                        <div class="switch">
+                                            <label>
+                                                Off
+                                                <Input name="switch-disabled" disabled={true} type="checkbox"/>
+                                                <span class="lever"/>
+                                                On
+                                            </label>
+                                        </div>
                                     </p>
                                 </Form>
                                 <Form name="selects">
-
                                     <Select name="multiple-select" multiple>
                                         <option value="" disabled selected>Choose your option</option>
                                         <option value="1">Option 1</option>
@@ -266,7 +262,6 @@ export class Foo extends st.staticComponent {
                                         <option value="3">Option 3</option>
                                     </Select>
                                 </Form>
-                            </fragment>
                         </Form>
                     </div>
                 </div>

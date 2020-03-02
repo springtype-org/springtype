@@ -3,8 +3,8 @@ import {attr} from "../../component";
 import {IValidationSate} from "../interface/i-validation-sate";
 import {BaseComponent} from "./base-component";
 import {IAttrValidationComponent} from "../interface/i-attr-validation-component";
-import {Form} from "./form-component";
 import {AttrType} from "../../component/trait/attr";
+import {st} from "../../../core/st";
 
 
 const DEFAULT_VALIDATION_DEBOUNCE_TIME_IN_MS = 250;
@@ -16,6 +16,8 @@ export const DEFAULT_VALIDATION_STATE: IValidationSate = {
 };
 
 export abstract class ValidationComponent<Attribute extends IAttrValidationComponent> extends BaseComponent<Attribute> implements ILifecycle {
+    @attr(AttrType.DOM_TRANSPARENT)
+    name!: string;
 
     @attr
     validationStrategies: Array<string> = DEFAULT_VALIDATION_STRATEGIES;
@@ -26,25 +28,24 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
     @attr
     validators: Array<(value: string) => Promise<boolean>> = [];
 
-    @attr
-    activeLabelClasses!: Array<string>;
-
-    @attr
-    invalidClasses!: Array<string>;
-
-    @attr
-    validClasses!: Array<string>;
-
     @attr(AttrType.DOM_TRANSPARENT)
     value: string = '';
 
     timeout!: NodeJS.Timeout;
-    validation!: Promise<any>;
+
+    validationPromise!: Promise<any>;
 
     validateValue!: string;
 
     onAfterElCreate() {
         super.onAfterElCreate();
+        if (this.name) {
+            this.el.setAttribute('name', this.name);
+        } else {
+            if (this instanceof ValidationComponent) {
+                st.error(`${this.constructor.name} needs an name attribute`, this);
+            }
+        }
         this.registerValidationStrategies();
         this.registerActiveLabelClasses();
     }
@@ -55,32 +56,24 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
             if (name == 'value') {
                 this.el.setAttribute('value', newValue);
             }
+            if (name == 'name') {
+                this.el.setAttribute('name', newValue);
+            }
         }
     }
 
     registerValidationStrategies() {
         for (const validationEventName of this.validationStrategies) {
             this.el.addEventListener(validationEventName, async () => {
-                console.log('validationEventName',validationEventName );
+                console.log('validationEventName', validationEventName);
                 //finish last validation
-                if (this.validation) {
-                    await this.validation;
-                    delete this.validation;
-                }
-                clearTimeout(this.timeout);
-                this.timeout = setTimeout(async () => {
-                        this.validation = this.validate();
-                        await this.validation;
-
-                    },
-                    this.validationDebounceTimeInMs
-                )
+                this.validate();
             });
         }
     }
 
     registerActiveLabelClasses() {
-        //after document is loaded
+        //after document is loaded set if value is set
         document.addEventListener('DOMContentLoaded', () => {
             if (this.getValue()) {
                 for (const label of this.getLabels()) {
@@ -112,79 +105,35 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         return document.querySelectorAll(`label[for=${this.name}]`);
     }
 
-
     async validate(): Promise<IValidationSate> {
-
-        const value = this.getValue();
-        if (this.validateValue === value) {
-            return this.getState();
+        if (this.validationPromise) {
+            await this.validationPromise;
+            delete this.validationPromise;
         }
-        this.setCustomError(true);
-        this.validateValue = value;
+        return this.validationPromise = new Promise<IValidationSate>(resolve => {
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(async () => {
+                    const value = this.getValue();
+                    if (this.validateValue !== value) {
+                        this.setCustomError(true);
+                        this.validateValue = value;
 
-        let valid = true;
-        const errors: Array<string> = [];
+                        const validationSate = await this.doValidation(value);
 
-        for (const validator of this.validators) {
-            if (!await validator(value)) {
-                valid = false;
-                errors.push((validator as any)['VALIDATOR_NAME']);
-            }
-        }
-        this.setCustomError(!valid);
+                        this.setCustomError(!validationSate.valid);
+                        this.updateValidationState(validationSate);
+                        resolve(validationSate);
+                    }
+                    resolve(this.getState())
 
-        const validationState = {valid, errors};
-        this.updateValidationState(validationState);
-        return validationState;
+                },
+                this.validationDebounceTimeInMs
+            )
+        });
     }
 
-    getInvalidClasses() {
-        if (this.invalidClasses) {
-            return this.invalidClasses;
-        }
-        //take from parent from
-        const parentForm = this.getParentForm();
-        if (parentForm && parentForm.invalidClasses) {
-            return parentForm.invalidClasses;
-        }
-        return [];
-    }
+    abstract async doValidation(value: string): Promise<IValidationSate>;
 
-    getValidClasses() {
-        if (this.validClasses) {
-            return this.validClasses;
-        }
-        //take from parent from
-        const parentForm = this.getParentForm();
-        if (parentForm && parentForm.validClasses) {
-            return parentForm.validClasses;
-        }
-        return [];
-    }
-
-    getParentForm(): Form | undefined {
-        const parentForm = (this.el as any).form;
-        if (parentForm && parentForm.$stComponent instanceof Form) {
-            return parentForm.$stComponent as Form;
-        }
-    }
-
-    getActiveLabelClasses(): Array<string> {
-        //take own
-        if (this.activeLabelClasses) {
-            return this.activeLabelClasses;
-        }
-
-        //take from parent from
-        const parentForm = (this.el as any).form;
-        if (parentForm && parentForm.$stComponent instanceof Form) {
-            const parentCmpForm = parentForm.$stComponent as Form;
-            if (parentCmpForm.activeLabelClasses) {
-                return parentCmpForm.activeLabelClasses;
-            }
-        }
-        return [];
-    }
 
     setCustomError(error: boolean) {
         const validClasses = this.getValidClasses();
@@ -200,7 +149,7 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         }
     }
 
-  abstract  getValue(): string;
+    abstract getValue(): string;
 
     abstract getState(): IValidationSate;
 

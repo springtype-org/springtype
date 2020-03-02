@@ -6,6 +6,10 @@ import {IAttrSelectComponent} from "../interface/i-attr-select-component";
 
 @component({tag: 'select'})
 export class Select extends ValidationComponent<IAttrSelectComponent> {
+   async doValidation(): Promise<IValidationSate> {
+       // throw new Error("Method not implemented.");
+        return this.state;
+    }
 
     @attr
     multiple!: boolean;
@@ -15,14 +19,28 @@ export class Select extends ValidationComponent<IAttrSelectComponent> {
     constructor() {
         super();
     }
+
     onAfterElCreate() {
         super.onAfterElCreate();
+        if (this.multiple) {
+            this.el.setAttribute('multiple', '');
+        }
     }
+
+    onAttributeChange(name: string, newValue: string) {
+        super.onAttributeChange(name, newValue);
+        if (this.INTERNAL.notInitialRender) {
+            if (name == 'multiple') {
+                this.el.setAttribute('multiple', '');
+            }
+        }
+    }
+
     render() {
         return this.renderChildren()
     }
 
-    updateValidationState(validationState: IValidationSate): void {
+    updateValidationState(validationState: IValidationSate) {
         this.state = Object.freeze(validationState);
     }
 
@@ -37,7 +55,7 @@ export class Select extends ValidationComponent<IAttrSelectComponent> {
         }
         const value = values.join(',');
 
-      this.value = value;
+        this.value = value;
         (this.el as any).value = value;
         return value;
     }

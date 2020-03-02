@@ -1,7 +1,6 @@
-export interface IAttrFormComponent extends Partial<HTMLFormElement> {
+import {IAttrBaseComponent} from "./i-attr-base-component";
+//@ts-ignore
+export interface IAttrFormComponent extends IAttrBaseComponent, Partial<HTMLFormElement> {
     name?: string;
     action?: string;
-    activeLabelClasses?: Array<string>;
-    invalidClasses?: Array<string>;
-    validClasses?: Array<string>;
 }
