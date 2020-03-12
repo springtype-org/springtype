@@ -3,7 +3,7 @@ import { IRouteMatch } from "./iroute-match";
 export interface IRouter {
 
   // memoized location change handlers (e.g. internal primary change observer and each <Link />)
-  ON_LOCATION_CHANGE_HANDLERS: Array<Function>;
+  ON_LOCATION_CHANGE_HANDLERS: Array<() => Promise<void>>;
   ON_AFTER_MATCH_HANDLERS: Array<Function>;
 
   // cached tokenized path
@@ -17,7 +17,7 @@ export interface IRouter {
 
   // current match state e.g.
   // { path: '/foo/:bar', url: '/foo/5', params: { bar: 5 }, isExact: true, isPartial: false, routes: [...] }
-  match?: Partial<IRouteMatch>;
+  match: {[path: string]: IRouteMatch};
 
   // defaults to: #/ for "/#/" SPA routing
   prefix: string;

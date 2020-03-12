@@ -5,34 +5,14 @@ import {st} from "../../../src/core";
 import {component} from "../../../src/web/component";
 import {tsx} from "../../../src/web/vdom";
 import {From, Input, Select} from "../../../src/web/form";
+import {required} from "../../../src/core/validate/validate/required";
+import {minLength} from "../../../src/core/validate/validate/min-length";
 
-const VALIDATOR_NAME = "ST_VALIDATOR_NAME";
-const validatorFactory = (fun: (value: string) => Promise<boolean>, validatorName: string) => {
-    fun[VALIDATOR_NAME] = validatorName;
-    return fun;
-};
-
-const required = validatorFactory(async (value: string): Promise<boolean> => {
-        st.debug('required', !!value);
-        return !!value;
-    },
-    'required'
-);
-
-const length = validatorFactory(async (value: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            st.debug('length', value.length >= 5);
-            resolve(value.length >= 5)
-        }, 3000)
-    });
-}, 'length');
 
 @component
 export class Foo extends st.staticComponent {
 
     render() {
-        console.log('validator name', required[VALIDATOR_NAME])
         return <fragment>
             <div class="parallax-container">
                 <div class="parallax"><img src="../assets/images/parallax1.jpg"/></div>
@@ -70,7 +50,7 @@ export class Foo extends st.staticComponent {
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <Input name="email" id="email" type="email"
-                                               validators={[required, length]}/>
+                                               validators={[required, minLength(5)]}/>
                                         <label for="email">Email</label>
                                         <span class="helper-text" data-error="wrong"
                                               data-success="right">Helper text</span>

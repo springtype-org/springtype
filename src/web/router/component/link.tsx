@@ -1,98 +1,71 @@
-import { st } from "../../../core";
-import { attr, component } from "../../component";
-import { ILifecycle } from "../../component/interface";
-import { AttrType } from "../../component/trait/attr";
+import {st} from "../../../core";
+import {attr, component} from "../../component";
+import {ILifecycle} from "../../component/interface";
+import {AttrType} from "../../component/trait/attr";
 
 export interface ILinkAttrs {
-  path: string;
-  params?: any;
-  href?: string;
-  target?: string;
-  activeClass?: string;
+    path: string;
+    params?: any;
+    href?: string;
+    target?: string;
+    activeClass?: string;
 }
 
 export const LINK_ACTIVE_CLASS = 'active';
-export const A_ELEMENT_TAG = 'a';
 
-// <Link />
-@component
+@component({tag: 'a'})
 export class Link extends st.component<ILinkAttrs> implements ILifecycle {
 
-  tag: string = A_ELEMENT_TAG;
 
-  @attr
-  exact: boolean = true;
+    @attr
+    path: string = '';
 
-  @attr
-  path: string = "";
+    @attr
+    params?: any;
 
-  @attr
-  params?: any;
+    @attr(AttrType.DOM_TRANSPARENT)
+    target?: string = '';
 
-  @attr
-  target?: string;
+    @attr(AttrType.DOM_TRANSPARENT)
+    href?: string = 'javascript:void(0)';
 
-  @attr
-  href?: string = 'javascript:void(0)';
+    @attr
+    activeClass?: string;
 
-  @attr
-  activeClass?: string;
+    onClick = () => {
+        st.route = {
+            path: this.path,
+            params: this.params
+        }
+    };
 
-  onClick = () => {
-
-      st.route = {
-      path: this.path,
-      params: this.params
+    onAfterElCreate() {
+        // register callback for future route changes
+        st.router.addOnAfterMatchHandler(this.updateActiveClass);
     }
-  }
 
-  onAfterElCreate() {
+    updateActiveClass = () => {
+       const activeClassName = this.activeClass || LINK_ACTIVE_CLASS;
+        if (!Array.isArray(this.class)) {
+            this.class = [this.class];
+        }
 
-    // register callback for future route changes
-    st.router.addOnAfterMatchHandler(this.updateActiveClass);
+        const filteredClasses = this.class.filter((className: string) => className !== activeClassName);
+        if (st.route) {
+            const matcher = st.router.match[this.path];
+            if (matcher && matcher.isExact) {
+                filteredClasses.push(activeClassName);
+            }
+        }
+        this.class = filteredClasses;
 
-    this.updateAttributes();
-  }
+    };
 
-  onAfterPatchEl() {
-    this.updateAttributes();
-  }
-
-  updateAttributes() {
-    if (st.dom.getTagToUse(this, this.virtualNode).toLowerCase() === A_ELEMENT_TAG) {
-      if (this.target) {
-        this.setAttribute('target', this.target, AttrType.DOM_TRANSPARENT);
-      }
-      if (this.href) {
-        this.setAttribute('href', this.href, AttrType.DOM_TRANSPARENT);
-      }
+    render() {
+        return this.renderChildren();
     }
-  }
 
-  onAfterInitialRender() {
-    this.updateActiveClass();
-  }
-
-  updateActiveClass = () => {
-
-    const activeClassName = this.activeClass || LINK_ACTIVE_CLASS;
-
-    if (!Array.isArray(this.class)) {
-      this.class = [this.class];
+    onDisconnect() {
+        st.router.removeOnAfterMatchHandler(this.updateActiveClass);
     }
-    const filteredClasses = this.class.filter((className: string) => className !== activeClassName);
-
-    if (st.route && st.route.paths!.indexOf(this.path) > -1) {
-      filteredClasses.push(activeClassName);
-    }
-    this.class = filteredClasses;
-  }
-
-  render() {
-    return this.renderChildren();
-  }
-
-  onDisconnect() {
-    st.router.removeOnAfterMatchHandler(this.updateActiveClass);
-  }
 }

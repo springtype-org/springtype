@@ -1,205 +1,284 @@
-import { st } from "../../../core";
-import { attr, component } from "../../component";
-import { ILifecycle } from "../../component/interface";
-import { tsx } from "../../vdom";
-import { IVirtualNode, IElement } from "../../vdom/interface";
-import { IRouteMatch } from "../interface/iroute-match";
-import { RouteGuard } from "../interface/route-guard";
-import { RouteList } from "./route-list";
-import { TYPE_FUNCTION } from "../../../core/lang/type-function";
-import { AttrType } from "../../component/trait/attr";
+import {st} from "../../../core";
+import {attr, component} from "../../component";
+import {ILifecycle} from "../../component/interface";
+import {tsx} from "../../vdom";
+import {IElement, IVirtualNode} from "../../vdom/interface";
+import {IRouteMatch, RouteGuard} from "../interface";
+import {RouteList} from "./route-list";
+import {TYPE_FUNCTION} from "../../../core/lang/type-function";
+import {AttrType} from "../../component/trait/attr";
+import {TYPE_STRING} from "../../../core/lang/type-string";
+import {TYPE_OBJECT} from "../../../core/lang/type-object";
 
-const defaultLoadingComponent = <p>Loading...</p>;
+const defaultLoadingComponent = <div>Loading...</div>;
 
 export interface IRouteAttrs {
-  path: string | Array<string>;
-  exact?: boolean;
-  component?: IVirtualNode | Function;
-  loadingComponent?: IVirtualNode;
-  guard?: RouteGuard;
-  notMatchingComponent?: IVirtualNode;
+    path: string | Array<string>;
+    exact?: boolean;
+    guard?: RouteGuard;
 }
 
-// <Route />
 @component
 export class Route extends st.component<IRouteAttrs> implements ILifecycle {
 
-  // if array is passed, the "one-of" strategy is used; first match wins
-  @attr(AttrType.DOM_TRANSPARENT)
-  path: string | Array<string> = "";
+    static SLOT_NAME_LOADING_COMPONENT = 'loading-component';
 
-  @attr
-  exact: boolean = false;
+    @attr
+    guard?: RouteGuard;
 
-  @attr
-  component?: IVirtualNode;
+    // if array is passed, the "one-of" strategy is used; first match wins
+    @attr(AttrType.DOM_TRANSPARENT)
+    path: string | Array<string> = "";
 
-  @attr
-  loadingComponent: IVirtualNode = defaultLoadingComponent;
+    @attr
+    exact: boolean = false;
 
-  @attr
-  guard?: RouteGuard;
+    @attr
+    displayStyle: string = 'block';
 
-  /**
-   * Might be 'flex' or else
-   */
-  @attr
-  displayStyle: string = 'block';
+    loadingComponentEl!: IElement | Array<IElement>;
 
-  loadingComponentEl!: IElement | Array<IElement>;
-  componentEl!: IElement;
-  match!: Function;
-  activePath!: string;
+    componentEl!: IElement | Array<IElement>;
 
-  shouldRender() {
-    return false;
-  }
+    guardComponent!: IElement;
 
-  onBeforeConnect() {
+    match!: Function;
 
-    this.match = st.router.createMatcher(this.path, this.onMatch, this.onMismatch);
+    runningMatch!: (reason?: any) => void;
 
-    if (!(this.parent instanceof RouteList)) {
-      st.router.addOnLocationChangeHandler(this.match);
+    activePath!: string;
+
+    shouldRender() {
+        return false;
     }
-  }
 
-  onMatch = (path: string, match: IRouteMatch) => {
-    this.enter(match, path);
-  }
-
-  onMismatch = (path: string) => {
-    this.leave(path);
-  }
-
-  onDisconnect() {
-    if (!(this.parent instanceof RouteList)) {
-      st.router.removeOnLocationChangeHandler(this.match);
-    }
-  }
-
-  leave = async (path: string) => {
-
-    if (path === this.activePath) {
-
-      this.style = {
-        display: 'none'
-      };
-
-      if (this.componentEl && this.componentEl.$stComponent && typeof this.componentEl.$stComponent.onRouteLeave == TYPE_FUNCTION) {
-        this.componentEl.$stComponent.onRouteLeave(path);
-      }
-      delete this.activePath;
-    }
-  };
-
-  prepareLoadingComponent = () => {
-
-    if (this.loadingComponentEl) return;
-
-    this.loadingComponentEl = (st.dom.createElementOrElements(this.loadingComponent, this.el) as Array<IElement>);
-
-    if (Array.isArray(this.loadingComponentEl)) {
-      this.loadingComponentEl = this.loadingComponentEl[0]
-    }
-  };
-
-  prepareComponent = async (match: IRouteMatch) => {
-
-    if (this.componentEl) return;
-
-    // guard function takes precedence
-    if (typeof this.guard === TYPE_FUNCTION) {
-
-      this.prepareLoadingComponent();
-
-      // run guard function
-      this.component = await this.guard!(match);
-
-    } else {
-
-      // suppport <Route path="about"><AboutPage /></Route> syntax
-      this.component = this.component || (this.renderChildren() as Array<IVirtualNode>)[0];
-
-      // allows for <Route>{() => import('foo/bar')}</Route>
-      if (typeof this.component === TYPE_FUNCTION) {
-
-        this.prepareLoadingComponent();
-
-        // call closure
-        this.component = await (this.component as unknown as Function)();
-
-        // dynamic import case: <Route>{() => import('./page/b') }</Route>
-        if ((this.component! as any).default) {
-
-          // must be exported as: export default class Foo extends st.component {} to work well
-          const Component = (this.component! as any).default;
-
-          this.component = <Component />;
+    async onBeforeConnect() {
+        this.match = () => {
+            this.stopRunningMatch();
+            const matchFunction = st.router.createMatcher(this.path, this.onMatch, this.onMismatch);
+            matchFunction();
+        };
+        if (!(this.parent instanceof RouteList)) {
+            st.router.addOnLocationChangeHandler(this.match);
         }
-      }
     }
 
-    //this.el.removeChild(this.loadingComponentEl as IElement);
-    this.componentEl = st.dom.createElementOrElements(this.component, this.el, true) as IElement;
-  };
-
-  // is called by the router whenever one of this.paths match partially or exactly
-  enter = async (match: IRouteMatch, path: string) => {
-
-    // false-positive match when explicit matching is asked for
-    if (this.exact && !match.isExact) return;
-
-    this.activePath = path;
-
-    this.style = {
-      display: this.displayStyle
+    onMatch = async (path: string, match: IRouteMatch) => {
+      try {
+        await this.enter(match, path);
+      }catch (e) {
+          st.debug(e.message);
+      }
     };
 
-    await this.prepareComponent(match);
+    onMismatch = async (path: string) => {
+        this.leave(path);
+    };
 
-    const stComponent = this.componentEl.$stComponent;
-
-    if (this.loadingComponentEl) {
-      (this.loadingComponentEl as IElement).style.display = 'none';
+    onDisconnect() {
+        if (!(this.parent instanceof RouteList)) {
+            st.router.removeOnLocationChangeHandler(this.match);
+        }
     }
 
-    if ((this.loadingComponentEl && this.el.childNodes.length === 1) || this.el.childNodes.length === 0) {
-      this.el.appendChild(this.componentEl);
+    leave = async (path: string) => {
+        if (path === this.activePath) {
+
+            this.style = {
+                display: 'none'
+            };
+
+            const lifecycle = (component: IElement | undefined) => {
+                if (component && component.$stComponent && typeof component.$stComponent.onRouteLeave == TYPE_FUNCTION) {
+                    //component.$stComponent.onRouteLeave(path);
+                }
+            };
+
+            if (Array.isArray(this.componentEl)) {
+                if (this.componentEl.length > -1) {
+                    this.componentEl.forEach(cmp => lifecycle(cmp));
+                }
+            } else {
+                lifecycle(this.componentEl);
+            }
+            this.removeElement(this.guardComponent);
+            delete this.activePath;
+        }
+    };
+
+    prepareLoadingComponent() {
+        if (this.loadingComponentEl) return;
+        const componentSlot = this.renderSlot(Route.SLOT_NAME_LOADING_COMPONENT, defaultLoadingComponent) as Array<IVirtualNode>;
+        this.loadingComponentEl = (st.dom.createElementOrElements(componentSlot, this.el) as Array<IElement>);
+    };
+
+    renderFunctionalComponent = async (component: IVirtualNode) => {
+        // allows for <Route>{() => import('foo/bar')}</Route>
+        if (typeof component === TYPE_FUNCTION) {
+            // call closure
+            component = await (component as unknown as Function)();
+            // dynamic import case: <Route>{() => import('./page/b') }</Route>
+            if ((component! as any).default) {
+                // must be exported as: export default class Foo extends st.component {} to work well
+                const Component = (component! as any).default;
+                return <Component/>;
+            }
+        }
+        return component;
+    };
+
+    async prepareComponent() {
+        if (this.componentEl) return;
+        // support <Route path="about"><AboutPage /></Route> syntax
+        const childComponents = (this.renderChildren() as Array<IVirtualNode>);
+        const components: Array<IVirtualNode> = [];
+        for (const component of childComponents) {
+            components.push(await this.renderFunctionalComponent(component));
+        }
+        this.componentEl = st.dom.createElementOrElements(components, this.el, true) as Array<IElement>;
+    };
+
+    removeElement(elements: IElement | Array<IElement> | undefined) {
+        if (elements) {
+            if (Array.isArray(elements)) {
+                for (const element of elements) {
+                    if (this.el.contains(element)) {
+                        this.el.removeChild(element as IElement);
+                    }
+                }
+            } else {
+                if (this.el.contains(elements as IElement)) {
+                    this.el.removeChild(elements as IElement);
+                }
+            }
+        }
     }
 
-    // first render
-    if (stComponent && !stComponent.INTERNAL.isConnected) {
-      stComponent.connectedCallback();
-
-      // deep link support
-      this.matchVertical(stComponent);
-    } else if (stComponent) {
-
-      if (stComponent.shouldRender()) {
-        // re-render on route change
-        stComponent.doRender();
-      }
+    showElement(elements: IElement | Array<IElement> | undefined, show: boolean = true) {
+        if (elements) {
+            if (Array.isArray(elements)) {
+                for (const element of elements) {
+                    (element as IElement).style.display = show ? this.displayStyle : 'none';
+                }
+            } else {
+                (elements as IElement).style.display = show ? this.displayStyle : 'none';
+            }
+        }
     }
 
-    if (stComponent && typeof stComponent.onRouteEnter == TYPE_FUNCTION) {
-      stComponent.onRouteEnter(path);
+    deleteGuardComponent() {
+        this.removeElement(this.guardComponent);
+        delete this.guardComponent;
     }
-  };
 
-  matchVertical(component: ILifecycle) {
-
-    if (!component.childComponents) return;
-
-    for (let childComponent of component.childComponents) {
-      if ((childComponent instanceof Route) || (childComponent instanceof RouteList)) {
-        childComponent.match();
-        this.matchVertical(childComponent);
-      }
+    deleteLoadingComponent() {
+        this.removeElement(this.loadingComponentEl);
+        delete this.loadingComponentEl;
     }
-  }
 
-  render() {
-    return <fragment />
-  }
+    deleteComponent() {
+        this.removeElement(this.componentEl);
+        delete this.componentEl;
+    }
+
+    stopRunningMatch() {
+        if (this.runningMatch) {
+            this.runningMatch({
+                reason: 'matcher triggered',
+                message: `Stopped matching (${this.path})`});
+        }
+    }
+
+    // is called by the router whenever one of this.paths match partially or exactly
+    enter = async (match: IRouteMatch, path: string) => {
+        if (this.guardComponent) {
+            this.deleteGuardComponent();
+            this.deleteLoadingComponent();
+            this.deleteComponent()
+        }
+
+        // false-positive match when explicit matching is asked for
+        if (this.exact && !match.isExact) {
+            //also leave old path
+            this.leave(path);
+            return;
+        }
+
+        this.activePath = path;
+
+        this.style = {
+            display: this.displayStyle
+        };
+
+        if (typeof this.guard === TYPE_FUNCTION) {
+            this.prepareLoadingComponent();
+            // run guard function
+            let result;
+
+            result = await new Promise(async (resolve, reject) => {
+                this.runningMatch = reject;
+                const guardResponse = await this.guard!(match);
+                resolve(guardResponse);
+            });
+
+            if (typeof result === TYPE_STRING) {
+                st.router.navigate(result as string);
+                this.deleteLoadingComponent();
+                this.deleteComponent();
+                return;
+
+            } else if (typeof result === TYPE_OBJECT) {
+                this.guardComponent = (st.dom.createElementOrElements(result as IVirtualNode, this.el) as IElement);
+            }
+        }
+
+        this.showElement(this.loadingComponentEl, false);
+
+        if (!this.guardComponent) {
+            await this.prepareComponent();
+        }
+
+        const lifecycle = (component: IElement) => {
+            if (!this.el.contains(component)) {
+                this.el.appendChild(component);
+            }
+            const stComponent = component.$stComponent;
+            // first render
+            if (stComponent && !stComponent.INTERNAL.isConnected) {
+                stComponent.connectedCallback();
+
+                // call to this for all links
+                st.router.callOnAfterMatchHandlers();
+            } else if (stComponent) {
+
+                if (stComponent.shouldRender()) {
+                    // re-render on route change
+                    stComponent.doRender();
+                }
+            }
+
+            if (stComponent && typeof stComponent.onRouteEnter == TYPE_FUNCTION) {
+                stComponent.onRouteEnter(path);
+            }
+        };
+
+        if (!this.guardComponent) {
+            if (Array.isArray(this.componentEl)) {
+                for (const component of this.componentEl) {
+                    lifecycle(component);
+                }
+            } else {
+                lifecycle(this.componentEl);
+            }
+        } else {
+            lifecycle(this.guardComponent);
+
+        }
+
+
+    };
+
+    render() {
+        return <fragment/>
+    }
 }

@@ -1,21 +1,18 @@
-import { st } from "../../core";
-import { isPrimitive } from "../../core/lang/is-primitive";
-import { GlobalCache } from "./../../core/st/interface/i$st";
-import { IComponentOptions } from "./../component/interface/icomponent-options";
-import { Component } from "./../component/component"
-import { IElement } from "./interface/ielement";
-import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
-import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
-import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
-import { TYPE_FUNCTION } from "../../core/lang/type-function";
-import { TYPE_STRING } from "../../core/lang/type-string";
-import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
-import { cloneObject } from "../../core/lang/immute";
-import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
-import { mergeObjects } from "../../core/lang/merge-objects";
-import { mergeArrays } from "../../core/lang/merge-arrays";
-import { AttrTrait, AttrType } from "../component/trait/attr";
-import { ILifecycle } from "../component/interface";
+import {st} from "../../core";
+import {isPrimitive} from "../../core/lang/is-primitive";
+import {GlobalCache} from "../../core/st/interface/i$st";
+import {IComponentOptions, ILifecycle} from "../component/interface";
+import {Component} from "../component"
+import {IElement} from "./interface";
+import {IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes} from "./interface/ivirtual-node";
+import {isJSXComment, tsxToStandardAttributeName} from "./tsx";
+import {REF_ATTRIBUTE_NAME} from "./interface/iattributes";
+import {TYPE_FUNCTION} from "../../core/lang/type-function";
+import {TYPE_STRING} from "../../core/lang/type-string";
+import {TYPE_BOOLEAN} from "../../core/lang/type-boolean";
+import {cloneObject} from "../../core/lang/immute";
+import {TYPE_UNDEFINED} from "../../core/lang/type-undefined";
+import {AttrTrait, AttrType} from "../component/trait/attr";
 
 export const TEMPLATE_ELEMENT_NAME = "template";
 export const DEFAULT_SLOT_NAME = "default";
@@ -35,402 +32,388 @@ const STANDARD_HTML_PASS_ATTRIBUTES = [CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAM
 
 if (!st.dom) {
 
-  // DOM abstraction layer for manipulation
-  st.dom = {
+    // DOM abstraction layer for manipulation
+    st.dom = {
 
-    isReady: async (): Promise<void> => {
-      if (document.body) return Promise.resolve();
-      return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
-    },
+        isReady: async (): Promise<void> => {
+            if (document.body) return Promise.resolve();
+            return new Promise(resolve => document.addEventListener("DOMContentLoaded", () => resolve()));
+        },
 
-    hasElNamespace: (domElement: Element): boolean => {
-      return domElement.namespaceURI === SVG_NAMESPACE;
-    },
+        hasElNamespace: (domElement: Element): boolean => {
+            return domElement.namespaceURI === SVG_NAMESPACE;
+        },
 
-    hasSvgNamespace: (parentElement: Element, type: string): boolean => {
-      return st.dom.hasElNamespace(parentElement) && type !== "STYLE" && type !== "SCRIPT";
-    },
+        hasSvgNamespace: (parentElement: Element, type: string): boolean => {
+            return st.dom.hasElNamespace(parentElement) && type !== "STYLE" && type !== "SCRIPT";
+        },
 
-    isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.COMPONENT_REGISTRY][tagName],
+        isRegisteredComponent: (tagName: string): boolean => !!st[GlobalCache.COMPONENT_REGISTRY][tagName],
 
-    createElementOrElements: (
-      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
-      parentDomElement: IElement,
-      detached: boolean = false
-    ): Array<IElement | Text | undefined> | IElement | Text | undefined => {
+        createElementOrElements: (
+            virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
+            parentDomElement: IElement,
+            detached: boolean = false
+        ): Array<IElement | Text | undefined> | IElement | Text | undefined => {
 
-      if (Array.isArray(virtualNode)) {
-        return st.dom.createChildElements(virtualNode, parentDomElement, detached);
-      } else if (typeof virtualNode != TYPE_UNDEFINED) {
-        return st.dom.createElement(virtualNode as IVirtualNode | undefined, parentDomElement, detached);
-      } else {
-        // undefined virtualNode -> e.g. when a tsx variable is used in markup which is undefined
-        return st.dom.createTextNode("", parentDomElement, detached);
-      }
-    },
-
-    createComponentInstance: (virtualNode: IVirtualNode, parentDomElement: IElement) => {
-      // Refactor: exclude
-      let component;
-      let componentCtor = st.getComponent(virtualNode.type) as any;
-
-      if (!componentCtor) return {};
-
-      const outerAttributes: any = cloneObject(virtualNode.attributes, false);
-
-      // identified virtual component
-      // functional component
-      if (!componentCtor.name) {
-
-        const fn = componentCtor as Function & {
-          COMPONENT_OPTIONS: IComponentOptions;
-        };
-
-        // create shallow component instance
-        component = new Component();
-
-        // assign options
-        component.INTERNAL.options = fn.COMPONENT_OPTIONS;
-
-        // execute function and assign render method
-        component.render = fn(component);
-
-      } else {
-
-
-        // class API
-        // create instance of component
-        component = new componentCtor();
-
-        if (process.env.NODE_ENV == 'development') {
-          if (!(component instanceof st.component)) {
-            st.error(`Class ${componentCtor.name} does not extend from st.component!`);
-          }
-        }
-      }
-
-      // set root DOM node ref and parent ref
-      component.parent = parentDomElement.$stComponentRef;
-
-      // assign attributes, slotChildren etc.
-      component.virtualNode = virtualNode;
-
-      if (component.parent) {
-        if (!component.parent.childComponents) {
-          component.parent.childComponents = [];
-        }
-        component.parent.childComponents.push(component);
-      }
-
-      for (let propName in component) {
-
-        // undefined early return
-        if (typeof component[propName] == TYPE_UNDEFINED) continue;
-
-        if (propName.startsWith(ATTR_EVENT_LISTENER_PREFIX) &&
-          typeof component[propName] == TYPE_FUNCTION) {
-
-          // component-local bould event listener function
-          if (!virtualNode.attributes) {
-            virtualNode.attributes = {};
-          }
-
-          if (outerAttributes[propName]) {
-
-            const outsideEventListener = outerAttributes[propName];
-            const localEventListener = component[propName];
-
-            virtualNode.attributes[propName] = (evt: Event) => {
-              localEventListener(evt);
-              outsideEventListener(evt);
+            if (Array.isArray(virtualNode)) {
+                return st.dom.createChildElements(virtualNode, parentDomElement, detached);
+            } else if (typeof virtualNode != TYPE_UNDEFINED) {
+                return st.dom.createElement(virtualNode as IVirtualNode | undefined, parentDomElement, detached);
+            } else {
+                // undefined virtualNode -> e.g. when a tsx variable is used in markup which is undefined
+                return st.dom.createTextNode("", parentDomElement, detached);
             }
-          } else {
-            virtualNode.attributes[propName] = component[propName]
-          }
-        }
-      }
+        },
 
-      // to analyze, filter and transform before create
-      component.onBeforeElCreate(virtualNode);
+        createComponentInstance: (virtualNode: IVirtualNode, parentDomElement: IElement) => {
+            // Refactor: exclude
+            let component;
+            let componentCtor = st.getComponent(virtualNode.type) as any;
 
-      return {
-        component,
-        componentCtor,
-        outerAttributes
-      }
-    },
+            if (!componentCtor) return {};
 
-    updateComponentAttributes: (component: any, outerAttributes: any, virtualNode: IVirtualNode) => {
+            const outerAttributes: any = cloneObject(virtualNode.attributes, false);
 
-      // internal class: 'foo' or outer class="foo" handling
-      if (component.INTERNAL[CLASS_ATTRIBUTE_NAME] || outerAttributes[CLASS_ATTRIBUTE_NAME]) {
-        virtualNode.attributes[CLASS_ATTRIBUTE_NAME] = mergeArrays(component.INTERNAL[CLASS_ATTRIBUTE_NAME], outerAttributes[CLASS_ATTRIBUTE_NAME]);
+            // identified virtual component
+            // functional component
+            if (!componentCtor.name) {
 
-        // update class internally as a merge of outer style and internal style
-        component.INTERNAL[CLASS_ATTRIBUTE_NAME] = virtualNode.attributes[CLASS_ATTRIBUTE_NAME];
-      }
+                const fn = componentCtor as Function & {
+                    COMPONENT_OPTIONS: IComponentOptions;
+                };
 
-      // internal style: { border: '1px' } or outer style={{ border: '1px' }} handling
-      if (component.INTERNAL[STYLE_ATTRIBUTE_NAME] || outerAttributes[STYLE_ATTRIBUTE_NAME]) {
-        virtualNode.attributes[STYLE_ATTRIBUTE_NAME] = mergeObjects(component.INTERNAL[STYLE_ATTRIBUTE_NAME], outerAttributes[STYLE_ATTRIBUTE_NAME]);
+                // create shallow component instance
+                component = new Component();
 
-        // update style internally as a merge of outer and internal
-        component.INTERNAL[STYLE_ATTRIBUTE_NAME] = virtualNode.attributes[STYLE_ATTRIBUTE_NAME];
-      }
+                // assign options
+                component.INTERNAL.options = fn.COMPONENT_OPTIONS;
 
-      // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
-      for (let attrName in component.INTERNAL.attributes) {
+                // execute function and assign render method
+                component.render = fn(component);
 
-        if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
-          const value = outerAttributes[attrName] || component.INTERNAL.attributes[attrName];
+            } else {
 
-          virtualNode.attributes[attrName] = value;
 
-          // update as a decision
-          component.INTERNAL.attributes[attrName] = value;
-        }
-      }
+                // class API
+                // create instance of component
+                component = new componentCtor();
 
-      const id = outerAttributes[ID_ATTRIBUTE_NAME] || component.INTERNAL[ID_ATTRIBUTE_NAME];
+                if (process.env.NODE_ENV == 'development') {
+                    if (!(component instanceof st.component)) {
+                        st.error(`Class ${componentCtor.name} does not extend from st.component!`);
+                    }
+                }
+            }
 
-      if (id) {
-        virtualNode.attributes[ID_ATTRIBUTE_NAME] = id;
+            // set root DOM node ref and parent ref
+            component.parent = parentDomElement.$stComponentRef;
 
-        // update as a decision
-        component.INTERNAL[ID_ATTRIBUTE_NAME] = id;
-      }
+            // assign attributes, slotChildren etc.
+            component.virtualNode = virtualNode;
 
-      const key = outerAttributes[LIST_KEY_ATTRIBUTE_NAME] || component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME];
+            if (component.parent) {
+                if (!component.parent.childComponents) {
+                    component.parent.childComponents = [];
+                }
+                component.parent.childComponents.push(component);
+            }
 
-      if (key) {
-        virtualNode.attributes[LIST_KEY_ATTRIBUTE_NAME] = key;
+            for (let propName in component) {
 
-        // update as a decision
-        component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME] = key;
-      }
+                // undefined early return
+                if (typeof component[propName] == TYPE_UNDEFINED) continue;
 
-      const tabIndex = outerAttributes[TABINDEX_ATTRIBUTE_NAME] || component.INTERNAL[TABINDEX_ATTRIBUTE_NAME];
-      if (tabIndex) {
-        virtualNode.attributes[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
+                if (propName.startsWith(ATTR_EVENT_LISTENER_PREFIX) &&
+                    typeof component[propName] == TYPE_FUNCTION) {
 
-        // update as a decision
-        component.INTERNAL[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
-      }
-    },
+                    // component-local bould event listener function
+                    if (!virtualNode.attributes) {
+                        virtualNode.attributes = {};
+                    }
 
-    getTagToUse: (component: ILifecycle, virtualNode: IVirtualNode): string => {
+                    if (outerAttributes[propName]) {
 
-      if (component) {
-        const componentCtor = Object.getPrototypeOf(component).constructor;
-        if ((component as any).tag || componentCtor.COMPONENT_OPTIONS && componentCtor.COMPONENT_OPTIONS.tag) {
-          // use <class-name> instead of ClassName which would end up as <classname> in DOM
-          return (component as any).tag || componentCtor.COMPONENT_OPTIONS.tag;
-        }
-      }
+                        const outsideEventListener = outerAttributes[propName];
+                        const localEventListener = component[propName];
 
-      // support for <component tag="h1"> and <div tag="h2"> cases
-      if (virtualNode.attributes && virtualNode.attributes.tag) {
-        return virtualNode.attributes.tag;
-      }
-      return virtualNode.type;
-    },
+                        virtualNode.attributes[propName] = (evt: Event) => {
+                            localEventListener(evt);
+                            outsideEventListener(evt);
+                        }
+                    } else {
+                        virtualNode.attributes[propName] = component[propName]
+                    }
+                }
+            }
 
-    createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, detached: boolean = false): IElement | undefined => {
-      let newEl: Element;
+            // to analyze, filter and transform before create
+            component.onBeforeElCreate(virtualNode);
 
-      const { component, outerAttributes } = st.dom.createComponentInstance(virtualNode, parentDomElement);
+            return {
+                component,
+                componentCtor,
+                outerAttributes
+            }
+        },
 
-      if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase())) {
-        newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
-      } else {
-        newEl = document.createElement(st.dom.getTagToUse(component as ILifecycle, virtualNode) as string);
-      }
+        updateComponentAttributes: (component: any, outerAttributes: any, virtualNode: IVirtualNode) => {
 
-      if (component) {
+            // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
+            for (let attrName in component.INTERNAL.attributes) {
 
-        // set element reference
-        component.el = newEl;
+                if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
+                    const value = outerAttributes[attrName] || component.INTERNAL.attributes[attrName];
 
-        // reference component logical controller component
-        (newEl as IElement).$stComponent = component;
-        (newEl as IElement).$stComponentRef = component;
-        (newEl as IElement).getComponent = function () { return this.$stComponent || this.$stComponentRef };
+                    virtualNode.attributes[attrName] = value;
 
-        st.dom.updateComponentAttributes(component, outerAttributes, virtualNode);
+                    // update as a decision
+                    component.INTERNAL.attributes[attrName] = value;
+                }
+            }
 
-      } else {
-        // passing down parent component reference (it's a pure DOM element in this case)
-        (newEl as IElement).$stComponentRef = parentDomElement.$stComponentRef;
-        (newEl as IElement).getComponent = function () { return this.$stComponentRef };
-      }
+            const id = outerAttributes[ID_ATTRIBUTE_NAME] || component.INTERNAL[ID_ATTRIBUTE_NAME];
+            if (id) {
+                virtualNode.attributes[ID_ATTRIBUTE_NAME] = id;
 
-      if (virtualNode.attributes) {
-        st.dom.setAttributes(virtualNode.attributes, newEl);
-      }
+                // update as a decision
+                component.INTERNAL[ID_ATTRIBUTE_NAME] = id;
+            }
+            const key = outerAttributes[LIST_KEY_ATTRIBUTE_NAME] || component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME];
 
-      if (component) {
-        // to verify and mutate further
-        component.onAfterElCreate!(newEl);
-        component.onBeforeElChildrenCreate!();
-      }
+            if (key) {
+                virtualNode.attributes[LIST_KEY_ATTRIBUTE_NAME] = key;
 
-      if (virtualNode.children) {
-        st.dom.createChildElements(virtualNode.children, newEl);
-      }
+                // update as a decision
+                component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME] = key;
+            }
 
-      if (component) {
-        component.onAfterElChildrenCreate!();
-        component.onBeforeConnect!();
-      }
+            const tabIndex = outerAttributes[TABINDEX_ATTRIBUTE_NAME] || component.INTERNAL[TABINDEX_ATTRIBUTE_NAME];
+            if (tabIndex) {
+                virtualNode.attributes[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
 
-      if (!detached) {
-        parentDomElement.appendChild(newEl);
+                // update as a decision
+                component.INTERNAL[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
+            }
+        },
 
-        if (component) {
-          component.connectedCallback!();
-        }
-      }
-      return newEl as IElement;
-    },
+        getTagToUse: (component: ILifecycle, virtualNode: IVirtualNode): string => {
 
-    replaceElement: (
-      virtualNode: IVirtualNode | undefined,
-      parentDomElement: Element,
-      oldDomChildElement: Element
-    ): IElement => {
-      const domElement = st.dom.createElement(virtualNode, parentDomElement, true) as IElement;
-      parentDomElement.replaceChild(domElement, oldDomChildElement);
-      return domElement;
-    },
+            if (component) {
+                const componentCtor = Object.getPrototypeOf(component).constructor;
+                if ((component as any).tag || componentCtor.COMPONENT_OPTIONS && componentCtor.COMPONENT_OPTIONS.tag) {
+                    // use <class-name> instead of ClassName which would end up as <classname> in DOM
+                    return (component as any).tag || componentCtor.COMPONENT_OPTIONS.tag;
+                }
+            }
 
-    replaceTextNode: (
-      virtualElementTextContent: string,
-      parentDomElement: Element,
-      oldDomChildElement: Element): Text => {
-      const domElement = st.dom.createTextNode(virtualElementTextContent, parentDomElement, true);
-      parentDomElement.replaceChild(domElement, oldDomChildElement);
-      return domElement;
-    },
+            // support for <component tag="h1"> and <div tag="h2"> cases
+            if (virtualNode.attributes && virtualNode.attributes.tag) {
+                return virtualNode.attributes.tag;
+            }
+            return virtualNode.type;
+        },
 
-    createTextNode: (text: string, domElement: IElement, detached: boolean = false): Text => {
+        createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, detached: boolean = false): IElement | undefined => {
+            let newEl: Element;
 
-      const node = document.createTextNode(text.toString());
+            const {component, outerAttributes} = st.dom.createComponentInstance(virtualNode, parentDomElement);
 
-      if (!detached) {
-        domElement.appendChild(node);
-      }
-      return node;
-    },
+            if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase())) {
+                newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
+            } else {
+                newEl = document.createElement(st.dom.getTagToUse(component as ILifecycle, virtualNode) as string);
+            }
 
-    createChildElements: (
-      virtualChildren: IVirtualChildren,
-      domElement: IElement,
-      detached: boolean = false): Array<IElement | Text | undefined> => {
+            if (component) {
 
-      const children: Array<IElement | Text | undefined> = [];
+                // set element reference
+                component.el = newEl;
 
-      for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
-        if (isPrimitive(virtualChild)) {
-          children.push(st.dom.createTextNode(((typeof virtualChild == TYPE_UNDEFINED || virtualChild === null) ? "" : virtualChild!).toString(), domElement, detached));
-        } else {
-          if (isJSXComment(virtualChild as IVirtualNode)) {
-            continue;
-          }
-          children.push(st.dom.createElement(virtualChild as IVirtualNode, domElement, detached));
-        }
-      }
-      return children;
-    },
+                // reference component logical controller component
+                (newEl as IElement).$stComponent = component;
+                (newEl as IElement).$stComponentRef = component;
+                (newEl as IElement).getComponent = function () {
+                    return this.$stComponent || this.$stComponentRef
+                };
 
-    setAttribute: (name: string, value: any, domElement: IElement, forceNative?: boolean) => {
-      // don't render debug attributes like __source and __self
-      if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
+                st.dom.updateComponentAttributes(component, outerAttributes, virtualNode);
 
-      // stores referenced DOM nodes in a memory efficient WeakMap
-      // for access from CustomElements
-      if (name === REF_ATTRIBUTE_NAME) {
-        const refName = Object.keys(value)[0];
+            } else {
+                // passing down parent component reference (it's a pure DOM element in this case)
+                (newEl as IElement).$stComponentRef = parentDomElement.$stComponentRef;
+                (newEl as IElement).getComponent = function () {
+                    return this.$stComponentRef
+                };
+            }
 
-        if (!domElement.$stComponentRef.INTERNAL.refs) {
-          domElement.$stComponentRef.INTERNAL.refs = {};
-        }
+            if (virtualNode.attributes) {
+                st.dom.setAttributes(virtualNode.attributes, newEl);
+            }
 
-        const refValue = domElement.$stComponent || domElement;
+            if (component) {
+                // to verify and mutate further
+                component.onAfterElCreate!(newEl);
+                component.onBeforeElChildrenCreate!();
+            }
 
-        // remember for destruction on disconnect
-        domElement.$stComponentRef.INTERNAL.refs[refName] = refValue;
+            if (virtualNode.children) {
+                st.dom.createChildElements(virtualNode.children, newEl);
+            }
 
-        let refMutation = false;
+            if (component) {
+                component.onAfterElChildrenCreate!();
+                component.onBeforeConnect!();
+            }
 
-        if (value[refName][refName]) {
-          refMutation = true;
-        }
+            if (!detached) {
+                parentDomElement.appendChild(newEl);
 
-        Object.defineProperty(value[refName], refName, {
-          value: refValue,
-          configurable: true,
-        });
+                if (component) {
+                    component.connectedCallback!();
+                }
+            }
+            return newEl as IElement;
+        },
 
-        if (refMutation) {
-          value[refName].onAfterRefChange(refName, refValue);
-        }
-        return;
-      }
+        replaceElement: (
+            virtualNode: IVirtualNode | undefined,
+            parentDomElement: Element,
+            oldDomChildElement: Element
+        ): IElement => {
+            const domElement = st.dom.createElement(virtualNode, parentDomElement, true) as IElement;
+            parentDomElement.replaceChild(domElement, oldDomChildElement);
+            return domElement;
+        },
 
-      if (name.startsWith(ATTR_EVENT_LISTENER_PREFIX) && typeof value == TYPE_FUNCTION) {
-        let eventName = name.substring(2).toLowerCase();
-        const capturePos = eventName.indexOf("capture");
-        const doCapture = capturePos > -1;
+        replaceTextNode: (
+            virtualElementTextContent: string,
+            parentDomElement: Element,
+            oldDomChildElement: Element): Text => {
+            const domElement = st.dom.createTextNode(virtualElementTextContent, parentDomElement, true);
+            parentDomElement.replaceChild(domElement, oldDomChildElement);
+            return domElement;
+        },
 
-        // onClickCapture={...} support
-        if (doCapture) {
-          eventName = eventName.substring(0, capturePos);
-        }
-        domElement.addEventListener(eventName, value, doCapture);
-        return;
-      }
+        createTextNode: (text: string, domElement: IElement, detached: boolean = false): Text => {
 
-      // transforms class={['a', 'b']} into class="a b"
-      if (name === CLASS_ATTRIBUTE_NAME && Array.isArray(value)) {
-        value = value.join(" ");
-      }
+            const node = document.createTextNode(text.toString());
 
-      if (st.dom.hasElNamespace(domElement) && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
-        domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
-      } else {
-        if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
-          domElement.$stComponent.setAttribute(name, value);
-        } else if (name === STYLE_ATTRIBUTE_NAME && typeof value !== TYPE_STRING) {
-          for (let prop in value) {
-            domElement.style[prop as any] = value[prop];
-          }
-        } else {
-          if (typeof value == TYPE_BOOLEAN) {
-            (domElement as any)[name] = value;
-          } else {
-            domElement.setAttribute(name, value);
-          }
-        }
-      }
-    },
+            if (!detached) {
+                domElement.appendChild(node);
+            }
+            return node;
+        },
 
-    isStandardHTMLAttribute: (name: string) => {
-      // these attributes, set on a component (from the outside) will
-      // always directly be set on component.el and the component will
-      // not be notified using lifecycle methods
-      // thus, these attribute names render pointless to be used
-      // but this should be obvious too - just because of thier names nature
-      return STANDARD_HTML_PASS_ATTRIBUTES.indexOf(name.toLowerCase()) > -1;
-    },
+        createChildElements: (
+            virtualChildren: IVirtualChildren,
+            domElement: IElement,
+            detached: boolean = false): Array<IElement | Text | undefined> => {
 
-    setAttributes: (
-      attributes: IVirtualNodeAttributes,
-      domElement: IElement,
-      forceNative?: boolean,
-    ) => {
-      for (let name in attributes) {
-        st.dom.setAttribute(name, attributes[name], domElement, forceNative);
-      }
-    },
-  };
+            const children: Array<IElement | Text | undefined> = [];
+
+            for (let virtualChild of virtualChildren as Array<IVirtualChild>) {
+                if (isPrimitive(virtualChild)) {
+                    children.push(st.dom.createTextNode(((typeof virtualChild == TYPE_UNDEFINED || virtualChild === null) ? "" : virtualChild!).toString(), domElement, detached));
+                } else {
+                    if (isJSXComment(virtualChild as IVirtualNode)) {
+                        continue;
+                    }
+                    children.push(st.dom.createElement(virtualChild as IVirtualNode, domElement, detached));
+                }
+            }
+            return children;
+        },
+
+        setAttribute: (name: string, value: any, domElement: IElement, forceNative?: boolean) => {
+            // don't render debug attributes like __source and __self
+            if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
+
+            // stores referenced DOM nodes in a memory efficient WeakMap
+            // for access from CustomElements
+            if (name === REF_ATTRIBUTE_NAME) {
+                const refName = Object.keys(value)[0];
+
+                if (!domElement.$stComponentRef.INTERNAL.refs) {
+                    domElement.$stComponentRef.INTERNAL.refs = {};
+                }
+
+                const refValue = domElement.$stComponent || domElement;
+
+                // remember for destruction on disconnect
+                domElement.$stComponentRef.INTERNAL.refs[refName] = refValue;
+
+                let refMutation = false;
+
+                if (value[refName][refName]) {
+                    refMutation = true;
+                }
+
+                Object.defineProperty(value[refName], refName, {
+                    value: refValue,
+                    configurable: true,
+                });
+
+                if (refMutation) {
+                    value[refName].onAfterRefChange(refName, refValue);
+                }
+                return;
+            }
+
+            if (name.startsWith(ATTR_EVENT_LISTENER_PREFIX) && typeof value == TYPE_FUNCTION) {
+                let eventName = name.substring(2).toLowerCase();
+                const capturePos = eventName.indexOf("capture");
+                const doCapture = capturePos > -1;
+
+                // onClickCapture={...} support
+                if (doCapture) {
+                    eventName = eventName.substring(0, capturePos);
+                }
+                domElement.addEventListener(eventName, value, doCapture);
+                return;
+            }
+
+            // transforms class={['a', 'b']} into class="a b"
+            if (name === CLASS_ATTRIBUTE_NAME && Array.isArray(value)) {
+                value = value.join(" ");
+            }
+
+            if (st.dom.hasElNamespace(domElement) && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
+                domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
+            } else {
+                if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
+                    domElement.$stComponent.setAttribute(name, value);
+                } else if (name === STYLE_ATTRIBUTE_NAME && typeof value !== TYPE_STRING) {
+                    for (let prop in value) {
+                        domElement.style[prop as any] = value[prop];
+                    }
+                } else {
+                    if (typeof value == TYPE_BOOLEAN) {
+                        (domElement as any)[name] = value;
+                    } else {
+                        domElement.setAttribute(name, value);
+                    }
+                }
+            }
+        },
+
+        isStandardHTMLAttribute: (name: string) => {
+            // these attributes, set on a component (from the outside) will
+            // always directly be set on component.el and the component will
+            // not be notified using lifecycle methods
+            // thus, these attribute names render pointless to be used
+            // but this should be obvious too - just because of thier names nature
+            return STANDARD_HTML_PASS_ATTRIBUTES.indexOf(name.toLowerCase()) > -1;
+        },
+
+        setAttributes: (
+            attributes: IVirtualNodeAttributes,
+            domElement: IElement,
+            forceNative?: boolean,
+        ) => {
+            for (let name in attributes) {
+                st.dom.setAttribute(name, attributes[name], domElement, forceNative);
+            }
+        },
+    };
 }
