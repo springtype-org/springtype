@@ -3,7 +3,7 @@ import {component} from "../../../../src/web/component";
 import {tsx} from "../../../../src/web/vdom";
 import {Route, RouteList} from "../../../../src/web/router";
 import {ROUTE_HOME_ADMIN, ROUTE_HOME_BASE, ROUTE_HOME_NOT_PERMITTED, ROUTE_NOT_ALLOWED} from "../routes";
-import {IRouteMatch,IRouterGuardResponse} from "../../../../src/web/router/interface";
+import {IRouteMatch, IRouterGuardResponse} from "../../../../src/web/router/interface";
 
 @component
 export class HomePage extends st.component {
@@ -34,14 +34,14 @@ export class HomePage extends st.component {
         if (match.path === ROUTE_HOME_NOT_PERMITTED) {
             const number = this.counter % 3;
             switch (number) {
-                default :
+                case 1 :
                     console.log('route');
                     resolveGuard = ROUTE_NOT_ALLOWED;
                     break;
-                 case 2:
-                       console.log('custom component');
-                       resolveGuard = <div>custom comp 403</div>;
-                       break;
+                case 2:
+                    console.log('custom component');
+                    resolveGuard = <div>custom comp 403</div>;
+                    break;
             }
 
             this.counter++;

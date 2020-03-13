@@ -12,4 +12,4 @@ export const castIntrinsic = (value: string): string|number|boolean => {
     return Number(value);
   }
   return value; // string
-}
+};

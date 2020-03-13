@@ -2,6 +2,7 @@ import {st} from "../../../core";
 import {attr, component} from "../../component";
 import {ILifecycle} from "../../component/interface";
 import {AttrType} from "../../component/trait/attr";
+import {equalObjects} from "../../../core/lang";
 
 export interface ILinkAttrs {
     path: string;
@@ -45,7 +46,7 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     }
 
     updateActiveClass = () => {
-       const activeClassName = this.activeClass || LINK_ACTIVE_CLASS;
+        const activeClassName = this.activeClass || LINK_ACTIVE_CLASS;
         if (!Array.isArray(this.class)) {
             this.class = [this.class];
         }
@@ -53,8 +54,10 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
         const filteredClasses = this.class.filter((className: string) => className !== activeClassName);
         if (st.route) {
             const matcher = st.router.match[this.path];
-            if (matcher && matcher.isExact) {
-                filteredClasses.push(activeClassName);
+            if (matcher && equalObjects(matcher.params, this.params || {})) {
+                if (matcher.isExact || matcher.isPartial) {
+                    filteredClasses.push(activeClassName);
+                }
             }
         }
         this.class = filteredClasses;
@@ -68,4 +71,5 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     onDisconnect() {
         st.router.removeOnAfterMatchHandler(this.updateActiveClass);
     }
+
 }

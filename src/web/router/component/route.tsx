@@ -5,10 +5,8 @@ import {tsx} from "../../vdom";
 import {IElement, IVirtualNode} from "../../vdom/interface";
 import {IRouteMatch, RouteGuard} from "../interface";
 import {RouteList} from "./route-list";
-import {TYPE_FUNCTION} from "../../../core/lang/type-function";
+import {TYPE_FUNCTION, TYPE_OBJECT, TYPE_STRING} from "../../../core/lang";
 import {AttrType} from "../../component/trait/attr";
-import {TYPE_STRING} from "../../../core/lang/type-string";
-import {TYPE_OBJECT} from "../../../core/lang/type-object";
 
 const defaultLoadingComponent = <div>Loading...</div>;
 
@@ -64,11 +62,11 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
     }
 
     onMatch = async (path: string, match: IRouteMatch) => {
-      try {
-        await this.enter(match, path);
-      }catch (e) {
-          st.debug(e.message);
-      }
+        try {
+            await this.enter(match, path);
+        } catch (e) {
+            st.debug(e.message);
+        }
     };
 
     onMismatch = async (path: string) => {
@@ -185,7 +183,8 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
         if (this.runningMatch) {
             this.runningMatch({
                 reason: 'matcher triggered',
-                message: `Stopped matching (${this.path})`});
+                message: `Stopped matching (${this.path})`
+            });
         }
     }
 

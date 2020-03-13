@@ -11,15 +11,12 @@ import {IComponentInternals} from "./interface/icomponent";
 import {RenderReason, RenderReasonMetaData} from "./interface/irender-reason";
 import {AttrTrait, AttrType} from "./trait/attr";
 import {StateTrait} from "./trait/state";
-import {TYPE_FUNCTION} from "../../core/lang/type-function";
-import {TYPE_UNDEFINED} from "../../core/lang/type-undefined";
+import {mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED} from "../../core/lang";
 import {IRefAttribute} from "./interface/iref-attribute";
 import {CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME} from "../vdom/dom";
 import {ContextStateTrait} from "./trait/context-state";
 import {StoreTrait} from "./trait/store";
 import {MessageTrait} from "./trait/message";
-import {mergeArrays} from "../../core/lang/merge-arrays";
-import {mergeObjects} from "../../core/lang/merge-objects";
 
 export type DefaultComponentAttributes = {
     tag?: string; // allows to set a custom .el tag
@@ -355,7 +352,7 @@ export class Component<A = {}> implements ILifecycle {
 
         this.onDisconnect();
 
-        console.log('disable messaging in disconnect')
+        console.log('disable messaging in disconnect');
         MessageTrait.disableFor(this);
 
         // purge from global instance registry
@@ -430,7 +427,7 @@ export const disconnectComponent = (component: Component<any>) => {
         }
         component.disconnectedCallback();
     }
-}
+};
 
 const awaitDisconnect = (component: Component<any>) => {
 

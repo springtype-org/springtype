@@ -1,8 +1,6 @@
 import {st} from "../../core";
 import {IRouteMatch} from "./interface";
-import {TYPE_UNDEFINED} from "../../core/lang/type-undefined";
-import {TYPE_FUNCTION} from "../../core/lang/type-function";
-import {castIntrinsic} from "../../core/lang/cast-intrinsic";
+import {TYPE_UNDEFINED,TYPE_FUNCTION,TYPE_STRING,castIntrinsic} from "../../core/lang";
 import {GlobalCache} from "../../core/st/interface/i$st";
 
 // matches when no route matches (not even partially!), basically like HTTP ERROR 404 NOT FOUND behaviour
@@ -106,7 +104,12 @@ if (!st.router) {
                     if (match.params![paramName] !== st.router.tokenizedActualPath[i]) {
                         st.router.paramsChanged = true;
                         // casts intrinsically based on the string syntax ("0.012" -> float number, "true" -> true etc.)
-                        match.params![paramName] = castIntrinsic(st.router.tokenizedActualPath[i]);
+                        let parameter = castIntrinsic(st.router.tokenizedActualPath[i]);
+                        if (typeof parameter === TYPE_STRING) {
+                            //unescape url parameter if string
+                            parameter = unescape(parameter as string);
+                        }
+                        match.params![paramName] = parameter
                     }
                 } else if (!st.router.tokenizedActualPath[i] && tokenizedMatchPath[i]) {
 
@@ -119,7 +122,6 @@ if (!st.router) {
                     // match the actual path token with the candidates token at the same position
                     if (typeof st.router.tokenizedActualPath[i] != TYPE_UNDEFINED &&
                         pathToken === st.router.tokenizedActualPath[i]) {
-
                         match.isPartial = true;
 
                     } else {
@@ -128,7 +130,10 @@ if (!st.router) {
                     }
                 }
             }
-
+            if (match.isPartial) {
+                //partial only if path is smaller than actual length
+                match.isPartial = tokenizedMatchPath.length < st.router.tokenizedActualPath.length
+            }
             if (match.isPartial || match.isExact) {
                 return match;
             }
@@ -168,7 +173,7 @@ if (!st.router) {
             }
 
             for (let path of matchPath) {
-                tokenizedPaths.push(st.router.tokenize(st.router.removeTrailingSep(path)))
+                tokenizedPaths.push(st.router.tokenize(st.router.removeTrailingSep(path)));
                 nonTokenizedPaths.push(path);
             }
 
@@ -297,6 +302,6 @@ if (!st.router) {
 
 } else {
     if (process.env.NODE_ENV === 'development') {
-        st.warn('Module router is loaded twice. Check for duplicate famework import!');
+        st.warn('Module router is loaded twice. Check for duplicate framework import!');
     }
 }
