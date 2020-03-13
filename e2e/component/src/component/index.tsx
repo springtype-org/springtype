@@ -7,13 +7,13 @@ import { attr, component, state } from "../../../../src/web/component";
 import { IStateChange } from "../../../../src/web/component/interface";
 import { tsx } from "../../../../src/web/vdom";
 // @ts-ignore JSON module import activated in bundler config
-import * as de from "./i18n/de.json";
-// @ts-ignore JSON module import activated in bundler config
+import de from "./i18n/de.json";
+// also possible
 import * as en from "./i18n/en.json";
 import { formatter } from "../../../../src/core/formatter";
 
-@formatter("uppercase", value => value.toUpperCase())
 @translation("de", de)
+@formatter("uppercase", value => value.toUpperCase())
 @translation("en", en)
 @component
 export class Foo2 extends st.component {
@@ -69,7 +69,7 @@ export class Foo2 extends st.component {
     setTimeout(() => {
       this.foo =
         "GOOOOOOOD" +
-        st.t("deep222.msg", {
+        st.t("deep.msg", {
           someValue: "Yeah!",
         }) +
         st.t("deep.msg2", {

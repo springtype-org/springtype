@@ -2,7 +2,6 @@ import { st } from "../../../../src/core";
 import { component } from "../../../../src/web/component";
 import { tsx } from "../../../../src/web/vdom";
 import { ILifecycle } from "../../../../src/web/component/interface";
-import {IRouteParams} from "../../../../src/web/router/interface/iroute-match";
 
 @component
 export default class AboutPage extends st.component implements ILifecycle {

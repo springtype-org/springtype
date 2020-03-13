@@ -12,7 +12,7 @@ const Duplicate = component(() => {
   return () => {
     return <p>Duplicate-{id}</p>;
   }
-})
+});
 
 const DRAG_GROUP = 'DRAG_GROUP';
 
@@ -47,7 +47,7 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
     width: 100,
     height: 100,
     padding: 20
-  }
+  };
 
   constructor() {
     super();
@@ -65,7 +65,7 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
     for (let draggable of this.dragGroup) {
       draggable.handleDragStart();
     }
-  }
+  };
 
   handleDragStart() {
     this.style = { ...this.style, opacity: 0.4 };
@@ -83,12 +83,12 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
   @event
   onDragEnter = () => {
     this.style = { ...this.style, border: '2px dotted #000' };
-  }
+  };
 
   @event
   onDragLeave = () => {
     this.handleDragLeave();
-  }
+  };
 
   handleDragLeave() {
     this.style = { ...this.style, border: '2px solid transparent', opacity: 1 };
@@ -99,7 +99,7 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
     for (let draggable of this.dragGroup) {
       draggable.handleDragLeave();
     }
-  }
+  };
 
   @event
   onDrop = (evt: DragEvent) => {
@@ -117,7 +117,7 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
 
     DRAG_ELEMENT = null;
     return false;
-  }
+  };
 
   render() {
     return this.displayText;
