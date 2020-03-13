@@ -1,6 +1,5 @@
-import { st } from "../../core/st/st";
-import { IElement } from "./interface/ielement";
-import { IVirtualNode } from "./interface/ivirtual-node";
+import { st } from "../../core/st";
+import { IElement, IVirtualNode } from "./interface";
 import { filterComments, tsxToStandardAttributeName } from "./tsx";
 import { NOVDOM_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { TYPE_OBJECT } from "../../core/lang/type-object";
@@ -49,7 +48,6 @@ if (!st.renderer) {
         if (typeof virtualElement === TYPE_OBJECT) {
           st.renderer.patchElement(parent, domElement, virtualElement as IVirtualNode);
         } else {
-
           st.renderer.patchTextNode(parent, domElement, (virtualElement as unknown) as string);
         }
       }

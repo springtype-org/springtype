@@ -6,4 +6,4 @@ export const mergeObjects = (a: any, b: any) => {
     mergeResult = a || b;
   }
   return mergeResult;
-}
+};

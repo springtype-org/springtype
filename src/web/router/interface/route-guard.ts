@@ -1,4 +1,4 @@
-import { IVirtualNode } from "../../vdom/interface";
 import { IRouteMatch } from "./iroute-match";
+import {IRouterGuardResponse} from "./irouter-guard-response";
 
-export type RouteGuard = (match: IRouteMatch) => Promise<IVirtualNode>;
+export type RouteGuard = (match: IRouteMatch) => Promise<IRouterGuardResponse>;

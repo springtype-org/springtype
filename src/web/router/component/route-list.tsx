@@ -9,7 +9,6 @@ export class RouteList extends st.component implements ILifecycle {
 
   onAfterInitialRender() {
     st.router.addOnLocationChangeHandler(this.match);
-
     this.match();
   }
 

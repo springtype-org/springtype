@@ -1,7 +1,7 @@
 import { st } from "../../../src/core";
 import { context } from "../../../src/core/context";
 import { attr, component } from "../../../src/web/component";
-import { Component } from "../../../src/web/component/component";
+import { Component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 import { tpl } from "./index.tpl";
 

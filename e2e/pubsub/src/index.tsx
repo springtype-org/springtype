@@ -28,7 +28,6 @@ export class E2EBusTest extends st.component implements ILifecycle {
   }
 
   containerA() {
-
     return <fragment>
       <ComponentA />
       <br />
@@ -37,11 +36,11 @@ export class E2EBusTest extends st.component implements ILifecycle {
   }
 
   containerB() {
-    return <span>
+    return <fragment>
       <ComponentA />
       <br />
       <ComponentB />
-    </span>
+    </fragment>
   }
 
   render() {
@@ -73,7 +72,7 @@ export class ComponentA extends st.component {
 
   sendMessageOnClick = (event: Event) => {
     this.sendMessage(TOPIC_BUTTON_CLICK, 'Yes')
-  }
+  };
 
   render() {
     return (
