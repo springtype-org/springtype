@@ -1,3 +1,10 @@
-export { IsDefined, validateIsDefined } from "./is-defined";
-export { NotNull, validateNotNull} from "./not-null";
-export { Required, validateRequired } from "./required";
+export {IsDefined, defined} from "./is-defined";
+export {NotNull, notnull} from "./not-null";
+export {NotEmpty, notEmpty} from "./not-empty";
+export {Required, required} from "./required";
+export {CreditCard, creditCard} from "./credit-card";
+export {EMail, email} from "./email";
+export {MaxLength, maxLength} from "./max-length";
+export {MinLength, minLength} from "./min-length";
+export {Pattern, pattern} from "./pattern";
+export {Range, range} from "./range";

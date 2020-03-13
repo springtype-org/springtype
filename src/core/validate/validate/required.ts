@@ -1,11 +1,12 @@
-import { getParameterValidateDecorator } from "../function/get-parameter-validate-decorator";
-import { validateNotNull } from "./not-null";
-import { validateIsDefined } from "./is-defined";
+import {getParameterValidateDecorator} from "../function/get-parameter-validate-decorator";
+import {validatorNameFactory} from "../function/validator-name-factory";
+
+const VALIDATOR_NAME = 'required';
 
 // decorator @Required
-export const Required = () => getParameterValidateDecorator(validateRequired, 'Required');
+export const Required = () => getParameterValidateDecorator(required, VALIDATOR_NAME);
 
-export const validateRequired = (value: any): boolean => {
-    return validateNotNull(value) && validateIsDefined(value)
-};
+export const required = validatorNameFactory((value: any): boolean => {
+    return !!value
+}, VALIDATOR_NAME);
 
