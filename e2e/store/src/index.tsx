@@ -13,11 +13,11 @@ export class E2EStoreTest extends st.component implements ILifecycle {
 
   increment = () => {
     st.getStore().dispatch(actions.increment);
-  }
+  };
 
   decrement = () => {
     st.getStore().dispatch(actions.decrement);
-  }
+  };
 
   render() {
     return (

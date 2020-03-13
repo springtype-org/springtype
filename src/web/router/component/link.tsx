@@ -12,11 +12,9 @@ export interface ILinkAttrs {
     activeClass?: string;
 }
 
-export const LINK_ACTIVE_CLASS = 'active';
 
 @component({tag: 'a'})
 export class Link extends st.component<ILinkAttrs> implements ILifecycle {
-
 
     @attr
     path: string = '';
@@ -46,7 +44,7 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     }
 
     updateActiveClass = () => {
-        const activeClassName = this.activeClass || LINK_ACTIVE_CLASS;
+        const activeClassName = this.activeClass || st.router.activeLinkClass;
         if (!Array.isArray(this.class)) {
             this.class = [this.class];
         }

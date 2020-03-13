@@ -5,7 +5,7 @@ import {st} from "../../../src/core";
 import {component} from "../../../src/web/component";
 import {tsx} from "../../../src/web/vdom";
 import {From, Input, Select} from "../../../src/web/form";
-import {required} from "../../../src/core/validate/validate/required";
+import {required} from "../../../src/core/validate/validate";
 import {minLength} from "../../../src/core/validate/validate/min-length";
 
 

@@ -22,6 +22,9 @@ export interface IRouter {
   // defaults to: #/ for "/#/" SPA routing
   prefix: string;
 
+  //active link class
+  activeLinkClass: string;
+
   materialize(route: string, params?: any): string;
   getUrlPath(pathnameOrHash: string): string;
   removeTrailingSep(url: string): string;

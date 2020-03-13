@@ -1,6 +1,6 @@
 import {st} from "../../core";
 import {IRouteMatch} from "./interface";
-import {TYPE_UNDEFINED,TYPE_FUNCTION,TYPE_STRING,castIntrinsic} from "../../core/lang";
+import {castIntrinsic, TYPE_FUNCTION, TYPE_STRING, TYPE_UNDEFINED} from "../../core/lang";
 import {GlobalCache} from "../../core/st/interface/i$st";
 
 // matches when no route matches (not even partially!), basically like HTTP ERROR 404 NOT FOUND behaviour
@@ -28,6 +28,8 @@ if (!st.router) {
         prefix: '#/',
         enabled: false,
         paramsChanged: false,
+
+        activeLinkClass: 'active',
 
         addOnAfterMatchHandler: (handler: Function) => {
             st.router.ON_AFTER_MATCH_HANDLERS.push(handler);

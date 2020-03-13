@@ -9,17 +9,17 @@ import { Link } from "../../../src/web/router";
 @component
 export class E2EDomTransparencyTest extends st.component implements ILifecycle {
 
-  id = 'transparent123'
+  id = 'transparent123';
 
-  tag = 'div'
+  tag = 'div';
 
-  class = ['foo', 'bar']
+  class = ['foo', 'bar'];
 
   style = {
     display: 'block',
     backgroundColor: '#ccc',
     height: '100px'
-  }
+  };
 
   tabIndex = "3";
 
