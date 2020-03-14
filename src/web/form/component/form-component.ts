@@ -4,6 +4,7 @@ import {ValidationComponent} from "./validation-component";
 import {IAttrFormComponent} from "../interface/i-attr-form-component";
 import {IFormState} from "../interface/i-form-state";
 import {BaseComponent} from "./base-component";
+import {htmlCollectionToArray} from "../../../core/lang";
 
 @component({tag: 'form'})
 export class Form extends BaseComponent<IAttrFormComponent> {
@@ -13,6 +14,8 @@ export class Form extends BaseComponent<IAttrFormComponent> {
 
     @attr
     action!: string;
+
+    //onSubmit:()
 
     render() {
         return this.renderChildren();
@@ -24,12 +27,14 @@ export class Form extends BaseComponent<IAttrFormComponent> {
 
     overrideSubmit() {
         const form = this.el as HTMLFormElement;
+
         //ignore on submit validate forms async
         form.onsubmit = () => false;
+
         this.el.addEventListener('submit', async () => {
-            if (await this.validate()) {
-                form.submit();
-            }
+                if (await this.validate()) {
+                    form.submit();
+                }
         })
     }
 
@@ -37,11 +42,11 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         return new Promise<boolean>(async (resolve) => {
             let result = true;
             const elementResults: Array<Promise<boolean>> = [];
-            for (const element of this.getElements()) {
+            for (const element of this.elements) {
                 elementResults.push(element.validate().then(v => !(v.valid === false || v.valid === 'none')));
             }
             const formResults: Array<Promise<boolean>> = [];
-            for (const subForm of this.getSubForms()) {
+            for (const subForm of this.subForm) {
                 formResults.push(subForm.validate())
             }
             if ((await Promise.all(elementResults)).filter(v => !v).length > 0) {
@@ -55,12 +60,11 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         });
     }
 
-    getElements(): ValidationComponent<any>[] {
-        const validationComponents: ValidationComponent<any>[] = [];
-        const htmlForm = this.el as HTMLFormElement;
-        for (const element of htmlForm.elements) {
-            if ((element as any).$stComponent && (element as any).$stComponent instanceof ValidationComponent) {
-                const validationComponent = (element as any).$stComponent as ValidationComponent<any>;
+    get elements(): ValidationComponent<any>[] {
+        const validationComponents: Array<ValidationComponent<any>> = [];
+        for (const element of htmlCollectionToArray<any>((this.el as HTMLFormElement).elements)) {
+            if (element.$stComponent && element.$stComponent instanceof ValidationComponent) {
+                const validationComponent = element.$stComponent as ValidationComponent<any>;
                 if (!validationComponent.disabled) {
                     validationComponents.push(validationComponent);
                 }
@@ -69,16 +73,21 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         return validationComponents;
     }
 
-    getState() {
+    get state() {
         const formState: IFormState = {};
         const htmlForm = this.el as HTMLFormElement;
         const radios: { [name: string]: RadioNodeList } = {};
         const elements = htmlForm.elements;
-        for (const element of elements) {
+        for (const element of htmlCollectionToArray<HTMLElement>(elements)) {
+
+
             if (element instanceof HTMLButtonElement) {
                 continue;
             }
             if (element instanceof HTMLInputElement) {
+                if (element.disabled) {
+                    continue;
+                }
                 const htmlInput = element as HTMLInputElement;
                 if (htmlInput.type === 'radio' && htmlInput.name) {
                     radios[htmlInput.name] = elements.namedItem(htmlInput.name) as RadioNodeList;
@@ -96,27 +105,24 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         for (const radioGroupName of Object.keys(radios)) {
             formState[radioGroupName] = radios[radioGroupName].value;
         }
-        const subFoms = this.getSubForms();
-        for (const form of subFoms) {
-            formState[form.name] = form.getState();
+        for (const form of this.subForm) {
+            formState[form.name] = form.state;
         }
         return formState;
     }
 
-    getSubForms(): Array<Form> {
+    get subForm(): Array<Form> {
         const forms: Array<Form> = [];
-        this.el.querySelectorAll('form').forEach((el) => {
-            if (el.$stComponent && el.$stComponent instanceof Form) {
-                const nestedForm = el.$stComponent as Form;
+        for (const form of htmlCollectionToArray<any>(this.el.querySelectorAll('form'))) {
+            if (form.$stComponent && form.$stComponent instanceof Form) {
+                const nestedForm = form.$stComponent as Form;
                 if (nestedForm.parent === this) {
-                    forms.push(el.$stComponent as Form);
+                    forms.push(nestedForm);
                 }
             } else {
-                st.error('Using a nested form that is not a springtype form', el);
+                st.error('Using a nested form that is not a springtype form', form);
             }
-        });
+        }
         return forms;
     }
-
-
 }

@@ -1,9 +1,10 @@
 import {attr, component} from "../../component";
 import {IValidationSate} from "../interface/i-validation-sate";
 import {tsx} from "../../vdom";
-import {DEFAULT_VALIDATION_STATE, ValidationComponent} from "./validation-component";
+import {DEFAULT_VALIDATION_STATE, VALIDATION_VALIDATOR_NAME, ValidationComponent} from "./validation-component";
 import {AttrType} from "../../component/trait/attr";
 import {IAttrInputComponent} from "../interface/i-attr-input-component";
+import {nodeListToArray} from "../../../core/lang";
 
 
 @component({tag: 'input'})
@@ -25,7 +26,6 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
     type: string = 'text';
 
     state: IValidationSate = Object.freeze(DEFAULT_VALIDATION_STATE);
-
 
     render() {
         return <fragment/>;
@@ -99,35 +99,33 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         const errors: Array<string> = [];
         let parent = (this.el as HTMLInputElement).form;
         if (parent) {
-            const elements = (parent as HTMLFormElement).elements;
+            const elements = parent.elements;
             if (elements.namedItem(this.name) instanceof RadioNodeList) {
                 const radioList = elements.namedItem(this.name) as RadioNodeList;
-                for (const radioInput of radioList) {
-                    if ((radioInput as any).$stComponent) {
+                for (const radioInput of nodeListToArray<any>(radioList)) {
+                    if (radioInput.$stComponent) {
                         // const component = (radioInput as any).$stComponent;
-                        const validators = (radioInput as any).$stComponent.validators;
+                        const validators = radioInput.$stComponent.validators;
                         if (validators.length > 0) {
                             for (const validator of validators) {
                                 if (!await validator(value)) {
                                     valid = false;
-                                    errors.push((validator as any)['VALIDATOR_NAME']);
+                                    errors.push((validator as any)[VALIDATION_VALIDATOR_NAME]);
                                 }
                             }
                             break;
                         }
                     }
                 }
-                for (const radioInput of radioList) {
-                    if ((radioInput as any).$stComponent) {
+                for (let i = 0; i < radioList.length; i++) {
+                    const radioInput = radioList.item(i);
+                    if (radioList && (radioInput as any).$stComponent) {
                         const component = (radioInput as any).$stComponent as Input;
                         component.setCustomError(!valid);
                         component.updateValidationState({valid, errors});
                     }
                 }
-
-
             }
-
         }
         return {valid, errors}
     }
@@ -142,7 +140,7 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         for (const validator of this.validators) {
             if (!await validator(value)) {
                 valid = false;
-                errors.push((validator as any)['VALIDATOR_NAME']);
+                errors.push((validator as any)[VALIDATION_VALIDATOR_NAME]);
             }
         }
         return {valid, errors}

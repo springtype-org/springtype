@@ -4,8 +4,8 @@ import {st} from "../../../core/st";
 import {IAttrBaseComponent} from "../interface/i-attr-base-component";
 import {Form} from "./form-component";
 
-export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extends st.component<Attribute> implements ILifecycle {
 
+export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extends st.staticComponent<Attribute> implements ILifecycle {
 
     @attr
     disabled!: any;
@@ -20,7 +20,6 @@ export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extend
     validClasses!: Array<string>;
 
     onAfterElCreate() {
-
         if (this.disabled) {
             this.el.setAttribute('disabled', '');
         }
@@ -46,32 +45,6 @@ export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extend
         return parent;
     }
 
-    getInvalidClasses(): Array<string> {
-        if (this.invalidClasses) {
-            return this.invalidClasses;
-        }
-        //take from parent from
-        const parentForm = this.getParentForm();
-        if (parentForm) {
-            return parentForm.getInvalidClasses();
-        }
-        return [];
-    }
-
-    getActiveLabelClasses(): Array<string> {
-        //take own
-        if (this.activeLabelClasses) {
-            return this.activeLabelClasses;
-        }
-        //take from parent from
-        const parentForm = this.getParentForm();
-        if (parentForm) {
-            return parentForm.getActiveLabelClasses();
-        }
-        return [];
-    }
-
-
     getValidClasses(): Array<string> {
         if (this.validClasses) {
             return this.validClasses;
@@ -81,7 +54,30 @@ export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extend
         if (parentForm) {
             return parentForm.getValidClasses();
         }
-        return [];
+        return st.form.validClasses;
     }
 
+    getInvalidClasses(): Array<string> {
+        if (this.invalidClasses) {
+            return this.invalidClasses;
+        }
+        //take from parent from
+        const parentForm = this.getParentForm();
+        if (parentForm) {
+            return parentForm.getInvalidClasses();
+        }
+        return st.form.invalidClasses;
+    }
+
+    getActiveLabelClasses(): Array<string> {
+        if (this.activeLabelClasses) {
+            return this.activeLabelClasses;
+        }
+        //take from parent from
+        const parentForm = this.getParentForm();
+        if (parentForm) {
+            return parentForm.getActiveLabelClasses();
+        }
+        return st.form.labelActiveClasses;
+    }
 }

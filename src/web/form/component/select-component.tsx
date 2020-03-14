@@ -2,12 +2,13 @@ import {attr, component} from "../../component";
 import {IValidationSate} from "../interface/i-validation-sate";
 import {DEFAULT_VALIDATION_STATE, ValidationComponent} from "./validation-component";
 import {IAttrSelectComponent} from "../interface/i-attr-select-component";
+import {htmlCollectionToArray} from "../../../core/lang";
 
 
 @component({tag: 'select'})
 export class Select extends ValidationComponent<IAttrSelectComponent> {
-   async doValidation(): Promise<IValidationSate> {
-       // throw new Error("Method not implemented.");
+    async doValidation(): Promise<IValidationSate> {
+        // throw new Error("Method not implemented.");
         return this.state;
     }
 
@@ -50,13 +51,14 @@ export class Select extends ValidationComponent<IAttrSelectComponent> {
 
     getValue(): string {
         const values: Array<string> = [];
-        for (const option of (this.el as any).selectedOptions) {
-            values.push(option.value);
+        const selectEl = this.el as HTMLSelectElement;
+        for (const option of htmlCollectionToArray<HTMLOptionElement>(selectEl.selectedOptions)) {
+                values.push(option.value);
         }
         const value = values.join(',');
 
         this.value = value;
-        (this.el as any).value = value;
+        selectEl.value = value;
         return value;
     }
 

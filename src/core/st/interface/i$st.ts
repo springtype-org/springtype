@@ -21,6 +21,7 @@ import { IPublish } from "../../pubsub/interface/ipublish";
 import { ISubscribe } from "../../pubsub/interface/isubscribe";
 import { Store } from "../../redux/interface/store";
 import { Action, AnyAction } from "../../redux/interface/actions";
+import {IForm} from "../../../web/form/interface/i-Form";
 
 /**
  * public $st and internal st API
@@ -96,6 +97,9 @@ export interface I$st {
   // DOM routing
   router: IRouter;
   route: Partial<IRouteMatch>;
+
+  // form
+  form: IForm;
 
   // renders a virtual node directly into an existing DOM node, defaults to document.body
   render: (virtualNode: IVirtualNode, domNode?: Element) => void;

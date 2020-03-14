@@ -5,10 +5,9 @@ import {BaseComponent} from "./base-component";
 import {IAttrValidationComponent} from "../interface/i-attr-validation-component";
 import {AttrType} from "../../component/trait/attr";
 import {st} from "../../../core/st";
+import {nodeListToArray} from "../../../core/lang";
 
-
-const DEFAULT_VALIDATION_DEBOUNCE_TIME_IN_MS = 250;
-const DEFAULT_VALIDATION_STRATEGIES = ['keyup', 'change'];
+export const VALIDATION_VALIDATOR_NAME = 'VALIDATOR_NAME';
 
 export const DEFAULT_VALIDATION_STATE: IValidationSate = {
     valid: "none",
@@ -16,24 +15,24 @@ export const DEFAULT_VALIDATION_STATE: IValidationSate = {
 };
 
 export abstract class ValidationComponent<Attribute extends IAttrValidationComponent> extends BaseComponent<Attribute> implements ILifecycle {
+
     @attr(AttrType.DOM_TRANSPARENT)
     name!: string;
 
     @attr
-    validationStrategies: Array<string> = DEFAULT_VALIDATION_STRATEGIES;
+    validationStrategies!: Array<string>;
 
     @attr
-    validationDebounceTimeInMs: number = DEFAULT_VALIDATION_DEBOUNCE_TIME_IN_MS;
+    validationDebounceTimeInMs!: number;
 
     @attr
     validators: Array<(value: string) => Promise<boolean>> = [];
 
-    @attr(AttrType.DOM_TRANSPARENT)
     value: string = '';
 
     timeout!: NodeJS.Timeout;
 
-    validationPromise!: Promise<any>;
+    validationReject!: (reason?: any) => void;
 
     validateValue!: string;
 
@@ -63,11 +62,16 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
     }
 
     registerValidationStrategies() {
-        for (const validationEventName of this.validationStrategies) {
+        for (const validationEventName of (this.validationStrategies || st.form.validationStrategies)) {
             this.el.addEventListener(validationEventName, async () => {
-                console.log('validationEventName', validationEventName);
                 //finish last validation
-                this.validate();
+                try {
+                    await this.validate();
+                } catch (e) {
+                    if (!e.reason || e.reason !== 'validation') {
+                        throw e;
+                    }
+                }
             });
         }
     }
@@ -76,41 +80,44 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         //after document is loaded set if value is set
         document.addEventListener('DOMContentLoaded', () => {
             if (this.getValue()) {
-                for (const label of this.getLabels()) {
-                    (label as HTMLElement).classList.add(...this.getActiveLabelClasses());
+                for (const label of this.labels) {
+                    label.classList.add(...this.getActiveLabelClasses());
                 }
             }
         });
 
         //on focus
         this.el.addEventListener('focus', () => {
-            for (const label of this.getLabels()) {
-                (label as HTMLElement).classList.add(...this.getActiveLabelClasses());
+            for (const label of this.labels) {
+                label.classList.add(...this.getActiveLabelClasses());
             }
         });
+
         //on focus remove
         this.el.addEventListener('blur', () => {
             //Do not remove if value exist
             if (!!(this.el as any).value) {
                 return;
             }
-            for (const label of this.getLabels()) {
-                (label as HTMLElement).classList.remove(...this.getActiveLabelClasses());
+            for (const label of this.labels) {
+                label.classList.remove(...this.getActiveLabelClasses());
             }
         });
     }
 
-    getLabels(): NodeList {
+    get labels(): Array<HTMLLabelElement> {
         //no polyfill needed
-        return document.querySelectorAll(`label[for=${this.name}]`);
+        const labelNodeList = document.querySelectorAll(`label[for=${this.name}]`);
+        return nodeListToArray(labelNodeList);
     }
 
     async validate(): Promise<IValidationSate> {
-        if (this.validationPromise) {
-            await this.validationPromise;
-            delete this.validationPromise;
+        if (this.validationReject) {
+            this.validationReject({reason: 'validation', message: `rejected validation ${this.name}`});
+            delete this.validationReject;
         }
-        return this.validationPromise = new Promise<IValidationSate>(resolve => {
+        return new Promise<IValidationSate>((resolve, reject) => {
+            this.validationReject = reject;
             clearTimeout(this.timeout);
             this.timeout = setTimeout(async () => {
                     const value = this.getValue();
@@ -127,13 +134,10 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
                     resolve(this.getState())
 
                 },
-                this.validationDebounceTimeInMs
+                this.validationDebounceTimeInMs || st.form.debounceTimeInMs
             )
         });
     }
-
-    abstract async doValidation(value: string): Promise<IValidationSate>;
-
 
     setCustomError(error: boolean) {
         const validClasses = this.getValidClasses();
@@ -149,12 +153,12 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         }
     }
 
+    abstract async doValidation(value: string): Promise<IValidationSate>;
+
     abstract getValue(): string;
 
     abstract getState(): IValidationSate;
 
     abstract updateValidationState(validationState: IValidationSate): void;
-
-
 }
 
