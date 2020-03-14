@@ -9,12 +9,13 @@ export const PATH_WILDCARD = "*";
 // matches when no path is given, like: /, /#, /#/
 export const PATH_START = "";
 
+export const DEFAULT_ROUTE_CACHE_GROUP = 'main';
+
 if (!st.router) {
 
     const PATH_SEP = "/";
     const PATH_PARAM_PREFIX = ":";
     const PATH_TOKEN_MISSING = "TOKEN_MISSING:ACTUAL_PATH_LONGER";
-
     st.router = {
         match: {},
 
@@ -29,11 +30,32 @@ if (!st.router) {
         enabled: false,
         paramsChanged: false,
 
+        ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS: [],
+        activeRouteCacheGroup: DEFAULT_ROUTE_CACHE_GROUP,
+
         activeLinkClass: 'active',
+
+        addOnAfterCacheGroupChangeHandler: (handler: Function) => {
+            st.router.ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS.push(handler);
+        },
+
+        removeOnAfterCacheGroupChangeHandler: (handler: Function) => {
+            const index = st.router.ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS.indexOf(handler);
+            if (index > -1) {
+                st.router.ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS.splice(index, 1);
+            }
+        },
+
+        callOnAfterCacheGroupChangeHandler: async () => {
+            for (let handler of st.router.ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS) {
+                handler();
+            }
+        },
 
         addOnAfterMatchHandler: (handler: Function) => {
             st.router.ON_AFTER_MATCH_HANDLERS.push(handler);
         },
+
 
         removeOnAfterMatchHandler: (handler: Function) => {
             const index = st.router.ON_AFTER_MATCH_HANDLERS.indexOf(handler);
@@ -234,12 +256,14 @@ if (!st.router) {
             // run matchers
             st.router.callOnLocationChangeHandlers();
             st.router.callOnAfterMatchHandlers();
+            st.router.callOnAfterCacheGroupChangeHandler();
 
             if (!Object.keys(st.router.match).length) {
 
                 st.router.tokenizedActualPath = [PATH_WILDCARD];
                 st.router.callOnLocationChangeHandlers();
                 st.router.callOnAfterMatchHandlers();
+                st.router.callOnAfterCacheGroupChangeHandler();
 
                 if (!st.router.match) {
 

@@ -9,7 +9,10 @@ export class RouteList extends st.component implements ILifecycle {
 
   onAfterInitialRender() {
     st.router.addOnLocationChangeHandler(this.match);
+    st.router.addOnAfterCacheGroupChangeHandler(this.cacheGroupChange);
+
     this.match();
+    this.cacheGroupChange();
   }
 
   render() {
@@ -18,6 +21,7 @@ export class RouteList extends st.component implements ILifecycle {
 
   onDisconnect() {
     st.router.removeOnLocationChangeHandler(this.match);
+    st.router.removeOnAfterCacheGroupChangeHandler(this.match);
   }
 
   match = () => {
@@ -28,4 +32,13 @@ export class RouteList extends st.component implements ILifecycle {
       (route as Route).match();
     }
   };
+  cacheGroupChange = () => {
+    // subsequent match & enter/leave on routes
+    if (!this.childComponents) return;
+
+    for (let route of this.childComponents) {
+      (route as Route).cacheGroupFn();
+    }
+  };
+
 }

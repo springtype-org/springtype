@@ -12,6 +12,7 @@ import {IRouteMatch} from "../../../src/web/router/interface";
 @component
 export class RouterPage extends st.component implements ILifecycle {
     flip = false;
+
     render() {
         this.flip = !this.flip;
         return (
@@ -33,9 +34,10 @@ export class RouterPage extends st.component implements ILifecycle {
                     {/* Renders the AboutPage on /about after async import */}
                     <Route path={ROUTE_ABOUT}>
                         {() => import("./page/aboutpage")}
-                    </Route> <Route path={ROUTE_NOT_ALLOWED}>
-                    <div>403</div>
-                </Route>
+                    </Route>
+                    <Route cacheGroup={'none'} path={ROUTE_NOT_ALLOWED}>
+                        <div>403</div>
+                    </Route>
                 </RouteList>
             </div>
         );

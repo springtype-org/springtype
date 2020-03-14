@@ -9,6 +9,9 @@ export interface IRouter {
   // cached tokenized path
   tokenizedActualPath: Array<string>;
 
+  ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS: Array<Function>;
+  activeRouteCacheGroup: string;
+
   // true, if already enabled
   enabled: boolean;
 
@@ -38,12 +41,19 @@ export interface IRouter {
   navigate(route?: string | undefined, params?: any): IRouteMatch | void;
   doMatch(tokenizedMatchPath: Array<string>, path: string): IRouteMatch | undefined;
   tokenize(urlPath: string): Array<string>;
+
   addOnLocationChangeHandler(handler: Function): void;
   addOnAfterMatchHandler(handler: Function): void;
+  addOnAfterCacheGroupChangeHandler(handler: Function): void;
+
   removeOnLocationChangeHandler(handler: Function): void;
   removeOnAfterMatchHandler(handler: Function): void;
+  removeOnAfterCacheGroupChangeHandler(handler: Function): void;
+
   callOnLocationChangeHandlers(): void;
   callOnAfterMatchHandlers(): void;
+  callOnAfterCacheGroupChangeHandler(): void;
+
   tokenizeActualPath(): void;
   onLocationChange(): void;
 }

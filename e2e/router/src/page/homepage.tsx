@@ -34,14 +34,14 @@ export class HomePage extends st.component {
         if (match.path === ROUTE_HOME_NOT_PERMITTED) {
             const number = this.counter % 3;
             switch (number) {
-                case 1 :
+                default :
                     console.log('route');
                     resolveGuard = ROUTE_NOT_ALLOWED;
                     break;
-                case 2:
+              /*  case 2:
                     console.log('custom component');
                     resolveGuard = <div>custom comp 403</div>;
-                    break;
+                    break;*/
             }
 
             this.counter++;

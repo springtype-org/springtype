@@ -7,12 +7,14 @@ import {IRouteMatch, RouteGuard} from "../interface";
 import {RouteList} from "./route-list";
 import {TYPE_FUNCTION, TYPE_OBJECT, TYPE_STRING} from "../../../core/lang";
 import {AttrType} from "../../component/trait/attr";
+import {DEFAULT_ROUTE_CACHE_GROUP} from "../router";
 
 const defaultLoadingComponent = <div>Loading...</div>;
 
 export interface IRouteAttrs {
     path: string | Array<string>;
     exact?: boolean;
+    cacheGroup?: string;
     guard?: RouteGuard;
 }
 
@@ -32,6 +34,9 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
     exact: boolean = false;
 
     @attr
+    cacheGroup: string = DEFAULT_ROUTE_CACHE_GROUP;
+
+    @attr
     displayStyle: string = 'block';
 
     loadingComponentEl!: IElement | Array<IElement>;
@@ -41,6 +46,8 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
     guardComponent!: IElement;
 
     match!: Function;
+
+    cacheGroupFn!: Function;
 
     runningMatch!: (reason?: any) => void;
 
@@ -53,13 +60,24 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
     async onBeforeConnect() {
         this.match = () => {
             this.stopRunningMatch();
-            const matchFunction = st.router.createMatcher(this.path, this.onMatch, this.onMismatch);
-            matchFunction();
+            st.router.createMatcher(this.path, this.onMatch, this.onMismatch)();
+        };
+        this.cacheGroupFn = () =>{
+            this.onAfterCacheGroupChange()
         };
         if (!(this.parent instanceof RouteList)) {
             st.router.addOnLocationChangeHandler(this.match);
+            st.router.addOnAfterCacheGroupChangeHandler(this.cacheGroupFn);
         }
     }
+
+    onAfterCacheGroupChange = () => {
+        if (this.cacheGroup !== st.router.activeRouteCacheGroup) {
+            this.deleteGuardComponent();
+            this.deleteLoadingComponent();
+            this.deleteComponent()
+        }
+    };
 
     onMatch = async (path: string, match: IRouteMatch) => {
         try {
@@ -76,6 +94,7 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
     onDisconnect() {
         if (!(this.parent instanceof RouteList)) {
             st.router.removeOnLocationChangeHandler(this.match);
+            st.router.removeOnAfterCacheGroupChangeHandler(this.cacheGroupFn);
         }
     }
 
@@ -99,9 +118,13 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
             } else {
                 lifecycle(this.componentEl);
             }
-            this.removeElement(this.guardComponent);
+
+            this.deleteGuardComponent();
+            this.deleteLoadingComponent();
             delete this.activePath;
         }
+
+
     };
 
     prepareLoadingComponent() {
@@ -190,7 +213,7 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
 
     // is called by the router whenever one of this.paths match partially or exactly
     enter = async (match: IRouteMatch, path: string) => {
-        if (this.guardComponent) {
+        if (this.guardComponent || this.cacheGroup !== st.router.activeRouteCacheGroup) {
             this.deleteGuardComponent();
             this.deleteLoadingComponent();
             this.deleteComponent()
@@ -204,6 +227,7 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
         }
 
         this.activePath = path;
+        st.router.activeRouteCacheGroup = this.cacheGroup;
 
         this.style = {
             display: this.displayStyle
@@ -271,7 +295,6 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
             }
         } else {
             lifecycle(this.guardComponent);
-
         }
 
 
