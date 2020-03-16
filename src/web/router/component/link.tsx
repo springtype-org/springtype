@@ -45,16 +45,16 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
         }
     };
 
-    onAfterElCreate() {
+    onConnect = () => {
+        this.match = this.isMatch();
         // register callback for future route changes
-        this.match = this.isMatch();
-        st.router.addOnAfterMatchHandler(() => this.onAfterMatchHandler);
-    }
+        st.router.addOnAfterMatchHandler(this.onAfterMatchHandler);
+    };
 
-    onAfterMatchHandler() {
+    onAfterMatchHandler = () => {
+        st.debug('onAfterMatchHandler triggered', this);
         this.match = this.isMatch();
-        this.updateActiveClass();
-    }
+    };
 
     updateActiveClass = () => {
         const activeClassName = this.activeClass || st.router.activeLinkClass;
@@ -71,7 +71,7 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
 
     };
 
-    isMatch(): boolean {
+    isMatch = (): boolean => {
         if (st.route) {
             const matcher = st.router.match[this.path];
             if (matcher && equalObjects(matcher.params, this.params || {})) {
@@ -81,9 +81,10 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
             }
         }
         return false;
-    }
+    };
 
-    render() {
+    render = () => {
+        this.updateActiveClass();
         return <fragment>
             {this.renderChildren()}
             {this.match
@@ -93,7 +94,7 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
         </fragment>
     }
 
-    onDisconnect() {
+    onDisconnect = () => {
         st.router.removeOnAfterMatchHandler(this.onAfterMatchHandler);
     }
 
