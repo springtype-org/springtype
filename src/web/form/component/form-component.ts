@@ -1,10 +1,20 @@
-import {attr, component} from "../../component";
+import {attr, component, event} from "../../component";
 import {st} from "../../../core/st";
 import {ValidationComponent} from "./validation-component";
 import {IAttrFormComponent} from "../interface/i-attr-form-component";
 import {IFormState} from "../interface/i-form-state";
 import {BaseComponent} from "./base-component";
 import {htmlCollectionToArray} from "../../../core/lang";
+import {IEvent, IEventListener} from "../../component/interface";
+
+export interface StFromValidationEvent extends IEvent<StFromValidationDetail> {
+}
+
+export interface StFromValidationDetail {
+    valid: boolean;
+    state: {};
+}
+
 
 @component({tag: 'form'})
 export class Form extends BaseComponent<IAttrFormComponent> {
@@ -15,7 +25,19 @@ export class Form extends BaseComponent<IAttrFormComponent> {
     @attr
     action!: string;
 
-    //onSubmit:()
+    @event
+    onStFormValidation!: IEventListener<Event>;
+
+    dispatchStFormValidation = (detail: StFromValidationDetail) => {
+        this.dispatchEvent<StFromValidationDetail>("stFormValidation", {
+            bubbles: true,
+            cancelable: true,
+            composed: true,
+            detail: {
+                ...detail,
+            },
+        });
+    };
 
     render() {
         return this.renderChildren();
@@ -32,9 +54,9 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         form.onsubmit = () => false;
 
         this.el.addEventListener('submit', async () => {
-                if (await this.validate()) {
-                    form.submit();
-                }
+            if (await this.validate()) {
+                form.submit();
+            }
         })
     }
 
@@ -42,11 +64,11 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         return new Promise<boolean>(async (resolve) => {
             let result = true;
             const elementResults: Array<Promise<boolean>> = [];
-            for (const element of this.elements) {
+            for (const element of this.getElements()) {
                 elementResults.push(element.validate().then(v => !(v.valid === false || v.valid === 'none')));
             }
             const formResults: Array<Promise<boolean>> = [];
-            for (const subForm of this.subForm) {
+            for (const subForm of this.getSubForm()) {
                 formResults.push(subForm.validate())
             }
             if ((await Promise.all(elementResults)).filter(v => !v).length > 0) {
@@ -56,11 +78,17 @@ export class Form extends BaseComponent<IAttrFormComponent> {
             if ((await Promise.all(formResults)).filter(v => !v).length > 0) {
                 result = false;
             }
+
+            this.dispatchStFormValidation({
+                    valid: result,
+                    state: this.getState()
+                }
+            );
             resolve(result);
         });
     }
 
-    get elements(): ValidationComponent<any>[] {
+    getElements(): ValidationComponent<any>[] {
         const validationComponents: Array<ValidationComponent<any>> = [];
         for (const element of htmlCollectionToArray<any>((this.el as HTMLFormElement).elements)) {
             if (element.$stComponent && element.$stComponent instanceof ValidationComponent) {
@@ -73,7 +101,7 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         return validationComponents;
     }
 
-    get state() {
+    getState() {
         const formState: IFormState = {};
         const htmlForm = this.el as HTMLFormElement;
         const radios: { [name: string]: RadioNodeList } = {};
@@ -105,13 +133,13 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         for (const radioGroupName of Object.keys(radios)) {
             formState[radioGroupName] = radios[radioGroupName].value;
         }
-        for (const form of this.subForm) {
-            formState[form.name] = form.state;
+        for (const form of this.getSubForm()) {
+            formState[form.name] = form.getState();
         }
         return formState;
     }
 
-    get subForm(): Array<Form> {
+    getSubForm(): Array<Form> {
         const forms: Array<Form> = [];
         for (const form of htmlCollectionToArray<any>(this.el.querySelectorAll('form'))) {
             if (form.$stComponent && form.$stComponent instanceof Form) {

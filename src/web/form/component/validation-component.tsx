@@ -1,5 +1,5 @@
-import {ILifecycle} from "../../component/interface";
-import {attr} from "../../component";
+import {IEvent, IEventListener, ILifecycle} from "../../component/interface";
+import {attr, event} from "../../component";
 import {IValidationSate} from "../interface/i-validation-sate";
 import {BaseComponent} from "./base-component";
 import {IAttrValidationComponent} from "../interface/i-attr-validation-component";
@@ -14,6 +14,14 @@ export const DEFAULT_VALIDATION_STATE: IValidationSate = {
     errors: []
 };
 
+export interface StValidationEvent extends IEvent<StValidationEventDetail> {}
+
+export interface StValidationEventDetail {
+    valid: boolean | 'none';
+    errors: Array<string>;
+    value: string;
+}
+
 export abstract class ValidationComponent<Attribute extends IAttrValidationComponent> extends BaseComponent<Attribute> implements ILifecycle {
 
     @attr(AttrType.DOM_TRANSPARENT)
@@ -27,6 +35,20 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
 
     @attr
     validators: Array<(value: string) => Promise<boolean>> = [];
+
+    @event
+    onStValidation!: IEventListener<Event>;
+
+    dispatchStValidation = (detail: StValidationEventDetail) => {
+        this.dispatchEvent<StValidationEventDetail>("stValidation", {
+            bubbles: true,
+            cancelable: true,
+            composed: true,
+            detail: {
+                ...detail,
+            },
+        });
+    };
 
     value: string = '';
 
@@ -80,7 +102,7 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         //after document is loaded set if value is set
         document.addEventListener('DOMContentLoaded', () => {
             if (this.getValue()) {
-                for (const label of this.labels) {
+                for (const label of this.getLabels()) {
                     label.classList.add(...this.getActiveLabelClasses());
                 }
             }
@@ -88,7 +110,7 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
 
         //on focus
         this.el.addEventListener('focus', () => {
-            for (const label of this.labels) {
+            for (const label of this.getLabels()) {
                 label.classList.add(...this.getActiveLabelClasses());
             }
         });
@@ -99,15 +121,15 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
             if (!!(this.el as any).value) {
                 return;
             }
-            for (const label of this.labels) {
+            for (const label of this.getLabels()) {
                 label.classList.remove(...this.getActiveLabelClasses());
             }
         });
     }
 
-    get labels(): Array<HTMLLabelElement> {
+    getLabels(): Array<HTMLLabelElement> {
         //no polyfill needed
-        const labelNodeList = document.querySelectorAll(`label[for=${this.name}]`);
+        const labelNodeList = document.querySelectorAll(`label[for=${this.el.getAttribute('id') || 'none'}]`);
         return nodeListToArray(labelNodeList);
     }
 
@@ -126,9 +148,11 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
                         this.validateValue = value;
 
                         const validationSate = await this.doValidation(value);
-
                         this.setCustomError(!validationSate.valid);
                         this.updateValidationState(validationSate);
+
+                        this.dispatchStValidation({...validationSate, value});
+
                         resolve(validationSate);
                     }
                     resolve(this.getState())
