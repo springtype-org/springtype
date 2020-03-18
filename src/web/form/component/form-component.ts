@@ -153,4 +153,8 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         }
         return forms;
     }
+
+    reset() {
+        (this.el as HTMLFormElement).reset();
+    }
 }
