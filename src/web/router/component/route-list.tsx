@@ -21,7 +21,7 @@ export class RouteList extends st.component implements ILifecycle {
 
   onDisconnect() {
     st.router.removeOnLocationChangeHandler(this.match);
-    st.router.removeOnAfterCacheGroupChangeHandler(this.match);
+    st.router.removeOnAfterCacheGroupChangeHandler(this.cacheGroupChange);
   }
 
   match = () => {

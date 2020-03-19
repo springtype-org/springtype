@@ -14,7 +14,8 @@ export const DEFAULT_VALIDATION_STATE: IValidationSate = {
     errors: []
 };
 
-export interface StValidationEvent extends IEvent<StValidationEventDetail> {}
+export interface StValidationEvent extends IEvent<StValidationEventDetail> {
+}
 
 export interface StValidationEventDetail {
     valid: boolean | 'none';
@@ -39,6 +40,10 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
     @event
     onStValidation!: IEventListener<Event>;
 
+    @attr(AttrType.DOM_TRANSPARENT)
+    value: string = '';
+
+
     dispatchStValidation = (detail: StValidationEventDetail) => {
         this.dispatchEvent<StValidationEventDetail>("stValidation", {
             bubbles: true,
@@ -50,7 +55,6 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         });
     };
 
-    value: string = '';
 
     timeout!: NodeJS.Timeout;
 
@@ -99,15 +103,6 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
     }
 
     registerActiveLabelClasses() {
-        //after document is loaded set if value is set
-        document.addEventListener('DOMContentLoaded', () => {
-            if (this.getValue()) {
-                for (const label of this.getLabels()) {
-                    label.classList.add(...this.getActiveLabelClasses());
-                }
-            }
-        });
-
         //on focus
         this.el.addEventListener('focus', () => {
             for (const label of this.getLabels()) {

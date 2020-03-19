@@ -345,14 +345,14 @@ export class Component<A = {}> implements ILifecycle {
     }
 
     disconnectedCallback() {
-
-        if (this.INTERNAL) {
-            this.INTERNAL.isConnected = false;
+        if(!this.INTERNAL.isConnected){
+            return;
         }
+
+        this.INTERNAL.isConnected = false;
 
         this.onDisconnect();
 
-        console.log('disable messaging in disconnect');
         MessageTrait.disableFor(this);
 
         // purge from global instance registry

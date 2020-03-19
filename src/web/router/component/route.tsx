@@ -65,6 +65,7 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
         this.cacheGroupFn = () =>{
             this.onAfterCacheGroupChange()
         };
+
         if (!(this.parent instanceof RouteList)) {
             st.router.addOnLocationChangeHandler(this.match);
             st.router.addOnAfterCacheGroupChangeHandler(this.cacheGroupFn);
