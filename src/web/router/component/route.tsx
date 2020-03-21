@@ -14,8 +14,9 @@ const defaultLoadingComponent = <div>Loading...</div>;
 export interface IRouteAttrs {
     path: string | Array<string>;
     exact?: boolean;
-    cacheGroup?: string;
     guard?: RouteGuard;
+    cacheGroup?: string;
+    displayStyle?: string;
 }
 
 @component

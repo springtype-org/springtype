@@ -345,11 +345,13 @@ export class Component<A = {}> implements ILifecycle {
     }
 
     disconnectedCallback() {
-        if(!this.INTERNAL.isConnected){
-            return;
+        if (this.INTERNAL) {
+            if (this.INTERNAL.isConnected) {
+                this.INTERNAL.isConnected = false;
+            } else {
+                return;
+            }
         }
-
-        this.INTERNAL.isConnected = false;
 
         this.onDisconnect();
 
