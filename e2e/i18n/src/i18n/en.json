@@ -3,5 +3,6 @@
     "msg": "123en-{{ someValue, uppercase }}"
   },
   "German": "German",
-  "English": "English"
+  "English": "English",
+  "deep__msg": "Fail test"
 }

@@ -2,8 +2,8 @@ import { st } from "../../../src/core";
 import { translation } from "../../../src/core/i18n";
 import { component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
-import de from "./i18n/de.json";
-import en from "./i18n/en.json";
+import * as de from "./i18n/de.json";
+import * as en from "./i18n/en.json";
 import { formatter } from "../../../src/core/formatter";
 
 @formatter("uppercase", value => value.toUpperCase()) // TODO: st.addFormatter()
@@ -25,7 +25,9 @@ export class E2EI18nTest extends st.component {
   render() {
     return (
       <div>
-        <span id="e2e-tr">{st.t("deep.msg", { someValue: "e2e" })}</span>
+        <span id="e2e-tr">Key split lookup: {st.t("deep__msg", { someValue: "e2e" })}</span><br />
+        <span id="e2e-tr">Key array lookup: {st.t(["deep", "msg"], { someValue: "e2e" })}</span><br />
+        <span id="e2e-tr">Key array lookup 2: {st.t(["deep__msg"], { someValue: "e2e" })}</span><br />
         <button id="german" onClick={this.setGerman}>
           {st.t("German")}
         </button>

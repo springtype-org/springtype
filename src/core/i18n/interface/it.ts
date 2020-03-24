@@ -1,3 +1,3 @@
 import { ITranslationValues } from "./itranslation-values";
 
-export type It = (key: string, values?: ITranslationValues) => string;
+export type It = (key: string|Array<string>, values?: ITranslationValues) => string;

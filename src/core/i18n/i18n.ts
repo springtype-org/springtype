@@ -20,13 +20,13 @@ if (!st.i18n) {
      * 1. resolving the translation value in the translation JSON data for the currently active language
      * 2. Applying translation values for wildcards
      * 3. Applying transformator functions for the values
-     * @param key Translation key
+     * @param key Translation key or a chain or keys
      * @param [values] An optional object of data values to replace wildcards with
      */
-    t: (key: string, values?: ITranslationValues): string => {
+    t: (key: string|Array<string>, values?: ITranslationValues): string => {
 
-      const translation = resolvePathInObject(key, st.i18n.translations[st.i18n.currentLanguage]);
-      console.log('translation' ,key, st.i18n.translations[st.i18n.currentLanguage]);
+      const translation = resolvePathInObject(key, st.i18n.translations[st.i18n.currentLanguage], '__');
+      //console.log('translation' ,key, st.i18n.translations[st.i18n.currentLanguage]);
       if (!translation) {
 
         if (process.env.NODE_ENV === 'development') {
@@ -45,7 +45,7 @@ if (!st.i18n) {
     },
 
     addTranslation: (language: string, translation: ITranslation): Ii18n => {
-      console.log('esmodule ',language,translation ,translation['__esModule']?'true':'false')
+      //console.log('esmodule ',language,translation ,translation['__esModule']?'true':'false')
       const unwrap =(translation: ITranslation): ITranslation => {
         if(translation[ES_MODULE]){
           translation = (translation as any).default
