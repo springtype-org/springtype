@@ -1,18 +1,18 @@
-import {st} from "../../core";
-import {isPrimitive} from "../../core/lang/is-primitive";
-import {GlobalCache} from "../../core/st/interface/i$st";
-import {IComponentOptions, ILifecycle} from "../component/interface";
-import {Component} from "../component"
-import {IElement} from "./interface";
-import {IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes} from "./interface/ivirtual-node";
-import {isJSXComment, tsxToStandardAttributeName} from "./tsx";
-import {REF_ATTRIBUTE_NAME} from "./interface/iattributes";
-import {TYPE_FUNCTION} from "../../core/lang/type-function";
-import {TYPE_STRING} from "../../core/lang/type-string";
-import {TYPE_BOOLEAN} from "../../core/lang/type-boolean";
-import {cloneObject} from "../../core/lang/immute";
-import {TYPE_UNDEFINED} from "../../core/lang/type-undefined";
-import {AttrTrait, AttrType} from "../component/trait/attr";
+import { st } from "../../core";
+import { isPrimitive } from "../../core/lang/is-primitive";
+import { GlobalCache } from "../../core/st/interface/i$st";
+import { IComponentOptions, ILifecycle } from "../component/interface";
+import { Component } from "../component"
+import { IElement } from "./interface";
+import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
+import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
+import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
+import { TYPE_FUNCTION } from "../../core/lang/type-function";
+import { TYPE_STRING } from "../../core/lang/type-string";
+import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
+import { cloneObject } from "../../core/lang/immute";
+import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
+import { AttrTrait, AttrType } from "../component/trait/attr";
 
 export const TEMPLATE_ELEMENT_NAME = "template";
 export const DEFAULT_SLOT_NAME = "default";
@@ -26,6 +26,7 @@ export const ID_ATTRIBUTE_NAME = "id";
 export const LIST_KEY_ATTRIBUTE_NAME = "key";
 export const ATTR_EVENT_LISTENER_PREFIX = "on";
 export const ATTR_DEBUG_PREFIX = "__";
+export const CLASS_HIDE = "st-hide";
 
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const STANDARD_HTML_PASS_ATTRIBUTES = [CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, TABINDEX_ATTRIBUTE_NAME, LIST_KEY_ATTRIBUTE_NAME];
@@ -217,7 +218,7 @@ if (!st.dom) {
         createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, detached: boolean = false): IElement | undefined => {
             let newEl: Element;
 
-            const {component, outerAttributes} = st.dom.createComponentInstance(virtualNode, parentDomElement);
+            const { component, outerAttributes } = st.dom.createComponentInstance(virtualNode, parentDomElement);
 
             if (virtualNode.type.toUpperCase() === "SVG" || st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase())) {
                 newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
@@ -415,5 +416,19 @@ if (!st.dom) {
                 st.dom.setAttribute(name, attributes[name], domElement, forceNative);
             }
         },
+
+        hide: (domElement: IElement) => {
+            domElement.classList.add(CLASS_HIDE);
+        },
+
+        show: (domElement: IElement) => {
+            domElement.classList.remove(CLASS_HIDE);
+        },
+
+        removeElement: (domElement: IElement) => {
+            if (domElement.parentNode) {
+                domElement.parentNode.removeChild(domElement);
+            }
+        }
     };
 }

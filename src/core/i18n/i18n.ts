@@ -5,6 +5,7 @@ import { ITranslationValues } from "./interface/itranslation-values";
 import { resolvePathInObject } from "../lang/resolve-path-in-object";
 
 const ES_MODULE = '__esModule';
+
 // for st.enable(i18n, ...)
 export const i18n = null;
 
@@ -14,6 +15,8 @@ if (!st.i18n) {
     translations: {},
 
     currentLanguage: "en_US",
+
+    registeredTComponents: [],
 
     /**
      * Translates a key to the translation by:
@@ -72,8 +75,20 @@ if (!st.i18n) {
     setLanguage: (language: string): Ii18n => {
       st.i18n.initLanguage(language);
       st.i18n.currentLanguage = language;
+      for (const tComponent of st.i18n.registeredTComponents) {
+        tComponent.t();
+      }
       return st.i18n;
-    }
+    },
+
+    registerTComponent: (tComponent: any) => {
+      st.i18n.registeredTComponents.push(tComponent);
+    },
+
+    unregisterTComponent: (tComponent: any) => {
+      // cleanup cache; allows for GC
+      st.i18n.registeredTComponents.splice(st.i18n.registeredTComponents.indexOf(tComponent), 1);
+    },
   };
 
   // functional API

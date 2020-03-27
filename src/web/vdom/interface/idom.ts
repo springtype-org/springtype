@@ -58,4 +58,8 @@ export interface IDOM {
   setAttribute(name: string, value: any, parentDomElement: Element, forceNative?: boolean): void;
 
   setAttributes(attributes: any, parentDomElement: Element, forceNative?: boolean): void;
+
+  hide(domElement: Element): void;
+  show(domElement: Element): void;
+  removeElement(domElement: Element): void;
 }
