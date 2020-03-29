@@ -39,6 +39,10 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         });
     };
 
+    shouldRender(): boolean {
+        return true;
+    }
+
     render() {
         return this.renderChildren();
     }
@@ -60,16 +64,18 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         })
     }
 
-    async validate(): Promise<boolean> {
+    async validate(force: boolean = false): Promise<boolean> {
         return new Promise<boolean>(async (resolve) => {
             let result = true;
             const elementResults: Array<Promise<boolean>> = [];
             for (const element of this.getElements()) {
-                elementResults.push(element.validate().then(v => !(v.valid === false || v.valid === 'none')));
+                elementResults.push(element.validate(force)
+                    .then(v => !(v.valid === false || v.valid === 'none'))
+                );
             }
             const formResults: Array<Promise<boolean>> = [];
             for (const subForm of this.getSubForm()) {
-                formResults.push(subForm.validate())
+                formResults.push(subForm.validate(force))
             }
             if ((await Promise.all(elementResults)).filter(v => !v).length > 0) {
                 (this.el as HTMLFormElement).checkValidity();
@@ -111,6 +117,12 @@ export class Form extends BaseComponent<IAttrFormComponent> {
 
             if (element instanceof HTMLButtonElement) {
                 continue;
+            }
+            if((element as any).$stComponent as ValidationComponent<any>){
+              const validationComp = (element as any).$stComponent as ValidationComponent<any>;
+              if(validationComp.ignore){
+                  continue;
+              }
             }
             if (element instanceof HTMLInputElement) {
                 if (element.disabled) {

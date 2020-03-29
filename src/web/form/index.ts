@@ -1,10 +1,9 @@
 import {st} from "../../core/st";
 
-export {Form} from './component/form-component'
-export {Input} from './component/input-component'
-export {Select} from './component/select-component'
+export * from './component/form-component'
+export * from './component/input-component'
 
-export {getUniqueId} from './function/get-unique-id'
+export * from './function/get-unique-html-id'
 
 if (!st.form) {
     st.form = {

@@ -1,13 +1,16 @@
 import {attr, component} from "../../component";
 import {IValidationSate} from "../interface/i-validation-sate";
 import {tsx} from "../../vdom";
-import {DEFAULT_VALIDATION_STATE, VALIDATION_VALIDATOR_NAME, ValidationComponent} from "./validation-component";
+import {VALIDATION_VALIDATOR_NAME, ValidationComponent} from "./validation-component";
 import {AttrType} from "../../component/trait/attr";
 import {IAttrInputComponent} from "../interface/i-attr-input-component";
 import {nodeListToArray} from "../../../core/lang";
 
 @component({tag: 'input'})
 export class Input extends ValidationComponent<IAttrInputComponent> {
+
+    @attr
+    readonly: boolean = false;
 
     @attr
     checked!: boolean;
@@ -27,36 +30,9 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
     @attr
     rows: number = 1;
 
-    state: IValidationSate = Object.freeze(DEFAULT_VALIDATION_STATE);
 
     render() {
         return <fragment/>;
-    }
-
-    onAttributeChange(name: string, newValue: string) {
-        super.onAttributeChange(name, newValue);
-        if (this.INTERNAL.notInitialRender) {
-            if (name == 'checked') {
-                if (this.disabled) {
-                    this.el.setAttribute('checked', '');
-                } else {
-                    this.el.removeAttribute('checked');
-                }
-            }
-            if (name == 'hidden') {
-                if (this.disabled) {
-                    this.el.setAttribute('hidden', '');
-                } else {
-                    this.el.removeAttribute('hidden');
-                }
-            }
-            if (name == 'type') {
-                this.el.setAttribute('type', this.type);
-            }
-            if (name == 'rows') {
-                this.el.setAttribute('rows', this.rows.toString());
-            }
-        }
     }
 
     onAfterElCreate() {
@@ -65,7 +41,7 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         if (this.defaultValue) {
             htmlInput.defaultValue = this.defaultValue;
         }
-        if (this.defaultValue) {
+        if (this.defaultChecked) {
             htmlInput.defaultChecked = this.defaultChecked;
         }
         if (this.checked) {
@@ -77,14 +53,12 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         if (this.rows) {
             htmlInput.setAttribute('rows', this.rows.toString());
         }
-    }
-
-    updateValidationState(validationState: IValidationSate): void {
-        this.state = Object.freeze(validationState);
-    }
-
-    getState(): IValidationSate {
-        return this.state;
+        if (this.type) {
+            htmlInput.setAttribute('type', this.type);
+        }
+        if (this.readonly) {
+            htmlInput.setAttribute('readonly', 'true');
+        }
     }
 
     getValue(): string {
@@ -129,13 +103,13 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
                     const radioInput = radioList.item(i);
                     if (radioList && (radioInput as any).$stComponent) {
                         const component = (radioInput as any).$stComponent as Input;
-                        component.setCustomError(!valid);
-                        component.updateValidationState({valid, errors});
+                        component.validationState = ({valid, errors, value});
+                        component.updateValidation();
                     }
                 }
             }
         }
-        return {valid, errors}
+        return {valid, errors, value}
     }
 
     async doValidation(value: string): Promise<IValidationSate> {
@@ -151,6 +125,6 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
                 errors.push((validator as any)[VALIDATION_VALIDATOR_NAME]);
             }
         }
-        return {valid, errors}
+        return {valid, errors, value}
     }
 }

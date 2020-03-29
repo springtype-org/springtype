@@ -1,14 +1,14 @@
 import {Component} from "./component";
 import {ILifecycle} from "./interface";
 import {st} from "../../core";
-import {IElement} from "../vdom/interface";
+import {RenderReason} from "./interface/irender-reason";
 
 export class StaticComponent<A = {}> extends Component<A> implements ILifecycle {
 
-    onAfterElCreate(el: IElement) {
-        super.onAfterElCreate(el);
-        this.el.setAttribute('novdom','')
+    shouldRender(reason: RenderReason): boolean {
+         return !this.INTERNAL.notInitialRender;
     }
+
 }
 
 if (!st.staticComponent) {

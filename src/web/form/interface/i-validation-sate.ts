@@ -1,5 +1,6 @@
 
 export interface IValidationSate {
     valid: boolean| 'none';
-    errors: Array<string>
+    errors: Array<string>;
+    value: string;
 }
