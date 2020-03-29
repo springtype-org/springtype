@@ -1,6 +1,6 @@
 import {st} from "../../core";
 import {IRouteMatch} from "./interface";
-import {castIntrinsic, TYPE_FUNCTION, TYPE_STRING, TYPE_UNDEFINED} from "../../core/lang";
+import {TYPE_FUNCTION, TYPE_STRING, TYPE_UNDEFINED} from "../../core/lang";
 import {GlobalCache} from "../../core/st/interface/i$st";
 
 // matches when no route matches (not even partially!), basically like HTTP ERROR 404 NOT FOUND behaviour
@@ -128,7 +128,8 @@ if (!st.router) {
                     if (match.params![paramName] !== st.router.tokenizedActualPath[i]) {
                         st.router.paramsChanged = true;
                         // casts intrinsically based on the string syntax ("0.012" -> float number, "true" -> true etc.)
-                        let parameter = castIntrinsic(st.router.tokenizedActualPath[i]);
+                        //let parameter = castIntrinsic(st.router.tokenizedActualPath[i]);
+                        let parameter = st.router.tokenizedActualPath[i];
                         if (typeof parameter === TYPE_STRING) {
                             //unescape url parameter if string
                             parameter = unescape(parameter as string);
