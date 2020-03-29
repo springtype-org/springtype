@@ -4,8 +4,9 @@ import "./ext-validation.css"
 import {st} from "../../../src/core";
 import {component} from "../../../src/web/component";
 import {tsx} from "../../../src/web/vdom";
-import {Form, Input, Select} from "../../../src/web/form";
+import {Form, Input} from "../../../src/web/form";
 import {minLength, required} from "../../../src/core/validate/validate";
+import {ref} from "../../../src/core/ref/decorator";
 
 st.form = {
     ...st.form,
@@ -16,7 +17,9 @@ st.form = {
 
 
 @component
-export class Foo extends st.staticComponent {
+export class Foo extends st.component {
+    @ref
+    inputRef: Input;
 
     render() {
         return <fragment>
@@ -40,7 +43,7 @@ export class Foo extends st.staticComponent {
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <Input disabled={true} value="I m" id="disabled"
+                                        <Input ref={{inputRef: this}} disabled={true} value="I m" id="disabled"
                                                validators={[required, minLength(5)]}
                                                name="disabled" type="text"
                                         />
@@ -173,32 +176,6 @@ export class Foo extends st.staticComponent {
                                     </div>
                                 </p>
                             </Form>
-                            <Form name="selects">
-                                <Select name="multiple-select" multiple>
-                                    <option value="" disabled selected>Choose your option</option>
-                                    <option value="1">Option 1</option>
-                                    <option value="2">Option 2</option>
-                                    <option value="3">Option 3</option>
-                                </Select>
-
-                                <Select name="option-group-select" class="browser-default">
-                                    <optgroup label="team 1">
-                                        <option value="1">Option 1</option>
-                                        <option value="2">Option 2</option>
-                                    </optgroup>
-                                    <optgroup label="team 2">
-                                        <option value="3">Option 3</option>
-                                        <option value="4">Option 4</option>
-                                    </optgroup>
-                                </Select>
-
-                                <Select name="browser-default" class="browser-default">
-                                    <option value="" disabled selected>Choose your option</option>
-                                    <option value="1">Option 1</option>
-                                    <option value="2">Option 2</option>
-                                    <option value="3">Option 3</option>
-                                </Select>
-                            </Form>
                         </Form>
                     </div>
                 </div>
@@ -236,7 +213,7 @@ export class Foo extends st.staticComponent {
     }
 
     onAfterRender() {
-        //   M.AutoInit();
+       this.inputRef.updateLabels()
     }
 
 
