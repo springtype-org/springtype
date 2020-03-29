@@ -6,7 +6,6 @@ import {AttrType} from "../../component/trait/attr";
 import {IAttrInputComponent} from "../interface/i-attr-input-component";
 import {nodeListToArray} from "../../../core/lang";
 
-
 @component({tag: 'input'})
 export class Input extends ValidationComponent<IAttrInputComponent> {
 
@@ -24,6 +23,9 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
 
     @attr(AttrType.DOM_TRANSPARENT)
     type: string = 'text';
+
+    @attr
+    rows: number = 1;
 
     state: IValidationSate = Object.freeze(DEFAULT_VALIDATION_STATE);
 
@@ -51,6 +53,9 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
             if (name == 'type') {
                 this.el.setAttribute('type', this.type);
             }
+            if (name == 'rows') {
+                this.el.setAttribute('rows', this.rows.toString());
+            }
         }
     }
 
@@ -68,6 +73,9 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         }
         if (this.hidden) {
             htmlInput.setAttribute('hidden', '');
+        }
+        if (this.rows) {
+            htmlInput.setAttribute('rows', this.rows.toString());
         }
     }
 

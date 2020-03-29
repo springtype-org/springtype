@@ -7,4 +7,5 @@ export interface IAttrInputComponent extends IAttrValidationComponent, Partial<H
     type?: string;
     defaultValue?: string;
     defaultChecked?: boolean;
+    rows?: number;
 }
