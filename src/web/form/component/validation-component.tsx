@@ -6,6 +6,7 @@ import {IAttrValidationComponent} from "../interface/i-attr-validation-component
 import {AttrType} from "../../component/trait/attr";
 import {st} from "../../../core/st";
 import {nodeListToArray} from "../../../core/lang";
+import {IElement} from "../../vdom/interface";
 
 export const VALIDATION_VALIDATOR_NAME = 'VALIDATOR_NAME';
 
@@ -62,15 +63,7 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
             },
         });
     };
-    onAfterElCreate() {
-        if (this.name) {
-            this.el.setAttribute('name', this.name);
-        } else {
-            st.error(`${this.constructor.name} needs an name attribute`, this);
-        }
-        this.registerValidationStrategies();
-        this.registerActiveLabelClasses();
-    }
+
 
     shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
         if (!super.shouldAttributeChange(name, newValue, oldValue)) {
@@ -78,18 +71,39 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         }
         if (this.INTERNAL.notInitialRender) {
             if (name == 'value') {
-                this.el.setAttribute('value', newValue);
-                this.validationState = Object.freeze({...this.validationState, value: newValue})
+                this.setValue(newValue);
+                return false
             }
             if (name == 'name') {
-                this.el.setAttribute('name', newValue);
+                this.setName(newValue)
+                return false
             }
-            return false
-        }else{
+        } else {
             if (name == 'value') {
-                this.validationState = Object.freeze({...this.validationState, value: newValue})}
+                this.validationState = Object.freeze({...this.validationState, value: newValue})
+            }
         }
         return true;
+    }
+
+    onAfterElCreate(el: IElement) {
+        super.onAfterElCreate(el);
+        this.setName(this.name);
+        this.setValue(this.value);
+        this.registerValidationStrategies();
+        this.registerActiveLabelClasses();
+    }
+
+    setValue(value: string){
+        this.el.setAttribute('value', value);
+        this.validationState = Object.freeze({...this.validationState, value: value})
+    }
+    setName(name: string) {
+        if (name) {
+            this.el.setAttribute('name', this.name);
+        } else {
+            st.error(`${this.constructor.name} needs an name attribute`, this);
+        }
     }
 
 

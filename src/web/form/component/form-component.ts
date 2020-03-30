@@ -6,6 +6,7 @@ import {IFormState} from "../interface/i-form-state";
 import {BaseComponent} from "./base-component";
 import {htmlCollectionToArray} from "../../../core/lang";
 import {IEvent, IEventListener} from "../../component/interface";
+import {IElement} from "../../vdom/interface";
 
 export interface StFromValidationEvent extends IEvent<StFromValidationDetail> {
 }
@@ -39,19 +40,37 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         });
     };
 
+
     shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
         if (!super.shouldAttributeChange(name, newValue, oldValue)) {
             return false;
         }
+        if (this.INTERNAL.notInitialRender) {
+            if (name == 'name') {
+                this.setName(newValue)
+                return false
+            }
+        }
         return true;
+    }
+
+    onAfterElCreate(el: IElement) {
+        super.onAfterElCreate(el);
+        this.setName(this.name);
+        this.overrideSubmit();
+
+    }
+
+    setName(name: string) {
+        if (name) {
+            this.el.setAttribute('name', this.name);
+        } else {
+            st.error(`${this.constructor.name} needs an name attribute`, this);
+        }
     }
 
     render() {
         return this.renderChildren();
-    }
-
-    onAfterElCreate() {
-        this.overrideSubmit();
     }
 
     overrideSubmit() {

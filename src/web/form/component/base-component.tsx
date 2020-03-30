@@ -3,6 +3,7 @@ import {attr} from "../../component";
 import {st} from "../../../core/st";
 import {IAttrBaseComponent} from "../interface/i-attr-base-component";
 import {Form} from "./form-component";
+import {IElement} from "../../vdom/interface";
 
 
 export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extends st.component<Attribute> implements ILifecycle {
@@ -22,17 +23,25 @@ export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extend
     shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
         if (this.INTERNAL.notInitialRender) {
             if (name === 'disabled') {
-                if (newValue) {
-                    this.el.setAttribute('disabled', '');
-                } else {
-                    this.el.removeAttribute('disabled');
-                }
+                this.setDisabled(newValue);
                 return false
             }
         }
         return true;
     }
 
+    onAfterElCreate(el: IElement) {
+        super.onAfterElCreate(el);
+        this.setDisabled(this.disabled);
+    }
+
+    setDisabled(disabled: boolean) {
+        if (disabled) {
+            this.el.setAttribute('disabled', '');
+        } else {
+            this.el.removeAttribute('disabled');
+        }
+    }
 
     getParentForm(): Form | undefined {
         let parent: ILifecycle | undefined = this.parent;

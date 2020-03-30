@@ -5,6 +5,7 @@ import {VALIDATION_VALIDATOR_NAME, ValidationComponent} from "./validation-compo
 import {AttrType} from "../../component/trait/attr";
 import {IAttrInputComponent} from "../interface/i-attr-input-component";
 import {nodeListToArray} from "../../../core/lang";
+import {IElement} from "../../vdom/interface";
 
 @component({tag: 'input'})
 export class Input extends ValidationComponent<IAttrInputComponent> {
@@ -40,44 +41,86 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
             return false;
         }
         if (this.INTERNAL.notInitialRender) {
-            const htmlInput = this.el as HTMLInputElement;
             switch (name) {
                 case 'defaultValue':
-                    htmlInput.defaultValue = newValue;
+                    this.setDefaultValue(newValue);
                     return false;
                 case 'defaultChecked':
-                    htmlInput.defaultChecked = newValue;
+                    this.setDefaultChecked(newValue);
                     return false;
                 case 'checked':
-                    if (newValue) {
-                        htmlInput.setAttribute('checked', '');
-                    } else {
-                        htmlInput.removeAttribute('checked',);
-                    }
+                    this.setChecked(newValue);
                     return false;
                 case 'hidden':
-                    if (newValue) {
-                        htmlInput.setAttribute('hidden', '');
-                    } else {
-                        htmlInput.removeAttribute('hidden',);
-                    }
+                  this.setHidden(newValue);
                     return false;
                 case 'rows':
-                    htmlInput.setAttribute('rows', newValue.toString());
+                    this.setRows(newValue);
                     return false;
                 case 'type':
-                    htmlInput.setAttribute('type', newValue.toString());
+                  this.setType(newValue);
                     return false;
                 case 'readonly':
-                    if (newValue) {
-                        htmlInput.setAttribute('readonly', '');
-                    } else {
-                        htmlInput.removeAttribute('readonly',);
-                    }
+                   this.setReadonly(newValue);
                     return false;
             }
         }
         return true;
+    }
+
+    onAfterElCreate(el: IElement) {
+        super.onAfterElCreate(el);
+        this.setDefaultValue(this.defaultValue);
+        this.setDefaultChecked(this.defaultChecked);
+        this.setChecked(this.checked);
+        this.setHidden(this.hidden);
+        this.setRows(this.rows);
+        this.setType(this.type);
+        this.setReadonly(this.readonly);
+    }
+
+    setDefaultValue(value: string) {
+        const htmlInput = this.el as HTMLInputElement;
+        htmlInput.defaultValue = value;
+    }
+
+    setDefaultChecked(checked: boolean) {
+        const htmlInput = this.el as HTMLInputElement;
+        htmlInput.defaultChecked = checked;
+
+    }
+    setChecked(checked: boolean){
+        const htmlInput = this.el as HTMLInputElement;
+        if (checked) {
+            htmlInput.setAttribute('checked', '');
+        } else {
+            htmlInput.removeAttribute('checked');
+        }
+    }
+    setHidden(hidden: boolean){
+        const htmlInput = this.el as HTMLInputElement;
+        if (hidden) {
+            htmlInput.setAttribute('hidden', '');
+        } else {
+            htmlInput.removeAttribute('hidden');
+        }
+    }
+    setRows(rows: number){
+        const htmlInput = this.el as HTMLInputElement;
+        htmlInput.setAttribute('rows', rows.toString());
+    }
+
+    setType(type: string){
+        const htmlInput = this.el as HTMLInputElement;
+        htmlInput.setAttribute('type', type.toString());
+    }
+    setReadonly(readonly: boolean){
+        const htmlInput = this.el as HTMLInputElement;
+        if (readonly) {
+            htmlInput.setAttribute('readonly', 'true');
+        } else {
+            htmlInput.removeAttribute('readonly');
+        }
     }
 
     getValue(): string {
