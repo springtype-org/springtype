@@ -35,30 +35,49 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         return <fragment/>;
     }
 
-    onAfterElCreate() {
-        super.onAfterElCreate();
-        const htmlInput = this.el as HTMLInputElement;
-        if (this.defaultValue) {
-            htmlInput.defaultValue = this.defaultValue;
+    shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
+        if (!super.shouldAttributeChange(name, newValue, oldValue)) {
+            return false;
         }
-        if (this.defaultChecked) {
-            htmlInput.defaultChecked = this.defaultChecked;
+        if (this.INTERNAL.notInitialRender) {
+            const htmlInput = this.el as HTMLInputElement;
+            switch (name) {
+                case 'defaultValue':
+                    htmlInput.defaultValue = newValue;
+                    return false;
+                case 'defaultChecked':
+                    htmlInput.defaultChecked = newValue;
+                    return false;
+                case 'checked':
+                    if (newValue) {
+                        htmlInput.setAttribute('checked', '');
+                    } else {
+                        htmlInput.removeAttribute('checked',);
+                    }
+                    return false;
+                case 'hidden':
+                    if (newValue) {
+                        htmlInput.setAttribute('hidden', '');
+                    } else {
+                        htmlInput.removeAttribute('hidden',);
+                    }
+                    return false;
+                case 'rows':
+                    htmlInput.setAttribute('rows', newValue.toString());
+                    return false;
+                case 'type':
+                    htmlInput.setAttribute('type', newValue.toString());
+                    return false;
+                case 'readonly':
+                    if (newValue) {
+                        htmlInput.setAttribute('readonly', '');
+                    } else {
+                        htmlInput.removeAttribute('readonly',);
+                    }
+                    return false;
+            }
         }
-        if (this.checked) {
-            htmlInput.setAttribute('checked', '');
-        }
-        if (this.hidden) {
-            htmlInput.setAttribute('hidden', '');
-        }
-        if (this.rows) {
-            htmlInput.setAttribute('rows', this.rows.toString());
-        }
-        if (this.type) {
-            htmlInput.setAttribute('type', this.type);
-        }
-        if (this.readonly) {
-            htmlInput.setAttribute('readonly', 'true');
-        }
+        return true;
     }
 
     getValue(): string {

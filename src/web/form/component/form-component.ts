@@ -39,7 +39,10 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         });
     };
 
-    shouldRender(): boolean {
+    shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
+        if (!super.shouldAttributeChange(name, newValue, oldValue)) {
+            return false;
+        }
         return true;
     }
 

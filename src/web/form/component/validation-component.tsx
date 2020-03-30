@@ -41,7 +41,7 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
     @event
     onStValidation!: IEventListener<StValidationEventDetail>;
 
-    @attr(AttrType.DOM_TRANSPARENT)
+    @attr
     value: string = '';
 
     validationState: IValidationSate = Object.freeze(DEFAULT_VALIDATION_STATE);
@@ -63,7 +63,6 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         });
     };
     onAfterElCreate() {
-        super.onAfterElCreate();
         if (this.name) {
             this.el.setAttribute('name', this.name);
         } else {
@@ -80,6 +79,7 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         if (this.INTERNAL.notInitialRender) {
             if (name == 'value') {
                 this.el.setAttribute('value', newValue);
+                this.validationState = Object.freeze({...this.validationState, value: newValue})
             }
             if (name == 'name') {
                 this.el.setAttribute('name', newValue);

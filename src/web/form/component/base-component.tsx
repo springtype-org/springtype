@@ -5,7 +5,7 @@ import {IAttrBaseComponent} from "../interface/i-attr-base-component";
 import {Form} from "./form-component";
 
 
-export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extends st.staticComponent<Attribute> implements ILifecycle {
+export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extends st.component<Attribute> implements ILifecycle {
 
     @attr
     disabled!: any;
@@ -19,11 +19,20 @@ export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extend
     @attr
     validClasses!: Array<string>;
 
-    onAfterElCreate() {
-        if (this.disabled) {
-            this.el.setAttribute('disabled', '');
+    shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
+        if (this.INTERNAL.notInitialRender) {
+            if (name === 'disabled') {
+                if (newValue) {
+                    this.el.setAttribute('disabled', '');
+                } else {
+                    this.el.removeAttribute('disabled');
+                }
+                return false
+            }
         }
+        return true;
     }
+
 
     getParentForm(): Form | undefined {
         let parent: ILifecycle | undefined = this.parent;
