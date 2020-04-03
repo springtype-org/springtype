@@ -51,7 +51,7 @@ export const newUniqueComponentName = () => "fnc-" + ++cmpSequence;
 
 export const tsx = (st.tsx = (
   // if it is a function, it is a component
-  type: IVirtualNodeType | Function,
+  type: IVirtualNodeType | Function | any,
   attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null,
   ...children: Array<IVirtualChildren> | IVirtualChildren
 ): Array<IVirtualNode> | IVirtualNode => {

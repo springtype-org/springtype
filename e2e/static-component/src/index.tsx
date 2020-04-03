@@ -1,6 +1,5 @@
-import "./st-hide.css";
 import { st } from "../../../src/core";
-import { component, attr, staticComponent, StaticComponent } from "../../../src/web/component";
+import { attr, staticComponent, StaticComponent } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 import { ref } from "../../../src/core/ref/decorator";
 
@@ -20,6 +19,7 @@ const E2EClockStatic = staticComponent((scope: StaticComponent & E2EClockStaticR
     // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
     return () => (
         <fragment>
+            THRU {scope.disabled} {scope.id} {scope.tabIndex}
             <button onClick={updateUnixTime}>Show time</button>
             <br />
             Time display: <br />
@@ -87,7 +87,7 @@ export class Foo extends Fuu<IFooAttrs> {
 
     render() {
         return <div style="color: green">
-            <E2EClockStatic format="YYYY-mm-dd" />
+            <E2EClockStatic tabIndex={1} id="test" format="YYYY-mm-dd" disabled />
             <div ref={{ displayTextRef: this }}>!text!</div>
             <div ref={{ displayStrongElRef: this }}>!strong text!</div>
             <div ref={{ displayArrayOfStringsRef: this }}>!Array of strings!</div>

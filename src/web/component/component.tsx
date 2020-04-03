@@ -30,6 +30,7 @@ export type DefaultComponentAttributes = {
     tabIndex?: number;
     style?: Partial<JSX.CSSStyleDeclaration>;
     class?: Array<string> | string;
+    disabled?: boolean;
 } & JSX.DOMAttributes /* like onClick, ... -- passed down to .el automatically */;
 
 export class Component<A = {}> implements ILifecycle {
@@ -49,7 +50,9 @@ export class Component<A = {}> implements ILifecycle {
     tag!: string;
     ref!: IRefAttribute;
     unwrap!: boolean;
+    id!: string;
     tabIndex!: number | string;
+    disabled!: boolean;
 
     constructor() {
         // internal state initialization
@@ -343,6 +346,10 @@ export class Component<A = {}> implements ILifecycle {
 
         if (this.style && Object.keys(this.style).length) {
             this.style = this.style;
+        }
+
+        if (typeof this.id !== TYPE_UNDEFINED) {
+            this.id = this.id;
         }
     };
 

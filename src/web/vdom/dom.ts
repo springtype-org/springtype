@@ -180,6 +180,15 @@ if (!st.dom) {
 
         updateComponentAttributes: (component: any, outerAttributes: any, virtualNode: IVirtualNode) => {
 
+            const updateAttr = (name: string) => {
+                const value = outerAttributes[name] || component.INTERNAL[name];
+                if (typeof value !== TYPE_UNDEFINED) {
+                    virtualNode.attributes[name] =
+                        component.INTERNAL[name] =
+                            component[name] = value;
+                }
+            }
+
             // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
             for (let attrName in component.INTERNAL.attributes) {
 
@@ -193,31 +202,10 @@ if (!st.dom) {
                 }
             }
 
-            // TODO: Refactor, code duplication
-
-            const id = outerAttributes[ID_ATTRIBUTE_NAME] || component.INTERNAL[ID_ATTRIBUTE_NAME];
-            if (id) {
-                virtualNode.attributes[ID_ATTRIBUTE_NAME] = id;
-
-                // update as a decision
-                component.INTERNAL[ID_ATTRIBUTE_NAME] = id;
-            }
-            const key = outerAttributes[LIST_KEY_ATTRIBUTE_NAME] || component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME];
-
-            if (key) {
-                virtualNode.attributes[LIST_KEY_ATTRIBUTE_NAME] = key;
-
-                // update as a decision
-                component.INTERNAL[LIST_KEY_ATTRIBUTE_NAME] = key;
-            }
-
-            const tabIndex = outerAttributes[TABINDEX_ATTRIBUTE_NAME] || component.INTERNAL[TABINDEX_ATTRIBUTE_NAME];
-            if (tabIndex) {
-                virtualNode.attributes[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
-
-                // update as a decision
-                component.INTERNAL[TABINDEX_ATTRIBUTE_NAME] = tabIndex;
-            }
+            updateAttr(DISABLED_ATTRIBUTE_NAME);
+            updateAttr(LIST_KEY_ATTRIBUTE_NAME);
+            updateAttr(TABINDEX_ATTRIBUTE_NAME);
+            updateAttr(ID_ATTRIBUTE_NAME);
         },
 
         getTagToUse: (component: any, virtualNode: IVirtualNode): string => {

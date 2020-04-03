@@ -5,7 +5,7 @@ export const style = (name: string, definitions: string) => {
   const styleIdent = '$' + name;
 
   // local cache
-  let style: HTMLStyleElement = (document.head as any)[styleIdent];;
+  let style: HTMLStyleElement = (document.head as any)[styleIdent];
 
   // replace/update style
   if (!style) {

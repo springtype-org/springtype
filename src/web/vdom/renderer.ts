@@ -294,6 +294,9 @@ if (!st.renderer) {
         // start rendering routes; method checks internally if already enabled.
         st.router.enable();
       }
+
+      // standard style for .st-hide to work (st.hide(domElement), st.show(domElement))
+      st.style('st-hide', `[st-hide] { display: 'none'; }`);
     };
 
     if (process.env.NDOE_ENV == 'development') {
