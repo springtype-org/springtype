@@ -353,6 +353,9 @@ if (!st.dom) {
             // don't render debug attributes like __source and __self
             if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
 
+            // attributes not set (undefined) are ignored; use null value to reset an attributes state
+            if (typeof value == TYPE_UNDEFINED) return;
+
             // implementation to pass a map of attributes at once
             // like: <input attrs={{ hidden: true, value: '123', ... }} /> instead of writing
             // <input hidden={true} value='123' />
@@ -423,7 +426,8 @@ if (!st.dom) {
                         domElement.style[prop as any] = value[prop];
                     }
                 } else {
-                    if (typeof value == TYPE_BOOLEAN || typeof value == TYPE_UNDEFINED) {
+
+                    if (typeof value == TYPE_BOOLEAN) {
                         (domElement as any)[name] = value;
                     } else {
                         domElement.setAttribute(name, value);

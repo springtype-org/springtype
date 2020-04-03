@@ -1,13 +1,13 @@
-import {attr, component} from "../../component";
-import {IValidationSate} from "../interface/i-validation-sate";
-import {tsx} from "../../vdom";
-import {VALIDATION_VALIDATOR_NAME, ValidationComponent} from "./validation-component";
-import {AttrType} from "../../component/trait/attr";
-import {IAttrInputComponent} from "../interface/i-attr-input-component";
-import {nodeListToArray} from "../../../core/lang";
-import {IElement} from "../../vdom/interface";
+import { attr, component } from "../../component";
+import { IValidationSate } from "../interface/i-validation-sate";
+import { tsx } from "../../vdom";
+import { VALIDATION_VALIDATOR_NAME, ValidationComponent } from "./validation-component";
+import { AttrType } from "../../component/trait/attr";
+import { IAttrInputComponent } from "../interface/i-attr-input-component";
+import { nodeListToArray } from "../../../core/lang";
+import { IElement } from "../../vdom/interface";
 
-@component({tag: 'input'})
+@component({ tag: 'input' })
 export class Input extends ValidationComponent<IAttrInputComponent> {
 
     @attr
@@ -31,9 +31,12 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
     @attr
     rows: number = 1;
 
+    @attr
+    value: string = '';
+
 
     render() {
-        return <fragment/>;
+        return <fragment />;
     }
 
     shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
@@ -52,16 +55,19 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
                     this.setChecked(newValue);
                     return false;
                 case 'hidden':
-                  this.setHidden(newValue);
+                    this.setHidden(newValue);
+                    return false;
+                case 'value':
+                    this.setValue(newValue);
                     return false;
                 case 'rows':
                     this.setRows(newValue);
                     return false;
                 case 'type':
-                  this.setType(newValue);
+                    this.setType(newValue);
                     return false;
                 case 'readonly':
-                   this.setReadonly(newValue);
+                    this.setReadonly(newValue);
                     return false;
             }
         }
@@ -89,7 +95,17 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         htmlInput.defaultChecked = checked;
 
     }
-    setChecked(checked: boolean){
+
+    setValue(value: string) {
+        const htmlInput = this.el as HTMLInputElement;
+        if (value) {
+            htmlInput.setAttribute('value', '');
+        } else {
+            htmlInput.removeAttribute('value');
+        }
+    }
+
+    setChecked(checked: boolean) {
         const htmlInput = this.el as HTMLInputElement;
         if (checked) {
             htmlInput.setAttribute('checked', '');
@@ -97,7 +113,7 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
             htmlInput.removeAttribute('checked');
         }
     }
-    setHidden(hidden: boolean){
+    setHidden(hidden: boolean) {
         const htmlInput = this.el as HTMLInputElement;
         if (hidden) {
             htmlInput.setAttribute('hidden', '');
@@ -105,16 +121,16 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
             htmlInput.removeAttribute('hidden');
         }
     }
-    setRows(rows: number){
+    setRows(rows: number) {
         const htmlInput = this.el as HTMLInputElement;
         htmlInput.setAttribute('rows', rows.toString());
     }
 
-    setType(type: string){
+    setType(type: string) {
         const htmlInput = this.el as HTMLInputElement;
         htmlInput.setAttribute('type', type.toString());
     }
-    setReadonly(readonly: boolean){
+    setReadonly(readonly: boolean) {
         const htmlInput = this.el as HTMLInputElement;
         if (readonly) {
             htmlInput.setAttribute('readonly', 'true');
@@ -165,13 +181,13 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
                     const radioInput = radioList.item(i);
                     if (radioList && (radioInput as any).$stComponent) {
                         const component = (radioInput as any).$stComponent as Input;
-                        component.validationState = ({valid, errors, value});
+                        component.validationState = ({ valid, errors, value });
                         component.updateValidation();
                     }
                 }
             }
         }
-        return {valid, errors, value}
+        return { valid, errors, value }
     }
 
     async doValidation(value: string): Promise<IValidationSate> {
@@ -187,6 +203,6 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
                 errors.push((validator as any)[VALIDATION_VALIDATOR_NAME]);
             }
         }
-        return {valid, errors, value}
+        return { valid, errors, value }
     }
 }
