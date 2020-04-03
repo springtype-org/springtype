@@ -4,9 +4,12 @@ import { ComponentFunction } from "../interface/icomponent-function";
 import { IComponentOptions } from "../interface/icomponent-options";
 import { TYPE_FUNCTION } from "../../../core/lang/type-function";
 
-export const component = (optionsOrElementFunction: IComponentOptions | ComponentFunction | any = undefined): any => {
+export const component = (optionsOrElementFunction: IComponentOptions | ComponentFunction | any = undefined, functionalName?: string): any => {
   // functional use: component((scope) => { ... }, ...)
   if (typeof optionsOrElementFunction == TYPE_FUNCTION) {
+
+    optionsOrElementFunction.functionalName = functionalName;
+
     // component(() => <div></div>, () => ({ div: { color: red } }), 'open')
     return defineComponent(optionsOrElementFunction as ComponentFunction);
   } else {

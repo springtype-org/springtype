@@ -62,4 +62,5 @@ export interface IDOM {
   hide(domElement: Element): void;
   show(domElement: Element): void;
   removeElement(domElement: Element): void;
+  removeChildren(domElement: Element): void;
 }

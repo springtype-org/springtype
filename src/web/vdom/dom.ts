@@ -2,7 +2,7 @@ import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { GlobalCache } from "../../core/st/interface/i$st";
 import { IComponentOptions, ILifecycle } from "../component/interface";
-import { Component } from "../component"
+import { Component, StaticComponent } from "../component"
 import { IElement } from "./interface";
 import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
 import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
@@ -14,6 +14,11 @@ import { cloneObject } from "../../core/lang/immute";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { AttrTrait, AttrType } from "../component/trait/attr";
 
+// name of the standard component attribute to pass a map of attributes at once
+// like: <Bar attrs={{ hidden: true, foo: '123', ... }} /> instead of writing
+// <Bar hidden={true} foo='123' />
+export const ATTRS_ATTR_NAME = "attrs";
+
 export const TEMPLATE_ELEMENT_NAME = "template";
 export const DEFAULT_SLOT_NAME = "default";
 export const FRAGMENT_ELEMENT_NAME = "fragment";
@@ -24,12 +29,20 @@ export const CLASS_NAME_ATTRIBUTE_NAME = "className";
 export const XLINK_ATTRIBUTE_NAME = "xlink";
 export const ID_ATTRIBUTE_NAME = "id";
 export const LIST_KEY_ATTRIBUTE_NAME = "key";
+export const DISABLED_ATTRIBUTE_NAME = "disabled";
 export const ATTR_EVENT_LISTENER_PREFIX = "on";
 export const ATTR_DEBUG_PREFIX = "__";
-export const CLASS_HIDE = "st-hide";
+export const ATTR_ST_HIDE = "st-hide";
 
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-const STANDARD_HTML_PASS_ATTRIBUTES = [CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, ID_ATTRIBUTE_NAME, TABINDEX_ATTRIBUTE_NAME, LIST_KEY_ATTRIBUTE_NAME];
+const STANDARD_HTML_PASS_ATTRIBUTES = [
+    CLASS_ATTRIBUTE_NAME,
+    STYLE_ATTRIBUTE_NAME,
+    ID_ATTRIBUTE_NAME,
+    TABINDEX_ATTRIBUTE_NAME,
+    LIST_KEY_ATTRIBUTE_NAME,
+    DISABLED_ATTRIBUTE_NAME
+];
 
 if (!st.dom) {
 
@@ -85,7 +98,11 @@ if (!st.dom) {
                 };
 
                 // create shallow component instance
-                component = new Component();
+                component = new (componentCtor.isStaticComponent ? StaticComponent : Component)();
+
+                if (componentCtor.functionalName) {
+                    fn.COMPONENT_OPTIONS.tag = componentCtor.functionalName;
+                }
 
                 // assign options
                 component.INTERNAL.options = fn.COMPONENT_OPTIONS;
@@ -94,7 +111,6 @@ if (!st.dom) {
                 component.render = fn(component);
 
             } else {
-
 
                 // class API
                 // create instance of component
@@ -128,16 +144,20 @@ if (!st.dom) {
                 if (propName.startsWith(ATTR_EVENT_LISTENER_PREFIX) &&
                     typeof component[propName] == TYPE_FUNCTION) {
 
-                    // component-local bould event listener function
+                    // component-local bound event listener function
                     if (!virtualNode.attributes) {
                         virtualNode.attributes = {};
                     }
 
+                    // e.g. onClick
                     if (outerAttributes[propName]) {
 
                         const outsideEventListener = outerAttributes[propName];
                         const localEventListener = component[propName];
 
+                        // makes sure that first onClick (inner class impl) is called
+                        // and afterwards outer registered onClick with the same event,
+                        // no matter if the event was stopped by the inner class impl.
                         virtualNode.attributes[propName] = (evt: Event) => {
                             localEventListener(evt);
                             outsideEventListener(evt);
@@ -173,6 +193,8 @@ if (!st.dom) {
                 }
             }
 
+            // TODO: Refactor, code duplication
+
             const id = outerAttributes[ID_ATTRIBUTE_NAME] || component.INTERNAL[ID_ATTRIBUTE_NAME];
             if (id) {
                 virtualNode.attributes[ID_ATTRIBUTE_NAME] = id;
@@ -198,13 +220,13 @@ if (!st.dom) {
             }
         },
 
-        getTagToUse: (component: ILifecycle, virtualNode: IVirtualNode): string => {
+        getTagToUse: (component: any, virtualNode: IVirtualNode): string => {
 
             if (component) {
-                const componentCtor = Object.getPrototypeOf(component).constructor;
-                if ((component as any).tag || componentCtor.COMPONENT_OPTIONS && componentCtor.COMPONENT_OPTIONS.tag) {
+
+                if ((component as any).tag || component.INTERNAL.options && component.INTERNAL.options.tag) {
                     // use <class-name> instead of ClassName which would end up as <classname> in DOM
-                    return (component as any).tag || componentCtor.COMPONENT_OPTIONS.tag;
+                    return (component as any).tag || component.INTERNAL.options.tag;
                 }
             }
 
@@ -327,8 +349,19 @@ if (!st.dom) {
         },
 
         setAttribute: (name: string, value: any, domElement: IElement, forceNative?: boolean) => {
+
             // don't render debug attributes like __source and __self
             if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
+
+            // implementation to pass a map of attributes at once
+            // like: <input attrs={{ hidden: true, value: '123', ... }} /> instead of writing
+            // <input hidden={true} value='123' />
+            if (name === ATTRS_ATTR_NAME) {
+                for (const attrName in value) {
+                    st.dom.setAttribute(attrName, value[attrName], domElement, forceNative);
+                }
+                return;
+            }
 
             // stores referenced DOM nodes in a memory efficient WeakMap
             // for access from CustomElements
@@ -382,6 +415,7 @@ if (!st.dom) {
             if (st.dom.hasElNamespace(domElement) && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
                 domElement.setAttributeNS("http://www.w3.org/1999/xlink", tsxToStandardAttributeName(name), value);
             } else {
+
                 if (domElement.$stComponent && !st.dom.isStandardHTMLAttribute(name) && forceNative !== true) {
                     domElement.$stComponent.setAttribute(name, value);
                 } else if (name === STYLE_ATTRIBUTE_NAME && typeof value !== TYPE_STRING) {
@@ -389,7 +423,7 @@ if (!st.dom) {
                         domElement.style[prop as any] = value[prop];
                     }
                 } else {
-                    if (typeof value == TYPE_BOOLEAN) {
+                    if (typeof value == TYPE_BOOLEAN || typeof value == TYPE_UNDEFINED) {
                         (domElement as any)[name] = value;
                     } else {
                         domElement.setAttribute(name, value);
@@ -417,17 +451,38 @@ if (!st.dom) {
             }
         },
 
+        /**
+         * Only sets the non-standard st-hide attribute on the DOM element given.
+         * You need a global CSS style declaration like: [st-hide] { display: none }
+         * for this to work properly.
+         */
         hide: (domElement: IElement) => {
-            domElement.classList.add(CLASS_HIDE);
+            domElement.setAttribute(ATTR_ST_HIDE, '');
         },
 
+        /**
+         * Removes the non-standard st-hide attribute from the DOM element given.
+         */
         show: (domElement: IElement) => {
-            domElement.classList.remove(CLASS_HIDE);
+            domElement.removeAttribute(ATTR_ST_HIDE);
         },
 
+        /**
+         * Removes the DOM element provided from it's parent.
+         */
         removeElement: (domElement: IElement) => {
             if (domElement.parentNode) {
                 domElement.parentNode.removeChild(domElement);
+            }
+        },
+
+        /**
+         * Removes all children of a DOM element.
+         * Behaves the same like element.innerHTML = '';
+         */
+        removeChildren: (domElement: IElement) => {
+            while (domElement.firstChild) {
+                domElement.removeChild(domElement.firstChild);
             }
         }
     };

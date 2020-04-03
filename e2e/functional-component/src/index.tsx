@@ -20,7 +20,7 @@ const E2EClock = component((scope: Component) => {
 const E2ETimeDisplay = component(
   render((component: Component) => {
     return <div>{component.renderChildren()}</div>;
-  }),
+  })
 );
 
 // append element to <body> (as root app element)

@@ -17,9 +17,13 @@ if (!st.renderer) {
     IGNORED_ATTRIBUTES: [],
 
     renderInitial: (
-      virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
+      virtualNode: IVirtualNode | undefined | string | Array<IVirtualNode | undefined | string>,
       parentDomElement: IElement,
-    ): Array<IElement | Text | undefined> | IElement | Text | undefined => {
+    ): Array<IElement | Text | undefined> | IElement | Text | undefined => {
+
+      if (typeof virtualNode == 'string') {
+        return st.dom.createTextNode(virtualNode, parentDomElement);
+      }
       return st.dom.createElementOrElements(virtualNode, parentDomElement);
     },
 
@@ -273,18 +277,10 @@ if (!st.renderer) {
 
   if (!st.render) {
     // add render method for awaiting / initial rendering
-    st.render = async (virtualNode: IVirtualNode, domNode: Element = document.body) => {
+    st.render = async (virtualNode: IVirtualNode | undefined | string | Array<IVirtualNode | undefined | string>, domNode: Element = document.body) => {
 
-      if (process.env.NDOE_ENV == 'development') {
-
-        // timeout warning flag
-        (st.render as any)._rendered = true;
-
-        if (!virtualNode.type || !virtualNode.attributes || !virtualNode.children) {
-          st.error("Invalid virutal node: ", JSON.stringify(virtualNode));
-          throw new Error("This virtual node does NOT look like one");
-        }
-      }
+      // timeout warning flag
+      (st.render as any)._rendered = true;
 
       // wait for the DOM to become ready, then render (prevents errors if a novice calls st.render() before <body> exists)
       await st.dom.isReady();
@@ -295,7 +291,7 @@ if (!st.renderer) {
       if (st.router) {
 
         // all <Route>'s and <RouteList>'s are instantiated by now,
-        // start rendering routes
+        // start rendering routes; method checks internally if already enabled.
         st.router.enable();
       }
     };

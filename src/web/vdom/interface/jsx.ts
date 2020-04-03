@@ -819,6 +819,11 @@ declare global {
 
     // TODO: All should allow for string (full HTML support)
     export interface HTMLAttributes extends HTMLAttributesLowerCase, DOMAttributes {
+
+      // allow for map type attribute passing like:
+      // <div attrs={{ disabled: true, ... }}>...</div>
+      attrs?: Partial<HTMLAttributes>;
+
       // Standard HTML Attributes
       accept?: string;
       acceptCharset?: string;

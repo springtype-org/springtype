@@ -1,12 +1,12 @@
 import "materialize-css/dist/css/materialize.min.css"
 import "./ext-validation.css"
 
-import {st} from "../../../src/core";
-import {component} from "../../../src/web/component";
-import {tsx} from "../../../src/web/vdom";
-import {Form, Input} from "../../../src/web/form";
-import {minLength, required} from "../../../src/core/validate/validate";
-import {ref} from "../../../src/core/ref/decorator";
+import { st } from "../../../src/core";
+import { component } from "../../../src/web/component";
+import { tsx } from "../../../src/web/vdom";
+import { Form, Input } from "../../../src/web/form";
+import { minLength, required } from "../../../src/core/validate/validate";
+import { ref } from "../../../src/core/ref/decorator";
 
 st.form = {
     ...st.form,
@@ -33,37 +33,37 @@ export class Foo extends st.component {
                                 <div class="row">
                                     <div class="input-field col s6">
                                         <Input placeholder="Placeholder" id="first_name" name="first_name"
-                                               type="text" validators={[required]}/>
+                                            type="text" validators={[required]} />
                                         <label for="first_name">First Name</label>
                                     </div>
                                     <div class="input-field col s6">
-                                        <Input id="last_name" name="last_name" type="text"/>
+                                        <Input id="last_name" name="last_name" type="text" />
                                         <label for="last_name">Last Name</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <Input ref={{inputRef: this}} disabled={true} value="I m" id="disabled"
-                                               validators={[required, minLength(5)]}
-                                               name="disabled" type="text"
+                                        <Input ref={{ inputRef: this }} disabled={true} value="I m" id="disabled"
+                                            validators={[required, minLength(5)]}
+                                            name="disabled" type="text"
                                         />
                                         <label for="disabled">Disabled</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <Input id="password" name="password" type="password"/>
+                                        <Input id="password" name="password" type="password" />
                                         <label for="password">Password</label>
                                         <span class="helper-text" data-error="wrong"
-                                              data-success="right">Helper text</span>
+                                            data-success="right">Helper text</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <Input name="email" id="email" validators={[required, minLength(5)]}/>
+                                        <Input name="email" id="email" validators={[required, minLength(5)]} />
                                         <label for="email">required and length</label>
                                         <span class="helper-text" data-error="wrong"
-                                              data-success="right">Helper text</span>
+                                            data-success="right">Helper text</span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -71,10 +71,10 @@ export class Foo extends st.component {
                                         This is an inline input field:
                                         <div class="input-field inline">
                                             <Input id="email_inline" name="email_inline"
-                                                   type="email"
+                                                type="email"
                                             />
                                             <label for="email_inline">Email</label>
-                                            <span class="helper-text" data-error="wrong" data-success="right"/>
+                                            <span class="helper-text" data-error="wrong" data-success="right" />
                                         </div>
                                     </div>
                                 </div>
@@ -84,83 +84,83 @@ export class Foo extends st.component {
 
                                     <p>
                                         <label>
-                                            <Input type="radio" name="color" value="red"/>
+                                            <Input type="radio" name="color" value="red" />
                                             <span>Red</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                            <Input type="radio" name="color" value="yellow"/>
+                                            <Input type="radio" name="color" value="yellow" />
                                             <span>Yellow</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
                                             <Input class="with-gap" name="color" type="radio" value="green"
-                                                   validators={[required]}/>
+                                                validators={[required]} />
                                             <span>Green</span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                            <Input type="radio" name="color" value="brown"/>
+                                            <Input type="radio" name="color" value="brown" />
                                             <span>Brown</span>
                                         </label>
                                     </p>
                                 </Form>
                                 <p>
                                     <label>
-                                        <Input name="checkbox-red" type="checkbox" value="red"/>
+                                        <Input name="checkbox-red" type="checkbox" value="red" />
                                         <span>Red</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <Input name="checkbox-yellow" type="checkbox" value="yellow"
-                                               validators={[required]}/>
+                                            validators={[required]} />
                                         <span>Yellow</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <Input name="checkbox-filled-in" type="checkbox" class="filled-in"
-                                               value="filled in"
-                                               validators={[required]}/>
+                                            value="filled in"
+                                            validators={[required]} />
                                         <span>Filled in</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <Input name="checkbox-indeterminate-style" id="indeterminate-checkbox"
-                                               type="checkbox"/>
+                                            type="checkbox" />
                                         <span>Indeterminate Style</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
                                         <Input name="checkbox-disabled-green" type="checkbox" checked={true}
-                                               disabled={true}/>
+                                            disabled={true} />
                                         <span>Green</span>
                                     </label>
                                 </p>
                                 <p>
                                     <label>
-                                        <Input name="checkbox-disabled-brown" type="checkbox" disabled={true}/>
+                                        <Input name="checkbox-disabled-brown" type="checkbox" disabled={true} />
                                         <span>Brown</span>
                                     </label>
                                 </p>
                             </Form>
                             <Form name="range">
                                 <p class="range-field">
-                                    <input name="html5-range" type="range" id="test5" min="0" max="100"/>
+                                    <input name="html5-range" type="range" id="test5" min="0" max="100" />
                                 </p>
                             </Form>
                             <Form name="switches">
                                 <div class="switch">
                                     <label>
                                         Off
-                                        <Input name="switch" type="checkbox" validators={[required]}/>
-                                        <span class="lever"/>
+                                        <Input name="switch" type="checkbox" validators={[required]} />
+                                        <span class="lever" />
                                         On
                                     </label>
                                 </div>
@@ -169,8 +169,8 @@ export class Foo extends st.component {
                                     <div class="switch">
                                         <label>
                                             Off
-                                            <Input name="switch-disabled" disabled={true} type="checkbox"/>
-                                            <span class="lever"/>
+                                            <Input name="switch-disabled" disabled={true} type="checkbox" />
+                                            <span class="lever" />
                                             On
                                         </label>
                                     </div>
@@ -213,10 +213,10 @@ export class Foo extends st.component {
     }
 
     onAfterRender() {
-       this.inputRef.updateLabels()
+        this.inputRef.updateLabels()
     }
 
 
 }
 
-st.render(<Foo/>);
+st.render(<Foo />);

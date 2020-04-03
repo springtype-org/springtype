@@ -6,7 +6,7 @@ export interface IRenderer {
   IGNORED_ATTRIBUTES: Array<string>;
 
   renderInitial(
-    virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
+    virtualNode: IVirtualNode | undefined | string | Array<IVirtualNode | undefined | string>,
     parentDomElement: IElement,
   ): Array<IElement | Text | undefined> | IElement | Text | undefined;
 

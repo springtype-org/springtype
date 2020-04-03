@@ -1,22 +1,23 @@
-import {st} from "../../core";
-import {DEFAULT_EMPTY_PATH} from "../../core/cd/prop-change-manager";
-import {ContextTrait} from "../../core/context";
-import {removeContextChangeHandlersOfInstance} from "../../core/context/context";
-import {GlobalCache} from "../../core/st/interface/i$st";
-import {newUniqueComponentName, tsx} from "../vdom";
-import {IElement, IVirtualNode} from "../vdom/interface";
-import {IVirtualChild} from "../vdom/interface/ivirtual-node";
-import {IComponentOptions, ILifecycle, IStateChange} from "./interface";
-import {IComponentInternals} from "./interface/icomponent";
-import {RenderReason, RenderReasonMetaData} from "./interface/irender-reason";
-import {AttrTrait, AttrType} from "./trait/attr";
-import {StateTrait} from "./trait/state";
-import {mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED} from "../../core/lang";
-import {IRefAttribute} from "./interface/iref-attribute";
-import {CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME} from "../vdom/dom";
-import {ContextStateTrait} from "./trait/context-state";
-import {StoreTrait} from "./trait/store";
-import {MessageTrait} from "./trait/message";
+import { st } from "../../core";
+import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
+import { ContextTrait } from "../../core/context";
+import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
+import { GlobalCache } from "../../core/st/interface/i$st";
+import { newUniqueComponentName, tsx } from "../vdom";
+import { IElement, IVirtualNode } from "../vdom/interface";
+import { IVirtualChild } from "../vdom/interface/ivirtual-node";
+import { IComponentOptions, ILifecycle, IStateChange } from "./interface";
+import { IComponentInternals } from "./interface/icomponent";
+import { RenderReason, RenderReasonMetaData } from "./interface/irender-reason";
+import { AttrTrait, AttrType } from "./trait/attr";
+import { StateTrait } from "./trait/state";
+import { mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED } from "../../core/lang";
+import { IRefAttribute } from "./interface/iref-attribute";
+import { CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME, ATTRS_ATTR_NAME } from "../vdom/dom";
+import { ContextStateTrait } from "./trait/context-state";
+import { StoreTrait } from "./trait/store";
+import { MessageTrait } from "./trait/message";
+
 
 export type DefaultComponentAttributes = {
     tag?: string; // allows to set a custom .el tag
@@ -37,7 +38,7 @@ export class Component<A = {}> implements ILifecycle {
     INTERNAL: IComponentInternals;
 
     // typing for JSX.ElementClass @attr's
-    attrs!: A & DefaultComponentAttributes;
+    attrs!: Partial<A & DefaultComponentAttributes & { attrs: Partial<A & DefaultComponentAttributes> }>;
 
     el!: HTMLElement;
     parent!: ILifecycle;
@@ -79,6 +80,17 @@ export class Component<A = {}> implements ILifecycle {
         st[GlobalCache.COMPONENT_INSTANCES].push(this);
     }
 
+    async renderPartial(virtualNode: IVirtualNode | undefined | string | Array<IVirtualNode | undefined | string>, domNode?: Element) {
+
+        if (!domNode) {
+            domNode = this.el;
+        }
+
+        st.dom.removeChildren(domNode!);
+
+        st.render(virtualNode as any, domNode);
+    }
+
     // --- standard HTML attributes (pass-thru)
 
     get class(): string | Array<string> {
@@ -107,14 +119,14 @@ export class Component<A = {}> implements ILifecycle {
         if (this.virtualNode.slotChildren![slotName]) {
             return (this.virtualNode.slotChildren![slotName] as IVirtualNode).children;
         }
-        return defaults || <fragment/>;
+        return defaults || <fragment />;
     }
 
     renderChildren(defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualNode | Array<IVirtualNode> {
         if (this.virtualNode.slotChildren![DEFAULT_SLOT_NAME]) {
             return this.virtualNode.slotChildren![DEFAULT_SLOT_NAME];
         }
-        return defaults || <fragment/>;
+        return defaults || <fragment />;
     }
 
     onBeforeElCreate(virtualNode: IVirtualNode) {
@@ -188,6 +200,16 @@ export class Component<A = {}> implements ILifecycle {
     setAttribute(name: string, value: any, type?: AttrType): void {
         const prevValue = this.getAttribute(name, type);
 
+        // implementation to pass a map of attributes at once
+        // like: <Bar attrs={{ hidden: true, foo: '123', ... }} /> instead of writing
+        // <Bar hidden={true} foo='123' />
+        if (name === ATTRS_ATTR_NAME) {
+            for (const attrName in value) {
+                this.setAttribute(attrName, value[attrName]);
+            }
+            return;
+        }
+
         if (
             this.shouldAttributeChange(name, value, prevValue)
         ) {
@@ -211,6 +233,7 @@ export class Component<A = {}> implements ILifecycle {
                 }
             }
 
+            // TODO: Remove if we deprecate patch renderer
             if (
                 // don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
 
@@ -250,7 +273,7 @@ export class Component<A = {}> implements ILifecycle {
 
     render(): IVirtualNode | Array<IVirtualNode> | string {
         if (typeof this.INTERNAL.options.tpl! != TYPE_FUNCTION) {
-            return <fragment/>;
+            return <fragment />;
         }
         return this.INTERNAL.options.tpl!(this);
     }
@@ -310,9 +333,17 @@ export class Component<A = {}> implements ILifecycle {
     }
 
     updateClassAndStyles = () => {
-        //call getter and merge
-        this.class = this.class;
-        this.style = this.style;
+
+        // getter returns merged results from component and virutal node
+        // assignment happens to recall the setter for change detection
+        // this is necessary for outer class={[...]} and outer style={{ ... }} assignments
+        if (this.class && this.class.length) {
+            this.class = this.class;
+        }
+
+        if (this.style && Object.keys(this.style).length) {
+            this.style = this.style;
+        }
     };
 
     onBeforeInitialRender() {
