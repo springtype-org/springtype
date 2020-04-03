@@ -1,9 +1,9 @@
-import {st} from "../../../core";
-import {attr, component, state} from "../../component";
-import {ILifecycle} from "../../component/interface";
-import {AttrType} from "../../component/trait/attr";
-import {equalObjects} from "../../../core/lang";
-import {tsx} from "../../vdom";
+import { st } from "../../../core";
+import { attr, component } from "../../component";
+import { ILifecycle } from "../../component/interface";
+import { AttrType } from "../../component/trait/attr";
+import { equalObjects } from "../../../core/lang";
+import { tsx } from "../../vdom";
 
 
 export interface ILinkAttrs {
@@ -15,7 +15,7 @@ export interface ILinkAttrs {
 }
 
 
-@component({tag: 'a'})
+@component({ tag: 'a' })
 export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     static ACTIVE_LINK_SLOT = 'ACTIVE_LINK_SLOT';
     static INACTIVE_LINK_SLOT = 'INACTIVE_LINK_SLOT';
@@ -30,12 +30,11 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     target?: string = '';
 
     @attr(AttrType.DOM_TRANSPARENT)
-    href?: string = 'javascript:void(0)';
+    href?: string = 'javascript:';
 
     @attr
     activeClass?: string;
 
-    @state
     match: boolean = false;
 
     onClick = () => {
@@ -53,6 +52,8 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
 
     onAfterMatchHandler = () => {
         st.debug('onAfterMatchHandler triggered', this);
+
+        // TODO: FIXME: Re-render partially
         this.match = this.isMatch();
     };
 
@@ -68,7 +69,6 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
         }
 
         this.class = filteredClasses;
-
     };
 
     isMatch = (): boolean => {
@@ -85,6 +85,8 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
 
     render = () => {
         this.updateActiveClass();
+
+        // TODO: FIXME: this switch won't work with static rendering
         return <fragment>
             {this.renderChildren()}
             {this.match

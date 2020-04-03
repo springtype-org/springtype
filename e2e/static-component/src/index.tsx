@@ -1,5 +1,5 @@
 import { st } from "../../../src/core";
-import { attr, staticComponent, StaticComponent } from "../../../src/web/component";
+import { attr, component, Component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 import { ref } from "../../../src/core/ref/decorator";
 
@@ -11,7 +11,7 @@ export interface E2EClockStaticAttrs {
     format: string;
 }
 
-const E2EClockStatic = staticComponent((scope: StaticComponent & E2EClockStaticRefs & E2EClockStaticAttrs) => {
+const E2EClockStatic = component((scope: Component & E2EClockStaticRefs & E2EClockStaticAttrs) => {
 
     // defined at construction time
     const updateUnixTime = () => scope.renderPartial('format: ' + scope.getAttribute('format') + ':' + Date.now().toString(), scope.timeDisplayRef);
@@ -36,8 +36,8 @@ export interface BarProps {
     secondTestAttr: boolean;
 }
 
-@staticComponent
-class Bar extends st.staticComponent<BarProps> {
+@component
+class Bar extends st.component<BarProps> {
 
     @attr
     testAttr: boolean;
@@ -51,11 +51,11 @@ class Bar extends st.staticComponent<BarProps> {
     }
 }
 
-@staticComponent
-class Fuu<ATTR> extends st.staticComponent<ATTR> {
+@component
+class Fuu<ATTR> extends st.component<ATTR> {
 }
 
-@staticComponent({ tag: 'Faa' })
+@component({ tag: 'Faa' })
 export class Foo extends Fuu<IFooAttrs> {
 
     @ref

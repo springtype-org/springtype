@@ -1,5 +1,5 @@
 import { st } from "../../../core";
-import { pubsub } from "../../../core/pubsub";
+import { pubsub, PUBSUB_TOPIC_WILDCARD } from "../../../core/pubsub";
 
 export class MessageTrait {
 
@@ -8,17 +8,16 @@ export class MessageTrait {
     instance._messageObserver = (function(value: any, topic?: string) {
 
       if (instance.INTERNAL && instance.INTERNAL.isConnected) {
-        console.log('component is connected. call onMessage')
         instance.onMessage.call(instance, topic, value);
       }
 
     }).bind(instance);
 
-    st.subscribe('*', instance._messageObserver);
+    st.subscribe(PUBSUB_TOPIC_WILDCARD, instance._messageObserver);
   }
 
   static disableFor(instance: any) {
-    st.unsubscribe('*', instance._messageObserver, instance);
+    st.unsubscribe(PUBSUB_TOPIC_WILDCARD, instance._messageObserver, instance);
   }
 }
 

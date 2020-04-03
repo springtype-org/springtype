@@ -45,12 +45,6 @@ export class Form extends BaseComponent<IAttrFormComponent> {
         if (!super.shouldAttributeChange(name, newValue, oldValue)) {
             return false;
         }
-        if (this.INTERNAL.notInitialRender) {
-            if (name == 'name') {
-                this.setName(newValue)
-                return false
-            }
-        }
         return true;
     }
 

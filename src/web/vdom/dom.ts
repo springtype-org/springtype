@@ -2,7 +2,7 @@ import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { GlobalCache } from "../../core/st/interface/i$st";
 import { IComponentOptions, ILifecycle } from "../component/interface";
-import { Component, StaticComponent } from "../component"
+import { Component } from "../component"
 import { IElement } from "./interface";
 import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
 import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
@@ -98,7 +98,7 @@ if (!st.dom) {
                 };
 
                 // create shallow component instance
-                component = new (componentCtor.isStaticComponent ? StaticComponent : Component)();
+                component = new Component();
 
                 if (componentCtor.functionalName) {
                     fn.COMPONENT_OPTIONS.tag = componentCtor.functionalName;
@@ -178,36 +178,6 @@ if (!st.dom) {
             }
         },
 
-        updateComponentAttributes: (component: any, outerAttributes: any, virtualNode: IVirtualNode) => {
-
-            const updateAttr = (name: string) => {
-                const value = outerAttributes[name] || component.INTERNAL[name];
-                if (typeof value !== TYPE_UNDEFINED) {
-                    virtualNode.attributes[name] =
-                        component.INTERNAL[name] =
-                            component[name] = value;
-                }
-            }
-
-            // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
-            for (let attrName in component.INTERNAL.attributes) {
-
-                if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
-                    const value = outerAttributes[attrName] || component.INTERNAL.attributes[attrName];
-
-                    virtualNode.attributes[attrName] = value;
-
-                    // update as a decision
-                    component.INTERNAL.attributes[attrName] = value;
-                }
-            }
-
-            updateAttr(DISABLED_ATTRIBUTE_NAME);
-            updateAttr(LIST_KEY_ATTRIBUTE_NAME);
-            updateAttr(TABINDEX_ATTRIBUTE_NAME);
-            updateAttr(ID_ATTRIBUTE_NAME);
-        },
-
         getTagToUse: (component: any, virtualNode: IVirtualNode): string => {
 
             if (component) {
@@ -227,6 +197,15 @@ if (!st.dom) {
 
         createElement: (virtualNode: IVirtualNode, parentDomElement: IElement, detached: boolean = false): IElement | undefined => {
             let newEl: Element;
+
+            const setComponentAttr = (name: string) => {
+                const value = outerAttributes[name] || component.INTERNAL[name];
+                if (typeof value !== TYPE_UNDEFINED) {
+                    virtualNode.attributes[name] =
+                        component.INTERNAL[name] =
+                            component[name] = value;
+                }
+            }
 
             const { component, outerAttributes } = st.dom.createComponentInstance(virtualNode, parentDomElement);
 
@@ -248,7 +227,23 @@ if (!st.dom) {
                     return this.$stComponent || this.$stComponentRef
                 };
 
-                st.dom.updateComponentAttributes(component, outerAttributes, virtualNode);
+                // any internal  @attr(AttrType.DOM_TRANSPARENT) foo = 123; or outer foo={123} handling
+                for (let attrName in component.INTERNAL.attributes) {
+
+                    if (AttrTrait.getType(component, attrName) == AttrType.DOM_TRANSPARENT) {
+                        const value = outerAttributes[attrName] || component.INTERNAL.attributes[attrName];
+
+                        virtualNode.attributes[attrName] = value;
+
+                        // update as a decision
+                        component.INTERNAL.attributes[attrName] = value;
+                    }
+                }
+
+                setComponentAttr(DISABLED_ATTRIBUTE_NAME);
+                setComponentAttr(LIST_KEY_ATTRIBUTE_NAME);
+                setComponentAttr(TABINDEX_ATTRIBUTE_NAME);
+                setComponentAttr(ID_ATTRIBUTE_NAME);
 
             } else {
                 // passing down parent component reference (it's a pure DOM element in this case)

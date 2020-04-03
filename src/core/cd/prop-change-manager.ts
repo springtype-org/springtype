@@ -35,6 +35,6 @@ export class PropChangeManager {
   }
 }
 
-if (!st.onStateChange) {
-  st.onStateChange = PropChangeManager.onChange;
+if (!st.onPropChange) {
+  st.onPropChange = PropChangeManager.onChange;
 }

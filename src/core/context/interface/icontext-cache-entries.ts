@@ -1,8 +1,8 @@
-import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
+import { IOnContextChangeHandler } from "./icontext-change-handler";
 
 export interface IContextCacheEntries {
   [contextName: string]: {
     value: any;
-    onChangeHandlers: Array<IOnStateChangeHandler>;
+    onChangeHandlers: Array<IOnContextChangeHandler>;
   };
 }

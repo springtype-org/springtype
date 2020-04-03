@@ -7,7 +7,7 @@ import { Route } from "./route";
 @component
 export class RouteList extends st.component implements ILifecycle {
 
-  onAfterInitialRender() {
+  onAfterRender() {
     st.router.addOnLocationChangeHandler(this.match);
     st.router.addOnAfterCacheGroupChangeHandler(this.cacheGroupChange);
 
@@ -40,5 +40,4 @@ export class RouteList extends st.component implements ILifecycle {
       (route as Route).cacheGroupFn();
     }
   };
-
 }

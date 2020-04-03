@@ -54,7 +54,7 @@ class Draggable extends st.component<DraggableAttrs> implements ILifecycle {
     this.dragGroup.push(this);
   }
 
-  onBeforeInitialRender() {
+  onBeforeRender() {
     this.displayText = this.ident;
   }
 
@@ -133,7 +133,7 @@ export class E2eChildren extends st.component {
   @ref
   h4Ref!: HTMLElement;
 
-  onAfterInitialRender() {
+  onAfterRender() {
     setTimeout(() => {
       this.mapofnames = ["Michael", "Aron", "Daniel", "Bernd", "Holger", 0, 4];
     }, 500);

@@ -65,8 +65,8 @@ export class RefTest extends st.component<IRefTestAttrs> implements ILifecycle {
     );
   }
 
-  onAfterInitialRender() {
-    console.log('onAfterInitialRender', this.redBox)
+  onAfterRender() {
+    console.log('onAfterRender', this.redBox)
   }
 
   onAfterRefChange(refName: string, refValue: any) {

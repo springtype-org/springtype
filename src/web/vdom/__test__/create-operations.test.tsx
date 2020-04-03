@@ -16,7 +16,7 @@ describe("Renderer create operation", () => {
       </ul>
     );
 
-    st.renderer.renderInitial(list, parentDOMElement);
+    st.renderer.render(list, parentDOMElement);
 
     expect((parentDOMElement.childNodes[0] as HTMLLIElement).id).toEqual("123");
     expect((parentDOMElement.childNodes[0] as HTMLLIElement).childNodes[0].nodeName).toEqual("LI");

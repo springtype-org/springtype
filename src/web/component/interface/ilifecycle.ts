@@ -1,8 +1,6 @@
 import { IElement } from "../../vdom/interface";
 import { IVirtualChild, IVirtualNode } from "../../vdom/interface/ivirtual-node";
 import { AttrType } from '../trait/attr';
-import { RenderReason, RenderReasonMetaData } from './irender-reason';
-import { IStateChange } from "./ion-state-change";
 
 export interface ILifecycle {
 
@@ -26,23 +24,12 @@ export interface ILifecycle {
   // allows for async/await operations until the initial rendering has happened
   initiallyRendered?(): void;
 
-  onStoreChange?(propName: string, value: any): void;
-
-  // called when a @state property changes
-  onStateChange?(name: string, change: IStateChange): void;
-
   // allows to filer/transform the virtual node (and it's children and slotChildren)
   // before it's created and assigned as this.el
   onBeforeElCreate?(virtualNode: IVirtualNode): void;
 
   // allows to tap / mutate this.el after creation
   onAfterElCreate?(el: IElement): void;
-
-  // is called before the .el of the component is patches by the VDOM
-  onBeforePatchEl?(): void;
-
-  // is called after the .el of the component has been patched by the VDOM
-  onAfterPatchEl?(): void;
 
   // is called when a re-rendering of the VDOM triggers an outer change
   // of an attribute which is a standard HTML attribute such as: id, class, style, tabindex
@@ -67,26 +54,14 @@ export interface ILifecycle {
   // after an attribute got set
   onAttributeChange?(name: string, value: any, prevValue: any): void;
 
-  // before render(). Return false to skip render
-  shouldRender?(reason: RenderReason, meta?: RenderReasonMetaData): boolean;
-
   // before render()
   onBeforeRender?(): void;
 
   // after render()
   onAfterRender?(hasDOMChanged: boolean): void;
 
-  // before first render()
-  onBeforeInitialRender?(): void;
-
-  // after first render()
-  onAfterInitialRender?(): void;
-
   // implement this and return TSX to be rendered
   render?(): IVirtualNode | Array<IVirtualNode> | string;
-
-  // lifecycle method to trigger a VDOM tpl reflow
-  doRender?(): Promise<void>;
 
   // after the component has been unmounted from the DOM
   onDisconnect?(): void;
@@ -99,6 +74,9 @@ export interface ILifecycle {
 
   // called when DOM router is used and the routes parameters change (like /user/:id from #/user/1 to #/user/2)
   onRouteParamsChanged?(params: any): void;
+
+  // if a store is mounted, this method is called on store change
+  onStoreChange?(propName: string, value: any): void;
 
   // before attribute changes get accepted
   shouldAttributeChange(name: string, value: any, prevValue: any): boolean;

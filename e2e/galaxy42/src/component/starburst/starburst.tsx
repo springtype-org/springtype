@@ -108,7 +108,7 @@ export class StarBurst extends st.component implements ILifecycle {
 
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     this.app = new PIXI.Application();
 
     this.app.loader

@@ -1,9 +1,5 @@
 import { IComponentRegistry } from "../../../web/component/interface";
-import { IOnStateChangeHandler } from "../../../web/component/interface/ion-state-change";
 import { IDOM, IRenderer, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
-import { IOnDeepChangeHandler } from "../../cd/interface";
-import { ChangeType } from "../../cd/interface/change-type";
-import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
 import { IDI } from "../../di/interface";
 import { IlogFunction } from "../../log/interface";
 import { IComponent } from "./../../../web/component/interface";
@@ -22,6 +18,10 @@ import { ISubscribe } from "../../pubsub/interface/isubscribe";
 import { Store } from "../../redux/interface/store";
 import { Action, AnyAction } from "../../redux/interface/actions";
 import {IForm} from "../../../web/form/interface/i-Form";
+import { IOnContextChangeHandler } from "../../context/interface/icontext-change-handler";
+import { IOnDeepChangeHandler } from "../../cd/interface";
+import { ChangeType } from "../../cd/interface/change-type";
+import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
 
 /**
  * public $st and internal st API
@@ -60,21 +60,19 @@ export interface I$st {
   addTranslation: IAddTranslation;
   setLanguage: ISetLanguage;
 
-  // change detection: events/listeners for changes on objects (state)
+  // context: Global store to share state with change detection and change events/listeners
 
   // change detection for objects and arrays (deep changes)
   onChange: (object: any, onChange: IOnDeepChangeHandler, options: any) => any;
 
   // change detection with support for (deep changes + reference set changes)
-  onStateChange: (instance: any, name: string | symbol, type: ChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
-
-  // context: Global store to share state with change detection and change events/listeners
+  onPropChange: (instance: any, name: string | symbol, type: ChangeType, onChange: IOnChangeHandler, onDeepChange?: IOnDeepChangeHandler) => any;
 
   // global context cache
   CONTEXT: IContextCacheEntries;
-  context<S = {}>(contextName: string, initialValue?: S, onChange?: IOnStateChangeHandler, instance?: any): S;
-  addContextChangeHandler: (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => void;
-  removeContextChangeHandler: (contextName: string, onChange?: IOnStateChangeHandler) => void;
+  context<S = {}>(contextName: string, initialValue?: S, onChange?: IOnContextChangeHandler, instance?: any): S;
+  addContextChangeHandler: (contextName: string, onChange: IOnContextChangeHandler, instance?: any) => void;
+  removeContextChangeHandler: (contextName: string, onChange?: IOnContextChangeHandler) => void;
 
   // --- web specific
 
@@ -114,7 +112,6 @@ export interface I$st {
 
   // virtual component base class implemenetation to inherit from
   component: IComponent;
-  staticComponent: IComponent;
   getComponent: (className: string) => IComponent;
 
   // bus / publish / subscribe

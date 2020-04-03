@@ -69,19 +69,8 @@ export abstract class ValidationComponent<Attribute extends IAttrValidationCompo
         if (!super.shouldAttributeChange(name, newValue, oldValue)) {
             return false;
         }
-        if (this.INTERNAL.notInitialRender) {
-            if (name == 'value') {
-                this.setValue(newValue);
-                return false
-            }
-            if (name == 'name') {
-                this.setName(newValue)
-                return false
-            }
-        } else {
-            if (name == 'value') {
-                this.validationState = Object.freeze({...this.validationState, value: newValue})
-            }
+        if (name == 'value') {
+            this.validationState = Object.freeze({...this.validationState, value: newValue})
         }
         return true;
     }

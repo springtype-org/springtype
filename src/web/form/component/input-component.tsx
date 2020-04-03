@@ -43,34 +43,6 @@ export class Input extends ValidationComponent<IAttrInputComponent> {
         if (!super.shouldAttributeChange(name, newValue, oldValue)) {
             return false;
         }
-        if (this.INTERNAL.notInitialRender) {
-            switch (name) {
-                case 'defaultValue':
-                    this.setDefaultValue(newValue);
-                    return false;
-                case 'defaultChecked':
-                    this.setDefaultChecked(newValue);
-                    return false;
-                case 'checked':
-                    this.setChecked(newValue);
-                    return false;
-                case 'hidden':
-                    this.setHidden(newValue);
-                    return false;
-                case 'value':
-                    this.setValue(newValue);
-                    return false;
-                case 'rows':
-                    this.setRows(newValue);
-                    return false;
-                case 'type':
-                    this.setType(newValue);
-                    return false;
-                case 'readonly':
-                    this.setReadonly(newValue);
-                    return false;
-            }
-        }
         return true;
     }
 

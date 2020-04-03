@@ -105,7 +105,7 @@ export class UploadDialog extends st.component<IUploadDialogAttrs> {
     this.updateVisibility();
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     this.hasRendered = true;
     this.setState(UploadDialog.INITIAL);
   }

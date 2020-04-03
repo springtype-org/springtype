@@ -36,7 +36,5 @@ export interface IComponentInternals {
   resolveOnInitiallyRendered: any;
 
   // runtime flags
-  notInitialRender: boolean;
   isConnected: boolean;
-  hasDOMChanged: boolean;
 }

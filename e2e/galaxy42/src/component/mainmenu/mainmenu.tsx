@@ -24,11 +24,8 @@ export class MainMenu extends st.component implements ILifecycle {
   @inject(MusicService)
   musicService!: MusicService;
 
-  shouldRender() {
-    return !this.INTERNAL.notInitialRender;
-  }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     this.keyboardService.onEnter(this.onEnter);
     this.keyboardService.onDown(this.onDown);
     this.keyboardService.onUp(this.onUp);

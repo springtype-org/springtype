@@ -40,10 +40,9 @@ export class PageHeader extends st.component {
         );
     }
 
-    onAfterInitialRender() {
+    onAfterRender() {
         setTimeout(() => {
             console.log('after 1sec');
-            this.doRender();
         }, 2000);
     }
 }

@@ -56,12 +56,10 @@ export class App extends st.component {
     return routeList;
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     setTimeout(() => {
       console.log("re-render app, isssue?");
       this.rerenderTest = true;
-
-      this.doRender();
     }, 1500);
   }
 }

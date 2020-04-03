@@ -21,12 +21,6 @@ export abstract class BaseComponent<Attribute extends IAttrBaseComponent> extend
     validClasses!: Array<string>;
 
     shouldAttributeChange(name: string, newValue: any, oldValue: any): boolean {
-        if (this.INTERNAL.notInitialRender) {
-            if (name === 'disabled') {
-                this.setDisabled(newValue);
-                return false
-            }
-        }
         return true;
     }
 

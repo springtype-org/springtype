@@ -40,16 +40,14 @@ export class E2EContext extends st.component implements ILifecycle {
   @context('iterative')
   iterativeContext = st.context('iterative', ['asd']);
 
-  onAfterInitialRender() {
+  onAfterRender() {
 
-    console.log('onAfterInitialRender');
+    console.log('onAfterRender');
 
     st.addContextChangeHandler('iterative', (change: IStateChange) => {
 
       st.info('iterative context, change:');
       st.info(change);
-
-      this.doRender();
     });
 
     this.lolShared = {

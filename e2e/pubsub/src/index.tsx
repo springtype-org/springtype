@@ -20,7 +20,7 @@ export class E2EBusTest extends st.component implements ILifecycle {
   @state
   data: any = {};
 
-  onAfterInitialRender() {
+  onAfterRender() {
     // subscribe for any message published using this topic
     st.subscribe('newRandom', (data: any) => {
       this.data = data;

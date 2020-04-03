@@ -43,7 +43,7 @@ export class MyVideosPage extends st.component implements ILifecycle {
     );
   }
 
-  onAfterInitialRender(): void {
+  onAfterRender(): void {
     //@ts-ignore
     this.tabBarRef.mdcComponent.listen("MDCTabBar:activated", (evt: any) => {
       console.log("MDCTabBar:activated", evt, evt.detail.index);

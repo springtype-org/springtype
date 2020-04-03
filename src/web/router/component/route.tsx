@@ -1,13 +1,13 @@
-import {st} from "../../../core";
-import {attr, component} from "../../component";
-import {ILifecycle} from "../../component/interface";
-import {tsx} from "../../vdom";
-import {IElement, IVirtualNode} from "../../vdom/interface";
-import {IRouteMatch, RouteGuard} from "../interface";
-import {RouteList} from "./route-list";
-import {TYPE_FUNCTION, TYPE_OBJECT, TYPE_STRING} from "../../../core/lang";
-import {AttrType} from "../../component/trait/attr";
-import {DEFAULT_ROUTE_CACHE_GROUP} from "../router";
+import { st } from "../../../core";
+import { attr, component } from "../../component";
+import { ILifecycle } from "../../component/interface";
+import { tsx } from "../../vdom";
+import { IElement, IVirtualNode } from "../../vdom/interface";
+import { IRouteMatch, RouteGuard } from "../interface";
+import { RouteList } from "./route-list";
+import { TYPE_FUNCTION, TYPE_OBJECT, TYPE_STRING } from "../../../core/lang";
+import { AttrType } from "../../component/trait/attr";
+import { DEFAULT_ROUTE_CACHE_GROUP } from "../router";
 
 const defaultLoadingComponent = <div>Loading...</div>;
 
@@ -54,16 +54,12 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
 
     activePath!: string;
 
-    shouldRender() {
-        return false;
-    }
-
     async onBeforeConnect() {
         this.match = () => {
             this.stopRunningMatch();
             st.router.createMatcher(this.path, this.onMatch, this.onMismatch)();
         };
-        this.cacheGroupFn = () =>{
+        this.cacheGroupFn = () => {
             this.onAfterCacheGroupChange()
         };
 
@@ -125,8 +121,6 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
             this.deleteLoadingComponent();
             delete this.activePath;
         }
-
-
     };
 
     prepareLoadingComponent() {
@@ -144,7 +138,7 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
             if ((component! as any).default) {
                 // must be exported as: export default class Foo extends st.component {} to work well
                 const Component = (component! as any).default;
-                return <Component/>;
+                return <Component />;
             }
         }
         return component;
@@ -268,19 +262,13 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
                 this.el.appendChild(component);
             }
             const stComponent = component.$stComponent;
-            // first render
-            if (stComponent && !stComponent.INTERNAL.isConnected) {
+
+            if (!stComponent.INTERNAL.isConnected) {
                 stComponent.connectedCallback();
-
-                // call to this for all links
-                st.router.callOnAfterMatchHandlers();
-            } else if (stComponent) {
-
-                if (stComponent.shouldRender()) {
-                    // re-render on route change
-                    stComponent.doRender();
-                }
             }
+
+            // call to this for all links
+            st.router.callOnAfterMatchHandlers();
 
             if (stComponent && typeof stComponent.onRouteEnter == TYPE_FUNCTION) {
                 stComponent.onRouteEnter(path);
@@ -298,11 +286,9 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
         } else {
             lifecycle(this.guardComponent);
         }
-
-
     };
 
     render() {
-        return <fragment/>
+        return <fragment />
     }
 }

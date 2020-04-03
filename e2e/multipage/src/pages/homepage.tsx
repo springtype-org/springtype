@@ -39,7 +39,7 @@ export class HomePage extends st.component {
     );
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     console.log('Homepage initial render', this.el)
   }
 }

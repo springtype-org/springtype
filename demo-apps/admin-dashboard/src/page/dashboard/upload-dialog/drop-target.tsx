@@ -178,7 +178,7 @@ export class DropTarget extends st.component<IDropTargetAttrs> {
     );
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     this.hasRendered = true;
     this.updateContainerVisibility();
   }

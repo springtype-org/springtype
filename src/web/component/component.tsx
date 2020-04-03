@@ -1,20 +1,16 @@
 import { st } from "../../core";
-import { DEFAULT_EMPTY_PATH } from "../../core/cd/prop-change-manager";
 import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
 import { newUniqueComponentName, tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { IVirtualChild } from "../vdom/interface/ivirtual-node";
-import { IComponentOptions, ILifecycle, IStateChange } from "./interface";
+import { IComponentOptions, ILifecycle } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
-import { RenderReason, RenderReasonMetaData } from "./interface/irender-reason";
 import { AttrTrait, AttrType } from "./trait/attr";
-import { StateTrait } from "./trait/state";
 import { mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED } from "../../core/lang";
 import { IRefAttribute } from "./interface/iref-attribute";
 import { CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME, ATTRS_ATTR_NAME } from "../vdom/dom";
-import { ContextStateTrait } from "./trait/context-state";
 import { StoreTrait } from "./trait/store";
 import { MessageTrait } from "./trait/message";
 
@@ -57,15 +53,11 @@ export class Component<A = {}> implements ILifecycle {
     constructor() {
         // internal state initialization
         this.INTERNAL = {
-            notInitialRender: false,
             attributes: {},
             options: Object.getPrototypeOf(this).constructor.COMPONENT_OPTIONS,
             resolveOnInitiallyRendered: () => {
             },
         } as IComponentInternals;
-
-        // @state impl.
-        StateTrait.enableFor(this);
 
         // @attr impl.
         AttrTrait.enableFor(this);
@@ -88,9 +80,7 @@ export class Component<A = {}> implements ILifecycle {
         if (!domNode) {
             domNode = this.el;
         }
-
         st.dom.removeChildren(domNode!);
-
         st.render(virtualNode as any, domNode);
     }
 
@@ -162,9 +152,8 @@ export class Component<A = {}> implements ILifecycle {
 
         this.onConnect();
 
-        if (this.shouldRender(RenderReason.INITIAL)) {
-            this.doRender();
-        }
+        this.doRender();
+
     }
 
     onConnect() {
@@ -194,7 +183,6 @@ export class Component<A = {}> implements ILifecycle {
         }
         return this.INTERNAL.attributes[name];
     }
-
 
     /**
      * Overriding this method and not calling the super method
@@ -236,39 +224,15 @@ export class Component<A = {}> implements ILifecycle {
                 }
             }
 
-            // TODO: Remove if we deprecate patch renderer
-            if (
-                // don't reflow if it's the first render cycle (because attribute rendering is covered with first full render cycle)
-
-                this.INTERNAL.notInitialRender &&
-                // and don't render if the user land condition denies
-                this.shouldRender(RenderReason.ATTRIBUTE_CHANGE, {
-                    path: DEFAULT_EMPTY_PATH,
-                    name,
-                    value,
-                    prevValue,
-                })
-            ) {
-                this.doRender();
-            }
-
             // call lifecycle method
             this.onAttributeChange(name, value, prevValue);
         }
-    }
-
-    onStateChange(name: string, change: IStateChange) {
     }
 
     /**
      * Lifecycle method: Implement to get notified when attributes change
      */
     onAttributeChange(name: string, newValue: any, oldValue: any) {
-    }
-
-
-    shouldRender(reason: RenderReason, meta?: RenderReasonMetaData): boolean {
-        return true;
     }
 
     onBeforeRender() {
@@ -281,23 +245,17 @@ export class Component<A = {}> implements ILifecycle {
         return this.INTERNAL.options.tpl!(this);
     }
 
-    async doRender() {
+    onAfterRefChange(refName: string, refValue: any) {
+    }
+
+    private async doRender() {
 
         if (!this.INTERNAL) {
             this.disconnectedCallback();
             return;
         }
 
-
         this.onBeforeRender();
-
-        // reset
-        this.INTERNAL.hasDOMChanged = false;
-
-        if (!this.INTERNAL.notInitialRender) {
-            // call lifecycle method
-            this.onBeforeInitialRender();
-        }
 
         const vdom: IVirtualNode | Array<IVirtualNode> | string = this.render();
 
@@ -305,34 +263,17 @@ export class Component<A = {}> implements ILifecycle {
             throw new Error(`The render() method or the template (tpl) of <${this.constructor.name} /> must return virtual nodes.`);
         }
 
-
         const nodesToRender = Array.isArray(vdom) ? [...vdom!] : [vdom!];
-        if (!this.INTERNAL.notInitialRender) {
 
-            this.INTERNAL.hasDOMChanged = true;
-            this.INTERNAL.notInitialRender = true;
+        // if there isn't a prev. VDOM state, render initially
+        st.renderer.render(nodesToRender, (this.el as unknown) as IElement);
+        this.updateClassAndStyles();
 
-            // if there isn't a prev. VDOM state, render initially
-            st.renderer.renderInitial(nodesToRender, (this.el as unknown) as IElement);
-            this.updateClassAndStyles();
-
-            // resolve promises for calls on this.initiallyRendered()
-            this.INTERNAL.resolveOnInitiallyRendered();
-            // @contextState impl.
-            ContextStateTrait.enableFor(this);
-
-            // call lifecycle method
-            this.onAfterInitialRender();
-        } else {
-            // differential VDOM / DOM rendering algorithm
-            // algorithm will decide for this.INTERNAL.hasDOMChanged internally
-            st.renderer.patch((this.el as any).childNodes, nodesToRender, (this.el as unknown) as IElement);
-            this.updateClassAndStyles();
-        }
-
+        // resolve promises for calls on this.initiallyRendered()
+        this.INTERNAL.resolveOnInitiallyRendered();
 
         // call lifecycle method
-        this.onAfterRender(this.INTERNAL.hasDOMChanged);
+        this.onAfterRender();
     }
 
     updateClassAndStyles = () => {
@@ -347,28 +288,9 @@ export class Component<A = {}> implements ILifecycle {
         if (this.style && Object.keys(this.style).length) {
             this.style = this.style;
         }
-
-        if (typeof this.id !== TYPE_UNDEFINED) {
-            this.id = this.id;
-        }
     };
 
-    onBeforeInitialRender() {
-    }
-
-    onAfterInitialRender() {
-    }
-
-    onAfterRender(hasDOMChanged: boolean) {
-    }
-
-    onBeforePatchEl() {
-    }
-
-    onAfterPatchEl() {
-    }
-
-    onAfterRefChange(refName: string, refValue: any) {
+    onAfterRender() {
     }
 
     dispatchEvent<D>(eventName: string, init?: CustomEventInit<any> & { detail: D }) {

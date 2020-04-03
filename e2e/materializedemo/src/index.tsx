@@ -167,7 +167,7 @@ export class MaterializeDemo extends st.staticComponent implements ILifecycle {
     );
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
 
     // see https://materializecss.com/sidenav.html JavaScript API etc.
     M.Sidenav.init(document.querySelectorAll('.sidenav'), {});

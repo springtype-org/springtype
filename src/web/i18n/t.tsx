@@ -11,7 +11,7 @@ export interface ITProps {
  * Translates
  */
 @component
-export class T extends st.staticComponent<ITProps> implements ILifecycle {
+export class T extends st.component<ITProps> implements ILifecycle {
 
   @attr
   values: ITranslationValues = {};

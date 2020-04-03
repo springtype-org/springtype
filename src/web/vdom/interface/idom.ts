@@ -18,8 +18,6 @@ export interface IDOM {
 
   createComponentInstance(virtualNode: IVirtualNode, parentDomElement: IElement): any;
 
-  updateComponentAttributes(component: ILifecycle, outerAttributes: any, virtualNode: IVirtualNode): void;
-
   createElementOrElements(
     virtualNode: IVirtualNode | undefined | Array<IVirtualNode | undefined | string>,
     parentDomElement: Element,

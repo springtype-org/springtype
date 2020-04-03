@@ -23,10 +23,6 @@ export class InGame extends st.component implements ILifecycle {
   @inject(GameEngine)
   gameEngine!: GameEngine;
 
-  shouldRender() {
-    return !this.INTERNAL.notInitialRender;
-  }
-
   onRouteEnter() {
     this.musicService.play('lostPlanet');
   }
@@ -35,7 +31,7 @@ export class InGame extends st.component implements ILifecycle {
     this.musicService.stop('lostPlanet');
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     this.renderCanvas();
   }
 

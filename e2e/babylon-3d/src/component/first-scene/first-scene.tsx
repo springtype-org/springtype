@@ -36,7 +36,7 @@ export class FirstScene extends st.component implements ILifecycle {
   @ref
   private canvas!: HTMLCanvasElement;
 
-  onAfterInitialRender(): void {
+  onAfterRender(): void {
     window.addEventListener("resize", () => this.alignVideoDisplay());
 
     this.registerShaders();

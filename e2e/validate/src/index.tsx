@@ -45,7 +45,7 @@ export class TemplateName extends st.component implements ILifecycle {
   }
 
   // this method is called only one time after the first render
-  onAfterInitialRender() {
+  onAfterRender() {
     // changes to attributes trigger a re-rendering
     this.name = "SpringType v2: re-rendered";
 

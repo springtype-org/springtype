@@ -57,7 +57,7 @@ export class MetadataForm extends st.component<IMetadataFormAttrs> {
     );
   }
 
-  onAfterInitialRender() {
+  onAfterRender() {
     this.hasRendered = true;
   }
 }

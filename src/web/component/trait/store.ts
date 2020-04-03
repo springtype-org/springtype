@@ -4,8 +4,6 @@ import { Action, AnyAction } from "../../../core/redux/interface/actions";
 import { resolvePathInObject } from "../../../core/lang/resolve-path-in-object";
 import { TYPE_FUNCTION } from "../../../core/lang/type-function";
 import { ILifecycle } from "../interface";
-import { RenderReason } from "../interface/irender-reason";
-import { ChangeType } from "../../../core/cd/interface/change-type";
 
 export const STORE_MOUNTS: string = "STORE_MOUNTS";
 let reduxStore: Store<any, any>;
@@ -45,16 +43,6 @@ export class StoreTrait {
 
       if (typeof instance.onStoreChange == TYPE_FUNCTION) {
         instance.onStoreChange!(name, value);
-      }
-
-      if (instance.shouldRender!(RenderReason.STORE_CHANGE, {
-        name,
-        path: storeMounts[name],
-        prevValue,
-        type: ChangeType.REFERENCE,
-        value
-      })) {
-        instance.doRender!();
       }
     }
   }

@@ -1,4 +1,3 @@
-import { IOnStateChangeHandler } from "../../web/component/interface/ion-state-change";
 import { ChangeType } from "../cd/interface/change-type";
 import { DEFAULT_EMPTY_PATH, PropChangeManager } from "../cd/prop-change-manager";
 import { isPrimitive } from "../lang/is-primitive";
@@ -6,6 +5,7 @@ import { GlobalCache } from "../st/interface/i$st";
 import { st } from "../st/st";
 import { TYPE_FUNCTION } from "../lang/type-function";
 import { context as contextDecorator } from "./decorator/context";
+import { IOnContextChangeHandler } from "./interface/icontext-change-handler";
 
 const HANDLER_OWNING_INSTANCE: any = "HANDLER_OWNING_INSTANCE";
 const DEFAULT_CONTEXT_VALUE = {};
@@ -16,7 +16,7 @@ export const context = contextDecorator;
 if (!st.context) {
 
   /* internal API */
-  const callChangeHandlers = (onChangeHandlers: Array<IOnStateChangeHandler>, name: string, type: ChangeType, value: any, prevValue: any, path: string = DEFAULT_EMPTY_PATH) => {
+  const callChangeHandlers = (onChangeHandlers: Array<IOnContextChangeHandler>, name: string, type: ChangeType, value: any, prevValue: any, path: string = DEFAULT_EMPTY_PATH) => {
     for (let onChangeHandler of onChangeHandlers) {
       onChangeHandler({
         name,
@@ -69,7 +69,7 @@ if (!st.context) {
    * @param onChange Handler function to be applied when the context object gets changed by reference or deeply
    * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
    */
-  st.context = function context<S = any>(contextName: string, initialValue?: S, onChange?: IOnStateChangeHandler, instance?: any) {
+  st.context = function context<S = any>(contextName: string, initialValue?: S, onChange?: IOnContextChangeHandler, instance?: any) {
 
     if (!initialValue) {
       initialValue = {} as any;
@@ -98,7 +98,7 @@ if (!st.context) {
  * @param onChange Handler function, called on change
  * @param instance Optional instance reference to allow for correct GC. Should be used with @Share
  */
-export const addContextChangeHandler = (st.addContextChangeHandler = (contextName: string, onChange: IOnStateChangeHandler, instance?: any) => {
+export const addContextChangeHandler = (st.addContextChangeHandler = (contextName: string, onChange: IOnContextChangeHandler, instance?: any) => {
   if (typeof onChange == TYPE_FUNCTION) {
     if (instance) {
       (onChange as any)[HANDLER_OWNING_INSTANCE] = instance;
@@ -112,7 +112,7 @@ export const addContextChangeHandler = (st.addContextChangeHandler = (contextNam
  * @param contextName Name reference of the context
  * @param [onChange] Handler function reference. Must equal (===) the orginal function registered
  */
-export const removeContextChangeHandler = (st.removeContextChangeHandler = (contextName: string, onChange?: IOnStateChangeHandler) => {
+export const removeContextChangeHandler = (st.removeContextChangeHandler = (contextName: string, onChange?: IOnContextChangeHandler) => {
   let index = st[GlobalCache.CONTEXT][contextName].onChangeHandlers.indexOf(onChange!);
   if (index > -1) {
     st[GlobalCache.CONTEXT][contextName].onChangeHandlers.splice(index, 1);
