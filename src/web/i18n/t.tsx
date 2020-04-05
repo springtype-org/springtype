@@ -5,6 +5,8 @@ import { ITranslationValues } from "../../core/i18n/interface/itranslation-value
 
 export interface ITProps {
   values?: ITranslationValues;
+  // literally allow any attribute as it's not specified (tag can be arbitrary)
+  [key: string]: any;
 }
 
 /**
