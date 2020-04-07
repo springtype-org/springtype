@@ -33,7 +33,7 @@ if (!st.router) {
         ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS: [],
         activeRouteCacheGroup: DEFAULT_ROUTE_CACHE_GROUP,
 
-        activeLinkClass: 'active',
+        activeLinkClass: ['active'],
 
         addOnAfterCacheGroupChangeHandler: (handler: Function) => {
             st.router.ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS.push(handler);
