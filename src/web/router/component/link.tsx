@@ -1,9 +1,9 @@
-import { st } from "../../../core";
-import { attr, component } from "../../component";
-import { ILifecycle } from "../../component/interface";
-import { AttrType } from "../../component/trait/attr";
-import { equalObjects } from "../../../core/lang";
-import { tsx } from "../../vdom";
+import {st} from "../../../core";
+import {attr, component} from "../../component";
+import {ILifecycle} from "../../component/interface";
+import {AttrType} from "../../component/trait/attr";
+import {equalObjects, mergeArrays} from "../../../core/lang";
+import {tsx} from "../../vdom";
 
 
 export interface ILinkAttrs {
@@ -15,7 +15,7 @@ export interface ILinkAttrs {
 }
 
 
-@component({ tag: 'a' })
+@component({tag: 'a'})
 export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     static ACTIVE_LINK_SLOT = 'ACTIVE_LINK_SLOT';
     static INACTIVE_LINK_SLOT = 'INACTIVE_LINK_SLOT';
@@ -58,14 +58,19 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     };
 
     updateActiveClass = () => {
-        const activeClassName = this.activeClass || st.router.activeLinkClass;
         if (!Array.isArray(this.class)) {
             this.class = [this.class];
         }
 
-        const filteredClasses = this.class.filter((className: string) => className !== activeClassName);
+        let activeClassNames = this.activeClass || st.router.activeLinkClass;
+
+        if (!Array.isArray(activeClassNames)) {
+            activeClassNames = [activeClassNames];
+        }
+        let filteredClasses = this.class.filter((className: string) => activeClassNames.indexOf(className) === -1);
+
         if (this.match) {
-            filteredClasses.push(activeClassName);
+            filteredClasses = mergeArrays(filteredClasses, activeClassNames)
         }
 
         this.class = filteredClasses;

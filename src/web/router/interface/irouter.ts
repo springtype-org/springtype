@@ -26,7 +26,7 @@ export interface IRouter {
   prefix: string;
 
   //active link class
-  activeLinkClass: string;
+  activeLinkClass: Array<string>;
 
   materialize(route: string, params?: any): string;
   getUrlPath(pathnameOrHash: string): string;

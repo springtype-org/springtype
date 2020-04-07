@@ -2,8 +2,8 @@ import { IComponentRegistry } from "../../../web/component/interface";
 import { IDOM, IRenderer, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
 import { IDI } from "../../di/interface";
 import { IlogFunction } from "../../log/interface";
-import { IComponent } from "./../../../web/component/interface";
-import { IContextCacheEntries } from "./../../context/interface/icontext-cache-entries";
+import { IComponent } from "../../../web/component/interface";
+import { IContextCacheEntries } from "../../context/interface";
 import { IRouter, IRouteMatch } from "../../../web/router/interface";
 import { IFormatter } from "../../formatter/interface/iformatter";
 import { IFormat } from "../../formatter/interface/iformat";
@@ -15,7 +15,6 @@ import { IPublish } from "../../pubsub/interface/ipublish";
 import { ISubscribe } from "../../pubsub/interface/isubscribe";
 import { Store } from "../../redux/interface/store";
 import { Action, AnyAction } from "../../redux/interface/actions";
-import {IForm} from "../../../web/form/interface/i-Form";
 import { IOnContextChangeHandler } from "../../context/interface/icontext-change-handler";
 import { IOnDeepChangeHandler } from "../../cd/interface";
 import { ChangeType } from "../../cd/interface/change-type";
@@ -91,9 +90,6 @@ export interface I$st {
   // DOM routing
   router: IRouter;
   route: Partial<IRouteMatch>;
-
-  // form
-  form: IForm;
 
   // renders a virtual node directly into an existing DOM node, defaults to document.body
   render: (virtualNode: IVirtualNode, domNode?: Element) => void;

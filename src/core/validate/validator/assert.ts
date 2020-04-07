@@ -6,9 +6,6 @@ import { st } from "../..";
 export class AssertValidator implements IValidator {
 
   validate(errors: Array<ValidationResult>): void {
-
-
-
-      st.error(errors.map(getValidationErrorMessage).join(' '))
+       st.error(errors.map(getValidationErrorMessage).join(' '))
   }
 }

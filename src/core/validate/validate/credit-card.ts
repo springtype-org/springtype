@@ -1,10 +1,10 @@
 import {getParameterValidateDecorator} from "../function/get-parameter-validate-decorator";
 import {validatorNameFactory} from "../function/validator-name-factory";
 
-const VALIDATOR_NAME = 'credit-card';
+export const CREDIT_CARD = 'credit-card';
 
 // decorator @CreditCard
-export const CreditCard = () => getParameterValidateDecorator(creditCard, VALIDATOR_NAME);
+export const CreditCard = () => getParameterValidateDecorator(creditCard, CREDIT_CARD);
 
 export const creditCard = validatorNameFactory((value: string): boolean => {
     //delete all not numeric stuff
@@ -17,7 +17,7 @@ export const creditCard = validatorNameFactory((value: string): boolean => {
         // to add the digits in a number
         .map((v) => sum(toDigitList(String(v)))));
     return total % 10 === 0
-}, VALIDATOR_NAME);
+}, CREDIT_CARD);
 
 
 export const toDigitList = (digitString: string): Array<number> => digitString.split('').map(Number);

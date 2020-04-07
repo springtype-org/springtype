@@ -1,12 +1,12 @@
 import {getParameterValidateDecorator} from "../function/get-parameter-validate-decorator";
 import {validatorNameFactory} from "../function/validator-name-factory";
 
-const VALIDATOR_NAME = 'max-length';
+export const MAX_LENGTH = 'max-length';
 
 // decorator @MaxLength
-export const MaxLength = (maximum: number) => getParameterValidateDecorator(maxLength(maximum), VALIDATOR_NAME);
+export const MaxLength = (maximum: number) => getParameterValidateDecorator(maxLength(maximum), MAX_LENGTH);
 
 export const maxLength = (maximum: number) => validatorNameFactory((value: string | Array<any>): boolean => {
     return value.length <= maximum;
-}, VALIDATOR_NAME);
+}, MAX_LENGTH);
 

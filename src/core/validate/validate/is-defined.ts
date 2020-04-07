@@ -2,11 +2,11 @@ import {getParameterValidateDecorator} from "../function/get-parameter-validate-
 import {validatorNameFactory} from "../function/validator-name-factory";
 import {TYPE_UNDEFINED} from "../../lang";
 
-const VALIDATOR_NAME = 'defined';
+export const IS_DEFINED = 'defined';
 
 // decorator @IsDefined
-export const IsDefined = () => getParameterValidateDecorator(defined, VALIDATOR_NAME);
+export const IsDefined = () => getParameterValidateDecorator(defined, IS_DEFINED);
 
 export const defined = validatorNameFactory((value: any): boolean => {
     return typeof value !== TYPE_UNDEFINED;
-}, VALIDATOR_NAME);
+}, IS_DEFINED);
