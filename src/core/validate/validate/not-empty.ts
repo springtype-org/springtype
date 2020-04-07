@@ -2,11 +2,11 @@ import {getParameterValidateDecorator} from "../function/get-parameter-validate-
 import {validatorNameFactory} from "../function/validator-name-factory";
 import {minLength} from "./min-length";
 
-const VALIDATOR_NAME = 'pattern';
+export const NOT_EMPTY = 'not-empty';
 
 // decorator @NotEmpty
-export const NotEmpty = () => getParameterValidateDecorator(notEmpty, VALIDATOR_NAME);
+export const NotEmpty = () => getParameterValidateDecorator(notEmpty, NOT_EMPTY);
 
 export const notEmpty = validatorNameFactory((value: string | Array<any>): boolean => {
     return minLength(1)(value);
-}, VALIDATOR_NAME);
+}, NOT_EMPTY);

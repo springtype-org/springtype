@@ -1,9 +1,9 @@
 import {getParameterValidateDecorator} from "../function/get-parameter-validate-decorator";
 import {validatorNameFactory} from "../function/validator-name-factory";
 
-const VALIDATOR_NAME = 'not-null';
+export const NOT_NULL = 'not-null';
 
 // decorator @NotNull
-export const NotNull = () => getParameterValidateDecorator(notnull, VALIDATOR_NAME);
+export const NotNull = () => getParameterValidateDecorator(notnull, NOT_NULL);
 
-export const notnull = validatorNameFactory((value: any): boolean => null !== value, VALIDATOR_NAME);
+export const notnull = validatorNameFactory((value: any): boolean => null !== value, NOT_NULL);
