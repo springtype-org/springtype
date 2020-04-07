@@ -4,5 +4,6 @@
   },
   "German": "German",
   "English": "English",
+  "Fallback": "Fallback",
   "deep__msg": "Fail test"
 }

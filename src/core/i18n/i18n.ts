@@ -5,6 +5,7 @@ import { ITranslationValues } from "./interface/itranslation-values";
 import { resolvePathInObject } from "../lang/resolve-path-in-object";
 
 const ES_MODULE = '__esModule';
+const DEFAULT_LANGUAGE = 'en_US';
 
 // for st.enable(i18n, ...)
 export const i18n = null;
@@ -12,9 +13,11 @@ export const i18n = null;
 if (!st.i18n) {
   st.i18n = {
 
+    // translation cache: $locale -> { ... }
     translations: {},
 
-    currentLanguage: "en_US",
+    currentLanguage: DEFAULT_LANGUAGE,
+    fallbackLanguage: DEFAULT_LANGUAGE,
 
     registeredTComponents: [],
 
@@ -28,7 +31,13 @@ if (!st.i18n) {
      */
     t: (key: string|Array<string>, values?: ITranslationValues): string => {
 
-      const translation = resolvePathInObject(key, st.i18n.translations[st.i18n.currentLanguage], '__');
+      let translation = resolvePathInObject(key, st.i18n.translations[st.i18n.currentLanguage], '__');
+
+      // try fallback language
+      if (!translation) {
+        translation = resolvePathInObject(key, st.i18n.translations[st.i18n.fallbackLanguage], '__');
+      }
+
       //console.log('translation' ,key, st.i18n.translations[st.i18n.currentLanguage]);
       if (!translation) {
 
@@ -75,9 +84,13 @@ if (!st.i18n) {
     setLanguage: (language: string): Ii18n => {
       st.i18n.initLanguage(language);
       st.i18n.currentLanguage = language;
-      for (const tComponent of st.i18n.registeredTComponents) {
-        tComponent.t();
-      }
+      st.i18n.translateRegisteredComponents();
+      return st.i18n;
+    },
+
+    setFallbackLanguage: (language: string): Ii18n => {
+      st.i18n.fallbackLanguage = language;
+      st.i18n.translateRegisteredComponents();
       return st.i18n;
     },
 
@@ -89,12 +102,16 @@ if (!st.i18n) {
       // cleanup cache; allows for GC
       st.i18n.registeredTComponents.splice(st.i18n.registeredTComponents.indexOf(tComponent), 1);
     },
+
+    translateRegisteredComponents: () => {
+      for (const tComponent of st.i18n.registeredTComponents) {
+        tComponent.t();
+      }
+    }
   };
 
   // functional API
   st.t = st.i18n.t;
-  st.setLanguage = st.i18n.setLanguage;
-  st.addTranslation = st.i18n.addTranslation;
 
 } else {
   if (process.env.NODE_ENV === 'development') {

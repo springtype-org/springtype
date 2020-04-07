@@ -8,8 +8,6 @@ import { IRouter, IRouteMatch } from "../../../web/router/interface";
 import { IFormatter } from "../../formatter/interface/iformatter";
 import { IFormat } from "../../formatter/interface/iformat";
 import { IAddFomratter } from "../../formatter/interface/iadd-formatter";
-import { IAddTranslation } from "../../i18n/interface/iadd-translation";
-import { ISetLanguage } from "../../i18n/interface/iset-language";
 import { Ii18n } from "../../i18n/interface/ii18n";
 import { It } from "../../i18n/interface/it";
 import { IPubSub } from "../../pubsub/interface";
@@ -57,8 +55,6 @@ export interface I$st {
   // internationalization (i18n): translate text using JSON based translation files and formatting functions
   i18n: Ii18n;
   t: It;
-  addTranslation: IAddTranslation;
-  setLanguage: ISetLanguage;
 
   // context: Global store to share state with change detection and change events/listeners
 

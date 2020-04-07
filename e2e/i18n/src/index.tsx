@@ -7,20 +7,21 @@ import * as en from "./i18n/en.json";
 import { formatter } from "../../../src/core/formatter";
 import { T } from "../../../src/web/i18n/t";
 
-@formatter("uppercase", value => value.toUpperCase()) // TODO: st.addFormatter()
-@translation("de_DE", de) // TODO: st.addTranslation()
-@translation("en_US", en) // default locale: en_US
+@formatter("uppercase", value => value.toUpperCase())
+@translation("de_DE", de)
+@translation("en_US", en) // default locale
 @component
 export class E2EI18nTest extends st.component {
 
   setGerman = () => {
     st.i18n.setLanguage("de_DE");
-    this.doRender();
+    st.i18n.setFallbackLanguage("en_US");
+    this.rerender();
   };
 
   setEnglish = () => {
     st.i18n.setLanguage("en_US");
-    this.doRender();
+    this.rerender();
   };
 
   render() {
@@ -28,7 +29,9 @@ export class E2EI18nTest extends st.component {
       <div>
         <span id="e2e-tr">Key split lookup: {st.t("deep__msg", { someValue: "e2e" })}</span><br />
         <span id="e2e-tr">Key array lookup: {st.t(["deep", "msg"], { someValue: "e2e" })}</span><br />
-        <span id="e2e-tr">Key array lookup 2: {st.t(["deep__msg"], { someValue: "e2e" })}</span><br />
+        <span id="e2e-tr">Key array lookup 2: {st.t(["deep__msg"])}</span><br />
+        <span id="e2e-tr">Fallback: {st.t(["Fallback"], { someValue: "e2e" })}</span><br />
+        <span id="e2e-tr">Error test: {st.t(["Fallback2"], { someValue: "e2e" })}</span><br />
         <span id="e2e-tr">Using component: <T tag="p" values={{ someValue: "e2e" }}>deep__msg</T></span><br />
         <button id="german" onClick={this.setGerman}>
           {st.t("German")}

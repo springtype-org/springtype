@@ -63,6 +63,12 @@ export interface ILifecycle {
   // implement this and return TSX to be rendered
   render?(): IVirtualNode | Array<IVirtualNode> | string;
 
+  // renders a partial VDOM node into a specific DOM element; therefore removes the DOM elements child nodes
+  renderPartial?(virtualNode: IVirtualNode | undefined | string | Array<IVirtualNode | undefined | string>, domNode?: Element): Promise<void>;
+
+  // re-renders the component by calling render() again and rendering it as a partial to this.el
+  rerender?(): Promise<void>;
+
   // after the component has been unmounted from the DOM
   onDisconnect?(): void;
 

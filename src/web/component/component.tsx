@@ -84,6 +84,10 @@ export class Component<A = {}> implements ILifecycle {
         st.render(virtualNode as any, domNode);
     }
 
+    async rerender() {
+        return this.renderPartial(this.render(), this.el);
+    }
+
     // --- standard HTML attributes (pass-thru)
 
     get class(): string | Array<string> {
