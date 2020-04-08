@@ -162,7 +162,8 @@ if (!st.dom) {
                             localEventListener(evt);
                             outsideEventListener(evt);
                         }
-                    } else {
+                        //make sure that no ECMAScript getter is called
+                    } else if(typeof component[propName] !== TYPE_FUNCTION) {
                         virtualNode.attributes[propName] = component[propName]
                     }
                 }
