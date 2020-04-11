@@ -162,8 +162,9 @@ if (!st.dom) {
                             localEventListener(evt);
                             outsideEventListener(evt);
                         }
-                        //make sure that no ECMAScript getter is called
-                    } else if(typeof component[propName] !== TYPE_FUNCTION) {
+
+                    } else {
+
                         virtualNode.attributes[propName] = component[propName]
                     }
                 }
@@ -204,7 +205,7 @@ if (!st.dom) {
                 if (typeof value !== TYPE_UNDEFINED) {
                     virtualNode.attributes[name] =
                         component.INTERNAL[name] =
-                            component[name] = value;
+                        component[name] = value;
                 }
             }
 
@@ -472,6 +473,26 @@ if (!st.dom) {
             while (domElement.firstChild) {
                 domElement.removeChild(domElement.firstChild);
             }
+        },
+
+        /**
+         * Removes a CSS class from a DOM elements classList.
+         */
+        addClass: (className: string, domElement: IElement) => {
+            domElement.classList.add(className);
+        },
+
+        /**
+         * Adds a CSS class from a DOM elements classList.
+         */
+        removeClass: (className: string, domElement: IElement) => {
+            domElement.classList.remove(className);
         }
     };
+
+    // DOM helper shortcut functions
+    st.hide = st.dom.hide;
+    st.show = st.dom.show;
+    st.addClass = st.dom.addClass;
+    st.removeClass = st.dom.removeClass;
 }

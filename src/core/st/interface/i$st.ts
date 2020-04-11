@@ -1,5 +1,5 @@
 import { IComponentRegistry } from "../../../web/component/interface";
-import { IDOM, IRenderer, IVirtualChildren, IVirtualNode, IVirtualNodeType } from "../../../web/vdom/interface";
+import { IDOM, IRenderer, IVirtualChildren, IVirtualNode, IVirtualNodeType, IElement } from "../../../web/vdom/interface";
 import { IDI } from "../../di/interface";
 import { IlogFunction } from "../../log/interface";
 import { IComponent } from "../../../web/component/interface";
@@ -83,6 +83,14 @@ export interface I$st {
 
   // DOM mutation abstraction
   dom: IDOM;
+
+  // shortcut DOM helper functions
+
+  hide(domElement: Element): void;
+  show(domElement: Element): void;
+
+  addClass(className: string, domElement: IElement): void;
+  removeClass(className: string, domElement: IElement): void;
 
   // initial and patch (differential) rendering
   renderer: IRenderer;

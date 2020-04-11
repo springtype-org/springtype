@@ -217,7 +217,7 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
 
         // false-positive match when explicit matching is asked for
         if (this.exact && !match.isExact) {
-            //also leave old path
+            // also leave old path
             this.leave(path);
             return;
         }
@@ -261,9 +261,12 @@ export class Route extends st.component<IRouteAttrs> implements ILifecycle {
             if (!this.el.contains(component)) {
                 this.el.appendChild(component);
             }
+
             const stComponent = component.$stComponent;
 
-            if (!stComponent.INTERNAL.isConnected) {
+            // stComponent is only given when we're dealing with a SpringType component here
+            // else it's undefined and connectedCallback() should never be called
+            if (stComponent && !stComponent.INTERNAL.isConnected) {
                 stComponent.connectedCallback();
             }
 

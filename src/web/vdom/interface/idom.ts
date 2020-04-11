@@ -57,8 +57,12 @@ export interface IDOM {
 
   setAttributes(attributes: any, parentDomElement: Element, forceNative?: boolean): void;
 
-  hide(domElement: Element): void;
-  show(domElement: Element): void;
   removeElement(domElement: Element): void;
   removeChildren(domElement: Element): void;
+
+  hide(domElement: Element): void;
+  show(domElement: Element): void;
+
+  addClass(className: string, domElement: IElement): void;
+  removeClass(className: string, domElement: IElement): void;
 }

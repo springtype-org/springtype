@@ -81,7 +81,7 @@ export class Component<A = {}> implements ILifecycle {
             domNode = this.el;
         }
         st.dom.removeChildren(domNode!);
-        st.render(virtualNode as any, domNode);
+        return st.render(virtualNode as any, domNode);
     }
 
     async rerender() {

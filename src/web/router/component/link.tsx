@@ -1,10 +1,9 @@
-import {st} from "../../../core";
-import {attr, component} from "../../component";
-import {ILifecycle} from "../../component/interface";
-import {AttrType} from "../../component/trait/attr";
-import {equalObjects, mergeArrays} from "../../../core/lang";
-import {tsx} from "../../vdom";
-
+import { st } from "../../../core";
+import { attr, component } from "../../component";
+import { ILifecycle } from "../../component/interface";
+import { AttrType } from "../../component/trait/attr";
+import { equalObjects, mergeArrays } from "../../../core/lang";
+import { tsx } from "../../vdom";
 
 export interface ILinkAttrs {
     path: string;
@@ -14,9 +13,9 @@ export interface ILinkAttrs {
     activeClass?: string;
 }
 
-
-@component({tag: 'a'})
+@component({ tag: 'a' })
 export class Link extends st.component<ILinkAttrs> implements ILifecycle {
+
     static ACTIVE_LINK_SLOT = 'ACTIVE_LINK_SLOT';
     static INACTIVE_LINK_SLOT = 'INACTIVE_LINK_SLOT';
 
@@ -38,6 +37,7 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     match: boolean = false;
 
     onClick = () => {
+
         st.route = {
             path: this.path,
             params: this.params
@@ -45,16 +45,23 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     };
 
     onConnect = () => {
+
         this.match = this.isMatch();
+
         // register callback for future route changes
         st.router.addOnAfterMatchHandler(this.onAfterMatchHandler);
     };
 
-    onAfterMatchHandler = () => {
-        st.debug('onAfterMatchHandler triggered', this);
+    onAfterMatchHandler = async () => {
 
-        // TODO: FIXME: Re-render partially
+        const matchBefore = this.match;
+
         this.match = this.isMatch();
+
+        // if state of match differs, rerender
+        if (matchBefore != this.match) {
+            await this.rerender();
+        }
     };
 
     updateActiveClass = () => {
@@ -72,7 +79,6 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
         if (this.match) {
             filteredClasses = mergeArrays(filteredClasses, activeClassNames)
         }
-
         this.class = filteredClasses;
     };
 
@@ -89,9 +95,9 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     };
 
     render = () => {
+
         this.updateActiveClass();
 
-        // TODO: FIXME: this switch won't work with static rendering
         return <fragment>
             {this.renderChildren()}
             {this.match
@@ -104,5 +110,4 @@ export class Link extends st.component<ILinkAttrs> implements ILifecycle {
     onDisconnect = () => {
         st.router.removeOnAfterMatchHandler(this.onAfterMatchHandler);
     }
-
 }

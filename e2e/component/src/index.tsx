@@ -24,7 +24,7 @@ export class Foo extends st.component<IFooAttrs> {
   lolShared: any = st.context("foo");
 
   onButtonClick = () => {
-    this.doRender();
+    this.rerender();
   };
 
   render() {
