@@ -85,7 +85,9 @@ export class Component<A = {}> implements ILifecycle {
     }
 
     async rerender() {
-        return this.renderPartial(this.render(), this.el);
+        const vdom = this.renderPartial(this.render(), this.el);
+        this.onAfterRender();
+        return vdom;
     }
 
     // --- standard HTML attributes (pass-thru)
