@@ -29,7 +29,7 @@ if (!st.i18n) {
      * @param key Translation key or a chain or keys
      * @param [values] An optional object of data values to replace wildcards with
      */
-    t: (key: string|Array<string>, values?: ITranslationValues): string => {
+    t: (key: string | Array<string>, values?: ITranslationValues): string => {
 
       let translation = resolvePathInObject(key, st.i18n.translations[st.i18n.currentLanguage], '__');
 
@@ -43,14 +43,20 @@ if (!st.i18n) {
 
         if (process.env.NODE_ENV === 'development') {
           st.warn(`No translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage}!`);
+          return `❓ t(${st.i18n.currentLanguage}/${key}) ❓`;
+        } else {
+          return key as string;
         }
-        return `? t(${st.i18n.currentLanguage}/${key}) ?`;
+
       } else if (typeof translation != "string") {
 
         if (process.env.NODE_ENV === 'development') {
           st.warn(`The translation found for key "${key}" in translations for language: ${st.i18n.currentLanguage} is an object not a string!`);
+          return `t(${st.i18n.currentLanguage}/${key}) object ❓`;
+        } else {
+          return key as string;
         }
-        return `t(${st.i18n.currentLanguage}/${key}) object ❓`;
+
       } else {
         return st.format(translation, values || {});
       }
@@ -58,8 +64,8 @@ if (!st.i18n) {
 
     addTranslation: (language: string, translation: ITranslation): Ii18n => {
       //console.log('esmodule ',language,translation ,translation['__esModule']?'true':'false')
-      const unwrap =(translation: ITranslation): ITranslation => {
-        if(translation[ES_MODULE]){
+      const unwrap = (translation: ITranslation): ITranslation => {
+        if (translation[ES_MODULE]) {
           translation = (translation as any).default
         }
         return translation;
