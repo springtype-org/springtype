@@ -30,6 +30,7 @@ export interface IRouter {
 
   materialize(route: string, params?: any): string;
   getUrlPath(pathnameOrHash: string): string;
+  getQueryParams(): any;
   removeTrailingSep(url: string): string;
   createMatcher(
     matchPath: string | Array<string>,

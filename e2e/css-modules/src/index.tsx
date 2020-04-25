@@ -1,6 +1,5 @@
 import { st } from "../../../src/core";
-import { ref } from "../../../src/core/ref";
-import { component, state } from "../../../src/web/component";
+import { component } from "../../../src/web/component";
 import { ILifecycle } from "../../../src/web/component/interface/ilifecycle";
 import { tsx } from "../../../src/web/vdom";
 import * as mdcButton from "./styles.tss.scss";
@@ -8,39 +7,20 @@ import * as mdcButton from "./styles.tss.scss";
 @component
 export class TemplateName extends st.component implements ILifecycle {
 
-  @state
-  label: string = "Click me!";
+  tag = 'css-modules-support';
 
-  @ref
-  nameDiv!: HTMLDivElement;
-
-  changeName = (evt: MouseEvent) => {
-    this.label = "Click me again!";
-
-    st.style('bgtheme', `body {
-      background-color: #333;
-    }`);
-
-    setTimeout(() => {
-
-      st.style('bgtheme', `body {
-        background-color: #eee;
-      }`);
-
-    }, 1000);
-  };
+  label: string = "CSS modules are awesome!";
 
   render() {
     return (
-      <div ref={{ nameDiv: this }}>
+      <fragment>
+        {/* try auto-complete on the CSS module import */}
         <button
           class={[mdcButton.mdcButton, mdcButton.mdcButtonIcon, mdcButton.mdcButtonRipple]}
-          style={{ background: "#eee", border: "1px dotted green" }}
-          onClick={this.changeName}
         >
           {this.label}
         </button>
-      </div>
+      </fragment>
     );
   }
 }

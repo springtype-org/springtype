@@ -1,6 +1,6 @@
 import { injectable } from "../../../../src/core/di";
 import { st } from "../../../../src/core";
-import { pubsub } from "../../../../src/core/pubsub/pubsub";
+import { bus } from "../../../../src/core/event-bus/event-bus";
 
 export const EVENT_WINDOW_RESIZE = 'EVENT_WINDOW_RESIZE';
 
@@ -16,4 +16,4 @@ export class ResizeService {
   }
 }
 
-st.enable(pubsub);
+st.enable(bus);

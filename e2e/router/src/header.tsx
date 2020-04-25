@@ -29,7 +29,7 @@ export class PageHeader extends st.component {
                     </ul>
                 </li>
                 <li>
-                    <Link path={ROUTE_ABOUT} params={{name: 'foo'}}>About</Link>
+                    <Link path={ROUTE_ABOUT} class="black" params={{name: 'foo'}}>About</Link>
                 </li>
                 <li id="problem">
                     <Link key="000" class="foo bar" path={ROUTE_ABOUT} params={{name: 'foo key 000'}}>About2</Link><br/>

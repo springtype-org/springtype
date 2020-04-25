@@ -1627,10 +1627,22 @@ babel-plugin-named-asset-import@^0.3.4:
   resolved "https://registry.yarnpkg.com/babel-plugin-named-asset-import/-/babel-plugin-named-asset-import-0.3.4.tgz#4a8fc30e9a3e2b1f5ed36883386ab2d84e1089bd"
   integrity sha512-S6d+tEzc5Af1tKIMbsf2QirCcPdQ+mKUCY2H1nJj1DyA1ShwpsoxEOAwbWsG5gcXNV/olpvQd9vrUWRx4bnhpw==
 
+babel-plugin-parameter-decorator@^1.0.14:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/babel-plugin-parameter-decorator/-/babel-plugin-parameter-decorator-1.0.16.tgz#1c889c3a1f3bbf03801fcbc2e95b8bae7468df3f"
+  integrity sha512-yUT2WPTUg1JaPmRGRSF557m1HJ9vdFQInRWOkiOyO5a9HhqlXffJu+fQ2xd5+qU/35ICMrrk9eWKsHCairKA9w==
+
 babel-plugin-transform-react-remove-prop-types@0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-remove-prop-types/-/babel-plugin-transform-react-remove-prop-types-0.4.24.tgz#f2edaf9b4c6a5fbe5c1d678bfb531078c1555f3a"
   integrity sha512-eqj0hVcJUR57/Ug2zE1Yswsw4LhuqqHhD+8v120T1cl3kjg76QwtyBrdIk4WVwK+lAhBJVYCd/v+4nc4y+8JsA==
+
+babel-plugin-transform-typescript-metadata@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-typescript-metadata/-/babel-plugin-transform-typescript-metadata-0.2.2.tgz#fc44611187409ed9d5cb372ca2f85939a359cada"
+  integrity sha512-wWRw1p3IDNZN8l3UOLgeScq9Nhh4lvxT7ZOvUzYi5sMw8lUWW+KdRlnBeQKehHAsgDs5TR6PvMJmsQ6e6NmKCg==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
 
 babel-preset-react-app@^9.0.2:
   version "9.0.2"
@@ -7562,33 +7574,17 @@ ssri@^7.0.0:
     figgy-pudding "^3.5.1"
     minipass "^3.1.1"
 
-st-cp@^2.0.0-alpha.4:
-  version "2.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/st-cp/-/st-cp-2.0.0-alpha.4.tgz#5681c536168fbaf5257aff07020004eabd79b2d2"
-  integrity sha512-MwQWv5+6iqjSPCaYUl326B2pKfRsXx2SOddL6/odWNvIIYY4pT5wul+LIJaFwNdwRRAUHmfbpTpfqh0Qyq6k7A==
+st-mkdir@^1.0.0-alpha.5:
+  version "1.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/st-mkdir/-/st-mkdir-1.0.0-alpha.6.tgz#aeb39d0929846dacbac2e9223ae84125ee19c39c"
+  integrity sha512-InollATjOnIE5GP7WSV0bOgzhlGU2XWHIrA6DzoaZTI72q3ORI9NT7PxsyfvpvWycuu6ggybqmJ8NltIivM1Kg==
   dependencies:
     chalk "^2.4.2"
 
-st-mkdir@^1.0.0-alpha.4:
-  version "1.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/st-mkdir/-/st-mkdir-1.0.0-alpha.4.tgz#11b8857c307cbd6c20761adaf3d70a688b8ed4f9"
-  integrity sha512-P2044vhpmTcbycONBbzazjvlrVUtWPIRQaLJRofmR9NSe9INgArWoZSD4/WBiw16lVxP0GOAryZA1zCTeOsPgg==
-  dependencies:
-    chalk "^2.4.2"
-    st-cp "^2.0.0-alpha.4"
-    st-rm-rf "^2.0.0-alpha.8"
-
-st-rm-rf@^2.0.0-alpha.8:
-  version "2.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/st-rm-rf/-/st-rm-rf-2.0.0-alpha.8.tgz#4aa761378d4d7bae2dd6fe19516401cddd4c6c50"
-  integrity sha512-gIdb2lZdsHjtZ9nBMrAYnfiuyO1QEqwdH3QBc8jR2QCq92AOxFdhESt3u5TDWIRuwxA/T+oFmS2x3HPUQaeuqA==
-  dependencies:
-    chalk "^2.4.2"
-
-st-start@2.0.0-beta.25:
-  version "2.0.0-beta.25"
-  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-beta.25.tgz#0eed3b5da84bffa0c1a0668749607ac87f5d2655"
-  integrity sha512-PnuHu7FQX81AapPuOIraLI75XC0Zmrd94gG3/I6IsPaH9wENyfqPh5xwQI/pgE599Uad1uX/5HxeAzDIwn2HZw==
+st-start@2.0.0-beta.34:
+  version "2.0.0-beta.34"
+  resolved "https://registry.yarnpkg.com/st-start/-/st-start-2.0.0-beta.34.tgz#e445526cd2264d90e2fda1fa9a060ae36c0a26fd"
+  integrity sha512-noc/BvIx/wCarK/q5sbKk3N9jDXuA9AtJ2DXVGP/z5YQJgBnEFVQm3RE+zmZ2BRamH7Nu8ijqZAj5vWb6yEuMg==
   dependencies:
     "@babel/core" "^7.7.2"
     "@babel/helper-create-class-features-plugin" "^7.7.0"
@@ -7607,6 +7603,8 @@ st-start@2.0.0-beta.25:
     babel-plugin-dynamic-import-node "^2.3.0"
     babel-plugin-macros "^2.6.1"
     babel-plugin-named-asset-import "^0.3.4"
+    babel-plugin-parameter-decorator "^1.0.14"
+    babel-plugin-transform-typescript-metadata "^0.2.2"
     babel-preset-react-app "^9.0.2"
     case-sensitive-paths-webpack-plugin "2.2.0"
     chalk "^2.4.2"
@@ -7625,7 +7623,7 @@ st-start@2.0.0-beta.25:
     optimize-css-assets-webpack-plugin "5.0.3"
     react-dev-utils "^9.1.0"
     resolve "1.12.0"
-    st-mkdir "^1.0.0-alpha.4"
+    st-mkdir "^1.0.0-alpha.5"
     style-loader "1.0.0"
     terser-webpack-plugin "2.2.1"
     webpack "4.41.2"

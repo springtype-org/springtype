@@ -35,7 +35,7 @@ export class DIE2E {
 	constructor() {
 
 		// @ts-ignore: way to keep the TS compiler friendly
-		if (this.fooSingleton === st.di.get(FooSingleton)) {
+		if (this.fooSingleton === st.di.get(FooSingleton) && this.fooSingleton === st.inject(FooSingleton)) {
 			st.log("singleton inject OK");
 		}
 
@@ -50,6 +50,9 @@ export class DIE2E {
 		if (this.fooFactoryCtorArg && this.fooFactoryCtorArg.name == "firstCtorArgumentProvided") {
 			st.log("factory function constructor argument passing OK");
 		}
+
+
+
 		st.log(this.fooSingleton, this.fooFactory, this.fooFactoryCtorArg);
 	}
 }

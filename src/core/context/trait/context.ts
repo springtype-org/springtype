@@ -1,7 +1,9 @@
 import { st } from "../../st";
 import { GlobalCache } from "../../st/interface/i$st";
-import { CONTEXT_ASSIGNMENTS } from "../decorator/context";
+import { CONTEXT_ASSIGNMENTS } from "../function/define-context";
+
 export class ContextTrait {
+
   static enableFor(instance: any) {
 
     const prototype = Object.getPrototypeOf(instance);
@@ -10,6 +12,7 @@ export class ContextTrait {
     if (!prototype[CONTEXT_ASSIGNMENTS]) return;
 
     for (let contextPropAssignment of prototype[CONTEXT_ASSIGNMENTS]) {
+
       // instead of reading and writing from/to the class instance memory,
       // use the context cache instead
       Object.defineProperty(prototype, contextPropAssignment.propName, {
@@ -21,6 +24,14 @@ export class ContextTrait {
         },
         configurable: true,
       });
+
+      // hook onContextChange lifecycle method
+      st.context(
+        contextPropAssignment.contextName,
+        prototype[CONTEXT_ASSIGNMENTS][contextPropAssignment],
+        instance.onContextChange.bind(instance),
+        instance
+      );
     }
   }
 }

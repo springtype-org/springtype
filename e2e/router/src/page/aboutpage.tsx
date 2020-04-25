@@ -3,6 +3,7 @@ import { ref } from "../../../../src/core/ref";
 import { component } from "../../../../src/web/component";
 import { tsx } from "../../../../src/web/vdom";
 import { ILifecycle } from "../../../../src/web/component/interface";
+import { debounce } from "../../../../src/core/lang/debounce";
 
 @component
 export default class AboutPage extends st.component implements ILifecycle {
@@ -11,8 +12,12 @@ export default class AboutPage extends st.component implements ILifecycle {
   paramContainer: HTMLElement;
 
   render() {
-    return <div>About, name: <p ref={{paramContainer: this}}></p></div>;
+    return <div>About, name: <p ref={{paramContainer: this}}></p> <button onClick={this.onButtonClick}>Click me</button></div>;
   }
+
+  onButtonClick = debounce(() => {
+    console.log('click debounce 1sec')
+  }, 1000)
 
   onRouteEnter() {
     console.log('ENTERED ABOUT PAGE')

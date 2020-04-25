@@ -1,18 +1,23 @@
-import { IContextPropAssignments } from './../interface/icontext-prop-assignments';
+import { TYPE_OBJECT } from '../../lang';
+import { defineContext } from "../function/define-context";
+import { generateContextName } from '../function/generate-context-name';
 
-export const CONTEXT_ASSIGNMENTS: any = 'CONTEXT_ASSIGNMENTS';
+export const context = (contextNameOrPrototype?: string | any, propName?: string): any => {
 
-export const context = (contextName: string): any => {
+  if (typeof contextNameOrPrototype !== TYPE_OBJECT) {
 
-  return (prototype: any, propName: string) => {
+    // @context('some-unique-name') case
+    return (prototype: any, propName: string) => {
 
-    if (!prototype[CONTEXT_ASSIGNMENTS]) {
-      prototype[CONTEXT_ASSIGNMENTS] = [];
-    }
+      //console.log('!!!', prototype, propName!, contextNameOrPrototype)
+      // in case contextName is not set, generate a pseudo-unique name
+      defineContext(prototype, propName, contextNameOrPrototype);
+    };
+  } else {
 
-    prototype[CONTEXT_ASSIGNMENTS].push({
-      propName,
-      contextName
-    } as IContextPropAssignments);
-  };
+    //console.log('???', contextNameOrPrototype, propName!, generateContextName(contextNameOrPrototype.constructor.name, propName!))
+
+    // @context case
+    defineContext(contextNameOrPrototype, propName!, generateContextName(contextNameOrPrototype.constructor.name, propName!));
+  }
 };

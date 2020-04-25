@@ -2,17 +2,20 @@ import { st } from "../../core";
 import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { newUniqueComponentName, tsx } from "../vdom";
+import { tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { IVirtualChild } from "../vdom/interface/ivirtual-node";
-import { IComponentOptions, ILifecycle } from "./interface";
 import { IComponentInternals } from "./interface/icomponent";
 import { AttrTrait, AttrType } from "./trait/attr";
 import { mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED } from "../../core/lang";
 import { IRefAttribute } from "./interface/iref-attribute";
 import { CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME, ATTRS_ATTR_NAME } from "../vdom/dom";
 import { StoreTrait } from "./trait/store";
-import { MessageTrait } from "./trait/message";
+import { EventBusTrait } from "./trait/event-bus";
+import { IContextChange } from "../../core/context/interface/icontext-change-handler";
+import { ILifecycle } from "./interface";
+import { callOnContextChange } from "../../core/context/function/call-on-context-change";
+import { callOnMessage } from "../../core/event-bus/function/call-on-message";
 
 
 export type DefaultComponentAttributes = {
@@ -62,14 +65,14 @@ export class Component<A = {}> implements ILifecycle {
         // @attr impl.
         AttrTrait.enableFor(this);
 
-        // @context impl.
+        // @context, @onContextChange
         ContextTrait.enableFor(this);
 
         // @store
         StoreTrait.enableFor(this);
 
-        // .onMessage / .sendMessage()
-        MessageTrait.enableFor(this);
+        // @onMessage
+        EventBusTrait.enableFor(this);
 
         // register with global instance registry
         st[GlobalCache.COMPONENT_INSTANCES].push(this);
@@ -85,7 +88,7 @@ export class Component<A = {}> implements ILifecycle {
     }
 
     async rerender() {
-        const vdom = this.renderPartial(this.render(), this.el);
+        const vdom = await this.renderPartial(this.render(), this.el);
         this.onAfterRender();
         return vdom;
     }
@@ -143,11 +146,12 @@ export class Component<A = {}> implements ILifecycle {
     onBeforeConnect() {
     }
 
-    onMessage(topic: string, value: any) {
+    onMessage(topicName: string, value: any) {
+        callOnMessage(topicName, value, this);
     }
 
-    sendMessage(topic: string, value: any): void {
-        st.publish(topic, value);
+    onContextChange(change: IContextChange) {
+        callOnContextChange(change, this);
     }
 
     // internal web component standard method
@@ -321,7 +325,7 @@ export class Component<A = {}> implements ILifecycle {
 
         this.onDisconnect();
 
-        MessageTrait.disableFor(this);
+        EventBusTrait.disableFor(this);
 
         // purge from global instance registry
         // (e.g. doesn't retrigger render on TSS theme change)
@@ -435,18 +439,3 @@ const awaitDisconnect = (component: Component<any>) => {
 if (!st.getComponent) {
     st.getComponent = getComponent;
 }
-
-export const defineComponent = (targetClassOrFunction: any, options: IComponentOptions = {}) => {
-
-    const componentIdent = targetClassOrFunction.name || newUniqueComponentName();
-
-    // register with element registry
-    st[GlobalCache.COMPONENT_REGISTRY][componentIdent] = targetClassOrFunction;
-    st[GlobalCache.COMPONENT_WEAKMAP].set(targetClassOrFunction, componentIdent);
-
-    // assign options to be used in CustomElement derived class constructor
-    targetClassOrFunction.COMPONENT_OPTIONS = options;
-
-    // return enhanced class / function
-    return targetClassOrFunction;
-};

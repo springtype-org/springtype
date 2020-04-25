@@ -1,6 +1,7 @@
 import { IElement } from "../../vdom/interface";
 import { IVirtualChild, IVirtualNode } from "../../vdom/interface/ivirtual-node";
 import { AttrType } from '../trait/attr';
+import { IContextChange } from "../../../core/context/interface/icontext-change-handler";
 
 export interface ILifecycle {
 
@@ -81,17 +82,18 @@ export interface ILifecycle {
   // called when DOM router is used and the routes parameters change (like /user/:id from #/user/1 to #/user/2)
   onRouteParamsChanged?(params: any): void;
 
-  // if a store is mounted, this method is called on store change
+  // if an @store is mounted, this method is called on store change
   onStoreChange?(propName: string, value: any): void;
+
+  // if a @context changes, this method is called and delegates
+  // calls to @onStateChange decorated methods
+  onContextChange?(change: IContextChange): void;
 
   // before attribute changes get accepted
   shouldAttributeChange(name: string, value: any, prevValue: any): boolean;
 
-  // receive and filter messages
-  onMessage?(topic: string, value: any): void;
-
-  // broadcasts a message for other components to listen to
-  sendMessage(topic: string, value: any): void;
+  // receive and filter messages; delegates to @onMessage methods
+  onMessage?(topicName: string, value: any): void;
 
   // set an attribute and follow the @attr behaviour (e.g. DOM_INTRANSPARENT)
   setAttribute(name: string, value: any, type?: AttrType): void;

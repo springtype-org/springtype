@@ -1,7 +1,7 @@
-import {st} from "../../core";
-import {IRouteMatch} from "./interface";
-import {TYPE_FUNCTION, TYPE_STRING, TYPE_UNDEFINED} from "../../core/lang";
-import {GlobalCache} from "../../core/st/interface/i$st";
+import { st } from "../../core";
+import { IRouteMatch } from "./interface";
+import { TYPE_FUNCTION, TYPE_STRING, TYPE_UNDEFINED } from "../../core/lang";
+import { GlobalCache } from "../../core/st/interface/i$st";
 
 // matches when no route matches (not even partially!), basically like HTTP ERROR 404 NOT FOUND behaviour
 export const PATH_WILDCARD = "*";
@@ -16,6 +16,7 @@ if (!st.router) {
     const PATH_SEP = "/";
     const PATH_PARAM_PREFIX = ":";
     const PATH_TOKEN_MISSING = "TOKEN_MISSING:ACTUAL_PATH_LONGER";
+
     st.router = {
         match: {},
 
@@ -159,9 +160,35 @@ if (!st.router) {
                 //partial only if path is smaller than actual length
                 match.isPartial = tokenizedMatchPath.length < st.router.tokenizedActualPath.length
             }
+
+            const queryParams = st.router.getQueryParams();
+
+            for (const key in queryParams) {
+                match.params[key] = queryParams[key];
+            }
+
             if (match.isPartial || match.isExact) {
                 return match;
             }
+        },
+
+        getQueryParams: () => {
+
+            const locationSearchParams: any = {};
+            const queryString = location.href.split('?')[1];
+
+            if (!queryString) {
+                return {};
+            }
+
+            decodeURIComponent(queryString)
+                .split(/&/g)
+                .forEach((assignment: string) => {
+                    const assignmentSplit = assignment.split('=');
+                    locationSearchParams[assignmentSplit[0]] = assignmentSplit[1];
+                });
+
+            return locationSearchParams;
         },
 
         // for: /#/home/foo, #home/foo, /home/foo

@@ -1,73 +1,110 @@
 import { st } from "../../../src/core";
-import { context } from "../../../src/core/context";
-import { attr, component } from "../../../src/web/component";
-import { Component } from "../../../src/web/component";
+import { attr, component, Component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
-import { tpl } from "./index.tpl";
+import { ref } from "../../../src/core/ref/decorator";
 
-const attr_ = (scope: Component, name: string, defaultValue?: string, x?: any): string => {
-  console.log("register for attribute cd", name);
+export interface E2EClockStaticRefs {
+    timeDisplayRef: HTMLElement;
+}
 
-  return defaultValue || "";
-};
+export interface E2EClockStaticAttrs {
+    format: string;
+}
+
+const E2EClockStatic = component((scope: Component & E2EClockStaticRefs & E2EClockStaticAttrs) => {
+
+    // defined at construction time
+    const updateUnixTime = () => scope.renderPartial('format: ' + scope.getAttribute('format') + ':' + Date.now().toString(), scope.timeDisplayRef);
+
+    // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
+    return () => (
+        <fragment>
+            THRU {scope.disabled} {scope.id} {scope.tabIndex}
+            <button onClick={updateUnixTime}>Show time</button>
+            <br />
+            Time display: <br />
+            <div ref={{ timeDisplayRef: scope }}></div>
+        </fragment>
+    );
+}, 'e2e-clock');
 
 export interface IFooAttrs {
-  some?: string;
+}
+
+export interface BarProps {
+    testAttr: boolean;
+    secondTestAttr: boolean;
 }
 
 @component
-export class Foo extends st.component<IFooAttrs> {
-  @attr
-  some: string = attr_(this, "some", "test");
+class Bar extends st.component<BarProps> {
 
-  @context("foo")
-  lolShared: any = st.context("foo");
+    @attr
+    testAttr: boolean;
 
-  onButtonClick = () => {
-    this.rerender();
-  };
+    @attr
+    secondTestAttr: boolean;
 
-  render() {
-    console.log("render x");
-    return tpl(this);
-  }
+    render() {
+        console.log('this.testAttr', this.testAttr, this.secondTestAttr);
+        return "Bar! testAttr? " + this.testAttr + ' and ' + this.secondTestAttr
+    }
+}
 
-  constructor() {
-    super();
+@component
+class Fuu<ATTR> extends st.component<ATTR> {
+}
 
-    this.some = "haha";
+@component({ tag: 'Faa' })
+export class Foo extends Fuu<IFooAttrs> {
 
-    console.log("foo st", st);
+    @ref
+    displayTextRef: HTMLElement;
 
-    st.i18n.setLanguage("en");
+    @ref
+    displayStrongElRef: HTMLElement;
 
-    setTimeout(() => {
-      st.info("router", st.router, "di", st.di, "i18n", st.i18n);
-    }, 200);
-  }
+    @ref
+    displayArrayOfStringsRef: HTMLElement;
 
-  onStateChange(name: string, change: any) {
-    console.log(name, "1PROP change", change);
-  }
+    @ref
+    displayFragmentRef: HTMLElement;
 
-  onConnect(): boolean {
-    st.info("to be executed on connect");
-    //this.lifecycle.doRender();
+    onRenderPartialClick = async () => {
+        await this.renderPartial('Something else', this.displayTextRef);
+        await this.renderPartial(<strong>Something else</strong>, this.displayStrongElRef);
+        await this.renderPartial(['A', ' ', 'B'], this.displayArrayOfStringsRef);
+        await this.renderPartial(<fragment>A B</fragment>, this.displayFragmentRef);
+    }
 
-    setTimeout(() => {
-      this.some = "haha2";
-      //this.lifecycle.render();
-      st.info("re-render after attribute change");
-    }, 1000);
+    onHideFragmentsClick = () => {
+        st.dom.hide(this.displayFragmentRef);
+    }
 
-    setTimeout(() => {
-      console.log("after 5sec", this.lolShared);
-      this.lolShared.lala = 2841823;
+    onShowFragmentsClick = () => {
+        st.dom.show(this.displayFragmentRef);
+    }
 
-      console.log("FINAL1", this.lolShared);
-    }, 5000);
-    return true;
-  }
+    render() {
+        return <div style="color: green">
+            <E2EClockStatic tabIndex={1} id="test" format="YYYY-mm-dd" disabled />
+            <div ref={{ displayTextRef: this }}>!text!</div>
+            <div ref={{ displayStrongElRef: this }}>!strong text!</div>
+            <div ref={{ displayArrayOfStringsRef: this }}>!Array of strings!</div>
+            <div ref={{ displayFragmentRef: this }}>!fragment A B!</div>
+            <button onClick={this.onRenderPartialClick}>Render Partial</button>
+            <button onClick={this.onHideFragmentsClick}>Hide fragments</button>
+            <button onClick={this.onShowFragmentsClick}>Show fragments</button>
+
+            {/* attrs map attribute passing for components */}
+            <Bar attrs={{ testAttr: true, secondTestAttr: false }} />
+            <Bar testAttr={true} secondTestAttr={true} />
+
+            {/* attrs map attribute passing for standard DOM elements */}
+            <input attrs={{ hidden: undefined, value: 'test' }} />
+            <input disabled value='test' />
+        </div>;
+    }
 }
 
 st.render(<Foo />);

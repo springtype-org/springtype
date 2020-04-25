@@ -10,15 +10,16 @@ import { IFormat } from "../../formatter/interface/iformat";
 import { IAddFomratter } from "../../formatter/interface/iadd-formatter";
 import { Ii18n } from "../../i18n/interface/ii18n";
 import { It } from "../../i18n/interface/it";
-import { IPubSub } from "../../pubsub/interface";
-import { IPublish } from "../../pubsub/interface/ipublish";
-import { ISubscribe } from "../../pubsub/interface/isubscribe";
+import { IEventBus } from "../../event-bus/interface";
+import { ISendMessageFn } from "../../event-bus/interface/isend-message-fn";
+import { IOnMessageFn } from "../../event-bus/interface/ion-message-fn";
 import { Store } from "../../redux/interface/store";
 import { Action, AnyAction } from "../../redux/interface/actions";
 import { IOnContextChangeHandler } from "../../context/interface/icontext-change-handler";
 import { IOnDeepChangeHandler } from "../../cd/interface";
 import { ChangeType } from "../../cd/interface/change-type";
 import { IOnChangeHandler } from "../../cd/interface/ion-change-handler";
+import { IService } from "../../service/interface";
 
 /**
  * public $st and internal st API
@@ -69,6 +70,9 @@ export interface I$st {
   addContextChangeHandler: (contextName: string, onChange: IOnContextChangeHandler, instance?: any) => void;
   removeContextChangeHandler: (contextName: string, onChange?: IOnContextChangeHandler) => void;
 
+  // service base impl.
+  service: IService;
+
   // --- web specific
 
   // TSX transformator function
@@ -115,11 +119,11 @@ export interface I$st {
   getComponent: (className: string) => IComponent;
 
   // bus / publish / subscribe
-  pubsub: IPubSub;
-  publish: IPublish<any>;
-  subscribe: ISubscribe<any>;
+  bus: IEventBus;
+  sendMessage: ISendMessageFn<any>;
+  onMessage: IOnMessageFn<any>;
   // same interface as subscribe, reverse logic
-  unsubscribe: ISubscribe<any>;
+  onMessageUnsubscribe: IOnMessageFn<any>;
 
   // redux redux support using @redux
   getStore: <S = any, A extends Action<any> = AnyAction>() => Store<S, A>;

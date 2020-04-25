@@ -1,9 +1,11 @@
 import { st } from "../../../src/core";
-import { injectable, inject } from "../../../src/core/di";
+import { inject } from "../../../src/core/di";
 import { context } from "../../../src/core/context";
-import { component, contextState } from "../../../src/web/component";
-import { ILifecycle, IStateChange } from "../../../src/web/component/interface";
+import { component } from "../../../src/web/component";
+import { onContextChange } from "../../../src/core/context/decorator/on-context-change";
+import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
+import { service } from "../../../src/core/service/decorator/service";
 
 interface LolShared {
   lala: number;
@@ -14,14 +16,20 @@ interface LolShared {
 const contextName = "foo";
 const initialContextValue = { lala: 123 };
 
-@injectable
-export class ServiceDemo {
+@service
+export class ServiceDemo extends st.service {
 
-  @context('iterative')
-  iterativeContext = st.context('iterative', ['asd']);
+  @context
+  iterativeContext = ['asd'];
 
   addToIterativeContext() {
     this.iterativeContext.push('foo');
+  }
+
+  @onContextChange('iterativeContext')
+  handleInteractiveChange(newValue: any, prevValue: any) {
+
+    console.log('interactive change in ServiceDemo. new Value:', newValue, 'prevValue', prevValue)
   }
 }
 
@@ -31,24 +39,18 @@ export class E2EContext extends st.component implements ILifecycle {
   @inject(ServiceDemo)
   serviceDemo: ServiceDemo;
 
-  @contextState(contextName)
-  lolShared: LolShared = st.context<LolShared>(contextName, initialContextValue);
+  @context(contextName)
+  lolShared: LolShared = initialContextValue;
 
-  @contextState(contextName)
-  lolSharedMirror: LolShared = st.context<LolShared>(contextName, initialContextValue);
+  @context(contextName)
+  lolSharedMirror: LolShared = initialContextValue;
 
-  @context('iterative')
-  iterativeContext = st.context('iterative', ['asd']);
+  @context
+  iterativeContext = ['asd'];
 
   onAfterRender() {
 
     console.log('onAfterRender');
-
-    st.addContextChangeHandler('iterative', (change: IStateChange) => {
-
-      st.info('iterative context, change:');
-      st.info(change);
-    });
 
     this.lolShared = {
       lala: 200
@@ -72,6 +74,7 @@ export class E2EContext extends st.component implements ILifecycle {
 
     }, 1000);
   }
+
 
   render() {
 

@@ -1,8 +1,8 @@
 import { st } from "../../../core";
-import { defineComponent } from "../component";
 import { ComponentFunction } from "../interface/icomponent-function";
 import { IComponentOptions } from "../interface/icomponent-options";
 import { TYPE_FUNCTION } from "../../../core/lang/type-function";
+import { defineComponent } from "../function/define-component";
 
 export const component = (optionsOrElementFunction: IComponentOptions | ComponentFunction | any = undefined, functionalName?: string): any => {
   // functional use: component((scope) => { ... }, ...)

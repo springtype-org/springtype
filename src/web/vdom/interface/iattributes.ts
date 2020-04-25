@@ -2,13 +2,9 @@ import { IRefs } from "../../../core/ref/interface/iref";
 
 export const REF_ATTRIBUTE_NAME = "ref";
 export const UNWRAP_ATTRIBUTE_NAME = "unwrap";
-export const NOVDOM_ATTRIBUTE_NAME = "novdom";
 export const SLOT_ATTRIBUTE_NAME = "slot";
 
 export interface IAttributes {
-
-  // to tell the VDOM to ignore this element and all it's children and subtrees
-  novdom?: boolean;
 
   // to unwrap an element (promote children one DOM tree level up)
   unwrap?: boolean;
@@ -25,9 +21,6 @@ export interface IAttributes {
   // virtual component instance this node belongs/references to (passed down to any sub-node)
   // basically the nearest parent $stComponent in the parent tree
   $stComponentRef?: any;
-
-  // forces a re-render
-  doRender?: boolean;
 
   // array-local unique key to identify element items in a NodeList
   key?: string;
