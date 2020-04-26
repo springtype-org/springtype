@@ -1,6 +1,6 @@
 <h1 align="center">SpringType</h1>
 
-> A re-invention of the union feature-set of [React, Angular, Vue].
+> A re-invention of a union-set of features seen in [React, Angular, Vue].
 > A simplified, fastified, minified apporach to modern web development.
 > It's < 20K (gzip) all-in, including VDOM, DOM router, components, DI, state management, i18n, Redux store, event bus, streaming API. Tree-shaking makes sure that usual build sizes are < than our favourite cat meme :-)
 
@@ -16,29 +16,28 @@ SpringType is the result of 35 web developer years of suffering 😅 But now, im
 
 <h2 align="center">Features</h2>
 
-- [x] Fast and lazy VDOM supporting SVG and even custom script DOM manipulation (`@component, @attr, @event`)
+- [x] Fast and lazy VDOM supporting SVG and native DOM access (`@component, @attr, @event`)
 - [x] No more JSX/TSX limits: Any valid HTML is valid TSX! (no `className` etc., just copy & paste HTML, it just works)
 - [x] Tiny. Supports all main features you know from React, Angular and Vue.js in < 16KiB (gzip) all-in(!)
 - [x] Security & Maintainability. SpringType core & web have *0 runtime dependencies*
 - [x] Headache-free DOM element to VDOM binding (`@ref modalDiv`, `<div ref={modalDiv: this}>e.g. a Bootstrap modal</div>`)
 - [x] Modern API's and ECMAScript language features (WeakMap, Proxy, Symbol, Decorators, ...)
 - [x] TSX (typed JSX) based templating (compile-time, no runtime overhead) (`st.render(<MyComponent iAmTyped={"yes"}><SoEasy /></MyComponent>)`)
-- [x] Redux store integration out-of-the-box
-- [x] Shared memory for hassle-free component inter-linking (no Provider/Context headache)
-- [x] Simple & effective high-performance event bus (internal app components event-driven communication) (`st.publish(...)`, `st.subscribe(...)`)
+- [x] Deep change detection, circuit-breakable, no Provider/Context headache (`@context`, `@onContextChange`)
+- [x] Reactive, functional API (`debounce()`, `component()`, ...)
+- [x] Simple & effective high-performance event bus (internal app components event-driven communication) (`st.sendMessage(...)`, `st.onMessage(...)`, `@onMessage`)
 - [x] Simple and dynamic DOM router for client-side routing (`<Route path=["home", "", "*"]><p>Home!</p></Route>`, `<RouteList>`)
-- [x] Modular i18n, supporting JSON translations and custom formatter (`t('hello-world')`)
+- [x] Modular i18n, supporting JSON translations and custom formatter (`t('hello-world')`, `<T>Hello, world!</T>`)
 - [x] Environment-aware logging (`st.log`, `st.warn`, `st.error`)
-- [x] RxJS-like Functional reactive programming for solving issues regarding time-complexities (`stream()`)
-- [x] Dependency Injection using decorators (`@inject`)
-- [x] Deep change detection and automatic re-rendering, circuit-breakable (`@state`)
+- [x] Dependency Injection using decorators (`@inject`, `st.inject(...)`)
+- [x] Redux store integration out-of-the-box
 
 <h2 align="center">3rd party framework integrations</h2>
 
-- [x] <a href="https://github.com/springtype-org/st-material">Google Material Design UI toolkit (material.io) based high-performance component library</a> (`st-material`), generate a project using `st-create`
 - [x] Ionic Framework 4 support for Mobile App / SPA development  (just use it AS IS, <a href="https://github.com/springtype-org/st-ionic-example-app">integration example</a>), generate a project using `st-create`
-- [x] Bootstrap 4 support (just use it AS IS, <a href="#">integration example</a>, generate a project using `st-create`)
-- [x] Materialize CSS support (just use it AS IS, <a href="#">integration example</a>, generate a project using `st-create`)
+- [x] Bootstrap 4 support (just use it AS IS, <a href="https://github.com/springtype-org/st-bootstrap">integration example</a>, generate a project using `st-create`)
+- [x] Materialize CSS support (just use it AS IS, <a href="https://github.com/springtype-org/st-materialize">integration example</a>, generate a project using `st-create`)
+- [x] <a href="https://github.com/springtype-org/st-material">Google Material Design UI toolkit (material.io) based high-performance component library</a> (`st-material`), generate a project using `st-create`
 
 <h2 align="center">Bundling, Live Reload & Developer Experience</h2>
 
