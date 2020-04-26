@@ -1,11 +1,11 @@
 import { st } from "../../../core";
-import { Store } from "../../../core/redux/interface/store";
-import { Action, AnyAction } from "../../../core/redux/interface/actions";
 import { resolvePathInObject } from "../../../core/lang/resolve-path-in-object";
 import { TYPE_FUNCTION } from "../../../core/lang/type-function";
 import { ILifecycle } from "../interface";
 
 export const STORE_MOUNTS: string = "STORE_MOUNTS";
+
+// @ts-ignore
 let reduxStore: Store<any, any>;
 
 export class StoreTrait {
@@ -71,6 +71,7 @@ if (!st.getStore) {
     return reduxStore;
   }
 
+// @ts-ignore
   st.setStore = <S = any, A extends Action<any> = AnyAction>(store: Store<S, A>) => {
     reduxStore = store;
   }

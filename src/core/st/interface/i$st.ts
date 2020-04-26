@@ -13,8 +13,6 @@ import { It } from "../../i18n/interface/it";
 import { IEventBus } from "../../event-bus/interface";
 import { ISendMessageFn } from "../../event-bus/interface/isend-message-fn";
 import { IOnMessageFn } from "../../event-bus/interface/ion-message-fn";
-import { Store } from "../../redux/interface/store";
-import { Action, AnyAction } from "../../redux/interface/actions";
 import { IOnContextChangeHandler } from "../../context/interface/icontext-change-handler";
 import { IOnDeepChangeHandler } from "../../cd/interface";
 import { ChangeType } from "../../cd/interface/change-type";
@@ -126,8 +124,12 @@ export interface I$st {
   onMessageUnsubscribe: IOnMessageFn<any>;
 
   // redux redux support using @redux
-  getStore: <S = any, A extends Action<any> = AnyAction>() => Store<S, A>;
-  setStore: <S = any, A extends Action<any> = AnyAction>(store: Store<S, A>) => void;
+  // @ts-ignore
+  //getStore: <S = any, A extends Action<any> = AnyAction>() => Store<S, A>;
+  getStore: () => any;
+  // @ts-ignore
+  //setStore: <S = any, A extends Action<any> = AnyAction>(store: Store<S, A>) => void;
+  setStore: (store: any) => void;
 
   // components are @springtype/web components
   COMPONENT_INSTANCES: any;
