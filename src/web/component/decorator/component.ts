@@ -1,5 +1,5 @@
 import { st } from "../../../core";
-import { ComponentFunction } from "../interface/icomponent-function";
+import { ComponentFunction } from "../interface/component-function";
 import { IComponentOptions } from "../interface/icomponent-options";
 import { TYPE_FUNCTION } from "../../../core/lang/type-function";
 import { defineComponent } from "../function/define-component";

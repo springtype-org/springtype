@@ -1,11 +1,7 @@
 import { st } from "../../../core";
+import { AttrType } from "../interface/attr-type";
 
 export const ATTRS: string = "ATTRS";
-
-export enum AttrType {
-  DOM_TRANSPARENT = 'DOM_TRANSPARENT',
-  DOM_INTRANSPARENT = 'DOM_INTRANSPARENT',
-}
 
 export type AttrTypeList = AttrType.DOM_TRANSPARENT | AttrType.DOM_INTRANSPARENT;
 

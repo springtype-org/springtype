@@ -70,6 +70,9 @@ export class Foo extends Fuu<IFooAttrs> {
     @ref
     displayFragmentRef: HTMLElement;
 
+    @ref
+    displayFooRef: HTMLElement;
+
     onRenderPartialClick = async () => {
         await this.renderPartial('Something else', this.displayTextRef);
         await this.renderPartial(<strong>Something else</strong>, this.displayStrongElRef);
@@ -85,13 +88,19 @@ export class Foo extends Fuu<IFooAttrs> {
         st.dom.show(this.displayFragmentRef);
     }
 
+    // demonstrates how to update asynchronously
+    renderFooDeferred() {
+        setTimeout(() => this.renderPartial(<p>Foo!</p>, this.displayFooRef), 1000);
+    }
+
     render() {
         return <div style="color: green">
-            <E2EClockStatic tabIndex={1} id="test" format="YYYY-mm-dd" disabled />
+            <E2EClockStatic tabIndex={1} id="test" format="YYYY-mm-dd" disabled />
             <div ref={{ displayTextRef: this }}>!text!</div>
             <div ref={{ displayStrongElRef: this }}>!strong text!</div>
             <div ref={{ displayArrayOfStringsRef: this }}>!Array of strings!</div>
             <div ref={{ displayFragmentRef: this }}>!fragment A B!</div>
+            <div>Foo promised: <p ref={{ displayFooRef: this }}>{this.renderFooDeferred()}</p></div>
             <button onClick={this.onRenderPartialClick}>Render Partial</button>
             <button onClick={this.onHideFragmentsClick}>Hide fragments</button>
             <button onClick={this.onShowFragmentsClick}>Show fragments</button>

@@ -1,7 +1,6 @@
 import { st } from "../../../core";
 import { attr, component } from "../../component";
-import { ILifecycle } from "../../component/interface";
-import { AttrType } from "../../component/trait/attr";
+import { ILifecycle, AttrType } from "../../component/interface";
 import { equalObjects, mergeArrays } from "../../../core/lang";
 import { tsx } from "../../vdom";
 

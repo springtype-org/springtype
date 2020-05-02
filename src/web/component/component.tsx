@@ -6,14 +6,14 @@ import { tsx } from "../vdom";
 import { IElement, IVirtualNode } from "../vdom/interface";
 import { IVirtualChild } from "../vdom/interface/ivirtual-node";
 import { IComponentInternals } from "./interface/icomponent";
-import { AttrTrait, AttrType } from "./trait/attr";
+import { AttrTrait } from "./trait/attr";
 import { mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED } from "../../core/lang";
 import { IRefAttribute } from "./interface/iref-attribute";
 import { CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME, ATTRS_ATTR_NAME } from "../vdom/dom";
 import { StoreTrait } from "./trait/store";
 import { EventBusTrait } from "./trait/event-bus";
 import { IContextChange } from "../../core/context/interface/icontext-change-handler";
-import { ILifecycle } from "./interface";
+import { ILifecycle, AttrType } from "./interface";
 import { callOnContextChange } from "../../core/context/function/call-on-context-change";
 import { callOnMessage } from "../../core/event-bus/function/call-on-message";
 

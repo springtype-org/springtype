@@ -1,12 +1,11 @@
 import { st } from "../../../core";
 import { attr, component } from "../../component";
-import { ILifecycle } from "../../component/interface";
+import { ILifecycle, AttrType } from "../../component/interface";
 import { tsx } from "../../vdom";
 import { IElement, IVirtualNode } from "../../vdom/interface";
 import { IRouteMatch, RouteGuard } from "../interface";
 import { RouteList } from "./route-list";
 import { TYPE_FUNCTION, TYPE_OBJECT, TYPE_STRING } from "../../../core/lang";
-import { AttrType } from "../../component/trait/attr";
 import { DEFAULT_ROUTE_CACHE_GROUP } from "../router";
 
 const defaultLoadingComponent = <div>Loading...</div>;

@@ -1,6 +1,7 @@
 import { ILifecycle } from "../interface/ilifecycle";
-import { AttrTrait, AttrType, DEFAULT_ATTR_TYPE, AttrTypeList } from "../trait/attr";
+import { AttrTrait, DEFAULT_ATTR_TYPE, AttrTypeList } from "../trait/attr";
 import { TYPE_OBJECT } from "../../../core/lang/type-object";
+import { AttrType } from "../interface/attr-type";
 
 export const attr = (
   typeOrPrototype: AttrType | AttrTypeList| ILifecycle = DEFAULT_ATTR_TYPE,

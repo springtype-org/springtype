@@ -1,7 +1,7 @@
 import { IElement } from "../../vdom/interface";
 import { IVirtualChild, IVirtualNode } from "../../vdom/interface/ivirtual-node";
-import { AttrType } from '../trait/attr';
 import { IContextChange } from "../../../core/context/interface/icontext-change-handler";
+import { AttrType } from "./attr-type";
 
 export interface ILifecycle {
 

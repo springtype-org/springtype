@@ -4,6 +4,7 @@ export { IComponentOptions } from "./icomponent-options";
 export { IComponentRegistry } from "./icomponent-registry";
 export { IEvent, IEventListener } from "./ievent";
 export { ILifecycle } from "./ilifecycle";
+export { AttrType } from "./attr-type";
 
 // exception from the ./interface folder rule (to only export interfaces and types)
 // from within interface folders, because here we need a typeof of an actual implementation

@@ -1,7 +1,7 @@
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { GlobalCache } from "../../core/st/interface/i$st";
-import { IComponentOptions, ILifecycle } from "../component/interface";
+import { IComponentOptions, ILifecycle, AttrType } from "../component/interface";
 import { Component } from "../component"
 import { IElement } from "./interface";
 import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
@@ -12,7 +12,7 @@ import { TYPE_STRING } from "../../core/lang/type-string";
 import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
 import { cloneObject } from "../../core/lang/immute";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
-import { AttrTrait, AttrType } from "../component/trait/attr";
+import { AttrTrait } from "../component/trait/attr";
 
 // name of the standard component attribute to pass a map of attributes at once
 // like: <Bar attrs={{ hidden: true, foo: '123', ... }} /> instead of writing

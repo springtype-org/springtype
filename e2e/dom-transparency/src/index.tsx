@@ -1,8 +1,7 @@
 import { st } from "../../../src/core";
 import { component, attr } from "../../../src/web/component";
-import { ILifecycle } from "../../../src/web/component/interface";
+import { ILifecycle, AttrType } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
-import { AttrType } from "../../../src/web/component/trait/attr";
 import {Nested} from "./nested";
 import { Link } from "../../../src/web/router";
 
