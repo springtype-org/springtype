@@ -10,7 +10,6 @@ import { IFormat } from "../../formatter/interface/iformat";
 import { IAddFomratter } from "../../formatter/interface/iadd-formatter";
 import { Ii18n } from "../../i18n/interface/ii18n";
 import { It } from "../../i18n/interface/it";
-import { IEventBus } from "../../event-bus/interface";
 import { ISendMessageFn } from "../../event-bus/interface/isend-message-fn";
 import { IOnMessageFn } from "../../event-bus/interface/ion-message-fn";
 import { IOnContextChangeHandler } from "../../context/interface/icontext-change-handler";
@@ -117,7 +116,6 @@ export interface I$st {
   getComponent: (className: string) => IComponent;
 
   // bus / publish / subscribe
-  bus: IEventBus;
   sendMessage: ISendMessageFn;
   onMessage: IOnMessageFn;
   // same interface as subscribe, reverse logic
