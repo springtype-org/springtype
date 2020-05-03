@@ -1,10 +1,10 @@
 {
   "name": "springtype",
-  "version": "2.0.0-beta.77",
+  "version": "2.0.0-beta.78",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Simply powerful Website, PWA and App development.",
+  "description": "Simply powerful Website and PWA development.",
   "scripts": {
     "clean": "st-run st-rm-rf dist",
     "prebuild": "yarn clean",

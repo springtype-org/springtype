@@ -4,11 +4,15 @@ import { ILifecycle } from "../../../src/web/component/interface";
 import { tsx } from "../../../src/web/vdom";
 import { onMessage } from "../../../src/core/event-bus/decorator/on-message";
 
+export interface IRandomData {
+  value: number;
+}
+
 const SendMessageButton = component((scope: any) => {
 
   const onClick = () => {
     // publishing data on this topic
-    st.sendMessage('newRandom', { value: Math.random() });
+    st.sendMessage<IRandomData>('newRandom', { value: Math.random() });
   };
   return () => <button onClick={onClick}>Send message "newRandom"</button>
 });

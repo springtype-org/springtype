@@ -118,10 +118,10 @@ export interface I$st {
 
   // bus / publish / subscribe
   bus: IEventBus;
-  sendMessage: ISendMessageFn<any>;
-  onMessage: IOnMessageFn<any>;
+  sendMessage: ISendMessageFn;
+  onMessage: IOnMessageFn;
   // same interface as subscribe, reverse logic
-  onMessageUnsubscribe: IOnMessageFn<any>;
+  onMessageUnsubscribe: IOnMessageFn;
 
   // redux redux support using @redux
   // @ts-ignore
