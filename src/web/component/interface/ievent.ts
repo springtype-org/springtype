@@ -5,4 +5,5 @@ export interface IEvent<D> {
   detail?: D;
 }
 
-export type IEventListener<D> = (evt: IEvent<D> & Event) => void | boolean;
+// N defines the native DOM event type. It might by specified when relaying native DOM events
+export type IEventListener<D, N=Event> = (evt: IEvent<D> & N) => void | boolean;
