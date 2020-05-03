@@ -34,7 +34,8 @@ export class PageHeader extends st.component {
                 <li id="problem">
                     <Link key="000" class="foo bar" path={ROUTE_ABOUT} params={{name: 'foo key 000'}}>About2</Link><br/>
                     <Link key="123" class="foo bar" path={ROUTE_ABOUT} params={{name: 'foo key 123'}}>About3</Link><br/>
-                    <Link key="456" class="foo bar" path={ROUTE_ABOUT} params={{name: 'foo key 456'}}>About4</Link>
+                    <Link key="456" class="foo bar" path={ROUTE_ABOUT} params={{name: 'foo key 456'}}>About4</Link><br />
+                    <Link key="456" class="foo bar" path={ROUTE_ABOUT} params={{}}>About5</Link>
                 </li>
             </ul>
         );

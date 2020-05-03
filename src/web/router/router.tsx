@@ -16,6 +16,8 @@ if (!st.router) {
     const PATH_SEP = "/";
     const PATH_PARAM_PREFIX = ":";
     const PATH_TOKEN_MISSING = "TOKEN_MISSING:ACTUAL_PATH_LONGER";
+    const PATH_PREFIX = "#/";
+    const CSS_CLASS_ACTIVE_LINK = "active";
 
     st.router = {
         match: {},
@@ -27,14 +29,14 @@ if (!st.router) {
         ON_AFTER_MATCH_HANDLERS: [],
 
         tokenizedActualPath: [],
-        prefix: '#/',
+        prefix: PATH_PREFIX,
         enabled: false,
         paramsChanged: false,
 
         ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS: [],
         activeRouteCacheGroup: DEFAULT_ROUTE_CACHE_GROUP,
 
-        activeLinkClass: ['active'],
+        activeLinkClass: [CSS_CLASS_ACTIVE_LINK],
 
         addOnAfterCacheGroupChangeHandler: (handler: Function) => {
             st.router.ON_AFTER_CACHE_GROUP_CHANGE_HANDLERS.push(handler);
@@ -130,12 +132,17 @@ if (!st.router) {
                         st.router.paramsChanged = true;
                         // casts intrinsically based on the string syntax ("0.012" -> float number, "true" -> true etc.)
                         //let parameter = castIntrinsic(st.router.tokenizedActualPath[i]);
-                        let parameter = st.router.tokenizedActualPath[i];
-                        if (typeof parameter === TYPE_STRING) {
+                        let parameterValue = st.router.tokenizedActualPath[i];
+                        if (typeof parameterValue === TYPE_STRING) {
                             //unescape url parameter if string
-                            parameter = unescape(parameter as string);
+                            parameterValue = unescape(parameterValue as string);
                         }
-                        match.params![paramName] = parameter
+
+                        // no value given, reset to empty string
+                        if (parameterValue.startsWith(PATH_PARAM_PREFIX)) {
+                            parameterValue = '';
+                        }
+                        match.params![paramName] = parameterValue
                     }
                 } else if (!st.router.tokenizedActualPath[i] && tokenizedMatchPath[i]) {
 
