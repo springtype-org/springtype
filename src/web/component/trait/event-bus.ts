@@ -5,12 +5,8 @@ export class EventBusTrait {
 
   static enableFor(instance: any) {
 
-    instance._messageObserver = (function(value: any, topic?: string) {
-
-      if (instance.INTERNAL && instance.INTERNAL.isConnected) {
-        instance.onMessage.call(instance, topic, value);
-      }
-
+    instance._messageObserver = (function (value: any, topic?: string) {
+      instance.onMessage.call(instance, topic, value);
     }).bind(instance);
 
     st.onMessage(BUS_TOPIC_WILDCARD, instance._messageObserver);
