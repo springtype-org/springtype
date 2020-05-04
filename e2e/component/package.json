@@ -10,23 +10,26 @@
   "author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer": "^9.7.1",
-    "dts-css-modules-loader": "^1.0.1",
+    "autoprefixer": "^9.7.6",
+    "browserslist": "^4.12.0",
+    "css-loader": "^3.5.3",
+    "dts-css-modules-loader": "^1.0.3",
     "lost": "^8.3.1",
-    "node-notifier": "^6.0.0",
-    "node-sass": "^4.13.0",
-    "postcss-flexbugs-fixes": "^4.1.0",
+    "node-notifier": "^7.0.0",
+    "node-sass": "^4.14.0",
+    "postcss-flexbugs-fixes": "^4.2.0",
     "postcss-loader": "^3.0.0",
-    "postcss-nested": "^4.1.2",
-    "postcss-normalize": "^8.0.1",
+    "postcss-nested": "^4.2.1",
+    "postcss-normalize": "^9.0.0",
     "postcss-preset-env": "^6.7.0",
-    "postcss-safe-parser": "^4.0.1",
-    "raw-loader": "^3.1.0",
-    "resolve-url-loader": "^3.1.0",
-    "sass-loader": "^8.0.0",
-    "webpack-bundle-analyzer": "^3.6.0"
+    "postcss-safe-parser": "^4.0.2",
+    "raw-loader": "^4.0.1",
+    "resolve-url-loader": "^3.1.1",
+    "sass-loader": "^8.0.2",
+    "webpack": "4.43.0",
+    "webpack-bundle-analyzer": "^3.7.0"
   },
   "dependencies": {
-    "st-start": "^2.0.0-beta.34"
+    "st-start": "^2.0.0-beta.48"
   }
 }

@@ -1,3 +1,5 @@
+/// <reference path="./interface/asset-import.d.ts" />
+
 import { st } from "../../core";
 import { ContextTrait } from "../../core/context";
 import { removeContextChangeHandlersOfInstance } from "../../core/context/context";
@@ -16,7 +18,6 @@ import { IContextChange } from "../../core/context/interface/icontext-change-han
 import { ILifecycle, AttrType } from "./interface";
 import { callOnContextChange } from "../../core/context/function/call-on-context-change";
 import { callOnMessage } from "../../core/event-bus/function/call-on-message";
-
 
 export type DefaultComponentAttributes = {
     tag?: string; // allows to set a custom .el tag

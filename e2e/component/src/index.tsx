@@ -3,6 +3,8 @@ import { attr, component, Component } from "../../../src/web/component";
 import { tsx } from "../../../src/web/vdom";
 import { ref } from "../../../src/core/ref/decorator";
 
+import springTypeLogo from "../static/springtype-logo.png";
+
 export interface E2EClockStaticRefs {
     timeDisplayRef: HTMLElement;
 }
@@ -35,7 +37,6 @@ export interface BarProps {
     testAttr: boolean;
     secondTestAttr: boolean;
 }
-
 @component
 class Bar extends st.component<BarProps> {
 
@@ -94,6 +95,9 @@ export class Foo extends Fuu<IFooAttrs> {
     }
 
     render() {
+
+        console.log(require('../static/springtype-logo.png'))
+
         return <div style="color: green">
             <E2EClockStatic tabIndex={1} id="test" format="YYYY-mm-dd" disabled />
             <div ref={{ displayTextRef: this }}>!text!</div>
@@ -112,6 +116,8 @@ export class Foo extends Fuu<IFooAttrs> {
             {/* attrs map attribute passing for standard DOM elements */}
             <input attrs={{ hidden: undefined, value: 'test' }} />
             <input disabled value='test' />
+
+            <img src={springTypeLogo} />
         </div>;
     }
 }
