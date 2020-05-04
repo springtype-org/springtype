@@ -11,7 +11,7 @@ import { IComponentInternals } from "./interface/icomponent";
 import { AttrTrait } from "./trait/attr";
 import { mergeArrays, mergeObjects, TYPE_FUNCTION, TYPE_UNDEFINED } from "../../core/lang";
 import { IRefAttribute } from "./interface/iref-attribute";
-import { CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME, ATTRS_ATTR_NAME } from "../vdom/dom";
+import { CLASS_ATTRIBUTE_NAME, DEFAULT_SLOT_NAME, STYLE_ATTRIBUTE_NAME } from "../vdom/dom";
 import { StoreTrait } from "./trait/store";
 import { EventBusTrait } from "./trait/event-bus";
 import { IContextChange } from "../../core/context/interface/icontext-change-handler";
@@ -39,7 +39,7 @@ export class Component<A = {}> implements ILifecycle {
     INTERNAL: IComponentInternals;
 
     // typing for JSX.ElementClass @attr's
-    attrs!: Partial<A & DefaultComponentAttributes & { attrs: Partial<A & DefaultComponentAttributes> }>;
+    attrs!: A & Partial<DefaultComponentAttributes & { attrs: A & Partial<DefaultComponentAttributes> }>;
 
     el!: HTMLElement;
     parent!: ILifecycle;
@@ -201,16 +201,6 @@ export class Component<A = {}> implements ILifecycle {
      */
     setAttribute(name: string, value: any, type?: AttrType): void {
         const prevValue = this.getAttribute(name, type);
-
-        // implementation to pass a map of attributes at once
-        // like: <Bar attrs={{ hidden: true, foo: '123', ... }} /> instead of writing
-        // <Bar hidden={true} foo='123' />
-        if (name === ATTRS_ATTR_NAME) {
-            for (const attrName in value) {
-                this.setAttribute(attrName, value[attrName]);
-            }
-            return;
-        }
 
         if (
             this.shouldAttributeChange(name, value, prevValue)

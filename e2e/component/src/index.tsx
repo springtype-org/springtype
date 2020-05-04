@@ -41,10 +41,10 @@ export interface BarProps {
 class Bar extends st.component<BarProps> {
 
     @attr
-    testAttr: boolean;
+    testAttr: boolean = false;
 
     @attr
-    secondTestAttr: boolean;
+    secondTestAttr: boolean = false;
 
     render() {
         console.log('this.testAttr', this.testAttr, this.secondTestAttr);
@@ -60,19 +60,19 @@ class Fuu<ATTR> extends st.component<ATTR> {
 export class Foo extends Fuu<IFooAttrs> {
 
     @ref
-    displayTextRef: HTMLElement;
+    displayTextRef!: HTMLElement;
 
     @ref
-    displayStrongElRef: HTMLElement;
+    displayStrongElRef!: HTMLElement;
 
     @ref
-    displayArrayOfStringsRef: HTMLElement;
+    displayArrayOfStringsRef!: HTMLElement;
 
     @ref
-    displayFragmentRef: HTMLElement;
+    displayFragmentRef!: HTMLElement;
 
     @ref
-    displayFooRef: HTMLElement;
+    displayFooRef!: HTMLElement;
 
     onRenderPartialClick = async () => {
         await this.renderPartial('Something else', this.displayTextRef);
@@ -110,11 +110,11 @@ export class Foo extends Fuu<IFooAttrs> {
             <button onClick={this.onShowFragmentsClick}>Show fragments</button>
 
             {/* attrs map attribute passing for components */}
-            <Bar attrs={{ testAttr: true, secondTestAttr: false }} />
+            <Bar {...{ testAttr: true, secondTestAttr: false }} />
             <Bar testAttr={true} secondTestAttr={true} />
 
             {/* attrs map attribute passing for standard DOM elements */}
-            <input attrs={{ hidden: undefined, value: 'test' }} />
+            <input {...{ hidden: undefined, value: 'test' }} />
             <input disabled value='test' />
 
             <img src={springTypeLogo} />

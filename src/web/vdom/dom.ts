@@ -1,3 +1,5 @@
+/// <reference path="./interface/jsx.d.ts" />
+
 import { st } from "../../core";
 import { isPrimitive } from "../../core/lang/is-primitive";
 import { GlobalCache } from "../../core/st/interface/i$st";
@@ -13,11 +15,6 @@ import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
 import { cloneObject } from "../../core/lang/immute";
 import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
 import { AttrTrait } from "../component/trait/attr";
-
-// name of the standard component attribute to pass a map of attributes at once
-// like: <Bar attrs={{ hidden: true, foo: '123', ... }} /> instead of writing
-// <Bar hidden={true} foo='123' />
-export const ATTRS_ATTR_NAME = "attrs";
 
 export const TEMPLATE_ELEMENT_NAME = "template";
 export const DEFAULT_SLOT_NAME = "default";
@@ -340,16 +337,6 @@ if (!st.dom) {
 
             // attributes not set (undefined) are ignored; use null value to reset an attributes state
             if (typeof value == TYPE_UNDEFINED) return;
-
-            // implementation to pass a map of attributes at once
-            // like: <input attrs={{ hidden: true, value: '123', ... }} /> instead of writing
-            // <input hidden={true} value='123' />
-            if (name === ATTRS_ATTR_NAME) {
-                for (const attrName in value) {
-                    st.dom.setAttribute(attrName, value[attrName], domElement, forceNative);
-                }
-                return;
-            }
 
             // stores referenced DOM nodes in a memory efficient WeakMap
             // for access from CustomElements

@@ -482,6 +482,7 @@ declare global {
     }
 
     export interface DOMAttributes extends IAttributes, DOMAttributeEventHandlersLowerCase {
+
       // Image Events
       onLoad?: GenericEventHandler;
       onLoadCapture?: GenericEventHandler;
