@@ -1,6 +1,6 @@
 import { tsx } from "../";
 import { st } from "../../../core";
-import { IElement } from "../interface/ielement";
+import { IElement } from "../interface";
 
 describe("Renderer create operation", () => {
   let parentDOMElement: IElement;

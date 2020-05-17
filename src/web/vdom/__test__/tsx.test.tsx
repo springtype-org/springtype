@@ -4,7 +4,7 @@ describe("VirtualDOM", () => {
   it("transforms a <ul> list into JSX.Element which extends IVirtualNode", () => {
     const list = (
       <ul>
-        <li id="123"></li>
+        <li id="123"/>
       </ul>
     );
 

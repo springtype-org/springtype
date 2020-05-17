@@ -1,20 +1,15 @@
 /// <reference path="./interface/jsx.d.ts" />
 
-import { st } from "../../core";
-import { isPrimitive } from "../../core/lang/is-primitive";
-import { GlobalCache } from "../../core/st/interface/i$st";
-import { IComponentOptions, ILifecycle, AttrType } from "../component/interface";
-import { Component } from "../component"
-import { IElement } from "./interface";
-import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
-import { isJSXComment, tsxToStandardAttributeName } from "./tsx";
-import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
-import { TYPE_FUNCTION } from "../../core/lang/type-function";
-import { TYPE_STRING } from "../../core/lang/type-string";
-import { TYPE_BOOLEAN } from "../../core/lang/type-boolean";
-import { cloneObject } from "../../core/lang/immute";
-import { TYPE_UNDEFINED } from "../../core/lang/type-undefined";
-import { AttrTrait } from "../component/trait/attr";
+import {st} from "../../core";
+import {GlobalCache} from "../../core/st/interface/i$st";
+import {AttrType, IComponentOptions, ILifecycle} from "../component/interface";
+import {Component} from "../component"
+import {IElement} from "./interface";
+import {IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes} from "./interface/ivirtual-node";
+import {isJSXComment, tsxToStandardAttributeName} from "./tsx";
+import {REF_ATTRIBUTE_NAME} from "./interface/iattributes";
+import {TYPE_FUNCTION , TYPE_STRING, TYPE_BOOLEAN ,TYPE_UNDEFINED, cloneObject ,isPrimitive} from "../../core/lang";
+import {AttrTrait} from "../component/trait/attr";
 
 export const TEMPLATE_ELEMENT_NAME = "template";
 export const DEFAULT_SLOT_NAME = "default";
