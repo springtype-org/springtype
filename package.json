@@ -10,7 +10,7 @@
     "prebuild": "yarn clean",
     "build": "tsc -p tsconfig.dist.json",
     "watch": "tsc -p tsconfig.dist.json -w",
-    "postbuild": "st-run st-cp package.json .npmignore README.md LICENSE dist",
+    "postbuild": "npx st-cp package.json .npmignore README.md LICENSE dist",
     "pree2e": "ts-node ./scripts/e2e-build-all.ts",
     "e2e": "testcafe chrome:headless e2e/**/__e2e__/*",
     "test": "jest --verbose --watch",
