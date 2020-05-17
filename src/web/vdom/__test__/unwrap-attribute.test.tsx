@@ -13,7 +13,7 @@ describe("Renderer an element with unwrap attribute", () => {
         const wrappedWithFragment = (
             <div unwrap>
                 <div unwrap>
-                    <div id="123">Foo</div>
+                    <div id="123">Fo0o</div>
                 </div>
             </div>
         );
@@ -21,6 +21,6 @@ describe("Renderer an element with unwrap attribute", () => {
         st.renderer.render(wrappedWithFragment, parentDOMElement);
 
         expect((parentDOMElement.childNodes[0] as HTMLDivElement).id).toEqual("123");
-        expect((parentDOMElement.childNodes[0] as HTMLDivElement).textContent).toEqual("Foo");
+        expect((parentDOMElement.childNodes[0] as HTMLDivElement).textContent).toEqual("Fo0o");
     });
 });
