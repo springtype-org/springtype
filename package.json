@@ -6,7 +6,7 @@
   },
   "description": "Simply powerful Website and PWA development.",
   "scripts": {
-    "clean": "st-run st-rm-rf dist",
+    "clean": "npx st-rm-rf dist",
     "prebuild": "yarn clean",
     "build": "tsc -p tsconfig.dist.json",
     "watch": "tsc -p tsconfig.dist.json -w",
