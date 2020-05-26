@@ -1,5 +1,3 @@
-/// <reference path="./interface/jsx.d.ts" />
-
 import {st} from "../../core";
 import {GlobalCache} from "../../core/st/interface/i$st";
 import {AttrType, IComponentOptions, ILifecycle} from "../component/interface";
