@@ -50,7 +50,7 @@ jobs:
         run: yarn test:ci
 
   npm-publish:
-    needs: [build]
+    needs: [test]
     name: npm-publish
     runs-on: ubuntu-latest
     # only on master
