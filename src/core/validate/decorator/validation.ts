@@ -6,7 +6,7 @@ import { TYPE_FUNCTION } from "../../lang";
 export const validation = (validator: IValidator = VALIDATOR_DEFAULT) =>
     <T extends { new(...args: any[]): {} }>(ctor: T) => {
 
-        for (const propertyName in ctor.prototype[VALIDATION_DECORATOR_METADATA_KEY]) {
+        for (const propertyName of Object.keys(ctor.prototype[VALIDATION_DECORATOR_METADATA_KEY])) {
             const descriptor = Object.getOwnPropertyDescriptor(ctor.prototype, propertyName);
 
             if (descriptor && typeof ctor.prototype[propertyName] == TYPE_FUNCTION) {

@@ -1,0 +1,76 @@
+name: Node CI
+
+on: [push,pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: Install yarn
+        run: npm install -g yarn
+      - run: yarn install
+      - run: yarn build
+      - name: Add artifact to github
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact
+          path: dist
+
+  test:
+    needs: build
+    strategy:
+      matrix:
+        os:
+          - macOS-latest
+          - ubuntu-latest
+          - windows-latest
+        node-version:
+          - 10.x
+          - 12.x
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: dist
+      - name: Install dev dependencies
+        run: yarn
+      - name: Run tests
+        run: yarn test:ci
+
+  npm-publish:
+    needs: [build]
+    name: npm-publish
+    runs-on: ubuntu-latest
+    # only on master
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: dist
+      - name: Publish if version in package.json change
+        uses: springtype-org/github-action-npm-publish@master
+        with:
+          install_build_packages: true
+          project_build_dir: dist
+          create_tag: true
+          auth_token: ${{ secrets.npm_token }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
