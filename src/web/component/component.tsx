@@ -118,18 +118,18 @@ export class Component<A = {}> implements ILifecycle {
         }
     }
 
-    renderSlot(slotName: string, defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualChild | Array<IVirtualChild> {
+    renderSlot(slotName: string, defaults: IVirtualChild | Array<IVirtualChild> = <fragment />): IVirtualChild | Array<IVirtualChild> {
         if (this.virtualNode.slotChildren![slotName]) {
             return (this.virtualNode.slotChildren![slotName] as IVirtualNode).children;
         }
-        return defaults || <fragment />;
+        return defaults as any;
     }
 
-    renderChildren(defaults?: IVirtualChild | Array<IVirtualChild>): IVirtualNode | Array<IVirtualNode> {
+    renderChildren(defaults: IVirtualChild | Array<IVirtualChild> =  <fragment />): IVirtualNode | Array<IVirtualNode> {
         if (this.virtualNode.slotChildren![DEFAULT_SLOT_NAME]) {
             return this.virtualNode.slotChildren![DEFAULT_SLOT_NAME];
         }
-        return defaults || <fragment />;
+        return defaults as any;
     }
 
     onBeforeElCreate(virtualNode: IVirtualNode) {
