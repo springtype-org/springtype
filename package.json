@@ -1,8 +1,16 @@
 {
   "name": "springtype",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "publishConfig": {
     "access": "public"
+  },
+  "homepage": "https://github.com/springtype-org/springtype",
+  "repository": {
+    "url": "git+https://github.com/springtype-org/springtype.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/springtype-org/springtype/issues"
   },
   "description": "TypeScript TSX/JSX microframework < 4k (gzip in a real app)",
   "keywords": [
