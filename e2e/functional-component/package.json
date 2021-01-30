@@ -16,5 +16,8 @@
   },
   "browserslist": [
     "last 1 Chrome version"
-  ]
+  ],
+  "resolutions": {
+    "parcel/node-forge": "^0.10.0"
+  }
 }
