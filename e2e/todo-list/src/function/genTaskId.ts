@@ -1,0 +1,1 @@
+export const genTaskId = () => `task-${Math.random() * 1000}`;

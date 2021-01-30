@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 
-const e2eProjects = ["functional-component"];
+const e2eProjects = ["functional-component", "todo-list"];
 
 const getPackageDir = (dirName: string) => "./e2e/" + dirName;
 
