@@ -10,7 +10,7 @@
 
 With SpringType v3 you can render JSX/TSX one-time and mutate the DOM with the standard DOM API.
 
-<a href="e2e/todo-list/src/component/TodoList.tsx">TODO list demo</a>
+<a href="https://github.com/springtype-org/springtype/tree/main/e2e/todo-list/src/component/TodoList.tsx">TODO list demo</a>
 
 <h2 align="center">Features</h2>
 

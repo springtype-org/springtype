@@ -1,10 +1,20 @@
 {
   "name": "springtype",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "publishConfig": {
     "access": "public"
   },
-  "description": "JSX microframework",
+  "description": "TypeScript TSX/JSX microframework < 4k (gzip in a real app)",
+  "keywords": [
+    "TSX",
+    "JSX",
+    "microframework",
+    "4k",
+    "TypeScript",
+    "zero-dependency",
+    "fast",
+    "DOM"
+  ],
   "scripts": {
     "clean": "npx st-rm-rf dist",
     "prebuild": "yarn clean",
@@ -17,7 +27,8 @@
     "test:ci": "jest --verbose --runInBand",
     "coverage": "jest --verbose --coverage",
     "coverage:ci": "jest --verbose --coverage --runInBand",
-    "release": "yarn publish"
+    "prerelease": "yarn build",
+    "release": "cd dist && yarn publish"
   },
   "author": "Aron Homberg <info@aron-homberg.de>",
   "license": "MIT",

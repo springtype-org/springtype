@@ -1,0 +1,23 @@
+{
+  "name": "@springtype/e2e-import-all",
+  "version": "1.0.0",
+  "description": "Import all test",
+  "scripts": {
+    "clean": "rimraf dist node_modules .cache",
+    "postclean": "yarn install",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url '.'"
+  },
+  "author": "Aron Homberg <info@aron-homberg.de>",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "rimraf": "^3.0.2"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
+  "resolutions": {
+    "parcel/node-forge": "^0.10.0"
+  }
+}
