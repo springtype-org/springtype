@@ -13,6 +13,12 @@ SpringType is brought to you by:
       </td>
       <td align="center">
         <img width="150" height="150"
+        src="https://avatars.githubusercontent.com/u/17221813?s=150&v=4">
+        </br>
+        <a href="https://github.com/jsdevtom">jsdevtom</a>
+      </td>
+      <td align="center">
+        <img width="150" height="150"
         src="https://avatars2.githubusercontent.com/u/12079044?s=150&v=4">
         </br>
         <a href="https://github.com/mansi1">Michael Mannseicher</a>

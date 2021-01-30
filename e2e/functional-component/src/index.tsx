@@ -1,27 +1,36 @@
-import { st } from "../../../src/core";
-import { component, Component, render } from "../../../src/web/component";
-import { tsx } from "../../../src/web/vdom";
+import { st, render, renderOnReady, Props, Ref } from "../../../dist/index";
 
-// define a functional custom element
-const E2EClock = component((scope: Component) => {
-  // defined at construction time
-  const updateUnixTime = () => scope.setAttribute("now", Date.now());
+export interface SomeFunctionalComponentProps extends Props {
+    frameworkName: string;
+}
 
-  // render fn returned, auto-called on doRender() when attribute changes (setAttribute)
-  return () => (
-    <div unwrap>
-      <button onClick={updateUnixTime}>Show time</button>
-      <E2ETimeDisplay>{scope.getAttribute("now")}</E2ETimeDisplay>
-    </div>
-  );
-});
+const FC = ({ frameworkName, children }: SomeFunctionalComponentProps) => {
+ 
+    const divRef: Ref = {};
 
-// simplified functional element, just renders what comes in
-const E2ETimeDisplay = component(
-  render((component: Component) => {
-    return <div>{component.renderChildren()}</div>;
-  })
-);
+    const onButtonClick = (evt: MouseEvent) => {
 
-// append element to <body> (as root app element)
-st.render(<E2EClock />);
+        divRef.current.innerHTML = '';
+
+        st.renderer.render(<span>Hello, {frameworkName}!
+            {children}
+        </span>, divRef.current);
+    }
+
+    return <fragment>
+        <div ref={divRef}></div>
+        <button onClick={onButtonClick}>Click me</button>
+    </fragment>
+}
+
+// waits for document.body to appear
+// then syncs the DOM with the VDOM and 
+// appends the resulting top-level DOM element to <body> 
+renderOnReady(<FC frameworkName="SpringType@v3.0.0">
+    <span><br /><br /><b id='someText'>And it has children :)</b><br /><br />
+    
+        <svg width="100" height="100">
+            <circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />
+        </svg>
+    </span>
+</FC>);

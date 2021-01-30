@@ -1,9 +1,0 @@
-{
-  "deep": {
-    "msg": "123en-{{ someValue, uppercase }}"
-  },
-  "German": "German",
-  "English": "English",
-  "Fallback": "Fallback",
-  "deep__msg": "Fail test"
-}

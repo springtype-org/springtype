@@ -1,21 +1,10 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es5",
-		"outDir": "dist",
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"strict": true,
-		"noUnusedLocals": true,
-		"noEmitHelpers": false,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
 		"jsx": "react",
-		"skipLibCheck": true,
-		"jsxFactory": "tsx",
-		"declaration": true,
-		"sourceMap": true
+		"jsxFactory": "render",
+		"outDir": "dist",
+		"declaration": true
 	},
 	"exclude": ["node_modules", "**/node_modules/*"],
-	"include": ["src/core", "src/web"]
+	"include": ["src"]
 }

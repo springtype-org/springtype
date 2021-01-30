@@ -1,10 +1,10 @@
 {
   "name": "springtype",
-  "version": "2.0.0-beta.85",
+  "version": "3.0.0-alpha.1",
   "publishConfig": {
     "access": "public"
   },
-  "description": "Simply powerful Website and PWA development.",
+  "description": "JSX microframework",
   "scripts": {
     "clean": "npx st-rm-rf dist",
     "prebuild": "yarn clean",
@@ -19,16 +19,17 @@
     "coverage:ci": "jest --verbose --coverage --runInBand",
     "release": "yarn publish"
   },
-  "author": "Aron Homberg <info@aron-homberg.de>, Michael Mannseicher <m.mansi1@gmx.net>",
+  "author": "Aron Homberg <info@aron-homberg.de>",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^25.2.1",
+    "@types/jsdom": "^16.2.6",
     "@types/node": "^13.13.2",
-    "jest": "^25.4.0",
-    "prettier": "^2.0.5",
-    "testcafe": "^1.8.4",
-    "ts-jest": "^25.4.0",
-    "ts-node": "^8.9.1",
-    "typescript": "^3.8.3"
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "testcafe": "^1.10.1",
+    "ts-jest": "^26.5.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   }
 }

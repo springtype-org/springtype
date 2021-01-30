@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 
-const e2eProjects = ["children", "i18n"];
+const e2eProjects = ["functional-component"];
 
 const getPackageDir = (dirName: string) => "./e2e/" + dirName;
 
@@ -11,7 +11,7 @@ for (let packageDir of e2eProjects) {
   exec("yarn");
 
   console.log(`[i] Building e2e project ${packageDir}...`);
-  exec("yarn start:prod");
+  exec("yarn build");
 
   process.chdir("../../");
 }

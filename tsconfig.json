@@ -13,7 +13,7 @@
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "skipLibCheck": true,
-    "jsxFactory": "tsx"
+    "jsxFactory": "render"
   },
   "exclude": ["node_modules", "**/node_modules/*"],
   "include": ["src", "e2e", "jest.config.js"]
