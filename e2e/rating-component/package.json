@@ -1,0 +1,24 @@
+{
+  "name": "@springtype/e2e-rating-component",
+  "version": "1.0.0",
+  "description": "Rating Component",
+  "scripts": {
+    "clean": "rimraf dist node_modules .cache",
+    "postclean": "yarn install",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url '.'"
+  },
+  "author": "jsdevtom contact@jsdevtom.com",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "rimraf": "^3.0.2",
+    "sass": "^1.32.5"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
+  "resolutions": {
+    "parcel/node-forge": "^0.10.0"
+  }
+}
