@@ -17,6 +17,9 @@ async function assertStarsFilledTo(starsCount: number, stars: Selector, filledTo
 }
 
 test('should show initial rating', async (t) => {
+
+    await t.wait(10);
+    
     const initialFilledCount = 3;
     const stars = Selector('.star');
     const starsCount = await stars.count;
@@ -26,7 +29,11 @@ test('should show initial rating', async (t) => {
 });
 
 test('should fill star being hovered and those left of it', async (t) => {
+
+    await t.wait(10);
+
     const stars = Selector('.star');
+
     const starsCount = await stars.count;
 
     await t.hover(`.star[data-index="0"]`);
@@ -51,6 +58,9 @@ test('should fill star being hovered and those left of it', async (t) => {
 });
 
 test('should remember user\'s selection', async (t) => {
+
+    await t.wait(10);
+
     const stars = Selector('.star');
     const starsCount = await stars.count;
 
