@@ -1,6 +1,6 @@
 import { I$st } from "./interface/i$st";
 
-const ST_KEY = "$st";
+export const ST_KEY = "$st";
 
 // scoped local global storage reference
 const _globalThis: any = new Function("return this")();

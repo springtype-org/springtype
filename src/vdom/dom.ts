@@ -1,7 +1,7 @@
 import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from "./interface/ivirtual-node";
 import { isJSXComment, tsxToStandardAttributeName } from "./render";
 import { isPrimitive } from "../lang/is-primitive";
-import { st } from "../st/st";
+import { st, ST_KEY } from "../st/st";
 import { REF_ATTRIBUTE_NAME } from "./interface/iattributes";
 import { IElement } from "./interface/ielement";
 
@@ -93,6 +93,11 @@ if (!st.dom) {
             } else {
                 newEl = document.createElement(st.dom.getTagToUse(virtualNode) as string);
             }
+
+            // reference SpringType as a reference to every element created
+            // this allows microframework addition libs like st-query to re-use this instance
+            // with the correct domImpl the element belongs to
+            (newEl as any)[ST_KEY] = st;
             
             if (virtualNode.attributes) {
                 st.dom.setAttributes(virtualNode.attributes, newEl);
