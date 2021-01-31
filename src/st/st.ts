@@ -10,7 +10,9 @@ const _globalThis: any = new Function("return this")();
 if (!_globalThis[ST_KEY]) {
 
   // register scoped global as an instance of this class
-  _globalThis[ST_KEY] = {};
+  _globalThis[ST_KEY] = {
+    state: {}
+  };
 }
 
 export const globalThis: any = _globalThis;

@@ -29,4 +29,7 @@ export interface I$st {
 
   // renders a virtual node directly into an existing DOM node, defaults to document.body
   renderOnReady: (virtualNode: IVirtualNode, domNode?: Element) => void;
+
+  // arbitrary state store
+  state: any;
 }

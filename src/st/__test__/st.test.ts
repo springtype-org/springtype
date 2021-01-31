@@ -1,17 +1,23 @@
 import { globalThis, st } from "../st";
 
 describe("$st", () => {
-	it('globalThis["st"] is an object', () => {
+	it('globalThis["$st"] is an object', () => {
 		expect(globalThis["$st"]).toBeDefined();
 		expect(globalThis["$st"]).toBeInstanceOf(Object);
 	});
 
-	it("my is an object", () => {
+	it("st is defined", () => {
 		expect(st).toBeDefined();
 		expect(st).toBeInstanceOf(Object);
 	});
 
-	it('my equals globalThis["$st"]', () => {
+	it('st equals globalThis["$st"]', () => {
 		expect(st).toEqual(globalThis["$st"]);
+	});
+
+	it('st can store an arbitrary state', () => {
+		expect(st.state).toEqual({});
+		st.state.foo = 'bar';
+		expect(st.state.foo).toEqual('bar');
 	});
 });
