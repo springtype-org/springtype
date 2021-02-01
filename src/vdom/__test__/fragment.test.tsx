@@ -1,4 +1,4 @@
-import { render, st } from "../..";
+import { render, tsx } from "../..";
 import { IElement } from "../interface/ielement";
 
 describe("Renderer an fragment", () => {
@@ -17,7 +17,7 @@ describe("Renderer an fragment", () => {
             </fragment>
         );
 
-        st.renderer.render(wrappedWithFragment, parentDOMElement);
+        render(wrappedWithFragment, parentDOMElement);
 
         expect((parentDOMElement.childNodes[0] as HTMLDivElement).id).toEqual("123");
         expect((parentDOMElement.childNodes[0] as HTMLDivElement).textContent).toEqual("Foo");

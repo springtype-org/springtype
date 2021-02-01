@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
 		"jsx": "react",
-		"jsxFactory": "render",
 		"outDir": "dist",
+		"jsxFactory": "tsx",
 		"declaration": true
 	},
 	"exclude": ["node_modules", "**/node_modules/*"],

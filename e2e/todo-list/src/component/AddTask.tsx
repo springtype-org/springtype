@@ -1,4 +1,4 @@
-import { render, Props, Ref } from "../../../../dist/index";
+import { tsx, Ref } from "../../../../dist/index";
 
 export interface AddTaskProps {
     taskRef: Ref;

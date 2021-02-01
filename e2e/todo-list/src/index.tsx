@@ -1,4 +1,4 @@
-import {  render, renderOnReady } from "../../../dist/index";
+import {  tsx, renderOnReady } from "../../../dist/index";
 import { TodoList } from "./component/TodoList";
 
 import "./index.scss";

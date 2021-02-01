@@ -1,12 +1,10 @@
+import { XLINK_ATTRIBUTE_NAME, CLASS_NAME_ATTRIBUTE_NAME, CLASS_ATTRIBUTE_NAME, FRAGMENT_ELEMENT_NAME } from "./constants";
 import {
   IVirtualChild,
   IVirtualChildren,
   IVirtualNode,
   IVirtualNodeType,
 } from "./interface/ivirtual-node";
-import { XLINK_ATTRIBUTE_NAME, CLASS_NAME_ATTRIBUTE_NAME, CLASS_ATTRIBUTE_NAME, FRAGMENT_ELEMENT_NAME } from "./dom";
-import { st } from "../st/st";
-
 
 export const tsxToStandardAttributeName = (tsxAttributeName: string): string => {
   // support for SVG xlink:*
@@ -41,11 +39,7 @@ export const filterComments = (children: Array<IVirtualNode> | Array<IVirtualChi
   );
 };
 
-export let cmpSequence = 0;
-
-export const newUniqueComponentName = () => "fnc-" + ++cmpSequence;
-
-export const render = (st.render = (
+export const tsx = (
   // if it is a function, it is a component
   type: IVirtualNodeType | Function | any,
   attributes: JSX.HTMLAttributes & JSX.SVGAttributes & Record<string, any> | null,
@@ -76,4 +70,4 @@ export const render = (st.render = (
     attributes: attributes as any,
     children,
   };
-});
+};

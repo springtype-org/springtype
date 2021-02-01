@@ -1,6 +1,6 @@
-import { render, Props } from "../../../../dist/index";
-
+import { tsx, Props } from "../../../../dist/index";
 import { ITask } from "../interface/ITask"
+
 import "./Task.scss";
 
 export interface ITaskProps extends Props, ITask {

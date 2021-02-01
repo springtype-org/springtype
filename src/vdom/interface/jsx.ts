@@ -1,4 +1,5 @@
 import { IAttributes } from "./iattributes";
+import { Ref } from "./ref";
 
 declare global {
   namespace JSX {
@@ -6,12 +7,6 @@ declare global {
     interface ElementAttributesProperty {
       attrs: {};
     }
-
-    /*
-    interface ElementChildrenAttribute {
-      children: {};
-    }
-    */
 
     export interface SVGAttributes extends HTMLAttributes {
       accentHeight?: number | string;
@@ -483,6 +478,8 @@ declare global {
 
     export interface DOMAttributes extends IAttributes, DOMAttributeEventHandlersLowerCase {
 
+      ref?: Ref | undefined;
+
       // Image Events
       onLoad?: GenericEventHandler;
       onLoadCapture?: GenericEventHandler;
@@ -820,10 +817,7 @@ declare global {
 
     // TODO: All should allow for string (full HTML support)
     export interface HTMLAttributes extends HTMLAttributesLowerCase, DOMAttributes {
-
-      // allow for map type attribute passing like:
-      // <div attrs={{ disabled: true, ... }}>...</div>
-      attrs?: Partial<HTMLAttributes>;
+      ref?: Ref | undefined;
 
       // Standard HTML Attributes
       accept?: string;
@@ -1597,11 +1591,6 @@ declare global {
       writingMode: number | string | null;
       zIndex: number | string | null;
       zoom: number | string | null;
-    }
-
-    // addition for <template slot="$name">
-    interface IntrinsicElements {
-      template: HTMLAttributes;
     }
 
     // addition for <fragment unwrap>

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
+    "module": "amd",
+    "target": "es5",
     "outDir": "dist",
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -13,8 +13,8 @@
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "skipLibCheck": true,
-    "jsxFactory": "render"
+    "jsxFactory": "tsx"
   },
   "exclude": ["node_modules", "**/node_modules/*"],
-  "include": ["src", "e2e", "jest.config.js"]
+  "include": ["src", "jest.config.js"]
 }

@@ -1,4 +1,4 @@
-import { render, st, ST_KEY } from "../..";
+import { render, tsx, st, ST_KEY } from "../..";
 import { IElement } from "../interface/ielement";
 
 describe("Functional component", () => {
@@ -21,7 +21,7 @@ describe("Functional component", () => {
         const someFc = (
             <FC />
         );
-        st.renderer.render(someFc, parentDOMElement);
+        render(someFc, parentDOMElement);
 
         expect((parentDOMElement.childNodes[0] as HTMLDivElement).id).toEqual("123");
         expect((parentDOMElement.childNodes[0] as HTMLDivElement).textContent).toEqual("Foo");
@@ -42,7 +42,7 @@ describe("Functional component", () => {
         const someFc = (
             <FC />
         );
-        st.renderer.render(someFc, parentDOMElement);
+        render(someFc, parentDOMElement);
 
         expect(((parentDOMElement.childNodes[0]) as any)[ST_KEY]).toEqual(st);
     });

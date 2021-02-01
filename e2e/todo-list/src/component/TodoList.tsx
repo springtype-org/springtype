@@ -1,4 +1,4 @@
-import { st, render, Ref } from "../../../../dist/index";
+import { render, tsx, Ref } from "../../../../dist/index";
 import { defaultTasks } from "../config/defaultTasks";
 import { genTaskId } from "../function/genTaskId";
 import { ITask } from "../interface/ITask";
@@ -59,12 +59,12 @@ export const TodoList = () => {
 
     const updateTasks = () => {
         taskListRef.current.innerHTML = '';
-        st.renderer.render(renderTasks(), taskListRef.current);
+        render(renderTasks(), taskListRef.current);
     }
 
     const updateAddTask = () => {
         addTaskContainerRef.current.innerHTML = '';
-        st.renderer.render(renderAddTask(), addTaskContainerRef.current);
+        render(renderAddTask(), addTaskContainerRef.current);
     }
 
     const onAddTaskClick = () => {

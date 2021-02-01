@@ -1,4 +1,4 @@
-import { render, Props } from "../../../../dist/index";
+import { tsx, Props } from "../../../../dist/index";
 import './Rating.scss';
 
 export interface RatingProps extends Props {

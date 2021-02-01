@@ -1,7 +1,6 @@
 
-import { st } from "../..";
+import { tsx, render } from "../..";
 import { IElement } from "../interface/ielement";
-import { render } from "../render";
 
 describe("Renderer create operation", () => {
   let parentDOMElement: IElement;
@@ -17,7 +16,7 @@ describe("Renderer create operation", () => {
       </ul>
     );
 
-    st.renderer.render(list, parentDOMElement);
+    render(list, parentDOMElement);
 
     expect((parentDOMElement.childNodes[0] as HTMLLIElement).id).toEqual("123");
     expect((parentDOMElement.childNodes[0] as HTMLLIElement).childNodes[0].nodeName).toEqual("LI");
