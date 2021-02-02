@@ -7,10 +7,6 @@ import { IVirtualNodeType, IVirtualChildren, IVirtualNode } from "../../vdom/int
  */
 export interface I$st {
 
-  // --- platform global reference
-  // node: global, browser: window
-  globalThis: any;
-
   // TSX transformator function
   render: (
     type: IVirtualNodeType,

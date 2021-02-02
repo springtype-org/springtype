@@ -31,8 +31,8 @@ const STANDARD_HTML_PASS_ATTRIBUTES = [
 
 if (!st.dom) {
 
-    st.domImpl = st.globalThis.window || {
-        // TODO: Impl. compat document.* API 
+    st.domImpl = window || {
+        // TODO: Impl. compat document.* API
     };
 
     // DOM abstraction layer for manipulation
@@ -87,13 +87,13 @@ if (!st.dom) {
             // use DOM implementation provided instead of the globally infered one
             const document = st.domImpl!.document!;
 
-            if (virtualNode.type.toUpperCase() === "SVG" || 
+            if (virtualNode.type.toUpperCase() === "SVG" ||
                 (parentDomElement && st.dom.hasSvgNamespace(parentDomElement, virtualNode.type.toUpperCase()))) {
                 newEl = document.createElementNS(SVG_NAMESPACE, virtualNode.type as string);
             } else {
                 newEl = document.createElement(st.dom.getTagToUse(virtualNode) as string);
             }
-            
+
             if (virtualNode.attributes) {
                 st.dom.setAttributes(virtualNode.attributes, newEl);
             }

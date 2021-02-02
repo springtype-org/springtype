@@ -1,9 +1,9 @@
-import { globalThis, st } from "../st";
+import { st } from "../st";
 
 describe("$st", () => {
 	it('globalThis["st"] is an object', () => {
-		expect(globalThis["$st"]).toBeDefined();
-		expect(globalThis["$st"]).toBeInstanceOf(Object);
+		expect(window.$st).toBeDefined();
+		expect(window.$st).toBeInstanceOf(Object);
 	});
 
 	it("my is an object", () => {
@@ -12,6 +12,6 @@ describe("$st", () => {
 	});
 
 	it('my equals globalThis["$st"]', () => {
-		expect(st).toEqual(globalThis["$st"]);
+		expect(st).toEqual(window.$st);
 	});
 });
