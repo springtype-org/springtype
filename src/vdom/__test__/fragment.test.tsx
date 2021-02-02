@@ -1,25 +1,25 @@
-import { render, tsx } from "../..";
-import { IElement } from "../interface/ielement";
+import { render, tsx } from '../..';
+import { IElement } from '../interface/ielement';
 
-describe("Renderer an fragment", () => {
-    let parentDOMElement: IElement;
+describe('Renderer an fragment', () => {
+  let parentDOMElement: IElement;
 
-    beforeEach(() => {
-        parentDOMElement = (document.createElement("div") as unknown) as IElement;
-    });
+  beforeEach(() => {
+    parentDOMElement = (document.createElement('div') as unknown) as IElement;
+  });
 
-    it("renders a <fragment> (JSX.Element extends IVirtualNode) as a child of a DOM element, renderer have to skip them", () => {
-        const wrappedWithFragment = (
-            <fragment>
-                <fragment>
-                    <div id="123">Foo</div>
-                </fragment>
-            </fragment>
-        );
+  it('renders a <fragment> (JSX.Element extends IVirtualNode) as a child of a DOM element, renderer have to skip them', () => {
+    const wrappedWithFragment = (
+      <fragment>
+        <fragment>
+          <div id="123">Foo</div>
+        </fragment>
+      </fragment>
+    );
 
-        render(wrappedWithFragment, parentDOMElement);
+    render(wrappedWithFragment, parentDOMElement);
 
-        expect((parentDOMElement.childNodes[0] as HTMLDivElement).id).toEqual("123");
-        expect((parentDOMElement.childNodes[0] as HTMLDivElement).textContent).toEqual("Foo");
-    });
+    expect((parentDOMElement.childNodes[0] as HTMLDivElement).id).toEqual('123');
+    expect((parentDOMElement.childNodes[0] as HTMLDivElement).textContent).toEqual('Foo');
+  });
 });

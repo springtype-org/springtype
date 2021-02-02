@@ -1,4 +1,4 @@
-import { tsx, render, renderOnReady, Props, Ref } from "../../../dist/index";
+import { tsx, render, Props, Ref } from "../../../dist/index";
 
 export interface SomeFunctionalComponentProps extends Props {
     frameworkName: string;
@@ -26,7 +26,7 @@ const FC = ({ frameworkName, children }: SomeFunctionalComponentProps) => {
 // waits for document.body to appear
 // then syncs the DOM with the VDOM and 
 // appends the resulting top-level DOM element to <body> 
-renderOnReady(<FC frameworkName="SpringType@v3">
+render(<FC frameworkName="SpringType@v3">
     <span><br /><br /><b id='someText'>And it has children :)</b><br /><br />
     
         <svg width="100" height="100">

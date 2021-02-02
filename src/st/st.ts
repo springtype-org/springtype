@@ -1,23 +1,14 @@
-import { I$st } from "./interface/i$st";
+import { I$st } from './interface/i$st';
 
-export const ST_KEY = "$st";
-
-// scoped local global storage reference
-const _globalThis: any = new Function("return this")();
+export const ST_KEY = '$st';
 
 // makes sure the global storage is not re-initialized
 // and overwritten on subsequent calls / file imports
-if (!_globalThis[ST_KEY]) {
-
+if (!window[ST_KEY]) {
   // register scoped global as an instance of this class
-  _globalThis[ST_KEY] = {
-    state: {}
+  (window[ST_KEY] as any) = {
+    state: {},
   };
 }
 
-export const globalThis: any = _globalThis;
-export const st: I$st = _globalThis[ST_KEY];
-
-if (!st.globalThis) {
-  st.globalThis = globalThis;
-}
+export const st: I$st = window[ST_KEY];

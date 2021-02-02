@@ -1,35 +1,34 @@
-import { IAttributes } from "./iattributes";
-import { Ref } from "./ref";
+import { IAttributes } from './iattributes';
+import { Ref } from './ref';
 
 declare global {
   namespace JSX {
-
     interface ElementAttributesProperty {
       attrs: {};
     }
 
     export interface SVGAttributes extends HTMLAttributes {
       accentHeight?: number | string;
-      accumulate?: "none" | "sum";
-      additive?: "replace" | "sum";
+      accumulate?: 'none' | 'sum';
+      additive?: 'replace' | 'sum';
       alignmentBaseline?:
-      | "auto"
-      | "baseline"
-      | "before-edge"
-      | "text-before-edge"
-      | "middle"
-      | "central"
-      | "after-edge"
-      | "text-after-edge"
-      | "ideographic"
-      | "alphabetic"
-      | "hanging"
-      | "mathematical"
-      | "inherit";
-      allowReorder?: "no" | "yes";
+        | 'auto'
+        | 'baseline'
+        | 'before-edge'
+        | 'text-before-edge'
+        | 'middle'
+        | 'central'
+        | 'after-edge'
+        | 'text-after-edge'
+        | 'ideographic'
+        | 'alphabetic'
+        | 'hanging'
+        | 'mathematical'
+        | 'inherit';
+      allowReorder?: 'no' | 'yes';
       alphabetic?: number | string;
       amplitude?: number | string;
-      arabicForm?: "initial" | "medial" | "terminal" | "isolated";
+      arabicForm?: 'initial' | 'medial' | 'terminal' | 'isolated';
       ascent?: number | string;
       attributeName?: string;
       attributeType?: string;
@@ -49,7 +48,7 @@ declare global {
       clipPathUnits?: number | string;
       clipRule?: number | string;
       colorInterpolation?: number | string;
-      colorInterpolationFilters?: "auto" | "sRGB" | "linearRGB" | "inherit";
+      colorInterpolationFilters?: 'auto' | 'sRGB' | 'linearRGB' | 'inherit';
       colorProfile?: number | string;
       colorRendering?: number | string;
       contentScriptType?: number | string;
@@ -76,7 +75,7 @@ declare global {
       externalResourcesRequired?: number | string;
       fill?: string;
       fillOpacity?: number | string;
-      fillRule?: "nonzero" | "evenodd" | "inherit";
+      fillRule?: 'nonzero' | 'evenodd' | 'inherit';
       filter?: string;
       filterRes?: number | string;
       filterUnits?: number | string;
@@ -198,8 +197,8 @@ declare global {
       stroke?: string;
       strokeDasharray?: string | number;
       strokeDashoffset?: string | number;
-      strokeLinecap?: "butt" | "round" | "square" | "inherit";
-      strokeLinejoin?: "miter" | "round" | "bevel" | "inherit";
+      strokeLinecap?: 'butt' | 'round' | 'square' | 'inherit';
+      strokeLinejoin?: 'miter' | 'round' | 'bevel' | 'inherit';
       strokeMiterlimit?: string;
       strokeOpacity?: number | string;
       strokeWidth?: number | string;
@@ -286,7 +285,6 @@ declare global {
     export type PointerEventHandler = EventHandler<PointerEvent>;
 
     export interface DOMAttributeEventHandlersLowerCase {
-
       // Image Events
       onload?: GenericEventHandler;
       onloadcapture?: GenericEventHandler;
@@ -477,7 +475,6 @@ declare global {
     }
 
     export interface DOMAttributes extends IAttributes, DOMAttributeEventHandlersLowerCase {
-
       ref?: Ref | undefined;
 
       // Image Events
@@ -787,7 +784,7 @@ declare global {
       step?: number | string;
       style?: string | Partial<CSSStyleDeclaration>;
       summary?: string;
-      tabindex?: number|string;
+      tabindex?: number | string;
       target?: string;
       title?: string;
       type?: string;
@@ -936,7 +933,7 @@ declare global {
       step?: number | string;
       style?: string | Partial<CSSStyleDeclaration>;
       summary?: string;
-      tabIndex?: number|string;
+      tabIndex?: number | string;
       target?: string;
       title?: string;
       type?: string;
@@ -965,7 +962,7 @@ declare global {
     }
 
     export interface IVirtualIntrinsicElements {
-      //some-custom-element-name: HTMLAttributes;
+      // some-custom-element-name: HTMLAttributes;
     }
 
     export interface IntrinsicElements extends IVirtualIntrinsicElements {
@@ -1082,12 +1079,13 @@ declare global {
       u: HTMLAttributes;
       ul: HTMLAttributes;
       var: HTMLAttributes;
-      video: HTMLAttributes & Partial<{
-        autoplay: boolean
-      }>;
+      video: HTMLAttributes &
+        Partial<{
+          autoplay: boolean;
+        }>;
       wbr: HTMLAttributes;
 
-      //SVG
+      // SVG
       svg: SVGAttributes;
       animate: SVGAttributes;
       circle: SVGAttributes;

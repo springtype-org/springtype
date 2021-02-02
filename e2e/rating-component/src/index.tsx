@@ -1,4 +1,4 @@
-import { render, Ref, tsx, renderOnReady } from "../../../dist/index";
+import { render, Ref, tsx } from "../../../dist/index";
 import { Rating } from "./component/Rating";
 
 import "./index.scss";
@@ -18,7 +18,7 @@ function renderRatingComponent() {
     return <Rating rating={rating} maxRating={5} onSelectionChange={onSelectionChange}/>;
 }
 
-renderOnReady(<fragment>
+render(<fragment>
 
     <div ref={ratingContainerRef}>{renderRatingComponent()}</div>
 

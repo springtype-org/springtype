@@ -1,31 +1,26 @@
-<h1 align="center">SpringType v3</h1>
+<h1 align="center">SpringType</h1>
 
-> TypeScript/TSX nano-framework for web apps & PWAs < 2k
+> "Everything should be made as simple as possible, but no simpler." - Albert Einstein
 
 [![Gitter](https://badges.gitter.im/springtype-official/springtype.svg)](https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 <h2 align="center">Example code</h2>
 
-> "Everything should be made as simple as possible, but no simpler." - Albert Einstein
-
 ```tsx
-import { tsx, render, Ref } from "springtype";
+import { tsx, render } from "springtype";
 
-interface HelloSpringTypeButtonProps {
-  framework: string;
+interface HelloMessageProps {
+  text: string;
 }
 
-const HelloSpringTypeButton = ({ framework }: HelloSpringTypeButtonProps) => {
-
-  const btnRef: Ref = {};
-  
-  const onClick = (evt: MouseEvent) => {
-    console.log('SpringType combines TSX with native DOM! :-)');
-    btnRef.current.style.transform = 'scale(2)';
-  }
-  return <button ref={btnRef} onClick={onClick}>Version: {framework}</button>
+const HelloMessage = ({ text }: HelloMessageProps) => {
+  return (
+    <div>
+      Hello, {text}!
+    </div>
+  )
 }
-render(<HelloSpringTypeButton framework="v3" />);
+render(<HelloMessage text="World" />);
 ```
 
 For a more complex demo, see: 
@@ -34,13 +29,28 @@ For a more complex demo, see:
 <h2 align="center">Features</h2>
 
 - ✅ React-like VDOM supporting SVG and native DOM access via `ref`
-- ✅ HTML-compatible `TSX`: Supports `class` instead of `className` etc.
-- ✅ < 2k bundle size: `1123 bytes` (best, brotli) - `1775 bytes` (worst, umd, gz)
+- ✅ HTML-compatible `TSX` - supports standard `class`
+- ✅ <= 1.5k bundle size: `970 bytes` (best, brotli) - `1596 bytes` (worst, umd, gz)
 - ✅ Zero dependencies
 - ✅ Purely functional
 - ✅ First class TypeScript support
-- ✅ Unit Test coverage >70%
+- ✅ > 95% Unit Test coverage
 - ✅ TestCafé smoke tests
+
+<h2 align="center">Philosophy</h2>
+
+<b>Less is more! Complexity is the devil!</b>  SpringType does render the TSX structure only one-time.
+
+SpringType does NOT update the DOM. This takes away tons of complexity and performance headaches.
+
+After initial rendering, you can basically go with pure TypeScript/DOM APIs to mutate the DOM wherever and whenever it is actually needed - not when the framework *thinks* it's needed. 
+
+However there is...
+
+- <a href="https://github.com/springtype-org/st-query">st-query</a> - a jQuery-like nano library for runtime DOM manipulation (+~`500 byte`)
+- <a href="https://github.com/springtype-org/st-route">st-route</a> - an Expess-like nano library for client-side DOM routing (+~`400 byte`)
+
+...to make your life easier :-)
 
 <h2 align="center">Backers</h2>
 
