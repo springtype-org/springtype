@@ -1,7 +1,7 @@
 import { st, ST_KEY } from '../..';
 
 describe('$st', () => {
-  it('globalThis["$st"] is an object', () => {
+  it('window.$st is an object', () => {
     expect(window.$st).toBeDefined();
     expect(window.$st).toBeInstanceOf(Object);
     expect(window[ST_KEY]).toBeDefined();
@@ -13,7 +13,7 @@ describe('$st', () => {
     expect(st).toBeInstanceOf(Object);
   });
 
-  it('st equals window["$st"]', () => {
+  it('st equals window.$st', () => {
     expect(st).toEqual(window.$st);
   });
 
