@@ -102,7 +102,7 @@ describe('VirtualDOM', () => {
 
   it('can apply many classes at once', () => {
     const el: Element = (render(
-      <button label="button" type="button" className={['a', 'b']} />,
+      <button label="button" type="button" class={['a', 'b']} />,
     ) as unknown) as HTMLButtonElement;
 
     expect(el).toBeInstanceOf(HTMLButtonElement);

@@ -1,6 +1,7 @@
 import { st } from '../st/st';
 import { IElement } from './interface/ielement';
 import { IVirtualNode } from './interface/ivirtual-node';
+import './dom';
 
 export const render = (st.render = (
   virtualNode: IVirtualNode | undefined | string | Array<IVirtualNode | undefined | string>,

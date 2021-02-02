@@ -61,6 +61,7 @@
     "@types/node": "^13.13.2",
     "@typescript-eslint/eslint-plugin": "^4.14.2",
     "@typescript-eslint/parser": "^4.14.2",
+    "conventional-changelog-conventionalcommits": "^4.5.0",
     "eslint": "^7.19.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-airbnb-typescript": "^12.0.0",

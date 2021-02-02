@@ -30,11 +30,11 @@ For a more complex demo, see:
 
 - ✅ React-like VDOM supporting SVG and native DOM access via `ref`
 - ✅ HTML-compatible `TSX` - supports standard `class`
-- ✅ <= 1.5k bundle size: `970 bytes` (best, brotli) - `1596 bytes` (worst, umd, gz)
+- ✅ < 1.5k bundle size: `991 bytes` (best, brotli) - `1245 bytes` (worst, umd, gz)
 - ✅ Zero dependencies
 - ✅ Purely functional
 - ✅ First class TypeScript support
-- ✅ > 95% Unit Test coverage
+- ✅ 100% Unit Test coverage
 - ✅ TestCafé smoke tests
 
 <h2 align="center">Philosophy</h2>
