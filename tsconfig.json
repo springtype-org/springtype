@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "module": "amd",
     "target": "es5",
     "outDir": "dist",
     "moduleResolution": "node",
@@ -15,6 +14,12 @@
     "skipLibCheck": true,
     "jsxFactory": "tsx"
   },
-  "exclude": ["node_modules", "**/node_modules/*"],
-  "include": ["src", "jest.config.js"]
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ],
+  "include": [
+    "src",
+    "jest.config.js"
+  ]
 }
