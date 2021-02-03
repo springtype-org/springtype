@@ -34,7 +34,7 @@ For a more complex demo, see:
 - ✅ Zero dependencies
 - ✅ Purely functional
 - ✅ First class TypeScript support
-- ✅ 100% Unit Test coverage
+- ✅ > 95% Unit Test coverage
 - ✅ TestCafé smoke tests
 
 <h2 align="center">Philosophy</h2>
