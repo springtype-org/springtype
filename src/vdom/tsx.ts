@@ -5,6 +5,7 @@ import {
   FRAGMENT_ELEMENT_NAME,
 } from './constants';
 import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeType } from './interface/ivirtual-node';
+import './interface/jsx';
 
 export const tsxToStandardAttributeName = (tsxAttributeName: string): string => {
   // support for SVG xlink:*
