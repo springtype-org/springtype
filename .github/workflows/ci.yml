@@ -46,11 +46,41 @@ jobs:
           path: dist
       - name: Install dev dependencies
         run: yarn
-      - name: Run tests
+      - name: Run ci tests
         run: yarn test:ci
 
+  test-e2e:
+    needs: build
+    strategy:
+      matrix:
+        os:
+          - macOS-latest
+          - ubuntu-latest
+          - windows-latest
+        node-version:
+          - 10.x
+          - 12.x
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Download build
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
+          path: dist
+      - name: Install dev dependencies
+        run: yarn
+      - name: Run e2e tests
+        run: yarn e2e
+
   npm-publish:
-    needs: [test]
+    needs: [test,test-e2e]
     name: npm-publish
     runs-on: ubuntu-latest
     # only on master

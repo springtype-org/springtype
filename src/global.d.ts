@@ -1,7 +1,7 @@
-import { I$st } from "./st/interface/i$st";
+import { I$st } from './st/interface/i$st';
 
 declare global {
   interface Window {
-    $st: I$st
+    $st: I$st;
   }
 }
