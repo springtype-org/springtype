@@ -1,4 +1,4 @@
-const { exec } = require("child_process");
+import { execSync } from 'child_process';
 
 const e2eProjects = ["functional-component", "todo-list", "rating-component"];
 
@@ -8,10 +8,14 @@ for (let packageDir of e2eProjects) {
   process.chdir(getPackageDir(packageDir));
 
   console.log(`[i] Installing e2e project ${packageDir}...`);
-  exec("yarn");
+  execSync('yarn', {
+    stdio: 'inherit',
+  });
 
   console.log(`[i] Building e2e project ${packageDir}...`);
-  exec("yarn build");
+  execSync('yarn build', {
+    stdio: 'inherit',
+  });
 
   process.chdir("../../");
 }
