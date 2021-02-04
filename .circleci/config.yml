@@ -21,6 +21,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run: 
+          name: Create test results directory
+          command: mkdir -p test_results
+
       - run: yarn test:ci
 
       - store_test_results:
