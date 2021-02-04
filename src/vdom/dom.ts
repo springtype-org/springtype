@@ -1,12 +1,17 @@
 import { IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from './interface/ivirtual-node';
-import { tsxToStandardAttributeName } from './tsx';
 import { st, ST_KEY } from '../st/st';
 import { REF_ATTRIBUTE_NAME } from './interface/iattributes';
 import { IElement } from './interface/ielement';
-import { ATTR_DEBUG_PREFIX, CLASS_ATTRIBUTE_NAME, STYLE_ATTRIBUTE_NAME, XLINK_ATTRIBUTE_NAME } from './constants';
+import {
+  CLASS_ATTRIBUTE_NAME,
+  CLASS_NAME_ATTRIBUTE_NAME,
+  STYLE_ATTRIBUTE_NAME,
+  XLINK_ATTRIBUTE_NAME,
+} from './constants';
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
+// istanbul ignore else
 if (!st.dom) {
   // DOM abstraction layer for manipulation
   st.dom = {
@@ -46,14 +51,17 @@ if (!st.dom) {
       // with the correct domImpl the element belongs to
       (newEl as any)[ST_KEY] = st;
 
+      // istanbul ignore else
       if (virtualNode.attributes) {
         st.dom.setAttributes(virtualNode.attributes, newEl);
       }
 
+      // istanbul ignore else
       if (virtualNode.children) {
         st.dom.createChildElements(virtualNode.children, newEl);
       }
 
+      // istanbul ignore else
       if (parentDomElement) {
         parentDomElement.appendChild(newEl);
       }
@@ -63,6 +71,7 @@ if (!st.dom) {
     createTextNode: (text: string, domElement?: IElement): Text => {
       const node = document.createTextNode(text.toString());
 
+      // istanbul ignore else
       if (domElement) {
         domElement.appendChild(node);
       }
@@ -92,13 +101,11 @@ if (!st.dom) {
     },
 
     setAttribute: (name: string, value: any, domElement: IElement) => {
-      // don't render debug attributes like __source and __self
-      if (name.indexOf(ATTR_DEBUG_PREFIX) === 0) return;
-
       // attributes not set (undefined) are ignored; use null value to reset an attributes state
       if (typeof value === 'undefined') return;
 
       // save ref as { current: DOMElement } in ref object
+      // allows for ref={someRef}
       if (name === REF_ATTRIBUTE_NAME) {
         value.current = domElement;
         return;
@@ -117,22 +124,36 @@ if (!st.dom) {
         return;
       }
 
+      // transforms className="..." -> class="..."
+      // allows for React TSX to work seamlessly
+      if (name === CLASS_NAME_ATTRIBUTE_NAME) {
+        name = CLASS_ATTRIBUTE_NAME;
+      }
+
       // transforms class={['a', 'b']} into class="a b"
       if (name === CLASS_ATTRIBUTE_NAME && Array.isArray(value)) {
         value = value.join(' ');
       }
 
       if (st.dom.hasElNamespace(domElement) && name.startsWith(XLINK_ATTRIBUTE_NAME)) {
-        domElement.setAttributeNS('http://www.w3.org/1999/xlink', tsxToStandardAttributeName(name), value);
+        // allows for <svg><use xlinkHref ...></svg>
+        domElement.setAttributeNS(
+          'http://www.w3.org/1999/xlink',
+          `${XLINK_ATTRIBUTE_NAME}:${name.replace(XLINK_ATTRIBUTE_NAME, '')}`.toLowerCase(),
+          value,
+        );
       } else if (name === STYLE_ATTRIBUTE_NAME && typeof value !== 'string') {
         const propNames = Object.keys(value);
 
+        // allows for style={{ margin: 10 }} etc.
         for (let i = 0; i < propNames.length; i++) {
           domElement.style[propNames[i] as any] = value[propNames[i]];
         }
       } else if (typeof value === 'boolean') {
+        // for cases like <button checked={false} />
         (domElement as any)[name] = value;
       } else {
+        // for any other case
         domElement.setAttribute(name, value);
       }
     },

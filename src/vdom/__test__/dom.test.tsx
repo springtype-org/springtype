@@ -29,6 +29,19 @@ describe('VirtualDOM', () => {
     expect(list.length).toBe(2);
   });
 
+  it('can render to document.body', () => {
+    const divRef: Ref = {};
+
+    expect(render(<div ref={divRef} />, document.body)).toBeInstanceOf(HTMLDivElement);
+    expect(divRef.current).toBeInstanceOf(HTMLDivElement);
+    expect(document.body.childNodes[0]).toEqual(divRef.current);
+  });
+
+  it('can render text to document.body', () => {
+    expect(render('Mesg', document.body)).toBeInstanceOf(Text);
+    expect(document.body.textContent).toEqual('Mesg');
+  });
+
   it('can render Text', () => {
     expect(render('Foo')).toBeDefined();
     expect(render('Foo')).toBeInstanceOf(Text);
@@ -63,6 +76,10 @@ describe('VirtualDOM', () => {
 
   it('can render undefined values', () => {
     expect(render(undefined)).toBeInstanceOf(Text);
+  });
+
+  it('can render null values', () => {
+    expect(render(<div>{null}</div>)).toBeTruthy();
   });
 
   it('can render refs', () => {
@@ -108,6 +125,24 @@ describe('VirtualDOM', () => {
     expect(el).toBeInstanceOf(HTMLButtonElement);
     expect(el.classList.contains('a')).toBe(true);
     expect(el.classList.contains('b')).toBe(true);
+  });
+
+  it('can apply many classes at once - with React syntax', () => {
+    const el: Element = (render(
+      <button label="button" type="button" className={['a', 'b']} />,
+    ) as unknown) as HTMLButtonElement;
+
+    expect(el).toBeInstanceOf(HTMLButtonElement);
+    expect(el.classList.contains('a')).toBe(true);
+    expect(el.classList.contains('b')).toBe(true);
+  });
+
+  it('can render undefined attributes', () => {
+    const el: Element = (render(
+      <button value={undefined as any} label="foo" type="button" />,
+    ) as unknown) as HTMLButtonElement;
+
+    expect(el).toBeInstanceOf(HTMLButtonElement);
   });
 
   it('can render style props', () => {
