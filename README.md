@@ -1,31 +1,57 @@
 <h1 align="center">SpringType</h1>
 
-> "Everything should be made as simple as possible, but no simpler." - Albert Einstein
+<p align="center">
+„Everything should be made as simple as possible, but no simpler.” - Albert Einstein
+</p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/springtype"><img src="https://img.shields.io/npm/v/springtype.svg?style=flat-square" alt="SpringType NPM"/></a> 
-  <a href="https://lgtm.com/projects/g/springtype-org/springtype/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="GitHub license" /></a>
-  <a href="https://lgtm.com/projects/g/springtype-org/springtype/alerts"><img src="https://img.shields.io/lgtm/alerts/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="Total alerts" /></a>
+  <a href="https://www.npmjs.com/package/springtype"><img src="https://img.shields.io/npm/v/springtype.svg?style=flat-square" alt="SpringType NPM version"/></a> 
+  <a href="https://lgtm.com/projects/g/springtype-org/springtype/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="LGTM Code Quality Rating" /></a>
+  <a href="https://lgtm.com/projects/g/springtype-org/springtype/alerts"><img src="https://img.shields.io/lgtm/alerts/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="LGTM Total alerts" /></a>
   <a href="https://github.com/springtype-org/springtype/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/springtype-org/springtype.svg" alt="License" /></a>
-  <a href="https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/springtype-official/springtype.svg" alt="Gitter" /></a>
+  <a href="https://circleci.com/gh/springtype-org/springtype"><img src="https://circleci.com/gh/springtype-org/springtype.svg?style=svg" alt="Circle CI" /></a>
+  <a href="https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/springtype-official/springtype.svg" alt="Gitter Chat" /></a>
 </p>
 
 <h2 align="center">Example code</h2>
 
+SpringType combines the best parts of the React API with the simplicity of jQuery:
+
 ```tsx
-import { tsx, render } from "springtype";
+import { tsx, render, Ref } from "springtype";
+import { $ } from "st-query";
 
 interface HelloMessageProps {
   text: string;
 }
 
+// a functional component, just like in React
+// but it only renders one time
 const HelloMessage = ({ text }: HelloMessageProps) => {
+
+  // reference is stored when the element is created
+  const messageRef: Ref = {};
+
+  // because there is no magic re-rendering,
+  // we can safely use setInterval() and can also
+  // safely wave goodbye to fancy hooks like useCallback() or useEffect()!
+  setInterval(() => {
+
+    // in case we want to change the rendering,
+    // we just do this programmatically, where it's needed
+    $(messageRef.current).html(<p>SpringType </p>);
+
+  }, 1000 /* 1 sec */);
+
   return (
-    <div>
+    <div ref={messageRef}>
       Hello, {text}!
     </div>
   )
 }
+
+// SpringType renders to document.body by default
+// but you can just provide a second argument to change this
 render(<HelloMessage text="World" />);
 ```
 
