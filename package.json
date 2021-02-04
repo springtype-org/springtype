@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/springtype-org/springtype/issues"
   },
-  "description": "TypeScript/TSX nano-framework for the web: < 1.5k",
+  "description": "1k TypeScript/TSX nano-framework for the web",
   "keywords": [
     "TSX",
     "JSX",

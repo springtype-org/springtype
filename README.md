@@ -2,15 +2,13 @@
 
 > "Everything should be made as simple as possible, but no simpler." - Albert Einstein
 
-<a href="https://www.npmjs.com/package/springtype"><img src="https://img.shields.io/npm/v/springtype.svg?style=flat-square" alt="SpringType NPM"/></a>
-
- <a href="https://lgtm.com/projects/g/springtype-org/springtype/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="GitHub license" /></a>
-
-<a href="https://lgtm.com/projects/g/springtype-org/springtype/alerts"><img src="https://img.shields.io/lgtm/alerts/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="Total alerts" /></a>
-
-<a href="https://github.com/springtype-org/springtype/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/springtype-org/springtype.svg" alt="License" /></a>
-
-[![Gitter](https://badges.gitter.im/springtype-official/springtype.svg)](https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+<p align="center">
+  <a href="https://www.npmjs.com/package/springtype"><img src="https://img.shields.io/npm/v/springtype.svg?style=flat-square" alt="SpringType NPM"/></a> 
+  <a href="https://lgtm.com/projects/g/springtype-org/springtype/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="GitHub license" /></a>
+  <a href="https://lgtm.com/projects/g/springtype-org/springtype/alerts"><img src="https://img.shields.io/lgtm/alerts/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="Total alerts" /></a>
+  <a href="https://github.com/springtype-org/springtype/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/springtype-org/springtype.svg" alt="License" /></a>
+  <a href="https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/springtype-official/springtype.svg" alt="Gitter" /></a>
+</p>
 
 <h2 align="center">Example code</h2>
 
@@ -36,8 +34,8 @@ For a more complex demo, see:
 
 <h2 align="center">Features</h2>
 
-- ✅ React-like VDOM supporting SVG and native DOM access via `ref`
-- ✅ HTML-compatible `TSX` - supports standard `class`
+- ✅ React-like VDOM supporting native DOM access via `ref`
+- ✅ HTML/SVG-compatible `TSX` - supports standard `class`
 - ✅ ~1k bundle size: `961 byte` (best, brotli) - `1209 byte` (worst, umd, gz)
 - ✅ Zero dependencies
 - ✅ Purely functional
