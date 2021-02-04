@@ -47,7 +47,7 @@ jobs:
     steps:
       - checkout
       - browser-tools/install-browser-tools
-      - node/install-packages
+      - node/install-packages:
           pkg-manager: yarn
       
       - run:
