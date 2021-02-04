@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@4.1.0
   browser-tools: circleci/browser-tools@1.1.0
 jobs:
-  test:
+  unit-test:
     parallelism: 3
     docker:
       - image: circleci/node:12
@@ -37,7 +37,28 @@ jobs:
       - store_artifacts:
           path: test_results
           destination: test_results
+
+  e2e-test:
+    docker:
+      - image: cimg/node:lts-browsers
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - browser-tools/install-browser-tools
+      - node/install-packages
+      
+      - run:
+          command: yarn e2e
+
+      - store_test_results:
+          path: /tmp/test-results
+
 workflows:
   unit-test:
     jobs:
-      - test
+      - unit-test
+  e2e-test:
+    jobs:
+      - e2e-test
