@@ -1,5 +1,8 @@
+orbs:
+  node: circleci/node@4.1.0
+  browser-tools: circleci/browser-tools@1.1.0
 jobs:
-  build:
+  test:
     parallelism: 3
     docker:
       - image: circleci/node:12
@@ -33,3 +36,7 @@ jobs:
       - store_artifacts:
           path: test_results
           destination: test_results
+workflows:
+  unit-test:
+    jobs:
+      - test
