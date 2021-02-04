@@ -48,6 +48,7 @@ jobs:
       - checkout
       - browser-tools/install-browser-tools
       - node/install-packages
+          pkg-manager: yarn
       
       - run:
           command: yarn e2e
