@@ -2,6 +2,14 @@
 
 > "Everything should be made as simple as possible, but no simpler." - Albert Einstein
 
+<a href="https://www.npmjs.com/package/springtype"><img src="https://img.shields.io/npm/v/springtype.svg?style=flat-square" alt="SpringType NPM"/></a>
+
+ <a href="https://lgtm.com/projects/g/springtype-org/springtype/context:javascript"><img src="https://img.shields.io/lgtm/grade/javascript/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="GitHub license" /></a>
+
+<a href="https://lgtm.com/projects/g/springtype-org/springtype/alerts"><img src="https://img.shields.io/lgtm/alerts/g/springtype-org/springtype.svg?logo=lgtm&logoWidth=18" alt="Total alerts" /></a>
+
+<a href="https://github.com/springtype-org/springtype/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/springtype-org/springtype.svg" alt="License" /></a>
+
 [![Gitter](https://badges.gitter.im/springtype-official/springtype.svg)](https://gitter.im/springtype-official/springtype?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 <h2 align="center">Example code</h2>
