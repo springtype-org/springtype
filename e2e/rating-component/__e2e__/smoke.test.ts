@@ -65,7 +65,7 @@ test('should remember user\'s selection', async (t) => {
     const starsCount = await stars.count;
 
     await t.click(`.star[data-index="2"]`);
-    await t.hover(`body`)
+    await t.hover(`body`);
 
     await assertStarsFilledTo(starsCount, stars, 2, t);
 
