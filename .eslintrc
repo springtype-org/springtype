@@ -21,6 +21,7 @@
         "no-plusplus": "off",
         "no-continue": "off",
         "no-multi-assign": "off",
+        "no-return-assign": "off",
         "no-param-reassign": "off",
         "import/prefer-default-export": "off",
         "react/jsx-indent": "off",
