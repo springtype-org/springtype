@@ -82,6 +82,7 @@ However there is...
 - <a href="https://github.com/springtype-org/st-query">st-query</a> - a jQuery-like nano library for runtime DOM manipulation (+~`500 byte`)
 - <a href="https://github.com/springtype-org/st-route">st-route</a> - an Expess-like nano library for client-side DOM routing (+~`400 byte`)
 - <a href="https://github.com/springtype-org/st-bus">st-bus</a> - a socket.io-like nano library for application/component eventing (+~`150 byte`)
+- <a href="https://github.com/springtype-org/st-state">st-state</a> - a map-like nano library for client-side state management and persistency (+~`200 byte`)
 
 ...to make your life easier :-)
 
