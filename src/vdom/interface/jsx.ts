@@ -1,4 +1,4 @@
-import { IAttributes } from './iattributes';
+import { IAttributes, TRef } from './iattributes';
 import { Ref } from './ref';
 
 declare global {
@@ -285,6 +285,9 @@ declare global {
     export type PointerEventHandler = EventHandler<PointerEvent>;
 
     export interface DOMAttributeEventHandlersLowerCase {
+      // SpringType custom events
+      onmount?: Function;
+
       // Image Events
       onload?: GenericEventHandler;
       onloadcapture?: GenericEventHandler;
@@ -475,7 +478,11 @@ declare global {
     }
 
     export interface DOMAttributes extends IAttributes, DOMAttributeEventHandlersLowerCase {
-      ref?: Ref | undefined;
+      // SpringType custom attributes
+      ref?: Ref | TRef | undefined;
+
+      // SpringType custom events
+      onMount?: Function;
 
       // Image Events
       onLoad?: GenericEventHandler;
@@ -812,9 +819,8 @@ declare global {
       itemref?: string;
     }
 
-    // TODO: All should allow for string (full HTML support)
     export interface HTMLAttributes extends HTMLAttributesLowerCase, DOMAttributes {
-      ref?: Ref | undefined;
+      ref?: Ref | TRef | undefined;
 
       // Standard HTML Attributes
       accept?: string;

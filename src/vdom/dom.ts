@@ -8,7 +8,6 @@ import {
   STYLE_ATTRIBUTE_NAME,
   XLINK_ATTRIBUTE_NAME,
 } from './constants';
-import { Ref } from './interface/ref';
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
@@ -112,15 +111,21 @@ if (!st.dom) {
 
       // save ref as { current: DOMElement } in ref object
       // allows for ref={someRef}
-      if (name === REF_ATTRIBUTE_NAME) {
+      if (name === REF_ATTRIBUTE_NAME && typeof value !== 'function') {
         value.current = domElement;
-        (domElement as any).$onMount = (value as Ref).onMount;
+      } else if (name === REF_ATTRIBUTE_NAME && typeof value === 'function') {
+        // allow for functional ref's like: render(<div ref={(el) => console.log('got el', el)} />)
+        value(domElement);
       }
 
       if (name.startsWith('on') && typeof value === 'function') {
         let eventName = name.substring(2).toLowerCase();
         const capturePos = eventName.indexOf('capture');
         const doCapture = capturePos > -1;
+
+        if (eventName === 'mount') {
+          (domElement as any).$onMount = value;
+        }
 
         // onClickCapture={...} support
         if (doCapture) {

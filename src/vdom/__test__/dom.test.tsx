@@ -188,30 +188,81 @@ describe('VirtualDOM', () => {
   });
 
   it('calls the onMount lifecycle hook when a DOM element has been rendered in <body>', () => {
-    const someDivRef: Ref = {
-      onMount: jest.fn(() => {
-        // callback
-      }),
-    };
+    const someDivRef: Ref = {};
 
-    render([<div ref={someDivRef}>A</div>, <div>B</div>], document.body);
+    const onMount = jest.fn(() => {
+      // callback
+    });
 
-    expect((someDivRef.onMount! as jest.Mock).mock.calls.length).toEqual(1);
+    render(
+      [
+        <div ref={someDivRef} onMount={onMount}>
+          A
+        </div>,
+        <div>B</div>,
+      ],
+      document.body,
+    );
+
+    expect(onMount.mock.calls.length).toEqual(1);
   });
 
   it('calls the onMount lifecycle hook when a DOM element has been rendered in to another <div>', () => {
     const someParentDivRef: Ref = {};
 
-    const someDivRef: Ref = {
-      onMount: jest.fn(() => {
-        // callback
-      }),
-    };
+    const someDivRef: Ref = {};
+
+    const onMount = jest.fn(() => {
+      // callback
+    });
 
     render([<div ref={someParentDivRef}>1</div>, <div>2</div>], document.body);
 
-    render([<div ref={someDivRef}>A</div>, <div>B</div>], someParentDivRef.current);
+    render(
+      [
+        <div onMount={onMount} ref={someDivRef}>
+          A
+        </div>,
+        <div>B</div>,
+      ],
+      someParentDivRef.current,
+    );
 
-    expect((someDivRef.onMount! as jest.Mock).mock.calls.length).toEqual(1);
+    expect(onMount.mock.calls.length).toEqual(1);
+  });
+
+  it('calls the ref callback function when a component is created', () => {
+    let someParentDivRef;
+    const someDivRef: Ref = {};
+
+    const onMount = jest.fn(() => {
+      // callback
+    });
+
+    render(
+      [
+        <div
+          ref={(el) => {
+            someParentDivRef = el;
+          }}
+        >
+          1
+        </div>,
+        <div>2</div>,
+      ],
+      document.body,
+    );
+
+    render(
+      [
+        <div onMount={onMount} ref={someDivRef}>
+          A
+        </div>,
+        <div>B</div>,
+      ],
+      someParentDivRef,
+    );
+
+    expect(onMount.mock.calls.length).toEqual(1);
   });
 });
