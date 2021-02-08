@@ -186,4 +186,32 @@ describe('VirtualDOM', () => {
     expect(el).toBeInstanceOf(HTMLButtonElement);
     expect(el.disabled).toBe(true);
   });
+
+  it('calls the onMount lifecycle hook when a DOM element has been rendered in <body>', () => {
+    const someDivRef: Ref = {
+      onMount: jest.fn(() => {
+        // callback
+      }),
+    };
+
+    render([<div ref={someDivRef}>A</div>, <div>B</div>], document.body);
+
+    expect((someDivRef.onMount! as jest.Mock).mock.calls.length).toEqual(1);
+  });
+
+  it('calls the onMount lifecycle hook when a DOM element has been rendered in to another <div>', () => {
+    const someParentDivRef: Ref = {};
+
+    const someDivRef: Ref = {
+      onMount: jest.fn(() => {
+        // callback
+      }),
+    };
+
+    render([<div ref={someParentDivRef}>1</div>, <div>2</div>], document.body);
+
+    render([<div ref={someDivRef}>A</div>, <div>B</div>], someParentDivRef.current);
+
+    expect((someDivRef.onMount! as jest.Mock).mock.calls.length).toEqual(1);
+  });
 });

@@ -8,6 +8,7 @@ import {
   STYLE_ATTRIBUTE_NAME,
   XLINK_ATTRIBUTE_NAME,
 } from './constants';
+import { Ref } from './interface/ref';
 
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
@@ -64,6 +65,11 @@ if (!st.dom) {
       // istanbul ignore else
       if (parentDomElement) {
         parentDomElement.appendChild(newEl);
+
+        // check for a lifecycle "onMount" hook and call it
+        if (typeof (newEl as any).$onMount === 'function') {
+          (newEl as any).$onMount!();
+        }
       }
       return newEl as IElement;
     },
@@ -108,7 +114,7 @@ if (!st.dom) {
       // allows for ref={someRef}
       if (name === REF_ATTRIBUTE_NAME) {
         value.current = domElement;
-        return;
+        (domElement as any).$onMount = (value as Ref).onMount;
       }
 
       if (name.startsWith('on') && typeof value === 'function') {
