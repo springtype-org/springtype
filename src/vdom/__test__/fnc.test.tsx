@@ -1,5 +1,4 @@
-import { render, tsx, st, ST_KEY } from '../..';
-import { IElement } from '../interface/ielement';
+import { render, tsx, st, ST_KEY, IElement } from '../..';
 
 describe('Functional component', () => {
   let parentDOMElement: IElement;

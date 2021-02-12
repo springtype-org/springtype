@@ -1,5 +1,4 @@
-import { render, tsx } from '../..';
-import { IElement } from '../interface/ielement';
+import { render, tsx, IElement } from '../..';
 
 describe('Renderer an fragment', () => {
   let parentDOMElement: IElement;

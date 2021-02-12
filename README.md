@@ -62,7 +62,7 @@ For a more complex demo, see:
 
 - ✅ React-like VDOM supporting native DOM access via `ref`
 - ✅ HTML/SVG-compatible `TSX` - supports standard `class`
-- ✅ ~1k bundle size: `991 byte` (best, brotli) - `1244 byte` (worst, umd, gz)
+- ✅ ~1k bundle size: `1140 byte` (best, brotli) - `1323 byte` (worst, umd, gz)
 - ✅ Zero dependencies
 - ✅ Purely functional
 - ✅ First class TypeScript support

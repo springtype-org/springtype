@@ -1,4 +1,4 @@
-import { I$st } from './interface/i$st';
+import { I$st } from 'springtype-types';
 
 export const ST_KEY = '$st';
 

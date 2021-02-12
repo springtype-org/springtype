@@ -7894,6 +7894,11 @@ split2@^3.0.0:
   dependencies:
     readable-stream "^3.0.0"
 
+springtype-types@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.yarnpkg.com/springtype-types/-/springtype-types-3.2.4.tgz#30edf66bca75bed849e4a83f9800cf1fd9bd34d3"
+  integrity sha512-IHCNhxmIZ7oKtmM1itHp/pMYLFybaoQYeJc9kOpXFm0m/WxEZdkIggyl/98T+RCzU6qtNFWZu7zoEeHLRxQgIQ==
+
 springtype@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/springtype/-/springtype-3.1.2.tgz#cc3b6fb2d72d7828646d801e445f4c5979beca97"

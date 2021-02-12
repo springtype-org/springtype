@@ -1,15 +1,13 @@
-import { IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from './interface/ivirtual-node';
+import { IElement, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from 'springtype-types';
 import { st, ST_KEY } from '../st/st';
-import { REF_ATTRIBUTE_NAME } from './interface/iattributes';
-import { IElement } from './interface/ielement';
 import {
   CLASS_ATTRIBUTE_NAME,
   CLASS_NAME_ATTRIBUTE_NAME,
+  REF_ATTRIBUTE_NAME,
   STYLE_ATTRIBUTE_NAME,
+  SVG_NAMESPACE,
   XLINK_ATTRIBUTE_NAME,
 } from './constants';
-
-const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
 // istanbul ignore else
 if (!st.dom) {

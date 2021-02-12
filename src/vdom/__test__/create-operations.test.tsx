@@ -1,5 +1,4 @@
-import { tsx, render } from '../..';
-import { IElement } from '../interface/ielement';
+import { tsx, render, IElement } from '../..';
 
 describe('Renderer create operation', () => {
   let parentDOMElement: IElement;

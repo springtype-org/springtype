@@ -1,6 +1,5 @@
+import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeType } from 'springtype-types';
 import { FRAGMENT_ELEMENT_NAME } from './constants';
-import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeType } from './interface/ivirtual-node';
-import './interface/jsx';
 
 // If a JSX comment is written, it looks like: { /* this */ }
 // Therefore, it turns into: {}, which is detected here

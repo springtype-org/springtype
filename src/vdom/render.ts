@@ -1,6 +1,5 @@
+import { IElement, IVirtualNode } from 'springtype-types';
 import { st } from '../st/st';
-import { IElement } from './interface/ielement';
-import { IVirtualNode } from './interface/ivirtual-node';
 import './dom';
 
 export const render = (st.render = (
