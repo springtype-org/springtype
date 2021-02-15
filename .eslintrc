@@ -28,6 +28,7 @@
         "react/jsx-one-expression-per-line": "off",
         "react/react-in-jsx-scope": "off",
         "react/no-unknown-property": "off",
-        "@typescript-eslint/indent": "off"
+        "@typescript-eslint/indent": "off",
+        "func-names": "off"
     }
 }
