@@ -1,13 +1,10 @@
 import { IElement, IVirtualChildren, IVirtualNode, IVirtualNodeAttributes } from 'springtype-types';
 import { st, ST_KEY } from '../st/st';
-import {
-  CLASS_ATTRIBUTE_NAME,
-  CLASS_NAME_ATTRIBUTE_NAME,
-  REF_ATTRIBUTE_NAME,
-  STYLE_ATTRIBUTE_NAME,
-  SVG_NAMESPACE,
-  XLINK_ATTRIBUTE_NAME,
-} from './constants';
+
+const CLASS_ATTRIBUTE_NAME = 'class';
+const XLINK_ATTRIBUTE_NAME = 'xlink';
+const REF_ATTRIBUTE_NAME = 'ref';
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
 
 // istanbul ignore else
 if (!st.dom) {
@@ -135,7 +132,7 @@ if (!st.dom) {
 
       // transforms className="..." -> class="..."
       // allows for React TSX to work seamlessly
-      if (name === CLASS_NAME_ATTRIBUTE_NAME) {
+      if (name === 'className') {
         name = CLASS_ATTRIBUTE_NAME;
       }
 
@@ -151,7 +148,7 @@ if (!st.dom) {
           `${XLINK_ATTRIBUTE_NAME}:${name.replace(XLINK_ATTRIBUTE_NAME, '')}`.toLowerCase(),
           value,
         );
-      } else if (name === STYLE_ATTRIBUTE_NAME && typeof value !== 'string') {
+      } else if (name === 'style' && typeof value !== 'string') {
         const propNames = Object.keys(value);
 
         // allows for style={{ margin: 10 }} etc.

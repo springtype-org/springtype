@@ -2985,6 +2985,11 @@ cssstyle@^2.2.0:
   dependencies:
     cssom "~0.3.6"
 
+csstype@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.6.tgz#865d0b5833d7d8d40f4e5b8a6d76aea3de4725ef"
+  integrity sha512-+ZAmfyWMT7TiIlzdqJgjMb7S4f1beorDbWbsocyK4RaiqA5RTX3K14bnBWmmA9QEM0gRdsjyyrEmcyga8Zsxmw==
+
 cuint@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/cuint/-/cuint-0.2.2.tgz#408086d409550c2631155619e9fa7bcadc3b991b"
@@ -7894,10 +7899,12 @@ split2@^3.0.0:
   dependencies:
     readable-stream "^3.0.0"
 
-springtype-types@^3.2.4:
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/springtype-types/-/springtype-types-3.2.4.tgz#30edf66bca75bed849e4a83f9800cf1fd9bd34d3"
-  integrity sha512-IHCNhxmIZ7oKtmM1itHp/pMYLFybaoQYeJc9kOpXFm0m/WxEZdkIggyl/98T+RCzU6qtNFWZu7zoEeHLRxQgIQ==
+springtype-types@^3.2.8:
+  version "3.2.8"
+  resolved "https://registry.yarnpkg.com/springtype-types/-/springtype-types-3.2.8.tgz#ed63ac2f2609716ff45718a48a48d8781a8ac477"
+  integrity sha512-QLGe/AEodyiqpeH24ZVhLdqV8uHoV5GeFk0b2JQHlHLg4JKuGMvArOqnOPikoJCvigc7hH1+A2T1g+1BhKde+Q==
+  dependencies:
+    csstype "^3.0.6"
 
 springtype@^3.1.2:
   version "3.1.2"

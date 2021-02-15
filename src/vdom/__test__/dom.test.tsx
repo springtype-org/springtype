@@ -1,4 +1,4 @@
-import { tsx, render, Ref, st } from '../..';
+import { tsx, render, Ref, st, Props } from '../..';
 
 describe('VirtualDOM', () => {
   it('defines st.dom', () => {
@@ -264,5 +264,20 @@ describe('VirtualDOM', () => {
     );
 
     expect(onMount.mock.calls.length).toEqual(1);
+  });
+
+  it('can forwardRef', () => {
+    const TryForwardRef = ({ ref }: Props) => (
+      <div>
+        <span ref={ref} id="forwardedRef" />
+      </div>
+    );
+
+    const forwardedRef: Ref = {};
+
+    render(<TryForwardRef ref={forwardedRef} />);
+
+    expect(forwardedRef.current).toBeInstanceOf(HTMLSpanElement);
+    expect(forwardedRef.current.id).toEqual('forwardedRef');
   });
 });
