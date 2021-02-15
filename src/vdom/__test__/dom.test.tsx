@@ -280,4 +280,33 @@ describe('VirtualDOM', () => {
     expect(forwardedRef.current).toBeInstanceOf(HTMLSpanElement);
     expect(forwardedRef.current.id).toEqual('forwardedRef');
   });
+
+  it('can use functional component inner update function', () => {
+    const newState = { foo: 1234 };
+    const innerUpdateFn = jest.fn();
+
+    const TryForwardRef = ({ ref }: Props) => {
+      const containerRef: Ref = {};
+
+      const update = (state: any) => {
+        innerUpdateFn(state);
+        expect(containerRef.current).toBeInstanceOf(HTMLDivElement);
+        expect(state).toEqual(newState);
+      };
+
+      if (ref) {
+        ref.onUpdate!(update);
+      }
+
+      return <div ref={containerRef} />;
+    };
+
+    const forwardedRef: Ref = {};
+
+    render(<TryForwardRef ref={forwardedRef} />);
+
+    forwardedRef.update!(newState);
+
+    expect(innerUpdateFn.mock.calls.length).toEqual(1);
+  });
 });

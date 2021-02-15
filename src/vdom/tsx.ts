@@ -1,4 +1,4 @@
-import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeType } from 'springtype-types';
+import { IVirtualChild, IVirtualChildren, IVirtualNode, IVirtualNodeType, Ref } from 'springtype-types';
 
 // If a JSX comment is written, it looks like: { /* this */ }
 // Therefore, it turns into: {}, which is detected here
@@ -9,6 +9,10 @@ const isJSXComment = (node: IVirtualNode): boolean =>
 // Filters comments and undefines like: ['a', 'b', false, {}] to: ['a', 'b', false]
 const filterComments = (children: Array<IVirtualNode> | Array<IVirtualChild>) =>
   children.filter((child: IVirtualChild) => !isJSXComment(child as IVirtualNode));
+
+const onUpdateFn = function (this: Ref, callback: Function) {
+  this.update = callback as any;
+};
 
 export const tsx = (
   // if it is a function, it is a component
@@ -32,6 +36,12 @@ export const tsx = (
 
   // it's a component, divide and conquer children
   if (typeof type === 'function') {
+    if (attributes.ref) {
+      // references an onUpdate assignment function to be called inside of the functional component
+      // to register an "update" function that can be called from the outside (ref.current.update(state?))
+      (attributes.ref as Ref)!.onUpdate = onUpdateFn.bind(attributes.ref as Ref) as any;
+    }
+
     return type({
       children,
       ...attributes,
