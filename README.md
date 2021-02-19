@@ -84,6 +84,7 @@ However there is...
 - <a href="https://github.com/springtype-org/st-bus">st-bus</a> - a socket.io-like nano library for application/component eventing (+~`150 byte`)
 - <a href="https://github.com/springtype-org/st-state">st-state</a> - a map-like nano library for client-side state management and persistency (+~`200 byte`)
 - <a href="https://github.com/springtype-org/st-i18n">st-i18n</a> - a i18next-like nano library for translation and string interpolation (+~`500 byte`)
+- <a href="https://github.com/springtype-org/st-jss">st-jss</a> - a JSS-like nano library for working with CSS in TS/JS (+~`600 byte`)
 
 ...to make your life easier :-)
 
